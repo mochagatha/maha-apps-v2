@@ -1,6 +1,7 @@
 // GoRouter Configuration
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/authentication/presentation/pages/login_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
 
@@ -12,18 +13,6 @@ class SplashPagePlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(child: CircularProgressIndicator()),
-    );
-  }
-}
-
-class LoginPagePlaceholder extends StatelessWidget {
-  const LoginPagePlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: const Center(child: Text('Login Page - To be implemented')),
     );
   }
 }
@@ -73,7 +62,7 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.login,
           name: RouteNames.login,
-          builder: (context, state) => const LoginPagePlaceholder(),
+          builder: (context, state) => const LoginPage(),
         ),
         GoRoute(
           path: RoutePaths.home,
