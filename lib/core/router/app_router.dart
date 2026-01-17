@@ -2,21 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
+import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
 
-// Temporary placeholder pages - will be replaced with actual feature pages
-class SplashPagePlaceholder extends StatelessWidget {
-  const SplashPagePlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
-  }
-}
-
+// Temporary placeholder for Home - will be replaced when home is implemented
 class HomePagePlaceholder extends StatelessWidget {
   const HomePagePlaceholder({super.key});
 
@@ -24,40 +14,31 @@ class HomePagePlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
-      body: const Center(child: Text('Home Page - To be implemented')),
+      body: const Center(
+        child: Text('Home Page - To be implemented\n\nYou are logged in!'),
+      ),
     );
   }
 }
 
 class AppRouter {
-  // This will be updated to accept AuthProvider when authentication is implemented
   static GoRouter router() {
     return GoRouter(
       initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
       
-      // Redirect logic - will be enhanced with auth guards
+      // Redirect logic - can be enhanced with auth guards if needed
       redirect: (context, state) {
-        // TODO: Add authentication check
-        // final isAuthenticated = authProvider.isAuthenticated;
-        // final isLoggingIn = state.matchedLocation == RoutePaths.login;
-        
-        // if (!isAuthenticated && !isLoggingIn) {
-        //   return RoutePaths.login;
-        // }
-        
-        // if (isAuthenticated && isLoggingIn) {
-        //   return RoutePaths.home;
-        // }
-        
-        return null; // No redirect
+        // Auth guards can be implemented here
+        // For now, let SplashPage handle the navigation logic
+        return null;
       },
       
       routes: [
         GoRoute(
           path: RoutePaths.splash,
           name: RouteNames.splash,
-          builder: (context, state) => const SplashPagePlaceholder(),
+          builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
           path: RoutePaths.login,

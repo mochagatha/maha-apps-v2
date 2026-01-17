@@ -1,43 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'core/di/injection_container.dart' as di;
+import 'core/router/app_router.dart';
+import 'features/authentication/presentation/providers/auth_provider.dart';
+import 'shared/theme/app_theme.dart';
 
-import 'sign_in/view_models/view_model_sign_in.dart';
-import 'sign_up/view_models/view_model_sign_up.dart';
-import 'splash_screen/screens/splash_screen.dart';
-import 'splash_screen/view_models/view_model_splash_screen.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load environment variables
+  await dotenv.load(fileName: '.env');
+  
+  // Initialize dependency injection
+  await di.init();
+  
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ViewModelSplashScreen()),
-        ChangeNotifierProvider(create: (_) => ViewModelSignIn()),
-        ChangeNotifierProvider(create: (_) => ViewModelSignUp()),
-      ],
-      child: SafeArea(
-        top: false,
-        child: MaterialApp(
-          theme: ThemeData(
-            textTheme: GoogleFonts.poppinsTextTheme(
-              Theme.of(context).textTheme,
-            ),
-          ),
-          debugShowCheckedModeBanner: false,
-          home: const SplashScreen(),
+        // Auth Provider from GetIt
+        ChangeNotifierProvider(
+          create: (_) => di.sl<AuthProvider>(),
         ),
+        // Add other providers here as needed
+      ],
+      child: MaterialApp.router(
+        title: 'MAHA Apps',
+        theme: AppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router(),
       ),
     );
   }
