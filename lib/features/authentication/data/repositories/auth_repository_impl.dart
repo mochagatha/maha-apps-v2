@@ -4,6 +4,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/auth_response.dart';
+import '../../domain/entities/register_response.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_local_datasource.dart';
@@ -112,6 +113,31 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(CacheFailure(e.message));
     } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RegisterResponse>> register({
+    required String fullname,
+    required String email,
+    required String password,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final registerResponse = await remoteDataSource.register(
+          fullname: fullname,
+          email: email,
+          password: password,
+        );
+
+        return Right(registerResponse);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure('No internet connection'));
     }
   }
 }

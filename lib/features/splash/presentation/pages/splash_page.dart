@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _initializeApp() async {
     // Wait for animation to play (approximately 3 seconds)
-    await Future.delayed(const Duration(seconds: 7));
+    await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted) return;
 

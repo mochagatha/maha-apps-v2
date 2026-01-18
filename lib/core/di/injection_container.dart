@@ -14,6 +14,7 @@ import '../../features/authentication/domain/usecases/check_auth_status.dart';
 import '../../features/authentication/domain/usecases/get_current_user.dart';
 import '../../features/authentication/domain/usecases/login.dart';
 import '../../features/authentication/domain/usecases/logout.dart';
+import '../../features/authentication/domain/usecases/register.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
 
 final sl = GetIt.instance;
@@ -27,6 +28,7 @@ Future<void> init() async {
       logout: sl(),
       getCurrentUser: sl(),
       checkAuthStatus: sl(),
+      register: sl(),
     ),
   );
 
@@ -35,6 +37,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Logout(sl()));
   sl.registerLazySingleton(() => GetCurrentUser(sl()));
   sl.registerLazySingleton(() => CheckAuthStatus(sl()));
+  sl.registerLazySingleton(() => Register(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(

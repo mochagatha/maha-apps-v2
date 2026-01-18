@@ -3,6 +3,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/constants.dart';
 import '../models/auth_response_model.dart';
+import '../models/register_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   /// Login with email and password
@@ -13,6 +14,13 @@ abstract class AuthRemoteDataSource {
 
   /// Logout (if API endpoint exists)
   Future<void> logout();
+
+  /// Register new user
+  Future<RegisterResponseModel> register({
+    required String fullname,
+    required String email,
+    required String password,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -55,6 +63,37 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await client.post(AppConstants.endpointLogout);
     } catch (e) {
       throw ServerException('Failed to logout: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<RegisterResponseModel> register({
+    required String fullname,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await client.post(
+        AppConstants.endpointRegister,
+        data: {
+          'fullname': fullname,
+          'email': email,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return RegisterResponseModel.fromJson(response.data);
+      } else {
+        throw ServerException(
+          response.data['message'] ?? 'Registration failed',
+        );
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to register: ${e.toString()}');
     }
   }
 }

@@ -6,6 +6,7 @@ import '../../domain/usecases/check_auth_status.dart';
 import '../../domain/usecases/get_current_user.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/logout.dart';
+import '../../domain/usecases/register.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
@@ -14,12 +15,14 @@ class AuthProvider extends ChangeNotifier {
   final Logout logout;
   final GetCurrentUser getCurrentUser;
   final CheckAuthStatus checkAuthStatus;
+  final Register register;
 
   AuthProvider({
     required this.login,
     required this.logout,
     required this.getCurrentUser,
     required this.checkAuthStatus,
+    required this.register,
   });
 
   AuthStatus _status = AuthStatus.initial;
@@ -121,6 +124,39 @@ class AuthProvider extends ChangeNotifier {
   /// Clear error message
   void clearError() {
     _errorMessage = null;
+    notifyListeners();
+  }
+
+  /// Register new user
+  Future<void> registerUser({
+    required String fullname,
+    required String email,
+    required String password,
+  }) async {
+    _status = AuthStatus.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    final result = await register(
+      RegisterParams(
+        fullname: fullname,
+        email: email,
+        password: password,
+      ),
+    );
+
+    result.fold(
+      (failure) {
+        _status = AuthStatus.error;
+        _errorMessage = failure.message;
+      },
+      (registerResponse) {
+        _status = AuthStatus.unauthenticated;
+        _errorMessage = null;
+        // Registration successful, user needs to login
+      },
+    );
+
     notifyListeners();
   }
 }

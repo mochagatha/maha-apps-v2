@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
+import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
@@ -44,6 +45,11 @@ class AppRouter {
           path: RoutePaths.login,
           name: RouteNames.login,
           builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.register,
+          name: RouteNames.register,
+          builder: (context, state) => const RegisterPage(),
         ),
         GoRoute(
           path: RoutePaths.home,

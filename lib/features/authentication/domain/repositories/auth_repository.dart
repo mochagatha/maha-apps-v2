@@ -2,6 +2,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/auth_response.dart';
+import '../entities/register_response.dart';
 import '../entities/user.dart';
 
 abstract class AuthRepository {
@@ -25,4 +26,11 @@ abstract class AuthRepository {
 
   /// Clear all auth data
   Future<Either<Failure, void>> clearAuthData();
+
+  /// Register new user
+  Future<Either<Failure, RegisterResponse>> register({
+    required String fullname,
+    required String email,
+    required String password,
+  });
 }
