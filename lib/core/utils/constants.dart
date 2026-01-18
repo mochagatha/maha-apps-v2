@@ -8,10 +8,15 @@ class AppConstants {
   static const String keyRememberMe = 'remember_me';
   static const String keyBranchCode = 'branch_code';
   
-  // API endpoints
+  // Auth endpoints
   static const String endpointLogin = '/auth/login';
   static const String endpointLogout = '/auth/logout';
   static const String endpointRegister = '/auth/register';
+
+  // Home endpoints
+  static const String endpointEmployeeProfile = '/employee/profile';
+  static const String endpointEmployeeMenus = '/menu/employee';
+  static const String endpointNotificationCount = '/notification/count';
   static const String endpointRefreshToken = '/auth/refresh';
   
   // Error messages

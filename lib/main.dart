@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/router/app_router.dart';
 import 'features/authentication/presentation/providers/auth_provider.dart';
+import 'features/home/presentation/providers/home_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'shared/theme/app_theme.dart';
 
@@ -31,7 +32,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.sl<AuthProvider>(),
         ),
-        // Add other providers here as needed
+        // Home Provider from GetIt
+        ChangeNotifierProvider(
+          create: (_) => di.sl<HomeProvider>(),
+        ),
       ],
       child: MaterialApp.router(
         title: 'MAHA Apps',
