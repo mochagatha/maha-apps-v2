@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_paths.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/auth_provider.dart';
 
@@ -66,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Pendaftaran Berhasil!',
+                context.l10n.registrationSuccess,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -74,8 +75,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Silahkan login dengan akun yang telah didaftarkan',
+              Text(
+                context.l10n.registrationSuccessMessage,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -86,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Navigator.of(context).pop();
                     context.go(RoutePaths.login);
                   },
-                  child: const Text('Masuk'),
+                  child: Text(context.l10n.login),
                 ),
               ),
             ],
@@ -107,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Buat Akun'),
+        title: Text(context.l10n.createAccount),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go(RoutePaths.login),
@@ -126,20 +127,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 32),
 
                     // Fullname Field
-                    const Text(
-                      'Nama Lengkap',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    Text(
+                      context.l10n.fullname,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _fullnameController,
-                      decoration: const InputDecoration(
-                        hintText: 'Masukkan nama lengkap anda...',
-                        prefixIcon: Icon(Icons.person_outline),
+                      decoration: InputDecoration(
+                        hintText: context.l10n.enterFullname,
+                        prefixIcon: const Icon(Icons.person_outline),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Nama lengkap tidak boleh kosong';
+                          return context.l10n.fullnameRequired;
                         }
                         return null;
                       },
@@ -147,24 +148,24 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 24),
 
                     // Email Field
-                    const Text(
-                      'Email',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    Text(
+                      context.l10n.email,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
-                      decoration: const InputDecoration(
-                        hintText: 'Masukkan email anda...',
-                        prefixIcon: Icon(Icons.email_outlined),
+                      decoration: InputDecoration(
+                        hintText: context.l10n.enterEmail,
+                        prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email tidak boleh kosong';
+                          return context.l10n.emailRequired;
                         }
                         if (!value.contains('@')) {
-                          return 'Format email tidak valid';
+                          return context.l10n.emailInvalid;
                         }
                         return null;
                       },
@@ -172,16 +173,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 24),
 
                     // Password Field
-                    const Text(
-                      'Kata Sandi',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    Text(
+                      context.l10n.password,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _isPasswordObscure,
                       decoration: InputDecoration(
-                        hintText: 'Masukkan kata sandi anda...',
+                        hintText: context.l10n.enterPassword,
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -196,10 +197,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password tidak boleh kosong';
+                          return context.l10n.passwordRequired;
                         }
                         if (value.length < 6) {
-                          return 'Password minimal 6 karakter';
+                          return context.l10n.passwordMinLength;
                         }
                         return null;
                       },
@@ -207,16 +208,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 24),
 
                     // Confirm Password Field
-                    const Text(
-                      'Konfirmasi Kata Sandi',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    Text(
+                      context.l10n.confirmPassword,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: _isConfirmPasswordObscure,
                       decoration: InputDecoration(
-                        hintText: 'Masukkan ulang kata sandi anda...',
+                        hintText: context.l10n.enterPassword,
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -231,10 +232,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Konfirmasi password tidak boleh kosong';
+                          return context.l10n.passwordRequired;
                         }
                         if (value != _passwordController.text) {
-                          return 'Password tidak sama';
+                          return context.l10n.passwordNotMatch;
                         }
                         return null;
                       },
@@ -254,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 strokeWidth: 2,
                               ),
                             )
-                          : const Text('Buat Akun'),
+                          : Text(context.l10n.createAccount),
                     ),
 
                     const SizedBox(height: 24),
@@ -268,9 +269,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: Colors.grey,
                           ),
                           children: [
-                            const TextSpan(text: 'Sudah punya akun? '),
+                            TextSpan(text: '${context.l10n.alreadyHaveAccount} '),
                             TextSpan(
-                              text: 'Masuk',
+                              text: context.l10n.login,
                               style: const TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/router/app_router.dart';
 import 'features/authentication/presentation/providers/auth_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'shared/theme/app_theme.dart';
 
 void main() async {
@@ -36,6 +38,17 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router(),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('id', ''), // Indonesian
+          Locale('en', ''), // English
+        ],
+        locale: const Locale('id', ''), // Default to Indonesian
       ),
     );
   }

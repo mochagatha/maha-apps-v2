@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_paths.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/pin_verification_dialog.dart';
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'MAHA APPS',
+                      context.l10n.appName,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
@@ -101,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                     // Role Dropdown (Optional Helper)
                     DropdownButtonFormField<String>(
                       value: _selectedRole,
-                      decoration: const InputDecoration(
-                        labelText: 'Pilih Role (Quick Fill)',
-                        prefixIcon: Icon(Icons.people_outline),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.selectRole,
+                        prefixIcon: const Icon(Icons.people_outline),
                       ),
                       items: _emailOptions.keys.map((role) {
                         return DropdownMenuItem(
@@ -124,21 +125,21 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 24),
 
                     // Email Field
-                    const Text(
-                      'Email',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    Text(
+                      context.l10n.email,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
-                      decoration: const InputDecoration(
-                        hintText: 'Masukkan email anda...',
-                        prefixIcon: Icon(Icons.email_outlined),
+                      decoration: InputDecoration(
+                        hintText: context.l10n.enterEmail,
+                        prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email tidak boleh kosong';
+                          return context.l10n.emailRequired;
                         }
                         return null;
                       },
@@ -146,16 +147,16 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 24),
 
                     // Password Field
-                    const Text(
-                      'Kata Sandi',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    Text(
+                      context.l10n.password,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _isObscure,
                       decoration: InputDecoration(
-                        hintText: 'Masukkan kata sandi anda...',
+                        hintText: context.l10n.enterPassword,
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -170,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password tidak boleh kosong';
+                          return context.l10n.passwordRequired;
                         }
                         return null;
                       },
@@ -196,15 +197,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Tetap masuk',
-                          style: TextStyle(color: AppColors.neutral7),
+                          context.l10n.rememberMe,
+                          style: const TextStyle(color: AppColors.neutral7),
                         ),
                         const Spacer(),
                         TextButton(
                           onPressed: () {
                             // TODO: Navigate to forgot password
                           },
-                          child: const Text('Lupa kata sandi?'),
+                          child: Text(context.l10n.forgotPassword),
                         ),
                       ],
                     ),
@@ -223,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                                 strokeWidth: 2,
                               ),
                             )
-                          : const Text('Masuk'),
+                          : Text(context.l10n.login),
                     ),
 
                     const SizedBox(height: 24),
@@ -237,9 +238,9 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey,
                           ),
                           children: [
-                            const TextSpan(text: 'Belum punya akun? '),
+                            TextSpan(text: '${context.l10n.dontHaveAccount} '),
                             TextSpan(
-                              text: 'Daftar',
+                              text: context.l10n.register,
                               style: const TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
@@ -260,8 +261,8 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 32),
                     Center(
                       child: Text(
-                        '© Copyright IT Maha ${DateTime.now().year}',
-                        style: TextStyle(color: AppColors.neutral5, fontSize: 12),
+                        context.l10n.copyright(DateTime.now().year.toString()),
+                        style: const TextStyle(color: AppColors.neutral5, fontSize: 12),
                       ),
                     ),
                   ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_paths.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 
 class PinVerificationDialog extends StatefulWidget {
@@ -74,8 +75,8 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
       _showTermsAndConditions();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Kode verifikasi tidak valid'),
+        SnackBar(
+          content: Text(context.l10n.pinInvalid),
           backgroundColor: AppColors.error,
         ),
       );
@@ -103,18 +104,18 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Masukkan Kode Verifikasi Perusahaan',
-            style: TextStyle(
+          Text(
+            context.l10n.pinVerificationTitle,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Masukkan kode verifikasi perusahaan yang telah diberikan HRD',
-            style: TextStyle(
+          Text(
+            context.l10n.pinVerificationMessage,
+            style: const TextStyle(
               fontSize: 12,
               color: Colors.black54,
             ),
@@ -207,9 +208,9 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
             const SizedBox(height: 20),
 
             // Title
-            const Text(
-              'Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi MAHA Apps Mobile',
-              style: TextStyle(
+            Text(
+              context.l10n.termsAndConditionsTitle,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -218,9 +219,9 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
             const SizedBox(height: 16),
 
             // Description
-            const Text(
-              'Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi merupakan ketentuan yang harus dibaca, dipahami, dan disetujui oleh pengguna sebelum mengakses atau menggunakan aplikasi MAHA Apps Mobile. Lihat selengkapnya di sini:',
-              style: TextStyle(fontSize: 13),
+            Text(
+              context.l10n.termsAndConditionsMessage,
+              style: const TextStyle(fontSize: 13),
               textAlign: TextAlign.start,
             ),
             const SizedBox(height: 16),
@@ -234,9 +235,9 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
                   onTap: () {
                     // TODO: Navigate to terms page
                   },
-                  child: const Text(
-                    'Syarat & Ketentuan Penggunaan',
-                    style: TextStyle(
+                  child: Text(
+                    context.l10n.termsOfUse,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -254,9 +255,9 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
                   onTap: () {
                     // TODO: Navigate to privacy page
                   },
-                  child: const Text(
-                    'Pemberitahuan Privasi',
-                    style: TextStyle(
+                  child: Text(
+                    context.l10n.privacyNotice,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -286,10 +287,10 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
                       });
                     },
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Dengan ini menyatakan Setuju, anda menerima segala isi Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi',
-                      style: TextStyle(fontSize: 12),
+                      context.l10n.agreeTerms,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
@@ -307,7 +308,7 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
                         context.go(RoutePaths.register);
                       }
                     : null,
-                child: const Text('Saya Setuju'),
+                child: Text(context.l10n.iAgree),
               ),
             ),
             const SizedBox(height: 20),

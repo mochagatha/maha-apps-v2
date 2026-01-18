@@ -1,0 +1,183 @@
+{
+  "@@locale": "id",
+  "appName": "MAHA Apps",
+  "@appName": {
+    "description": "Application name"
+  },
+  
+  "login": "Masuk",
+  "@login": {
+    "description": "Login button text"
+  },
+  
+  "register": "Daftar",
+  "@register": {
+    "description": "Register button text"
+  },
+  
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  
+  "password": "Kata Sandi",
+  "@password": {
+    "description": "Password field label"
+  },
+  
+  "confirmPassword": "Konfirmasi Kata Sandi",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  
+  "fullname": "Nama Lengkap",
+  "@fullname": {
+    "description": "Fullname field label"
+  },
+  
+  "forgotPassword": "Lupa kata sandi?",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+  
+  "rememberMe": "Tetap masuk",
+  "@rememberMe": {
+    "description": "Remember me checkbox"
+  },
+  
+  "dontHaveAccount": "Belum punya akun?",
+  "@dontHaveAccount": {
+    "description": "Don't have account text"
+  },
+  
+  "alreadyHaveAccount": "Sudah punya akun?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  
+  "enterEmail": "Masukkan email anda...",
+  "@enterEmail": {
+    "description": "Email field hint"
+  },
+  
+  "enterPassword": "Masukkan kata sandi anda...",
+  "@enterPassword": {
+    "description": "Password field hint"
+  },
+  
+  "enterFullname": "Masukkan nama lengkap anda...",
+  "@enterFullname": {
+    "description": "Fullname field hint"
+  },
+  
+  "emailRequired": "Email tidak boleh kosong",
+  "@emailRequired": {
+    "description": "Email required validation"
+  },
+  
+  "emailInvalid": "Format email tidak valid",
+  "@emailInvalid": {
+    "description": "Email invalid validation"
+  },
+  
+  "passwordRequired": "Password tidak boleh kosong",
+  "@passwordRequired": {
+    "description": "Password required validation"
+  },
+  
+  "passwordMinLength": "Password minimal 6 karakter",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
+  
+  "passwordNotMatch": "Password tidak sama",
+  "@passwordNotMatch": {
+    "description": "Password not match validation"
+  },
+  
+  "fullnameRequired": "Nama lengkap tidak boleh kosong",
+  "@fullnameRequired": {
+    "description": "Fullname required validation"
+  },
+  
+  "createAccount": "Buat Akun",
+  "@createAccount": {
+    "description": "Create account button"
+  },
+  
+  "registrationSuccess": "Pendaftaran Berhasil!",
+  "@registrationSuccess": {
+    "description": "Registration success title"
+  },
+  
+  "registrationSuccessMessage": "Silahkan login dengan akun yang telah didaftarkan",
+  "@registrationSuccessMessage": {
+    "description": "Registration success message"
+  },
+  
+  "pinVerificationTitle": "Masukkan Kode Verifikasi Perusahaan",
+  "@pinVerificationTitle": {
+    "description": "PIN verification dialog title"
+  },
+  
+  "pinVerificationMessage": "Masukkan kode verifikasi perusahaan yang telah diberikan HRD",
+  "@pinVerificationMessage": {
+    "description": "PIN verification dialog message"
+  },
+  
+  "pinInvalid": "Kode verifikasi tidak valid",
+  "@pinInvalid": {
+    "description": "PIN invalid message"
+  },
+  
+  "termsAndConditionsTitle": "Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi MAHA Apps Mobile",
+  "@termsAndConditionsTitle": {
+    "description": "Terms and conditions title"
+  },
+  
+  "termsAndConditionsMessage": "Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi merupakan ketentuan yang harus dibaca, dipahami, dan disetujui oleh pengguna sebelum mengakses atau menggunakan aplikasi MAHA Apps Mobile. Lihat selengkapnya di sini:",
+  "@termsAndConditionsMessage": {
+    "description": "Terms and conditions message"
+  },
+  
+  "termsOfUse": "Syarat & Ketentuan Penggunaan",
+  "@termsOfUse": {
+    "description": "Terms of use link"
+  },
+  
+  "privacyNotice": "Pemberitahuan Privasi",
+  "@privacyNotice": {
+    "description": "Privacy notice link"
+  },
+  
+  "agreeTerms": "Dengan ini menyatakan Setuju, anda menerima segala isi Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi",
+  "@agreeTerms": {
+    "description": "Agree terms checkbox text"
+  },
+  
+  "iAgree": "Saya Setuju",
+  "@iAgree": {
+    "description": "I agree button"
+  },
+  
+  "copyright": "© Copyright IT Maha {year}",
+  "@copyright": {
+    "description": "Copyright text",
+    "placeholders": {
+      "year": {
+        "type": "String",
+        "example": "2024"
+      }
+    }
+  },
+  
+  "selectRole": "Pilih Role (Quick Fill)",
+  "@selectRole": {
+    "description": "Select role dropdown label"
+  },
+  
+  "loading": "Sedang memuat...",
+  "@loading": {
+    "description": "Loading text"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "@@locale": "en",
+  "appName": "MAHA Apps",
+  
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "fullname": "Full Name",
+  "forgotPassword": "Forgot password?",
+  "rememberMe": "Remember me",
+  "dontHaveAccount": "Don't have an account?",
+  "alreadyHaveAccount": "Already have an account?",
+  
+  "enterEmail": "Enter your email...",
+  "enterPassword": "Enter your password...",
+  "enterFullname": "Enter your full name...",
+  
+  "emailRequired": "Email is required",
+  "emailInvalid": "Invalid email format",
+  "passwordRequired": "Password is required",
+  "passwordMinLength": "Password must be at least 6 characters",
+  "passwordNotMatch": "Passwords do not match",
+  "fullnameRequired": "Full name is required",
+  
+  "createAccount": "Create Account",
+  "registrationSuccess": "Registration Successful!",
+  "registrationSuccessMessage": "Please login with your registered account",
+  
+  "pinVerificationTitle": "Enter Company Verification Code",
+  "pinVerificationMessage": "Enter the company verification code provided by HRD",
+  "pinInvalid": "Invalid verification code",
+  
+  "termsAndConditionsTitle": "Terms & Conditions and Privacy Notice of MAHA Apps Mobile",
+  "termsAndConditionsMessage": "Terms & Conditions and Privacy Notice are terms that must be read, understood, and agreed upon by users before accessing or using the MAHA Apps Mobile application. See more here:",
+  "termsOfUse": "Terms & Conditions",
+  "privacyNotice": "Privacy Notice",
+  "agreeTerms": "By agreeing, you accept all the contents of the Terms & Conditions and Privacy Notice",
+  "iAgree": "I Agree",
+  
+  "copyright": "© Copyright IT Maha {year}",
+  "selectRole": "Select Role (Quick Fill)",
+  "loading": "Loading..."
+}
