@@ -173,6 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                         if (value == null || value.isEmpty) {
                           return context.l10n.passwordRequired;
                         }
+                        if (value.length < 6) {
+                          return context.l10n.passwordMinLength;
+                        }
                         return null;
                       },
                     ),
