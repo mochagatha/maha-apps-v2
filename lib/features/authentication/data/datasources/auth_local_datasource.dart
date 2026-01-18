@@ -50,7 +50,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final jsonString = json.encode(user.toJson());
       await sharedPreferences.setString(AppConstants.keyUserId, jsonString);
 
-      // Also save token separately for easy access
+      // Also save important fields separately for easy access
+      if (user.employeeId != null) {
+        await sharedPreferences.setInt('employee_id', user.employeeId!);
+      }
       if (user.token != null) {
         await sharedPreferences.setString(AppConstants.keyToken, user.token!);
       }

@@ -16,7 +16,7 @@ class AppConstants {
 
   // Home endpoints (V1 compatible)
   static const String endpointEmployeeProfile = '/employee/profile';
-  static const String endpointEmployeeMenus = '/menu/employee';
+  static const String endpointEmployeeMenus = '/employee/employee-menu-application';
   static const String endpointNotificationCount = '/notification/count';
   
   // Profile endpoints (V1 compatible)

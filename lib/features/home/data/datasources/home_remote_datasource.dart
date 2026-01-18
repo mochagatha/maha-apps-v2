@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/constants.dart';
@@ -45,8 +47,27 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<List<MenuItemModel>> getEmployeeMenus() async {
     try {
-      // Use main service for menu endpoints (V1 compatible)
-      final response = await client.dio.get(AppConstants.endpointEmployeeMenus);
+      // Get employee_id and token from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id');
+      final token = prefs.getString(AppConstants.keyToken);
+
+      if (employeeId == null) {
+        throw ServerException('Employee ID not found. Please login again.');
+      }
+
+      // Use dioGolang for menu endpoint (V1 compatible)
+      final response = await client.dioGolang.get(
+        AppConstants.endpointEmployeeMenus,
+        queryParameters: {
+          'employee_id': employeeId,
+        },
+        options: Options(
+          headers: {
+            'Authorization': token ?? '',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> menusJson = response.data['data'] ?? [];
