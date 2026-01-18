@@ -41,7 +41,7 @@ class ProfileCard extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             AppColors.primary,
-            AppColors.primary.withOpacity(0.8),
+            AppColors.primary.withOpacity(0.85),
           ],
         ),
       ),
@@ -49,39 +49,48 @@ class ProfileCard extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
-            // Avatar
+            // Avatar with white border
             Stack(
               children: [
-                CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: employee!.biodata?.photoUrl != null
-                      ? ClipOval(
-                          child: Image.network(
-                            employee!.biodata!.photoUrl!,
-                            width: 64,
-                            height: 64,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Text(
-                                _getInitials(employee!.fullname),
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary,
-                                ),
-                              );
-                            },
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 3,
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white,
+                    child: employee!.biodata?.photoUrl != null
+                        ? ClipOval(
+                            child: Image.network(
+                              employee!.biodata!.photoUrl!,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Text(
+                                  _getInitials(employee!.fullname),
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : Text(
+                            _getInitials(employee!.fullname),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
                           ),
-                        )
-                      : Text(
-                          _getInitials(employee!.fullname),
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
-                        ),
+                  ),
                 ),
                 if (hasNotifications)
                   Positioned(

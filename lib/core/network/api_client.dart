@@ -1,6 +1,7 @@
 // Centralized API Client using Dio
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../error/exceptions.dart';
 
 class ApiClient {
@@ -64,12 +65,16 @@ class ApiClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // Add token to headers if available
-          // TODO: Implement token retrieval from SharedPreferences
-          // final token = await _getToken();
-          // if (token != null) {
-          //   options.headers['Authorization'] = 'Bearer $token';
-          // }
+          // Add token to headers if available (V1 compatible)
+          try {
+            final prefs = await SharedPreferences.getInstance();
+            final token = prefs.getString('auth_token') ?? prefs.getString('refresh_token');
+            if (token != null && token.isNotEmpty) {
+              options.headers['Authorization'] = token;
+            }
+          } catch (e) {
+            print('Failed to get token: $e');
+          }
           
           print('REQUEST[${options.method}] => PATH: ${options.path}');
           return handler.next(options);

@@ -54,6 +54,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       if (user.employeeId != null) {
         await sharedPreferences.setInt('employee_id', user.employeeId!);
       }
+      if (user.jobTitleId != null) {
+        await sharedPreferences.setInt('job_title_id', user.jobTitleId!);
+      }
       if (user.token != null) {
         await sharedPreferences.setString(AppConstants.keyToken, user.token!);
       }

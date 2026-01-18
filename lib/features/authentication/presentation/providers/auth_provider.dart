@@ -1,6 +1,11 @@
 // Auth Provider - State management for authentication
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/usecases/usecase.dart';
+import '../../data/models/user_model.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/check_auth_status.dart';
 import '../../domain/usecases/get_current_user.dart';
@@ -46,16 +51,69 @@ class AuthProvider extends ChangeNotifier {
       LoginParams(email: email, password: password),
     );
 
-    result.fold(
-      (failure) {
+    await result.fold(
+      (failure) async {
         _status = AuthStatus.error;
         _errorMessage = failure.message;
         _user = null;
       },
-      (authResponse) {
-        _status = AuthStatus.authenticated;
-        _user = authResponse.data;
-        _errorMessage = null;
+      (authResponse) async {
+        // Login successful, now fetch employee profile to get employee_id and job_title_id
+        // This matches V1 flow: login -> getDataEmployeeByToken -> save employee data
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          
+          // First save the token so we can use it for the next request
+          if (authResponse.data.token != null) {
+            await prefs.setString('auth_token', authResponse.data.token!);
+            await prefs.setString('refresh_token', authResponse.data.refreshToken ?? authResponse.data.token!);
+          }
+          
+          // Now fetch employee data using the token
+          // V1 uses: POST BASE_URL_GOLANG/employee/get-by-token
+          final dio = Dio();
+          dio.options.baseUrl = dotenv.env['BASE_URL_GOLANG'] ?? '';
+          dio.options.headers['Authorization'] = authResponse.data.token;
+          
+          // V1 calls this endpoint after login to get employee data
+          final profileResponse = await dio.post('/employee/get-by-token');
+          
+          if (profileResponse.statusCode == 200 && profileResponse.data['status'] == 'success') {
+            final employeeData = profileResponse.data['data'];
+            final employeeId = employeeData['id'] as int?;
+            final jobTitleId = employeeData['job_title']?['id'] as int?;
+            final branchCode = employeeData['branch']?['branch_code'] as String?;
+            
+            // Update user with employee_id and job_title_id
+            final updatedUser = UserModel(
+              employeeId: employeeId,
+              jobTitleId: jobTitleId,
+              branchCode: branchCode ?? authResponse.data.branchCode,
+              token: authResponse.data.token,
+              refreshToken: authResponse.data.refreshToken,
+            );
+            
+            // Save updated user
+            await prefs.setString('user_data', json.encode(updatedUser.toJson()));
+            if (employeeId != null) {
+              await prefs.setInt('employee_id', employeeId);
+            }
+            if (jobTitleId != null) {
+              await prefs.setInt('job_title_id', jobTitleId);
+            }
+            
+            _user = updatedUser;
+          }
+          
+          _status = AuthStatus.authenticated;
+          _errorMessage = null;
+        } catch (e) {
+          debugPrint('Error fetching employee data after login: $e');
+          // Even if profile fetch fails, we're still logged in
+          _status = AuthStatus.authenticated;
+          _user = authResponse.data;
+          _errorMessage = null;
+        }
       },
     );
 

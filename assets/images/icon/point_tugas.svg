@@ -1,0 +1,20 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="40" height="40" rx="4" fill="#106AE8"/>
+<rect x="13.25" y="10.25" width="18.75" height="21.75" rx="0.75" fill="white"/>
+<path d="M9.5 13.625C9.5 13.0037 10.0037 12.5 10.625 12.5C11.2463 12.5 11.75 13.0037 11.75 13.625L11.75 26.75H9.5L9.5 13.625Z" fill="white"/>
+<path d="M10.625 28.625L9.5 26.75H11.75L10.625 28.625Z" fill="white"/>
+<rect x="9.5" y="14" width="2.25" height="12" fill="white"/>
+<rect x="11" y="14" width="0.75" height="12" fill="white"/>
+<rect x="17.75" y="9.5" width="9" height="3" rx="0.225" fill="white"/>
+<ellipse cx="22.25" cy="9.875" rx="2.25" ry="1.875" fill="white"/>
+<circle cx="22.25" cy="9.5" r="0.75" fill="#106AE8"/>
+<rect x="16.25" y="14.75" width="3" height="3" rx="0.75" fill="#106AE8"/>
+<rect x="16.25" y="20" width="3" height="3" rx="0.75" fill="#106AE8"/>
+<rect x="16.25" y="26" width="3" height="3" rx="0.75" fill="#106AE8"/>
+<rect x="21.5" y="14.75" width="7.5" height="0.75" rx="0.375" fill="#106AE8"/>
+<rect x="21.5" y="16.25" width="7.5" height="0.75" rx="0.375" fill="#106AE8"/>
+<rect x="21.5" y="26" width="7.5" height="0.75" rx="0.375" fill="#106AE8"/>
+<rect x="21.5" y="27.5" width="7.5" height="0.75" rx="0.375" fill="#106AE8"/>
+<rect x="21.5" y="20" width="7.5" height="0.75" rx="0.375" fill="#106AE8"/>
+<rect x="21.5" y="21.5" width="7.5" height="0.75" rx="0.375" fill="#106AE8"/>
+</svg>

@@ -26,8 +26,17 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<EmployeeModel> getEmployeeProfile() async {
     try {
-      // Use dioEmployee for employee profile (V1 compatible)
-      final response = await client.dioEmployee.get(AppConstants.endpointEmployeeProfile);
+      // Get employee_id from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id');
+
+      if (employeeId == null) {
+        throw ServerException('Employee ID not found. Please login again.');
+      }
+
+      // Use dioGolang for employee profile (V1 compatible)
+      // V1 uses: BASE_URL_GOLANG + /employee/{id}
+      final response = await client.dioGolang.get('/employee/$employeeId');
 
       if (response.statusCode == 200) {
         return EmployeeModel.fromJson(response.data['data']);
@@ -47,26 +56,21 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<List<MenuItemModel>> getEmployeeMenus() async {
     try {
-      // Get employee_id and token from SharedPreferences
+      // Get employee_id from SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       final employeeId = prefs.getInt('employee_id');
-      final token = prefs.getString(AppConstants.keyToken);
 
       if (employeeId == null) {
         throw ServerException('Employee ID not found. Please login again.');
       }
 
       // Use dioGolang for menu endpoint (V1 compatible)
+      // Token is automatically added by interceptor
       final response = await client.dioGolang.get(
         AppConstants.endpointEmployeeMenus,
         queryParameters: {
           'employee_id': employeeId,
         },
-        options: Options(
-          headers: {
-            'Authorization': token ?? '',
-          },
-        ),
       );
 
       if (response.statusCode == 200) {
@@ -90,8 +94,25 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<NotificationCountModel> getNotificationCount() async {
     try {
-      // Use main service for notification count (V1 compatible)
-      final response = await client.dio.get(AppConstants.endpointNotificationCount);
+      // Get employee_id and job_title_id from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id');
+      final jobTitleId = prefs.getInt('job_title_id');
+
+      if (employeeId == null) {
+        throw ServerException('Employee ID not found. Please login again.');
+      }
+
+      // Use dioGolang for notification count (V1 compatible)
+      // V1 uses: BASE_URL_GOLANG + /employee/employee-notification/count-by-job-title
+      // Method: POST with body { employee_id, job_title_id }
+      final response = await client.dioGolang.post(
+        '/employee/employee-notification/count-by-job-title',
+        data: {
+          'employee_id': employeeId,
+          'job_title_id': jobTitleId ?? 0,
+        },
+      );
 
       if (response.statusCode == 200) {
         return NotificationCountModel.fromJson(response.data['data']);

@@ -18,14 +18,31 @@ class MenuItemModel extends MenuItem {
         );
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
-    return MenuItemModel(
-      id: json['id']?.toString() ?? '',
-      name: json['name'] ?? '',
-      label: json['label'] ?? '',
-      icon: json['icon'] ?? '',
-      isAsset: json['is_asset'] ?? false,
-      order: json['order'] ?? 0,
-    );
+    // V1 response format has nested structure:
+    // { "menu_application": { "id": xxx, "name": "xxx", ... }, "children": [...] }
+    final menuApp = json['menu_application'] as Map<String, dynamic>?;
+    
+    if (menuApp != null) {
+      // V1 format with nested menu_application
+      return MenuItemModel(
+        id: menuApp['id']?.toString() ?? '',
+        name: menuApp['name'] ?? '',
+        label: menuApp['label'] ?? menuApp['name'] ?? '',
+        icon: menuApp['icon'] ?? '',
+        isAsset: menuApp['is_asset'] ?? false,
+        order: menuApp['order'] ?? 0,
+      );
+    } else {
+      // Fallback to flat structure (if API changes)
+      return MenuItemModel(
+        id: json['id']?.toString() ?? '',
+        name: json['name'] ?? '',
+        label: json['label'] ?? '',
+        icon: json['icon'] ?? '',
+        isAsset: json['is_asset'] ?? false,
+        order: json['order'] ?? 0,
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -47,11 +47,11 @@ class MenuGrid extends StatelessWidget {
     }
 
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        childAspectRatio: MediaQuery.of(context).size.width > 600 ? 1 : 0.85,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.9,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -71,8 +71,8 @@ class MenuGrid extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
+                  color: Colors.black.withOpacity(0.08),
+                  spreadRadius: 0,
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -85,24 +85,44 @@ class MenuGrid extends StatelessWidget {
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    menu.isAsset
-                        ? Image.asset(
-                            menu.icon,
-                            width: 48,
-                            height: 48,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(
-                                Icons.apps,
-                                size: 48,
-                                color: AppColors.primary,
-                              );
-                            },
-                          )
-                        : Icon(
-                            _getIconData(menu.icon),
-                            size: 48,
-                            color: AppColors.primary,
-                          ),
+                    // Icon display
+                    SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: menu.isAsset
+                          ? Image.asset(
+                              menu.icon,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.apps,
+                                  size: 48,
+                                  color: AppColors.primary,
+                                );
+                              },
+                            )
+                          : menu.icon.startsWith('http')
+                              ? Image.network(
+                                  menu.icon,
+                                  width: 48,
+                                  height: 48,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.apps,
+                                      size: 48,
+                                      color: AppColors.primary,
+                                    );
+                                  },
+                                )
+                              : Icon(
+                                  _getIconData(menu.icon),
+                                  size: 48,
+                                  color: AppColors.primary,
+                                ),
+                    ),
                     if (badgeCount > 0)
                       Positioned(
                         top: -4,
@@ -142,9 +162,10 @@ class MenuGrid extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: AppColors.neutral9,
+                      height: 1.2,
                     ),
                   ),
                 ),

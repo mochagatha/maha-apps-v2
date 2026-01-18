@@ -4,11 +4,13 @@ import '../../domain/entities/user.dart';
 class UserModel extends User {
   const UserModel({
     int? employeeId,
+    int? jobTitleId,
     String? branchCode,
     String? token,
     String? refreshToken,
   }) : super(
           employeeId: employeeId,
+          jobTitleId: jobTitleId,
           branchCode: branchCode,
           token: token,
           refreshToken: refreshToken,
@@ -18,6 +20,7 @@ class UserModel extends User {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       employeeId: json['employee_id'] as int?,
+      jobTitleId: json['job_title_id'] as int?,
       branchCode: json['branch_code'] as String?,
       token: json['token'] as String?,
       refreshToken: json['refresh_token'] as String?,
@@ -28,6 +31,7 @@ class UserModel extends User {
   Map<String, dynamic> toJson() {
     return {
       'employee_id': employeeId,
+      'job_title_id': jobTitleId,
       'branch_code': branchCode,
       'token': token,
       'refresh_token': refreshToken,
@@ -38,6 +42,7 @@ class UserModel extends User {
   User toEntity() {
     return User(
       employeeId: employeeId,
+      jobTitleId: jobTitleId,
       branchCode: branchCode,
       token: token,
       refreshToken: refreshToken,
@@ -48,6 +53,7 @@ class UserModel extends User {
   factory UserModel.fromEntity(User user) {
     return UserModel(
       employeeId: user.employeeId,
+      jobTitleId: user.jobTitleId,
       branchCode: user.branchCode,
       token: user.token,
       refreshToken: user.refreshToken,
