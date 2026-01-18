@@ -66,9 +66,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 size: 64,
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 context.l10n.registrationSuccess,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

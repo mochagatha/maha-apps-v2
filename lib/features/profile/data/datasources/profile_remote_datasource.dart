@@ -26,7 +26,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<EmployeeModel> getProfile() async {
     try {
-      final response = await client.get('/employee/profile');
+      // Use dioEmployee for employee endpoints (V1 compatible)
+      final response = await client.dioEmployee.get('/employee/profile');
 
       if (response.statusCode == 200) {
         // Extract data from response
@@ -49,7 +50,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<EmployeeModel> updateProfile(Map<String, dynamic> params) async {
     try {
-      final response = await client.put(
+      // Use dioEmployee for employee endpoints (V1 compatible)
+      final response = await client.dioEmployee.put(
         '/employee/profile',
         data: params,
       );
@@ -82,8 +84,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         ),
       });
 
-      final response = await client.post(
-        '/employee/profile/photo',
+      // Use dioEmployee and V1 endpoint path
+      final response = await client.dioEmployee.post(
+        '/employee/employee-selfie',
         data: formData,
       );
 

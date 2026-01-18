@@ -34,7 +34,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     try {
-      final response = await client.post(
+      // Use dioGolang for login endpoint (V1 compatible)
+      final response = await client.dioGolang.post(
         AppConstants.endpointLogin,
         data: {
           'email': email,
@@ -73,7 +74,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     try {
-      final response = await client.post(
+      // Use dioGolang for register endpoint (V1 compatible)
+      final response = await client.dioGolang.post(
         AppConstants.endpointRegister,
         data: {
           'fullname': fullname,

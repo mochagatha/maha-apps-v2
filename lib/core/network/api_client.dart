@@ -5,11 +5,48 @@ import '../error/exceptions.dart';
 
 class ApiClient {
   late final Dio _dio;
+  late final Dio _dioGolang;
+  late final Dio _dioEmployee;
+  late final Dio _dioRegion;
+  late final Dio _dioLetter;
+  late final Dio _dioAttendance;
+  late final Dio _dioPayroll;
+  late final Dio _dioCount;
+  late final Dio _dioPublic;
 
   ApiClient() {
-    _dio = Dio(
+    // Main service
+    _dio = _createDio(dotenv.env['BASE_URL'] ?? '');
+    
+    // Golang service
+    _dioGolang = _createDio(dotenv.env['BASE_URL_GOLANG'] ?? '');
+    
+    // Employee service
+    _dioEmployee = _createDio(dotenv.env['BASE_URL_EMPLOYEE'] ?? '');
+    
+    // Region service
+    _dioRegion = _createDio(dotenv.env['BASE_URL_REGION'] ?? '');
+    
+    // Letter service
+    _dioLetter = _createDio(dotenv.env['BASE_URL_LETTER'] ?? '');
+    
+    // Attendance service
+    _dioAttendance = _createDio(dotenv.env['BASE_URL_ATTENDANCE'] ?? '');
+    
+    // Payroll service
+    _dioPayroll = _createDio(dotenv.env['BASE_URL_PAYROLL'] ?? '');
+    
+    // Count service
+    _dioCount = _createDio(dotenv.env['BASE_URL_COUNT'] ?? '');
+    
+    // Public service
+    _dioPublic = _createDio(dotenv.env['BASE_URL_PUBLIC'] ?? '');
+  }
+
+  Dio _createDio(String baseUrl) {
+    final dio = Dio(
       BaseOptions(
-        baseUrl: dotenv.env['API_BASE_URL'] ?? '',
+        baseUrl: baseUrl,
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),
         headers: {
@@ -19,14 +56,16 @@ class ApiClient {
       ),
     );
 
-    _setupInterceptors();
+    _setupInterceptors(dio);
+    return dio;
   }
 
-  void _setupInterceptors() {
-    _dio.interceptors.add(
+  void _setupInterceptors(Dio dio) {
+    dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           // Add token to headers if available
+          // TODO: Implement token retrieval from SharedPreferences
           // final token = await _getToken();
           // if (token != null) {
           //   options.headers['Authorization'] = 'Bearer $token';
@@ -160,6 +199,14 @@ class ApiClient {
     }
   }
 
-  // Get Dio instance for advanced usage
+  // Get Dio instances for different services
   Dio get dio => _dio;
+  Dio get dioGolang => _dioGolang;
+  Dio get dioEmployee => _dioEmployee;
+  Dio get dioRegion => _dioRegion;
+  Dio get dioLetter => _dioLetter;
+  Dio get dioAttendance => _dioAttendance;
+  Dio get dioPayroll => _dioPayroll;
+  Dio get dioCount => _dioCount;
+  Dio get dioPublic => _dioPublic;
 }

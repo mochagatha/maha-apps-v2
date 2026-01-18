@@ -8,16 +8,26 @@ class AppConstants {
   static const String keyRememberMe = 'remember_me';
   static const String keyBranchCode = 'branch_code';
   
-  // Auth endpoints
-  static const String endpointLogin = '/auth/login';
+  // Auth endpoints (V1 compatible)
+  static const String endpointLogin = '/employee/login';
   static const String endpointLogout = '/auth/logout';
-  static const String endpointRegister = '/auth/register';
+  static const String endpointRegister = '/employee/register';
+  static const String endpointRefreshToken = '/employee/refresh-token';
 
-  // Home endpoints
+  // Home endpoints (V1 compatible)
   static const String endpointEmployeeProfile = '/employee/profile';
   static const String endpointEmployeeMenus = '/menu/employee';
   static const String endpointNotificationCount = '/notification/count';
-  static const String endpointRefreshToken = '/auth/refresh';
+  
+  // Profile endpoints (V1 compatible)
+  static const String endpointUpdateProfile = '/employee/profile';
+  static const String endpointUpdateProfilePicture = '/employee/employee-selfie';
+  
+  // Notification endpoints (V1 compatible)
+  static const String endpointNotifications = '/employee/employee-notification/get-by-employee-id';
+  static const String endpointMarkAsRead = '/employee-notification/read';
+  static const String endpointMarkAllAsRead = '/employee/employee-notification/read-all-by-employee';
+  static const String endpointDeleteAllRead = '/employee/employee-notification/delete-all-by-employee';
   
   // Error messages
   static const String errorNoInternet = 'No internet connection. Please check your network.';

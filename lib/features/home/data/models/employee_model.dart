@@ -1,4 +1,4 @@
-import '../entities/employee.dart';
+import '../../domain/entities/employee.dart';
 
 class EmployeeModel extends Employee {
   const EmployeeModel({

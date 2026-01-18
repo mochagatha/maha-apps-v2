@@ -1,4 +1,4 @@
-import '../entities/register_response.dart';
+import '../../domain/entities/register_response.dart';
 
 class RegisterResponseModel extends RegisterResponse {
   const RegisterResponseModel({

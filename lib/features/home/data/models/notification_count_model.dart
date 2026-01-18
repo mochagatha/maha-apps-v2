@@ -1,4 +1,4 @@
-import '../entities/notification_count.dart';
+import '../../domain/entities/notification_count.dart';
 
 class NotificationCountModel extends NotificationCount {
   const NotificationCountModel({

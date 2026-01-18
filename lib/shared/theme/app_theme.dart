@@ -20,6 +20,9 @@ class AppColors {
   static const Color neutral8 = Color(0xff404040);
   static const Color neutral9 = Color(0xff202020);
   
+  // Text colors
+  static const Color textPrimary = Color(0xff202020);
+  
   // Error
   static const Color error = Color(0xffE91E21);
 }
@@ -86,12 +89,12 @@ class AppTheme {
       ),
       
       // Card Theme
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         color: Colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: AppColors.neutral2),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          side: BorderSide(color: AppColors.neutral2),
         ),
         margin: EdgeInsets.zero,
       ),

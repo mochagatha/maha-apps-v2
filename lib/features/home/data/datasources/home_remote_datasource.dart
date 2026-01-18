@@ -24,7 +24,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<EmployeeModel> getEmployeeProfile() async {
     try {
-      final response = await client.get(AppConstants.endpointEmployeeProfile);
+      // Use dioEmployee for employee profile (V1 compatible)
+      final response = await client.dioEmployee.get(AppConstants.endpointEmployeeProfile);
 
       if (response.statusCode == 200) {
         return EmployeeModel.fromJson(response.data['data']);
@@ -44,7 +45,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<List<MenuItemModel>> getEmployeeMenus() async {
     try {
-      final response = await client.get(AppConstants.endpointEmployeeMenus);
+      // Use main service for menu endpoints (V1 compatible)
+      final response = await client.dio.get(AppConstants.endpointEmployeeMenus);
 
       if (response.statusCode == 200) {
         final List<dynamic> menusJson = response.data['data'] ?? [];
@@ -67,7 +69,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<NotificationCountModel> getNotificationCount() async {
     try {
-      final response = await client.get(AppConstants.endpointNotificationCount);
+      // Use main service for notification count (V1 compatible)
+      final response = await client.dio.get(AppConstants.endpointNotificationCount);
 
       if (response.statusCode == 200) {
         return NotificationCountModel.fromJson(response.data['data']);
