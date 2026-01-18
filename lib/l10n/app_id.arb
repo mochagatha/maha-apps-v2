@@ -179,5 +179,70 @@
   "loading": "Sedang memuat...",
   "@loading": {
     "description": "Loading text"
+  },
+  
+  "retry": "Coba Lagi",
+  "@retry": {
+    "description": "Retry button"
+  },
+  
+  "close": "Tutup",
+  "@close": {
+    "description": "Close button"
+  },
+  
+  "profile": "Profil",
+  "@profile": {
+    "description": "Profile page title"
+  },
+  
+  "profilePicture": "Foto Profil",
+  "@profilePicture": {
+    "description": "Profile picture label"
+  },
+  
+  "profilePoints": "Poin saat ini",
+  "@profilePoints": {
+    "description": "Profile points label"
+  },
+  
+  "profileFeatures": "FITUR",
+  "@profileFeatures": {
+    "description": "Profile features section title"
+  },
+  
+  "profilePreferences": "PREFERENSI",
+  "@profilePreferences": {
+    "description": "Profile preferences section title"
+  },
+  
+  "dataDiri": "Data Diri",
+  "@dataDiri": {
+    "description": "Personal data menu"
+  },
+  
+  "education": "Pendidikan",
+  "@education": {
+    "description": "Education menu"
+  },
+  
+  "skill": "Skill",
+  "@skill": {
+    "description": "Skill menu"
+  },
+  
+  "family": "Keluarga",
+  "@family": {
+    "description": "Family menu"
+  },
+  
+  "changePassword": "Ubah Password",
+  "@changePassword": {
+    "description": "Change password menu"
+  },
+  
+  "secureAccount": "Keamanan Akun",
+  "@secureAccount": {
+    "description": "Secure account menu"
   }
 }

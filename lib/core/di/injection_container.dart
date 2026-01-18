@@ -27,6 +27,17 @@ import '../../features/home/domain/usecases/get_employee_profile.dart';
 import '../../features/home/domain/usecases/get_notification_count.dart';
 import '../../features/home/presentation/providers/home_provider.dart';
 
+// Profile feature imports
+import '../../features/profile/data/datasources/profile_local_datasource.dart';
+import '../../features/profile/data/datasources/profile_remote_datasource.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/domain/usecases/get_employee_profile.dart' as profile_usecases;
+import '../../features/profile/domain/usecases/update_employee_profile.dart';
+import '../../features/profile/domain/usecases/update_profile_picture.dart';
+import '../../features/profile/presentation/providers/profile_provider.dart';
+
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -99,6 +110,40 @@ Future<void> init() async {
   sl.registerLazySingleton<HomeLocalDataSource>(
     () => HomeLocalDataSourceImpl(sharedPreferences: sl()),
   );
+
+  //! Features - Profile
+  // Provider
+  sl.registerFactory(
+    () => ProfileProvider(
+      getEmployeeProfile: sl(),
+      updateEmployeeProfile: sl(),
+      updateProfilePicture: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => profile_usecases.GetEmployeeProfile(sl()));
+  sl.registerLazySingleton(() => UpdateEmployeeProfile(sl()));
+  sl.registerLazySingleton(() => UpdateProfilePicture(sl()));
+
+  // Repository
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(client: sl()),
+  );
+
+  sl.registerLazySingleton<ProfileLocalDataSource>(
+    () => ProfileLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
 
   //! Core
   // Network

@@ -41,5 +41,19 @@
   
   "copyright": "© Copyright IT Maha {year}",
   "selectRole": "Select Role (Quick Fill)",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "retry": "Retry",
+  "close": "Close",
+  
+  "profile": "Profile",
+  "profilePicture": "Profile Picture",
+  "profilePoints": "Current Points",
+  "profileFeatures": "FEATURES",
+  "profilePreferences": "PREFERENCES",
+  "dataDiri": "Personal Data",
+  "education": "Education",
+  "skill": "Skills",
+  "family": "Family",
+  "changePassword": "Change Password",
+  "secureAccount": "Account Security"
 }

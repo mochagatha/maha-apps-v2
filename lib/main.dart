@@ -6,6 +6,7 @@ import 'core/di/injection_container.dart' as di;
 import 'core/router/app_router.dart';
 import 'features/authentication/presentation/providers/auth_provider.dart';
 import 'features/home/presentation/providers/home_provider.dart';
+import 'features/profile/presentation/providers/profile_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'shared/theme/app_theme.dart';
 
@@ -35,6 +36,10 @@ class MyApp extends StatelessWidget {
         // Home Provider from GetIt
         ChangeNotifierProvider(
           create: (_) => di.sl<HomeProvider>(),
+        ),
+        // Profile Provider from GetIt
+        ChangeNotifierProvider(
+          create: (_) => di.sl<ProfileProvider>(),
         ),
       ],
       child: MaterialApp.router(
