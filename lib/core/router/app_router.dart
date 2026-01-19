@@ -8,7 +8,12 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
+import 'route_paths.dart';
 import '../../shared/widgets/scaffold_with_navbar.dart';
+import 'package:provider/provider.dart';
+import '../di/injection_container.dart';
+import '../../features/absensi/presentation/pages/absensi_page.dart';
+import '../../features/absensi/presentation/providers/attendance_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -84,6 +89,14 @@ class AppRouter {
           path: RoutePaths.profile,
           name: RouteNames.profile,
           builder: (context, state) => const ProfilePage(),
+        ),
+        GoRoute(
+          path: RoutePaths.absensi,
+          name: RouteNames.absensi,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<AttendanceProvider>(),
+            child: const AbsensiPage(),
+          ),
         ),
       ],
 

@@ -38,6 +38,14 @@ import '../../features/profile/domain/usecases/update_employee_profile.dart';
 import '../../features/profile/domain/usecases/update_profile_picture.dart';
 import '../../features/profile/presentation/providers/profile_provider.dart';
 
+// Absensi feature imports
+import '../../features/absensi/data/datasources/attendance_remote_datasource.dart';
+import '../../features/absensi/data/repositories/attendance_repository_impl.dart';
+import '../../features/absensi/domain/repositories/attendance_repository.dart';
+import '../../features/absensi/domain/usecases/get_absensi_menu_ids.dart';
+import '../../features/absensi/domain/usecases/get_today_attendance.dart';
+import '../../features/absensi/presentation/providers/attendance_provider.dart';
+
 
 final sl = GetIt.instance;
 
@@ -145,6 +153,31 @@ Future<void> init() async {
 
   sl.registerLazySingleton<ProfileLocalDataSource>(
     () => ProfileLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  //! Features - Absensi
+  // Provider
+  sl.registerFactory(
+    () => AttendanceProvider(
+      getTodayAttendance: sl(),
+      getAbsensiMenuIDs: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetTodayAttendance(sl()));
+  sl.registerLazySingleton(() => GetAbsensiMenuIDs(sl()));
+
+  // Repository
+  sl.registerLazySingleton<AttendanceRepository>(
+    () => AttendanceRepositoryImpl(
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<AttendanceRemoteDataSource>(
+    () => AttendanceRemoteDataSourceImpl(client: sl()),
   );
 
 

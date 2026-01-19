@@ -29,6 +29,11 @@ class AppConstants {
   static const String endpointMarkAllAsRead = '/employee/employee-notification/read-all-by-employee';
   static const String endpointDeleteAllRead = '/employee/employee-notification/delete-all-by-employee';
   
+  // Absensi endpoints
+  static const String endpointGetTodayEmployee = '/attendance/get-today-employee';
+  static const String endpointGetTodayWorker = '/attendance/worker/get-today-worker';
+  static const String endpointJobTitleMenu = '/employee/job-title-menu-application';
+  
   // Error messages
   static const String errorNoInternet = 'No internet connection. Please check your network.';
   static const String errorServerError = 'Server error. Please try again later.';
