@@ -80,5 +80,25 @@
   "contactAdminMessageBlacklisted": "Hello admin, Why is my account blacklisted, Thank You",
   "contactAdminMessageContract": "Hello admin, Why is my contract data not verified, Thank You",
   "contactAdminMessageInaccessible": "Hello admin, Why is my account inaccessible please help, Thank You",
-  "rejectStatusDetailsComingSoon": "Reject Status Details Coming Soon"
+  "rejectStatusDetailsComingSoon": "Reject Status Details Coming Soon",
+  
+  "menuAbsensi": "Attendance",
+  "menuMengamati": "Monitoring",
+  "menuPersetujuan": "Approval",
+  "menuRencanaKerja": "Work Plan",
+  "menuPermintaan": "Request",
+  "menuTugas": "Task",
+  "menuPengajuan": "Submission",
+  "menuAdministrasi": "Administration",
+  "menuArsip": "Archive",
+  "menuDataAbsensi": "Attendance Data",
+  "menuDataKaryawan": "Employee Data",
+  "menuProyek": "Project",
+  "menuAduan": "Complaint",
+  "menuDataPayroll": "Payroll Data",
+  "menuKasir": "Cashier",
+  "menuAkuntansi": "Accounting",
+  "menuRekrutmen": "Recruitment",
+  "menuPengaturan": "Settings",
+  "menuUpdateKontrak": "Update Contract"
 }

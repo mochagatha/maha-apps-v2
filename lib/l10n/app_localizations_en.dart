@@ -230,4 +230,61 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get rejectStatusDetailsComingSoon =>
       'Reject Status Details Coming Soon';
+
+  @override
+  String get menuAbsensi => 'Attendance';
+
+  @override
+  String get menuMengamati => 'Monitoring';
+
+  @override
+  String get menuPersetujuan => 'Approval';
+
+  @override
+  String get menuRencanaKerja => 'Work Plan';
+
+  @override
+  String get menuPermintaan => 'Request';
+
+  @override
+  String get menuTugas => 'Task';
+
+  @override
+  String get menuPengajuan => 'Submission';
+
+  @override
+  String get menuAdministrasi => 'Administration';
+
+  @override
+  String get menuArsip => 'Archive';
+
+  @override
+  String get menuDataAbsensi => 'Attendance Data';
+
+  @override
+  String get menuDataKaryawan => 'Employee Data';
+
+  @override
+  String get menuProyek => 'Project';
+
+  @override
+  String get menuAduan => 'Complaint';
+
+  @override
+  String get menuDataPayroll => 'Payroll Data';
+
+  @override
+  String get menuKasir => 'Cashier';
+
+  @override
+  String get menuAkuntansi => 'Accounting';
+
+  @override
+  String get menuRekrutmen => 'Recruitment';
+
+  @override
+  String get menuPengaturan => 'Settings';
+
+  @override
+  String get menuUpdateKontrak => 'Update Contract';
 }

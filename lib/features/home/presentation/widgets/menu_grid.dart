@@ -138,7 +138,7 @@ class MenuGrid extends StatelessWidget {
                 const SizedBox(height: 8),
                 Flexible(
                   child: Text(
-                    menu.label,
+                    MenuMapper.getMenuLabel(context, menu.name),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 12,

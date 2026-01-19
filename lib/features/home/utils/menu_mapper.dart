@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:maha_apps_v2/core/router/route_paths.dart';
+import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 
 class MenuMapper {
   static const String absensi = 'ABSENSI_PEGAWAI';
@@ -143,6 +145,51 @@ class MenuMapper {
           'route': null,
           'isAsset': true,
         };
+    }
+  }
+  static String getMenuLabel(BuildContext context, String id) {
+    switch (id) {
+      case absensi:
+        return context.l10n.menuAbsensi;
+      case mengamati:
+        return context.l10n.menuMengamati;
+      case persetujuan:
+        return context.l10n.menuPersetujuan;
+      case rencanaKerja:
+        return context.l10n.menuRencanaKerja;
+      case permintaan:
+        return context.l10n.menuPermintaan;
+      case tugas:
+        return context.l10n.menuTugas;
+      case pengajuan:
+        return context.l10n.menuPengajuan;
+      case administrasi:
+        return context.l10n.menuAdministrasi;
+      case arsip:
+        return context.l10n.menuArsip;
+      case dataAbsensi:
+        return context.l10n.menuDataAbsensi;
+      case dataKaryawan:
+        return context.l10n.menuDataKaryawan;
+      case proyek:
+        return context.l10n.menuProyek;
+      case aduan:
+        return context.l10n.menuAduan;
+      case dataPayroll:
+        return context.l10n.menuDataPayroll;
+      case kasir:
+        return context.l10n.menuKasir;
+      case akuntansi:
+        return context.l10n.menuAkuntansi;
+      case rekrutment:
+        return context.l10n.menuRekrutmen;
+      case pengaturan:
+        return context.l10n.menuPengaturan;
+      case updateKontrak:
+        return context.l10n.menuUpdateKontrak;
+      default:
+        // Attempt to return a human-readable fallback if possible, or just the ID
+        return id.replaceAll('_', ' ').toLowerCase().split(' ').map((word) => word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1)}' : '').join(' ');
     }
   }
 }

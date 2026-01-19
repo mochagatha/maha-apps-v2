@@ -231,4 +231,61 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get rejectStatusDetailsComingSoon =>
       'Detail Status Penolakan Segera Hadir';
+
+  @override
+  String get menuAbsensi => 'Absensi';
+
+  @override
+  String get menuMengamati => 'Mengamati';
+
+  @override
+  String get menuPersetujuan => 'Persetujuan';
+
+  @override
+  String get menuRencanaKerja => 'Rencana Kerja';
+
+  @override
+  String get menuPermintaan => 'Permintaan';
+
+  @override
+  String get menuTugas => 'Tugas';
+
+  @override
+  String get menuPengajuan => 'Pengajuan';
+
+  @override
+  String get menuAdministrasi => 'Administrasi';
+
+  @override
+  String get menuArsip => 'Arsip';
+
+  @override
+  String get menuDataAbsensi => 'Data Absensi';
+
+  @override
+  String get menuDataKaryawan => 'Data Karyawan';
+
+  @override
+  String get menuProyek => 'Proyek';
+
+  @override
+  String get menuAduan => 'Aduan';
+
+  @override
+  String get menuDataPayroll => 'Data Payroll';
+
+  @override
+  String get menuKasir => 'Kasir';
+
+  @override
+  String get menuAkuntansi => 'Akuntansi';
+
+  @override
+  String get menuRekrutmen => 'Rekrutmen';
+
+  @override
+  String get menuPengaturan => 'Pengaturan';
+
+  @override
+  String get menuUpdateKontrak => 'Update Kontrak';
 }

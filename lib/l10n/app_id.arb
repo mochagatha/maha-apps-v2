@@ -332,5 +332,25 @@
   "contactAdminMessageBlacklisted": "Halo admin, Kenapa akun saya masuk daftar hitam, Terima Kasih",
   "contactAdminMessageContract": "Halo admin, Kenapa data kontrak saya belum diverifikasi, Terima Kasih",
   "contactAdminMessageInaccessible": "Halo admin, Kenapa akun saya tidak dapat diakses mohon dibantu, Terima Kasih",
-  "rejectStatusDetailsComingSoon": "Detail Status Penolakan Segera Hadir"
+  "rejectStatusDetailsComingSoon": "Detail Status Penolakan Segera Hadir",
+  
+  "menuAbsensi": "Absensi",
+  "menuMengamati": "Mengamati",
+  "menuPersetujuan": "Persetujuan",
+  "menuRencanaKerja": "Rencana Kerja",
+  "menuPermintaan": "Permintaan",
+  "menuTugas": "Tugas",
+  "menuPengajuan": "Pengajuan",
+  "menuAdministrasi": "Administrasi",
+  "menuArsip": "Arsip",
+  "menuDataAbsensi": "Data Absensi",
+  "menuDataKaryawan": "Data Karyawan",
+  "menuProyek": "Proyek",
+  "menuAduan": "Aduan",
+  "menuDataPayroll": "Data Payroll",
+  "menuKasir": "Kasir",
+  "menuAkuntansi": "Akuntansi",
+  "menuRekrutmen": "Rekrutmen",
+  "menuPengaturan": "Pengaturan",
+  "menuUpdateKontrak": "Update Kontrak"
 }

@@ -505,6 +505,120 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Detail Status Penolakan Segera Hadir'**
   String get rejectStatusDetailsComingSoon;
+
+  /// No description provided for @menuAbsensi.
+  ///
+  /// In id, this message translates to:
+  /// **'Absensi'**
+  String get menuAbsensi;
+
+  /// No description provided for @menuMengamati.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengamati'**
+  String get menuMengamati;
+
+  /// No description provided for @menuPersetujuan.
+  ///
+  /// In id, this message translates to:
+  /// **'Persetujuan'**
+  String get menuPersetujuan;
+
+  /// No description provided for @menuRencanaKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Rencana Kerja'**
+  String get menuRencanaKerja;
+
+  /// No description provided for @menuPermintaan.
+  ///
+  /// In id, this message translates to:
+  /// **'Permintaan'**
+  String get menuPermintaan;
+
+  /// No description provided for @menuTugas.
+  ///
+  /// In id, this message translates to:
+  /// **'Tugas'**
+  String get menuTugas;
+
+  /// No description provided for @menuPengajuan.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengajuan'**
+  String get menuPengajuan;
+
+  /// No description provided for @menuAdministrasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Administrasi'**
+  String get menuAdministrasi;
+
+  /// No description provided for @menuArsip.
+  ///
+  /// In id, this message translates to:
+  /// **'Arsip'**
+  String get menuArsip;
+
+  /// No description provided for @menuDataAbsensi.
+  ///
+  /// In id, this message translates to:
+  /// **'Data Absensi'**
+  String get menuDataAbsensi;
+
+  /// No description provided for @menuDataKaryawan.
+  ///
+  /// In id, this message translates to:
+  /// **'Data Karyawan'**
+  String get menuDataKaryawan;
+
+  /// No description provided for @menuProyek.
+  ///
+  /// In id, this message translates to:
+  /// **'Proyek'**
+  String get menuProyek;
+
+  /// No description provided for @menuAduan.
+  ///
+  /// In id, this message translates to:
+  /// **'Aduan'**
+  String get menuAduan;
+
+  /// No description provided for @menuDataPayroll.
+  ///
+  /// In id, this message translates to:
+  /// **'Data Payroll'**
+  String get menuDataPayroll;
+
+  /// No description provided for @menuKasir.
+  ///
+  /// In id, this message translates to:
+  /// **'Kasir'**
+  String get menuKasir;
+
+  /// No description provided for @menuAkuntansi.
+  ///
+  /// In id, this message translates to:
+  /// **'Akuntansi'**
+  String get menuAkuntansi;
+
+  /// No description provided for @menuRekrutmen.
+  ///
+  /// In id, this message translates to:
+  /// **'Rekrutmen'**
+  String get menuRekrutmen;
+
+  /// No description provided for @menuPengaturan.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan'**
+  String get menuPengaturan;
+
+  /// No description provided for @menuUpdateKontrak.
+  ///
+  /// In id, this message translates to:
+  /// **'Update Kontrak'**
+  String get menuUpdateKontrak;
 }
 
 class _AppLocalizationsDelegate
