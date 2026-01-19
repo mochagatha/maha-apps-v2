@@ -8,17 +8,20 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
+import '../../shared/widgets/scaffold_with_navbar.dart';
 
 class AppRouter {
   static GoRouter router() {
+    final rootNavigatorKey = GlobalKey<NavigatorState>();
+    final shellNavigatorKey = GlobalKey<NavigatorState>();
+
     return GoRouter(
+      navigatorKey: rootNavigatorKey,
       initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
       
-      // Redirect logic - can be enhanced with auth guards if needed
+      // Redirect logic
       redirect: (context, state) {
-        // Auth guards can be implemented here
-        // For now, let SplashPage handle the navigation logic
         return null;
       },
       
@@ -38,11 +41,44 @@ class AppRouter {
           name: RouteNames.register,
           builder: (context, state) => const RegisterPage(),
         ),
-        GoRoute(
-          path: RoutePaths.home,
-          name: RouteNames.home,
-          builder: (context, state) => const HomePage(),
+        
+        // StatefulShellRoute for Bottom Navigation with persisted state
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return ScaffoldWithNavBar(navigationShell: navigationShell);
+          },
+          branches: [
+            StatefulShellBranch(
+              navigatorKey: shellNavigatorKey,
+              routes: [
+                GoRoute(
+                  path: RoutePaths.home,
+                  name: RouteNames.home,
+                  builder: (context, state) => const HomePage(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RoutePaths.pesan, 
+                  name: RouteNames.pesan,
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RoutePaths.calendar, 
+                  name: RouteNames.calendar,
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Kalender"))),
+                ),
+              ],
+            ),
+          ],
         ),
+        
         GoRoute(
           path: RoutePaths.profile,
           name: RouteNames.profile,

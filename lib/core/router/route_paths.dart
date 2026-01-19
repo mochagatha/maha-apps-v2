@@ -7,10 +7,32 @@ class RoutePaths {
   
   // Home
   static const String home = '/home';
+  static const String pesan = '/pesan';
+  static const String calendar = '/calendar';
   
   // Profile
   static const String profile = '/profile';
   
   // Settings
-  static const String settings = '/settings';
+  static const String setting = '/settings';
+  static const String settings = '/settings'; // Legacy/Duplicate?
+
+  // Features
+  static const String absensi = '/absensi';
+  static const String monitoringList = '/monitoring-list';
+  static const String approvalList = '/approval-list';
+  static const String workerPlanManager = '/worker-plan-manager';
+  static const String permintaan = '/permintaan';
+  static const String listFeature = '/list-feature';
+  static const String requestHomeScreen = '/request-home';
+  static const String administration = '/administration';
+  static const String arsipMenu = '/arsip-menu';
+  static const String dataAbsensi = '/data-absensi';
+  static const String dataKaryawanList = '/data-karyawan-list';
+  static const String listProyek = '/list-proyek';
+  static const String reportList = '/report-list';
+  static const String dataListPayroll = '/data-list-payroll';
+  static const String approvalNew = '/approval-new';
+  static const String recruitment = '/recruitment';
+  static const String contractUpdates = '/contract-updates';
 }

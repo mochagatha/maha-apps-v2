@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../utils/menu_mapper.dart';
 import '../../domain/entities/menu_item.dart';
 import '../../domain/entities/notification_count.dart';
 
@@ -47,11 +49,11 @@ class MenuGrid extends StatelessWidget {
     }
 
     return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 0.9,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: MediaQuery.of(context).size.width > 600 ? 1 : 0.8,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -60,112 +62,96 @@ class MenuGrid extends StatelessWidget {
         final menu = menus[index];
         final badgeCount = _getMenuBadgeCount(menu.name);
 
+        // Get details from MenuMapper
+        // We use menu.name as 'id' because in V1 allHomeMenu checks 'id': AppConstants.menu.absensi
+        // and MenuItemModel.toEntity() maps 'id' to 'id'.
+        // However, let's make sure we pass the correct identifier.
+        // It seems menu.name in V2 might be the identifier we want if it matches V1 keys.
+        // Let's assume menu.id matches the keys in MenuMapper for now.
+        final details = MenuMapper.getMenuDetails(menu.name); // Using name as V1 used name/id interchangeably or specific constants
+        final iconAsset = details['icon'] as String;
+        final route = details['route'] as String?;
+        final isAsset = details['isAsset'] as bool? ?? true;
+
         return GestureDetector(
           onTap: () {
-            // TODO: Navigate based on menu.id or menu.name
-            debugPrint('Tapped menu: ${menu.name}');
+            if (route != null) {
+              context.push(route);
+            } else {
+               ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Feature ${menu.label} coming soon!')),
+              );
+            }
           },
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              color: MediaQuery.of(context).size.width > 600
+                  ? Colors.white
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: MediaQuery.of(context).size.width > 600
+                  ? [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      )
+                    ]
+                  : [],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Icon with badge
                 Stack(
-                  clipBehavior: Clip.none,
                   children: [
-                    // Icon display
-                    SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: menu.isAsset
-                          ? Image.asset(
-                              menu.icon,
-                              width: 48,
-                              height: 48,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(
-                                  Icons.apps,
-                                  size: 48,
-                                  color: AppColors.primary,
-                                );
-                              },
-                            )
-                          : menu.icon.startsWith('http')
-                              ? Image.network(
-                                  menu.icon,
-                                  width: 48,
-                                  height: 48,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(
-                                      Icons.apps,
-                                      size: 48,
-                                      color: AppColors.primary,
-                                    );
-                                  },
-                                )
-                              : Icon(
-                                  _getIconData(menu.icon),
-                                  size: 48,
-                                  color: AppColors.primary,
-                                ),
-                    ),
+                    isAsset
+                        ? Image.asset(
+                            iconAsset,
+                            width: MediaQuery.of(context).size.width > 600 ? 60 : 50,
+                            height: MediaQuery.of(context).size.width > 600 ? 60 : 50,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                          )
+                        : Icon(
+                            Icons.apps, 
+                            size: MediaQuery.of(context).size.width > 600 ? 50 : 40,
+                            color: AppColors.primary,
+                          ),
                     if (badgeCount > 0)
                       Positioned(
-                        top: -4,
-                        right: -4,
+                        top: 0,
+                        right: 0,
                         child: Container(
-                          padding: const EdgeInsets.all(4),
+                          width: 20,
+                          height: 20,
                           decoration: const BoxDecoration(
                             color: Colors.red,
                             shape: BoxShape.circle,
                           ),
-                          constraints: const BoxConstraints(
-                            minWidth: 20,
-                            minHeight: 20,
-                          ),
+                          alignment: Alignment.center,
                           child: Text(
                             badgeCount > 99 ? '99+' : '$badgeCount',
                             style: const TextStyle(
+                              fontSize: 7,
                               color: Colors.white,
-                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                   ],
                 ),
-
                 const SizedBox(height: 8),
-
-                // Label
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                Flexible(
                   child: Text(
                     menu.label,
                     textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.neutral9,
-                      height: 1.2,
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                 ),

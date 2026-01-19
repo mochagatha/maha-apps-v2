@@ -34,161 +34,153 @@ class ProfileCard extends StatelessWidget {
     final hasNotifications = (notificationCount?.notificationCount ?? 0) > 0;
 
     return Container(
+      height: 160,
       width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withOpacity(0.85),
-          ],
+      decoration: const BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(20),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Avatar with white border
-            Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 3,
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                    child: employee!.biodata?.photoUrl != null
-                        ? ClipOval(
-                            child: Image.network(
-                              employee!.biodata!.photoUrl!,
-                              width: 60,
-                              height: 60,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Text(
-                                  _getInitials(employee!.fullname),
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
-                                  ),
-                                );
-                              },
+            // Left side: Avatar and Employee Info
+            Expanded(
+              child: Row(
+                children: [
+                  // Avatar (no border, smaller)
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 23,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: employee!.biodata?.photoUrl != null
+                            ? NetworkImage(employee!.biodata!.photoUrl!)
+                            : null,
+                        child: employee!.biodata?.photoUrl == null
+                            ? Text(
+                                _getInitials(employee!.fullname),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              )
+                            : null,
+                      ),
+                      if (hasNotifications)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
                             ),
-                          )
-                        : Text(
-                            _getInitials(employee!.fullname),
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
+                            constraints: const BoxConstraints(
+                              minWidth: 18,
+                              minHeight: 18,
+                            ),
+                            child: Text(
+                              '${notificationCount!.notificationCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                  ),
-                ),
-                if (hasNotifications)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 20,
-                        minHeight: 20,
-                      ),
-                      child: Text(
-                        '${notificationCount!.notificationCount}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
                         ),
-                        textAlign: TextAlign.center,
+                    ],
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  // Employee Info
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        context.go(RoutePaths.profile);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            employee!.fullname,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            employee!.jobTitleName,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-              ],
-            ),
-
-            const SizedBox(width: 16),
-
-            // Employee Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    employee!.fullname,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    employee!.jobTitleName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    employee!.branchName,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
 
-            // Notification Bell Icon
-            IconButton(
-              onPressed: () {
-                // TODO: Navigate to notification page
-                // context.go(RoutePaths.notifications);
-              },
-              icon: Stack(
-                children: [
-                  const Icon(
-                    Icons.notifications_outlined,
+            // Right side: Notification Bell
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    // TODO: Navigate to notification page
+                  },
+                  child: Stack(
+                    children: [
+                      const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                      if (hasNotifications)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () {
+                    context.go(RoutePaths.profile);
+                  },
+                  child: const Icon(
+                    Icons.person_outline,
                     color: Colors.white,
                     size: 28,
                   ),
-                  if (hasNotifications)
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
