@@ -74,7 +74,9 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       );
 
       if (response.statusCode == 200) {
+        print('DEBUG: Menu Response Data: ${response.data}'); // Debugging line
         final List<dynamic> menusJson = response.data['data'] ?? [];
+        print('DEBUG: Parsed Menus Count: ${menusJson.length}'); // Debugging line
         return menusJson
             .map((json) => MenuItemModel.fromJson(json))
             .toList();
