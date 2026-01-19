@@ -1,17 +1,20 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import '../../domain/entities/attendance_today.dart';
 import '../../domain/usecases/get_absensi_menu_ids.dart';
 import '../../domain/usecases/get_today_attendance.dart';
+import '../../domain/usecases/submit_attendance.dart';
 
 enum AttendanceStatus { initial, loading, loaded, error }
 
 class AttendanceProvider extends ChangeNotifier {
   final GetTodayAttendance getTodayAttendance;
   final GetAbsensiMenuIDs getAbsensiMenuIDs;
+  final SubmitAttendance submitAttendanceUseCase;
 
   AttendanceProvider({
-    required this.getTodayAttendance,
-    required this.getAbsensiMenuIDs,
+    required this.getTodayAttendance,n    required this.getAbsensiMenuIDs,
+    required this.submitAttendanceUseCase,
   });
 
   AttendanceStatus _status = AttendanceStatus.initial;
@@ -26,6 +29,9 @@ class AttendanceProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   bool get isLoading => _status == AttendanceStatus.loading;
   bool get hasError => _status == AttendanceStatus.error;
+  
+  bool _isSubmitting = false;
+  bool get isSubmitting => _isSubmitting;
 
   Future<void> loadData({
     required int employeeId,
@@ -88,5 +94,77 @@ class AttendanceProvider extends ChangeNotifier {
       parentMenuId: parentMenuId,
       isWorker: isWorker,
     );
+  }
+
+  Future<void> submitAttendance({
+    required int employeeId,
+    required String photoPath,
+    required String location,
+    required String branchCode,
+    bool isWorker = false,
+  }) async {
+    _isSubmitting = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final now = DateTime.now();
+      final date = DateFormat('yyyy-MM-dd').format(now);
+      final time = DateFormat('HH:mm:ss').format(now);
+      
+      // Determine status based on current attendance state
+      int status = _determineAttendanceStatus();
+
+      final result = await submitAttendanceUseCase(
+        employeeId: employeeId,
+        attendanceDate: date,
+        attendanceTime: time,
+        attendanceLocation: location,
+        attendancePhotoPath: photoPath,
+        attendanceBranch: branchCode,
+        status: status,
+        isWorker: isWorker,
+      );
+
+      result.fold(
+        (failure) {
+          _errorMessage = failure.message;
+          _isSubmitting = false;
+          notifyListeners();
+        },
+        (message) {
+          _isSubmitting = false;
+          notifyListeners();
+          // Success - caller should refresh data
+        },
+      );
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isSubmitting = false;
+      notifyListeners();
+    }
+  }
+
+  int _determineAttendanceStatus() {
+    if (_attendanceToday == null) return 1; // Default to clock-in
+    
+    // Status logic from V1:
+    // 1: Clock In
+    // 2: Clock Out
+    // 3: Break Finish
+    
+    if (_attendanceToday!.isBreak == true) {
+      // Break mode
+      return _attendanceToday!.clockIn == null ? 1 : 2;
+    } else {
+      // Normal mode
+      if (_attendanceToday!.clockIn == null) {
+        return 1; // Clock in
+      } else if (_attendanceToday!.breakFinish == null) {
+        return 3; // Break
+      } else {
+        return 2; // Clock out
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/attendance_provider.dart';
+import 'camera_page.dart';
 
 class AbsensiPage extends StatefulWidget {
   const AbsensiPage({super.key});
@@ -89,12 +90,45 @@ class _AbsensiPageState extends State<AbsensiPage> {
                  // Action Button
                  SizedBox(
                    width: double.infinity,
-                   child: ElevatedButton.icon(
-                     onPressed: () {
-                        // Navigate to Camera/Face Check
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Camera feature coming soon')),
-                        );
+                   child: provider.isSubmitting
+                       ? const Center(child: CircularProgressIndicator())
+                       : ElevatedButton.icon(
+                     onPressed: () async {
+                       // Navigate to Camera Page
+                       final result = await Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => CameraPage(
+                             status: provider._determineAttendanceStatus(),
+                             onPhotoTaken: (photoPath, location) async {
+                               // TODO: Get actual employee ID and branch code from auth
+                               await provider.submitAttendance(
+                                 employeeId: 1, // TODO: Get from auth
+                                 photoPath: photoPath,
+                                 location: location,
+                                 branchCode: 'MAIN', // TODO: Get from auth
+                                 isWorker: false, // TODO: Get from auth
+                               );
+                               
+                               if (provider.errorMessage == null) {
+                                 // Success - refresh data
+                                 // TODO: Call loadData with proper params
+                                 if (context.mounted) {
+                                   ScaffoldMessenger.of(context).showSnackBar(
+                                     const SnackBar(content: Text('Absensi berhasil!')),
+                                   );
+                                 }
+                               } else {
+                                 if (context.mounted) {
+                                   ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(content: Text(provider.errorMessage!)),
+                                   );
+                                 }
+                               }
+                             },
+                           ),
+                         ),
+                       );
                      }, 
                      icon: const Icon(Icons.camera_alt), 
                      label: const Text('Ambil Absensi'),
@@ -105,6 +139,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                      ),
                    ),
                  ),
+
 
                  const SizedBox(height: 30),
                  

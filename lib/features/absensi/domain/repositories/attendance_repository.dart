@@ -9,4 +9,16 @@ abstract class AttendanceRepository {
 
   /// Get allowed menu IDs for the abstract feature based on job title
   Future<Either<Failure, List<String>>> getAbsensiMenuIDs(int jobTitleId, int parentMenuId);
+  
+  /// Submit attendance with photo and location
+  Future<Either<Failure, String>> submitAttendance({
+    required int employeeId,
+    required String attendanceDate,
+    required String attendanceTime,
+    required String attendanceLocation,
+    required String attendancePhotoPath,
+    required String attendanceBranch,
+    required int status,
+    bool isWorker = false,
+  });
 }

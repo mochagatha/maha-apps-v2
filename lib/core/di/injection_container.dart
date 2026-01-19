@@ -44,6 +44,7 @@ import '../../features/absensi/data/repositories/attendance_repository_impl.dart
 import '../../features/absensi/domain/repositories/attendance_repository.dart';
 import '../../features/absensi/domain/usecases/get_absensi_menu_ids.dart';
 import '../../features/absensi/domain/usecases/get_today_attendance.dart';
+import '../../features/absensi/domain/usecases/submit_attendance.dart';
 import '../../features/absensi/presentation/providers/attendance_provider.dart';
 
 
@@ -161,12 +162,14 @@ Future<void> init() async {
     () => AttendanceProvider(
       getTodayAttendance: sl(),
       getAbsensiMenuIDs: sl(),
+      submitAttendanceUseCase: sl(),
     ),
   );
 
   // Use cases
   sl.registerLazySingleton(() => GetTodayAttendance(sl()));
   sl.registerLazySingleton(() => GetAbsensiMenuIDs(sl()));
+  sl.registerLazySingleton(() => SubmitAttendance(sl()));
 
   // Repository
   sl.registerLazySingleton<AttendanceRepository>(

@@ -33,6 +33,8 @@ class AppConstants {
   static const String endpointGetTodayEmployee = '/attendance/get-today-employee';
   static const String endpointGetTodayWorker = '/attendance/worker/get-today-worker';
   static const String endpointJobTitleMenu = '/employee/job-title-menu-application';
+  static const String endpointSubmitAttendance = '/attendance/v2';
+  static const String endpointSubmitAttendanceWorker = '/attendance/worker';
   
   // Error messages
   static const String errorNoInternet = 'No internet connection. Please check your network.';

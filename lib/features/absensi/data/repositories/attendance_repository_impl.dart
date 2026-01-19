@@ -45,4 +45,34 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> submitAttendance({
+    required int employeeId,
+    required String attendanceDate,
+    required String attendanceTime,
+    required String attendanceLocation,
+    required String attendancePhotoPath,
+    required String attendanceBranch,
+    required int status,
+    bool isWorker = false,
+  }) async {
+    try {
+      final result = await remoteDataSource.submitAttendance(
+        employeeId: employeeId,
+        attendanceDate: attendanceDate,
+        attendanceTime: attendanceTime,
+        attendanceLocation: attendanceLocation,
+        attendancePhotoPath: attendancePhotoPath,
+        attendanceBranch: attendanceBranch,
+        status: status,
+        isWorker: isWorker,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }
