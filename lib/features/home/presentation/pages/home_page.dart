@@ -13,30 +13,33 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
     // Load home data when page is first opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeProvider>().loadHomeData();
+      final homeProvider = context.read<HomeProvider>();
+      homeProvider.loadHomeData();
+      homeProvider.startPolling();
     });
 
-    // Refresh notification count every 10 seconds
-    Future.delayed(const Duration(seconds: 10), () {
-      if (mounted) {
-        _startNotificationPolling();
-      }
-    });
+    WidgetsBinding.instance.addObserver(this);
   }
 
-  void _startNotificationPolling() {
-    Future.delayed(const Duration(seconds: 10), () {
-      if (mounted) {
-        context.read<HomeProvider>().refreshNotificationCount();
-        _startNotificationPolling();
-      }
-    });
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<HomeProvider>().startPolling();
+    } else if (state == AppLifecycleState.paused) {
+      context.read<HomeProvider>().stopPolling();
+    }
   }
 
   Future<void> _onRefresh() async {

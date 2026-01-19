@@ -17,14 +17,14 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.splash,
+      initialLocation: RoutePaths.login,
       debugLogDiagnostics: true,
-      
+
       // Redirect logic
       redirect: (context, state) {
         return null;
       },
-      
+
       routes: [
         GoRoute(
           path: RoutePaths.splash,
@@ -41,7 +41,7 @@ class AppRouter {
           name: RouteNames.register,
           builder: (context, state) => const RegisterPage(),
         ),
-        
+
         // StatefulShellRoute for Bottom Navigation with persisted state
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
@@ -61,7 +61,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: RoutePaths.pesan, 
+                  path: RoutePaths.pesan,
                   name: RouteNames.pesan,
                   builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
@@ -70,22 +70,23 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: RoutePaths.calendar, 
+                  path: RoutePaths.calendar,
                   name: RouteNames.calendar,
-                  builder: (context, state) => const Scaffold(body: Center(child: Text("Kalender"))),
+                  builder: (context, state) =>
+                      const Scaffold(body: Center(child: Text("Kalender"))),
                 ),
               ],
             ),
           ],
         ),
-        
+
         GoRoute(
           path: RoutePaths.profile,
           name: RouteNames.profile,
           builder: (context, state) => const ProfilePage(),
         ),
       ],
-      
+
       errorBuilder: (context, state) {
         return Scaffold(
           appBar: AppBar(title: const Text('Error')),

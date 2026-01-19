@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   // Pre-filled roles for quick testing (from V1)
   final Map<String, String> _emailOptions = {
     "Staff": "nur.alimul@mahasejahtera.com",
-    "Manajer TI": "setia@mahasejahtera.com", 
+    "Manajer TI": "setia@mahasejahtera.com",
     "Komisaris": "kris@mahasejahtera.com",
     "Direktur": "hazri@mahasejahtera.com",
   };
@@ -45,11 +45,8 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).unfocus();
 
     final authProvider = context.read<AuthProvider>();
-    
-    await authProvider.loginUser(
-      _emailController.text.trim(),
-      _passwordController.text,
-    );
+
+    await authProvider.loginUser(_emailController.text.trim(), _passwordController.text);
 
     if (!mounted) return;
 
@@ -57,10 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       context.go(RoutePaths.home);
     } else if (authProvider.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authProvider.errorMessage!),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text(authProvider.errorMessage!), backgroundColor: AppColors.error),
       );
     }
   }
@@ -79,24 +73,10 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                    
+
                     // Logo
-                    Center(
-                      child: Image.asset(
-                        'assets/maha.png',
-                        height: 100,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      context.l10n.appName,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    
+                    Center(child: Image.asset('assets/maha.png', height: 100)),
+
                     SizedBox(height: MediaQuery.of(context).size.height * 0.08),
 
                     // Role Dropdown (Optional Helper)
@@ -107,10 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: const Icon(Icons.people_outline),
                       ),
                       items: _emailOptions.keys.map((role) {
-                        return DropdownMenuItem(
-                          value: role,
-                          child: Text(role),
-                        );
+                        return DropdownMenuItem(value: role, child: Text(role));
                       }).toList(),
                       onChanged: (value) {
                         if (value != null) {
@@ -132,10 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: context.l10n.enterEmail,
-                        prefixIcon: const Icon(Icons.email_outlined),
-                      ),
+                      decoration: InputDecoration(hintText: context.l10n.enterEmail),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -157,11 +131,8 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: _isObscure,
                       decoration: InputDecoration(
                         hintText: context.l10n.enterPassword,
-                        prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: Icon(
-                            _isObscure ? Icons.visibility_off : Icons.visibility,
-                          ),
+                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
                           onPressed: () {
                             setState(() {
                               _isObscure = !_isObscure;
@@ -179,9 +150,9 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    
-                    const SizedBox(height: 16),
-                    
+
+                    const SizedBox(height: 8),
+
                     // Checkbox & Forgot Password
                     Row(
                       children: [
@@ -208,11 +179,14 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             // TODO: Navigate to forgot password
                           },
-                          child: Text(context.l10n.forgotPassword),
+                          child: Text(
+                            context.l10n.forgotPassword,
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 32),
 
                     // Login Button
@@ -222,10 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                           ? const SizedBox(
                               height: 24,
                               width: 24,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
+                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                             )
                           : Text(context.l10n.login),
                     ),
@@ -236,10 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                           children: [
                             TextSpan(text: '${context.l10n.dontHaveAccount} '),
                             TextSpan(

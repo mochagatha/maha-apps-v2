@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _initializeApp() async {
     // Wait for animation to play (approximately 3 seconds)
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 7));
 
     if (!mounted) return;
 
@@ -42,13 +42,6 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Lottie.asset(
-          'assets/splash_modified.json',
-          repeat: true,
-        ),
-      ),
-    );
+    return Scaffold(body: Center(child: Lottie.asset('assets/splash_modified.json', repeat: true)));
   }
 }

@@ -1,6 +1,6 @@
 name: maha_apps_v2
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
@@ -22,26 +22,33 @@ dependencies:
   # video_player: ^2.10.1
   lottie: ^3.3.1
   intl: ^0.20.2
-  
+
   # Architecture Dependencies
-  get_it: ^7.6.0                              # Dependency Injection
-  go_router: ^13.0.0                          # Routing
-  dartz: ^0.10.1                              # Functional Programming
-  equatable: ^2.0.5                           # Value Equality
-  internet_connection_checker: ^1.0.0+1       # Network Status
+  get_it: ^7.6.0 # Dependency Injection
+  go_router: ^13.0.0 # Routing
+  dartz: ^0.10.1 # Functional Programming
+  equatable: ^2.0.5 # Value Equality
+  internet_connection_checker: ^1.0.0+1 # Network Status
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  mockito: ^5.4.2                             # Mocking for tests
-  build_runner: ^2.4.6                        # Code generation
+  mockito: ^5.4.2 # Mocking for tests
+  build_runner: ^2.4.6 # Code generation
 
 flutter:
   generate: true
   uses-material-design: true
   assets:
+    - assets/images/
+    - assets/images/icon/
+    - assets/images/svg/
+    - assets/images/svg/arsip/
+    - assets/fonts/
+    - assets/audio/
     - assets/
+    - assets/templates/
     - .env
   # fonts:
   #   - family: Schyler

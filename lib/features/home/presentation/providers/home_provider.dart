@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/employee.dart';
@@ -25,6 +26,7 @@ class HomeProvider extends ChangeNotifier {
   List<MenuItem> _menus = [];
   NotificationCount? _notificationCount;
   String? _errorMessage;
+  Timer? _pollingTimer;
 
   // Getters
   HomeStatus get status => _status;
@@ -78,6 +80,25 @@ class HomeProvider extends ChangeNotifier {
 
     _status = HomeStatus.loaded;
     notifyListeners();
+    _status = HomeStatus.loaded;
+    notifyListeners();
+  }
+
+  /// Start polling for notifications
+  void startPolling() {
+    stopPolling();
+    // Initial fetch
+    refreshNotificationCount();
+    // Poll every 30 seconds
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      refreshNotificationCount();
+    });
+  }
+
+  /// Stop polling for notifications
+  void stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
   }
 
   /// Refresh notification count only
@@ -105,5 +126,11 @@ class HomeProvider extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    stopPolling();
+    super.dispose();
   }
 }
