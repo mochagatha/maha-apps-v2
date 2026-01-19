@@ -12,6 +12,7 @@ import '../../domain/usecases/get_current_user.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/logout.dart';
 import '../../domain/usecases/register.dart';
+import '../../domain/usecases/save_login_status.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
@@ -21,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
   final GetCurrentUser getCurrentUser;
   final CheckAuthStatus checkAuthStatus;
   final Register register;
+  final SaveLoginStatus saveLoginStatus;
 
   AuthProvider({
     required this.login,
@@ -28,6 +30,7 @@ class AuthProvider extends ChangeNotifier {
     required this.getCurrentUser,
     required this.checkAuthStatus,
     required this.register,
+    required this.saveLoginStatus,
   });
 
   AuthStatus _status = AuthStatus.initial;
@@ -42,7 +45,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _status == AuthStatus.loading;
 
   /// Login user
-  Future<void> loginUser(String email, String password) async {
+  Future<void> loginUser(String email, String password, {bool rememberMe = false}) async {
     _status = AuthStatus.loading;
     _errorMessage = null;
     notifyListeners();
@@ -103,6 +106,13 @@ class AuthProvider extends ChangeNotifier {
             }
             
             _user = updatedUser;
+          }
+          
+
+
+          // Save login status
+          if (rememberMe) {
+            await saveLoginStatus(SaveLoginStatusParams(rememberMe: true));
           }
           
           _status = AuthStatus.authenticated;

@@ -17,10 +17,10 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.login,
+      initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
 
-      // Redirect logic
+      // Redirect logic 
       redirect: (context, state) {
         return null;
       },

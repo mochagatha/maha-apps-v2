@@ -244,5 +244,93 @@
   "secureAccount": "Keamanan Akun",
   "@secureAccount": {
     "description": "Secure account menu"
-  }
+  },
+
+  
+  "logoutConfirmTitle": "Apakah Anda yakin ingin keluar dari aplikasi?",
+  "@logoutConfirmTitle": {
+    "description": "Logout confirmation dialog title"
+  },
+  
+  "logoutConfirmMessage": "Keluar dari aplikasi",
+  "@logoutConfirmMessage": {
+    "description": "Logout confirmation dialog message"
+  },
+  
+  "yes": "Ya",
+  "@yes": {
+    "description": "Yes button"
+  },
+  
+  "no": "Tidak",
+  "@no": {
+    "description": "No button"
+  },
+  
+  "cancel": "Batal",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  
+  "points": "Poin",
+  "@points": {
+    "description": "Points label"
+  },
+  
+  "targetReached": "Target tercapai 🎉",
+  "@targetReached": {
+    "description": "Target reached message"
+  },
+  
+  "appVersion": "Versi Aplikasi: {version}",
+  "@appVersion": {
+    "description": "App version text",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  
+  "statusRejectedTitle": "Data diri anda ditolak, Segera cek pemberitahuannya !",
+  "@statusRejectedTitle": {
+    "description": "Rejected status dialog title"
+  },
+  
+  "checkDetails": "Lihat Keterangan",
+  "@checkDetails": {
+    "description": "Check details button"
+  },
+  
+  "statusInactive": "Akun Anda Nonaktif. Silahkan hubungi HRD Maha segera !",
+  "@statusInactive": {
+    "description": "Inactive status message"
+  },
+  
+  "statusBlacklisted": "Akun masuk daftar hitam. Silahkan hubungi HRD Maha segera !",
+  "@statusBlacklisted": {
+    "description": "Blacklisted status message"
+  },
+  
+  "statusContractUnverified": "Data Kontrak Anda Belum Diverifikasi. Silahkan hubungi HRD Maha segera !",
+  "@statusContractUnverified": {
+    "description": "Contract unverified status message"
+  },
+  
+  "statusInaccessible": "Akun anda tidak dapat diakses. Silahkan hubungi HRD Maha segera !",
+  "@statusInaccessible": {
+    "description": "Inaccessible status message"
+  },
+  
+  "contactAdmin": "Hubungi Admin",
+  "@contactAdmin": {
+    "description": "Contact admin button"
+  },
+  
+  "contactAdminMessageInactive": "Halo admin, Kenapa akun saya nonaktif, Terima Kasih",
+  "contactAdminMessageBlacklisted": "Halo admin, Kenapa akun saya masuk daftar hitam, Terima Kasih",
+  "contactAdminMessageContract": "Halo admin, Kenapa data kontrak saya belum diverifikasi, Terima Kasih",
+  "contactAdminMessageInaccessible": "Halo admin, Kenapa akun saya tidak dapat diakses mohon dibantu, Terima Kasih",
+  "rejectStatusDetailsComingSoon": "Detail Status Penolakan Segera Hadir"
 }

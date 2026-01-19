@@ -158,4 +158,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get secureAccount => 'Account Security';
+
+  @override
+  String get logoutConfirmTitle => 'Are you sure you want to log out?';
+
+  @override
+  String get logoutConfirmMessage => 'Log out from application';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get points => 'Points';
+
+  @override
+  String get targetReached => 'Target reached 🎉';
+
+  @override
+  String appVersion(String version) {
+    return 'App Version: $version';
+  }
+
+  @override
+  String get statusRejectedTitle =>
+      'Your data has been rejected, check the notification immediately!';
+
+  @override
+  String get checkDetails => 'Check Details';
+
+  @override
+  String get statusInactive =>
+      'Your account is inactive. Please contact HRD Maha immediately!';
+
+  @override
+  String get statusBlacklisted =>
+      'Account blacklisted. Please contact HRD Maha immediately!';
+
+  @override
+  String get statusContractUnverified =>
+      'Your contract data has not been verified. Please contact HRD Maha immediately!';
+
+  @override
+  String get statusInaccessible =>
+      'Your account is inaccessible. Please contact HRD Maha immediately!';
+
+  @override
+  String get contactAdmin => 'Contact Admin';
+
+  @override
+  String get contactAdminMessageInactive =>
+      'Hello admin, Why is my account inactive, Thank You';
+
+  @override
+  String get contactAdminMessageBlacklisted =>
+      'Hello admin, Why is my account blacklisted, Thank You';
+
+  @override
+  String get contactAdminMessageContract =>
+      'Hello admin, Why is my contract data not verified, Thank You';
+
+  @override
+  String get contactAdminMessageInaccessible =>
+      'Hello admin, Why is my account inaccessible please help, Thank You';
+
+  @override
+  String get rejectStatusDetailsComingSoon =>
+      'Reject Status Details Coming Soon';
 }

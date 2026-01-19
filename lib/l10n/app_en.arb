@@ -55,5 +55,30 @@
   "skill": "Skills",
   "family": "Family",
   "changePassword": "Change Password",
-  "secureAccount": "Account Security"
+  "secureAccount": "Account Security",
+  
+  "logoutConfirmTitle": "Are you sure you want to log out?",
+  "logoutConfirmMessage": "Log out from application",
+  "yes": "Yes",
+  "no": "No",
+  "cancel": "Cancel",
+  
+  "points": "Points",
+  "targetReached": "Target reached 🎉",
+  "appVersion": "App Version: {version}",
+  
+  "statusRejectedTitle": "Your data has been rejected, check the notification immediately!",
+  "checkDetails": "Check Details",
+  
+  "statusInactive": "Your account is inactive. Please contact HRD Maha immediately!",
+  "statusBlacklisted": "Account blacklisted. Please contact HRD Maha immediately!",
+  "statusContractUnverified": "Your contract data has not been verified. Please contact HRD Maha immediately!",
+  "statusInaccessible": "Your account is inaccessible. Please contact HRD Maha immediately!",
+  
+  "contactAdmin": "Contact Admin",
+  "contactAdminMessageInactive": "Hello admin, Why is my account inactive, Thank You",
+  "contactAdminMessageBlacklisted": "Hello admin, Why is my account blacklisted, Thank You",
+  "contactAdminMessageContract": "Hello admin, Why is my contract data not verified, Thank You",
+  "contactAdminMessageInaccessible": "Hello admin, Why is my account inaccessible please help, Thank You",
+  "rejectStatusDetailsComingSoon": "Reject Status Details Coming Soon"
 }

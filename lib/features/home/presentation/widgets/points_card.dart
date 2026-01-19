@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../shared/theme/app_theme.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 class PointsCard extends StatelessWidget {
   const PointsCard({super.key});
@@ -10,13 +10,7 @@ class PointsCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       height: 70,
       decoration: BoxDecoration(
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            offset: Offset(0, 2),
-            blurRadius: 10,
-          ),
-        ],
+        boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 2), blurRadius: 10)],
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
@@ -28,11 +22,8 @@ class PointsCard extends StatelessWidget {
               'assets/images/icon/home-poin.png',
               width: 40,
               height: 40,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.monetization_on,
-                color: Colors.amber,
-                size: 40,
-              ),
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.monetization_on, color: Colors.amber, size: 40),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -40,8 +31,8 @@ class PointsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    '3000 / 3000 Poin',
+                  Text(
+                    '3000 / 3000 ${context.l10n.points}',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w300,
@@ -64,8 +55,8 @@ class PointsCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Target tercapai 🎉',
+                  Text(
+                    context.l10n.targetReached,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w300,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/router/route_paths.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
 import '../../domain/entities/employee.dart';
@@ -12,11 +12,7 @@ class ProfileCard extends StatelessWidget {
   final Employee? employee;
   final NotificationCount? notificationCount;
 
-  const ProfileCard({
-    super.key,
-    this.employee,
-    this.notificationCount,
-  });
+  const ProfileCard({super.key, this.employee, this.notificationCount});
 
   String _getInitials(String fullname) {
     if (fullname.isEmpty) return 'U';
@@ -35,9 +31,7 @@ class ProfileCard extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           content: SizedBox(
             width: MediaQuery.of(context).size.width - 120,
             child: Column(
@@ -49,19 +43,7 @@ class ProfileCard extends StatelessWidget {
                       const Icon(Icons.logout, size: 50, color: AppColors.primary),
                 ),
                 const SizedBox(height: 20),
-                const Text.rich(
-                  TextSpan(
-                    text: 'Apakah Anda yakin ingin ',
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'keluar ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: 'dari aplikasi ?'),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                Text(context.l10n.logoutConfirmTitle, textAlign: TextAlign.center),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,13 +55,13 @@ class ProfileCard extends StatelessWidget {
                           // Perform logout
                           final authProvider = context.read<AuthProvider>();
                           final nav = Navigator.of(context);
-                          
+
                           // Close dialog first
                           nav.pop();
-                          
+
                           // Call logout
                           await authProvider.logoutUser();
-                          
+
                           // Navigate to login
                           if (context.mounted) {
                             context.go(RoutePaths.login);
@@ -91,13 +73,10 @@ class ProfileCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 1.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
-                            side: const BorderSide(
-                              color: AppColors.primary,
-                              width: 1.5,
-                            ),
+                            side: const BorderSide(color: AppColors.primary, width: 1.5),
                           ),
                         ),
-                        child: const Text('Ya'),
+                        child: Text(context.l10n.yes),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -111,11 +90,9 @@ class ProfileCard extends StatelessWidget {
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: const Text('Batal'),
+                        child: Text(context.l10n.cancel),
                       ),
                     ),
                   ],
@@ -130,10 +107,10 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If employee is null, we can still show a skeleton or return mostly empty, 
-    // but the parent checks for null usually. 
+    // If employee is null, we can still show a skeleton or return mostly empty,
+    // but the parent checks for null usually.
     // We'll handle it gracefully just in case.
-    
+
     final hasNotifications = (notificationCount?.notificationCount ?? 0) > 0;
     // Fallback image if null
     final photoUrl = employee?.biodata?.photoUrl;
@@ -147,9 +124,7 @@ class ProfileCard extends StatelessWidget {
           width: double.infinity,
           decoration: const BoxDecoration(
             color: AppColors.primary,
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
@@ -164,9 +139,7 @@ class ProfileCard extends StatelessWidget {
                       CircleAvatar(
                         radius: 23,
                         backgroundColor: Colors.grey[200],
-                        backgroundImage: photoUrl != null
-                            ? NetworkImage(photoUrl)
-                            : null,
+                        backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
                         child: photoUrl == null
                             ? Text(
                                 _getInitials(fullName),
@@ -216,7 +189,7 @@ class ProfileCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 // Right side: Icons
                 Row(
                   children: [
@@ -250,8 +223,8 @@ class ProfileCard extends StatelessWidget {
                       onTap: () => _showLogoutDialog(context),
                       child: const Icon(
                         Icons.logout, // Using standard icon instead of FontAwesome for now
-                        color: Colors.white, 
-                        size: 20 // Slightly smaller like V1
+                        color: Colors.white,
+                        size: 20, // Slightly smaller like V1
                       ),
                     ),
                   ],
@@ -260,7 +233,7 @@ class ProfileCard extends StatelessWidget {
             ),
           ),
         ),
-        
+
         // Blur Effect Image (V1 decoration)
         Container(
           alignment: Alignment.topCenter,
@@ -272,7 +245,7 @@ class ProfileCard extends StatelessWidget {
             errorBuilder: (_, __, ___) => const SizedBox.shrink(), // Hides if missing
           ),
         ),
-        
+
         // Notification Badge Overlay on Avatar (Like in V1, though it was redundant there, we keep it if desired)
         // V1 had a badge on the avatar implementation too.
         if (hasNotifications)
@@ -281,14 +254,8 @@ class ProfileCard extends StatelessWidget {
             left: 12 + 46.0 - 15, // Approx avatar width helpers
             child: Container(
               padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
-               constraints: const BoxConstraints(
-                  minWidth: 16,
-                  minHeight: 16,
-                ),
+              decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
               child: Text(
                 '${notificationCount!.notificationCount}',
                 style: const TextStyle(

@@ -158,4 +158,77 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get secureAccount => 'Keamanan Akun';
+
+  @override
+  String get logoutConfirmTitle =>
+      'Apakah Anda yakin ingin keluar dari aplikasi?';
+
+  @override
+  String get logoutConfirmMessage => 'Keluar dari aplikasi';
+
+  @override
+  String get yes => 'Ya';
+
+  @override
+  String get no => 'Tidak';
+
+  @override
+  String get cancel => 'Batal';
+
+  @override
+  String get points => 'Poin';
+
+  @override
+  String get targetReached => 'Target tercapai 🎉';
+
+  @override
+  String appVersion(String version) {
+    return 'Versi Aplikasi: $version';
+  }
+
+  @override
+  String get statusRejectedTitle =>
+      'Data diri anda ditolak, Segera cek pemberitahuannya !';
+
+  @override
+  String get checkDetails => 'Lihat Keterangan';
+
+  @override
+  String get statusInactive =>
+      'Akun Anda Nonaktif. Silahkan hubungi HRD Maha segera !';
+
+  @override
+  String get statusBlacklisted =>
+      'Akun masuk daftar hitam. Silahkan hubungi HRD Maha segera !';
+
+  @override
+  String get statusContractUnverified =>
+      'Data Kontrak Anda Belum Diverifikasi. Silahkan hubungi HRD Maha segera !';
+
+  @override
+  String get statusInaccessible =>
+      'Akun anda tidak dapat diakses. Silahkan hubungi HRD Maha segera !';
+
+  @override
+  String get contactAdmin => 'Hubungi Admin';
+
+  @override
+  String get contactAdminMessageInactive =>
+      'Halo admin, Kenapa akun saya nonaktif, Terima Kasih';
+
+  @override
+  String get contactAdminMessageBlacklisted =>
+      'Halo admin, Kenapa akun saya masuk daftar hitam, Terima Kasih';
+
+  @override
+  String get contactAdminMessageContract =>
+      'Halo admin, Kenapa data kontrak saya belum diverifikasi, Terima Kasih';
+
+  @override
+  String get contactAdminMessageInaccessible =>
+      'Halo admin, Kenapa akun saya tidak dapat diakses mohon dibantu, Terima Kasih';
+
+  @override
+  String get rejectStatusDetailsComingSoon =>
+      'Detail Status Penolakan Segera Hadir';
 }

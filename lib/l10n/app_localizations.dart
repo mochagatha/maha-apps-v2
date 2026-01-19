@@ -385,6 +385,126 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Keamanan Akun'**
   String get secureAccount;
+
+  /// Logout confirmation dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah Anda yakin ingin keluar dari aplikasi?'**
+  String get logoutConfirmTitle;
+
+  /// Logout confirmation dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Keluar dari aplikasi'**
+  String get logoutConfirmMessage;
+
+  /// Yes button
+  ///
+  /// In id, this message translates to:
+  /// **'Ya'**
+  String get yes;
+
+  /// No button
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak'**
+  String get no;
+
+  /// Cancel button
+  ///
+  /// In id, this message translates to:
+  /// **'Batal'**
+  String get cancel;
+
+  /// Points label
+  ///
+  /// In id, this message translates to:
+  /// **'Poin'**
+  String get points;
+
+  /// Target reached message
+  ///
+  /// In id, this message translates to:
+  /// **'Target tercapai 🎉'**
+  String get targetReached;
+
+  /// App version text
+  ///
+  /// In id, this message translates to:
+  /// **'Versi Aplikasi: {version}'**
+  String appVersion(String version);
+
+  /// Rejected status dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Data diri anda ditolak, Segera cek pemberitahuannya !'**
+  String get statusRejectedTitle;
+
+  /// Check details button
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat Keterangan'**
+  String get checkDetails;
+
+  /// Inactive status message
+  ///
+  /// In id, this message translates to:
+  /// **'Akun Anda Nonaktif. Silahkan hubungi HRD Maha segera !'**
+  String get statusInactive;
+
+  /// Blacklisted status message
+  ///
+  /// In id, this message translates to:
+  /// **'Akun masuk daftar hitam. Silahkan hubungi HRD Maha segera !'**
+  String get statusBlacklisted;
+
+  /// Contract unverified status message
+  ///
+  /// In id, this message translates to:
+  /// **'Data Kontrak Anda Belum Diverifikasi. Silahkan hubungi HRD Maha segera !'**
+  String get statusContractUnverified;
+
+  /// Inaccessible status message
+  ///
+  /// In id, this message translates to:
+  /// **'Akun anda tidak dapat diakses. Silahkan hubungi HRD Maha segera !'**
+  String get statusInaccessible;
+
+  /// Contact admin button
+  ///
+  /// In id, this message translates to:
+  /// **'Hubungi Admin'**
+  String get contactAdmin;
+
+  /// No description provided for @contactAdminMessageInactive.
+  ///
+  /// In id, this message translates to:
+  /// **'Halo admin, Kenapa akun saya nonaktif, Terima Kasih'**
+  String get contactAdminMessageInactive;
+
+  /// No description provided for @contactAdminMessageBlacklisted.
+  ///
+  /// In id, this message translates to:
+  /// **'Halo admin, Kenapa akun saya masuk daftar hitam, Terima Kasih'**
+  String get contactAdminMessageBlacklisted;
+
+  /// No description provided for @contactAdminMessageContract.
+  ///
+  /// In id, this message translates to:
+  /// **'Halo admin, Kenapa data kontrak saya belum diverifikasi, Terima Kasih'**
+  String get contactAdminMessageContract;
+
+  /// No description provided for @contactAdminMessageInaccessible.
+  ///
+  /// In id, this message translates to:
+  /// **'Halo admin, Kenapa akun saya tidak dapat diakses mohon dibantu, Terima Kasih'**
+  String get contactAdminMessageInaccessible;
+
+  /// No description provided for @rejectStatusDetailsComingSoon.
+  ///
+  /// In id, this message translates to:
+  /// **'Detail Status Penolakan Segera Hadir'**
+  String get rejectStatusDetailsComingSoon;
 }
 
 class _AppLocalizationsDelegate

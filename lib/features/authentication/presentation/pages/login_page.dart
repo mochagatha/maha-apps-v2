@@ -46,7 +46,11 @@ class _LoginPageState extends State<LoginPage> {
 
     final authProvider = context.read<AuthProvider>();
 
-    await authProvider.loginUser(_emailController.text.trim(), _passwordController.text);
+    await authProvider.loginUser(
+      _emailController.text.trim(),
+      _passwordController.text,
+      rememberMe: _rememberMe,
+    );
 
     if (!mounted) return;
 
@@ -94,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                           setState(() {
                             _selectedRole = value;
                             _emailController.text = _emailOptions[value]!;
-                            _passwordController.text = '123456'; // Default default
+                            _passwordController.text = 'E!!fu!0T--T4~h@7hQ'; // Default default
                           });
                         }
                       },
