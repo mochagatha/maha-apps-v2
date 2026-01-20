@@ -236,6 +236,30 @@ abstract class AppLocalizations {
   /// **'Buat Akun'**
   String get createAccount;
 
+  /// Create account page title
+  ///
+  /// In id, this message translates to:
+  /// **'Buat Akun Baru'**
+  String get createAccountTitle;
+
+  /// Account type label
+  ///
+  /// In id, this message translates to:
+  /// **'Jenis Akun'**
+  String get accountType;
+
+  /// Employee account type
+  ///
+  /// In id, this message translates to:
+  /// **'Karyawan'**
+  String get employee;
+
+  /// Worker account type
+  ///
+  /// In id, this message translates to:
+  /// **'Pekerja'**
+  String get worker;
+
   /// Registration success title
   ///
   /// In id, this message translates to:
@@ -655,6 +679,12 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Update Kontrak'**
   String get menuUpdateKontrak;
+
+  /// No description provided for @menuKpi.
+  ///
+  /// In id, this message translates to:
+  /// **'Monitoring KPI'**
+  String get menuKpi;
 }
 
 class _AppLocalizationsDelegate

@@ -19,7 +19,8 @@ class MenuMapper {
   static const String dataPayroll = 'DATA_PAYROLL';
   static const String kasir = 'KASIR';
   static const String akuntansi = 'AKUNTANSI';
-  static const String rekrutment = 'REKRUTMEN';
+  static const String rekrutment = 'REKRUTMENT';
+  static const String kpi = 'KPI';
   static const String pengaturan = 'PENGATURAN';
   static const String updateKontrak = 'UPDATE_KONTRAK';
 
@@ -127,6 +128,12 @@ class MenuMapper {
           'route': RoutePaths.recruitment,
           'isAsset': true,
         };
+      case kpi:
+        return {
+          'icon': 'assets/images/icon/KPI.png',
+          'route': RoutePaths.kpi,
+          'isAsset': true,
+        };
       case pengaturan:
         return {
           'icon': 'assets/images/icon/setting_icon.png',
@@ -183,6 +190,8 @@ class MenuMapper {
         return context.l10n.menuAkuntansi;
       case rekrutment:
         return context.l10n.menuRekrutmen;
+      case kpi:
+        return context.l10n.menuKpi;
       case pengaturan:
         return context.l10n.menuPengaturan;
       case updateKontrak:

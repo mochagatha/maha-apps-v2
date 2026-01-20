@@ -22,6 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmPasswordController = TextEditingController();
   bool _isPasswordObscure = true;
   bool _isConfirmPasswordObscure = true;
+  String? _accountType = 'employee'; // Default to employee
 
   @override
   void dispose() {
@@ -34,6 +35,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
+    if (_accountType == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.fieldRequired)),
+      );
+      return;
+    }
 
     // Close keyboard
     FocusScope.of(context).unfocus();
@@ -44,6 +51,8 @@ class _RegisterPageState extends State<RegisterPage> {
       fullname: _fullnameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
+      // Pass account type if backend supports it
+      // type: _accountType, 
     );
 
     if (!mounted) return;
@@ -74,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Text(
                 context.l10n.registrationSuccessMessage,
                 textAlign: TextAlign.center,
@@ -104,13 +113,43 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  InputDecoration _buildInputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.0),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.createAccount),
+        title: Text(
+          context.l10n.createAccountTitle,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: AppColors.primary, // Red background
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => context.go(RoutePaths.login),
         ),
       ),
@@ -124,20 +163,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
 
                     // Fullname Field
                     Text(
                       context.l10n.fullname,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _fullnameController,
-                      decoration: InputDecoration(
-                        hintText: context.l10n.enterFullname,
-                        prefixIcon: const Icon(Icons.person_outline),
-                      ),
+                      decoration: _buildInputDecoration(context.l10n.enterFullname),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return context.l10n.fullnameRequired;
@@ -145,20 +181,60 @@ class _RegisterPageState extends State<RegisterPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
+
+                    // Account Type
+                    Text(
+                      context.l10n.accountType,
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Radio<String>(
+                              value: 'employee',
+                              groupValue: _accountType,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  _accountType = value;
+                                });
+                              },
+                            ),
+                            Text(context.l10n.employee),
+                          ],
+                        ),
+                        const SizedBox(width: 24),
+                        Row(
+                          children: [
+                            Radio<String>(
+                              value: 'worker',
+                              groupValue: _accountType,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  _accountType = value;
+                                });
+                              },
+                            ),
+                            Text(context.l10n.worker),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
 
                     // Email Field
                     Text(
                       context.l10n.email,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: context.l10n.enterEmail,
-                        prefixIcon: const Icon(Icons.email_outlined),
-                      ),
+                      decoration: _buildInputDecoration(context.l10n.enterEmail),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -170,23 +246,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
 
                     // Password Field
                     Text(
                       context.l10n.password,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _isPasswordObscure,
-                      decoration: InputDecoration(
-                        hintText: context.l10n.enterPassword,
-                        prefixIcon: const Icon(Icons.lock_outline),
+                      decoration: _buildInputDecoration(context.l10n.enterPassword).copyWith(
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordObscure ? Icons.visibility_off : Icons.visibility,
+                            _isPasswordObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            color: Colors.grey,
                           ),
                           onPressed: () {
                             setState(() {
@@ -205,23 +280,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
 
                     // Confirm Password Field
                     Text(
                       context.l10n.confirmPassword,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: _isConfirmPasswordObscure,
-                      decoration: InputDecoration(
-                        hintText: context.l10n.enterPassword,
-                        prefixIcon: const Icon(Icons.lock_outline),
+                      decoration: _buildInputDecoration(context.l10n.enterPassword).copyWith(
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isConfirmPasswordObscure ? Icons.visibility_off : Icons.visibility,
+                            _isConfirmPasswordObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            color: Colors.grey,
                           ),
                           onPressed: () {
                             setState(() {
@@ -241,21 +315,40 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 60),
 
                     // Register Button
-                    ElevatedButton(
-                      onPressed: authProvider.isLoading ? null : _handleRegister,
-                      child: authProvider.isLoading
-                          ? const SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: authProvider.isLoading ? null : _handleRegister,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor: Colors.grey.shade400,
+                          disabledForegroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: authProvider.isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                context.l10n.createAccount,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            )
-                          : Text(context.l10n.createAccount),
+                      ),
                     ),
 
                     const SizedBox(height: 24),

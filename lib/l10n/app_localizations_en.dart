@@ -78,6 +78,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
+  String get createAccountTitle => 'Create New Account';
+
+  @override
+  String get accountType => 'Account Type';
+
+  @override
+  String get employee => 'Employee';
+
+  @override
+  String get worker => 'Worker';
+
+  @override
   String get registrationSuccess => 'Registration Successful!';
 
   @override
@@ -305,4 +317,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuUpdateKontrak => 'Update Contract';
+
+  @override
+  String get menuKpi => 'KPI Monitoring';
 }

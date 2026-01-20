@@ -112,6 +112,22 @@
   "@createAccount": {
     "description": "Create account button"
   },
+  "createAccountTitle": "Buat Akun Baru",
+  "@createAccountTitle": {
+      "description": "Create account page title"
+  },
+  "accountType": "Jenis Akun",
+  "@accountType": {
+      "description": "Account type label"
+  },
+  "employee": "Karyawan",
+  "@employee": {
+      "description": "Employee account type"
+  },
+  "worker": "Pekerja",
+  "@worker": {
+      "description": "Worker account type"
+  },
   
   "registrationSuccess": "Pendaftaran Berhasil!",
   "@registrationSuccess": {
@@ -374,5 +390,6 @@
   "menuAkuntansi": "Akuntansi",
   "menuRekrutmen": "Rekrutmen",
   "menuPengaturan": "Pengaturan",
-  "menuUpdateKontrak": "Update Kontrak"
+  "menuUpdateKontrak": "Update Kontrak",
+  "menuKpi": "Monitoring KPI"
 }

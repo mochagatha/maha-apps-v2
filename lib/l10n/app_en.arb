@@ -5,6 +5,10 @@
   "login": "Login",
   "register": "Register here",
   "confirm": "Confirm",
+  "createAccountTitle": "Create New Account",
+  "accountType": "Account Type",
+  "employee": "Employee",
+  "worker": "Worker",
   "fieldRequired": "All fields are required",
   "email": "Email",
   "password": "Password",
@@ -102,5 +106,6 @@
   "menuAkuntansi": "Accounting",
   "menuRekrutmen": "Recruitment",
   "menuPengaturan": "Settings",
-  "menuUpdateKontrak": "Update Contract"
+  "menuUpdateKontrak": "Update Contract",
+  "menuKpi": "KPI Monitoring"
 }

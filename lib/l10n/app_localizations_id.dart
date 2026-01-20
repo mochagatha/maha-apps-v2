@@ -78,6 +78,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get createAccount => 'Buat Akun';
 
   @override
+  String get createAccountTitle => 'Buat Akun Baru';
+
+  @override
+  String get accountType => 'Jenis Akun';
+
+  @override
+  String get employee => 'Karyawan';
+
+  @override
+  String get worker => 'Pekerja';
+
+  @override
   String get registrationSuccess => 'Pendaftaran Berhasil!';
 
   @override
@@ -306,4 +318,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get menuUpdateKontrak => 'Update Kontrak';
+
+  @override
+  String get menuKpi => 'Monitoring KPI';
 }
