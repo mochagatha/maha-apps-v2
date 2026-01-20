@@ -10,7 +10,7 @@
     "description": "Login button text"
   },
   
-  "register": "Daftar",
+  "register": "Daftar disini",
   "@register": {
     "description": "Register button text"
   },
@@ -256,12 +256,26 @@
   "@logoutConfirmMessage": {
     "description": "Logout confirmation dialog message"
   },
-  
+  "logout": "Keluar",
+  "@logout": {
+    "description": "Logout button label"
+  },
+  "logoutConfirmation1": "Apakah Anda yakin ingin ",
+  "@logoutConfirmation1": {
+    "description": "Logout confirmation part 1"
+  },
+  "logoutConfirmation2": "keluar ",
+  "@logoutConfirmation2": {
+    "description": "Logout confirmation part 2 (bold)"
+  },
+  "logoutConfirmation3": "dari aplikasi?",
+  "@logoutConfirmation3": {
+    "description": "Logout confirmation part 3"
+  },
   "yes": "Ya",
   "@yes": {
     "description": "Yes button"
   },
-  
   "no": "Tidak",
   "@no": {
     "description": "No button"

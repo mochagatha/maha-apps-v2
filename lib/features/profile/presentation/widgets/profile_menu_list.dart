@@ -130,6 +130,8 @@ class ProfileMenuList extends StatelessWidget {
         return Icons.security_outlined;
       case 'settings':
         return Icons.settings_outlined;
+      case 'logout':
+        return Icons.logout;
       default:
         return Icons.circle_outlined;
     }

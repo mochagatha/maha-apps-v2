@@ -160,24 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                     // Checkbox & Forgot Password
                     Row(
                       children: [
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: Checkbox(
-                            value: _rememberMe,
-                            activeColor: AppColors.primary,
-                            onChanged: (value) {
-                              setState(() {
-                                _rememberMe = value ?? false;
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          context.l10n.rememberMe,
-                          style: const TextStyle(color: AppColors.neutral7),
-                        ),
+                        
                         const Spacer(),
                         TextButton(
                           onPressed: () {

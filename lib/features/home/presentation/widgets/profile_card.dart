@@ -28,7 +28,7 @@ class ProfileCard extends StatelessWidget {
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -40,10 +40,23 @@ class ProfileCard extends StatelessWidget {
                 Image.asset(
                   'assets/images/icon/logout.png',
                   errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.logout, size: 50, color: AppColors.primary),
+                      const Icon(Icons.logout, size: 64, color: AppColors.primary),
                 ),
                 const SizedBox(height: 20),
-                Text(context.l10n.logoutConfirmTitle, textAlign: TextAlign.center),
+                Text.rich(
+                  TextSpan(
+                    text: context.l10n.logoutConfirmation1,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: context.l10n.logoutConfirmation2,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: context.l10n.logoutConfirmation3),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 14),
+                ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -52,27 +65,25 @@ class ProfileCard extends StatelessWidget {
                       flex: 1,
                       child: ElevatedButton(
                         onPressed: () async {
-                          // Perform logout
-                          final authProvider = context.read<AuthProvider>();
-                          final nav = Navigator.of(context);
+                          // Perform logout first
+                          await context.read<AuthProvider>().logoutUser();
 
-                          // Close dialog first
-                          nav.pop();
-
-                          // Call logout
-                          await authProvider.logoutUser();
-
-                          // Navigate to login
+                          // Navigate to login after current frame completes
+                          // This ensures all dialogs are properly cleaned up
                           if (context.mounted) {
-                            context.go(RoutePaths.login);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (context.mounted) {
+                                context.go(RoutePaths.login);
+                              }
+                            });
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(vertical: 1.0),
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(5),
                             side: const BorderSide(color: AppColors.primary, width: 1.5),
                           ),
                         ),
@@ -84,13 +95,13 @@ class ProfileCard extends StatelessWidget {
                       flex: 1,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(dialogContext);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         ),
                         child: Text(context.l10n.cancel),
                       ),

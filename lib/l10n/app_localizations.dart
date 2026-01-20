@@ -398,6 +398,30 @@ abstract class AppLocalizations {
   /// **'Keluar dari aplikasi'**
   String get logoutConfirmMessage;
 
+  /// Logout button label
+  ///
+  /// In id, this message translates to:
+  /// **'Keluar'**
+  String get logout;
+
+  /// Logout confirmation part 1
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah Anda yakin ingin '**
+  String get logoutConfirmation1;
+
+  /// Logout confirmation part 2 (bold)
+  ///
+  /// In id, this message translates to:
+  /// **'keluar '**
+  String get logoutConfirmation2;
+
+  /// Logout confirmation part 3
+  ///
+  /// In id, this message translates to:
+  /// **'dari aplikasi?'**
+  String get logoutConfirmation3;
+
   /// Yes button
   ///
   /// In id, this message translates to:
