@@ -15,7 +15,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get login => 'Masuk';
 
   @override
-  String get register => 'Daftar';
+  String get register => 'Daftar disini';
+
+  @override
+  String get confirm => 'Konfirmasi';
+
+  @override
+  String get fieldRequired => 'Semua kolom wajib diisi';
 
   @override
   String get email => 'Email';

@@ -39,9 +39,9 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     }
     
     // Check if all fields are filled
-    if (_controllers.every((controller) => controller.text.isNotEmpty)) {
-      _verifyCode();
-    }
+    // if (_controllers.every((controller) => controller.text.isNotEmpty)) {
+    //   _verifyCode();
+    // }
   }
 
   void _onBackspace(int index) {
@@ -134,7 +134,7 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   maxLength: 1,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: InputDecoration(
                     counterText: '',
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -156,6 +156,36 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
                       _controllers[index].clear();
                     }
                   },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                if (_controllers.every((c) => c.text.isNotEmpty)) {
+                  _verifyCode();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                     SnackBar(content: Text(context.l10n.fieldRequired)),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                context.l10n.confirm,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

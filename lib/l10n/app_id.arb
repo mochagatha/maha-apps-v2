@@ -14,6 +14,14 @@
   "@register": {
     "description": "Register button text"
   },
+  "confirm": "Konfirmasi",
+  "@confirm": {
+      "description": "Confirm button text"
+  },
+  "fieldRequired": "Semua kolom wajib diisi",
+  "@fieldRequired": {
+      "description": "Validation message when field is empty"
+  },
   
   "email": "Email",
   "@email": {

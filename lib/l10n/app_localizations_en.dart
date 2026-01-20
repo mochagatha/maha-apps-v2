@@ -15,7 +15,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login => 'Login';
 
   @override
-  String get register => 'Register';
+  String get register => 'Register here';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get fieldRequired => 'All fields are required';
 
   @override
   String get email => 'Email';

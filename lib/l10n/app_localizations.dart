@@ -113,8 +113,20 @@ abstract class AppLocalizations {
   /// Register button text
   ///
   /// In id, this message translates to:
-  /// **'Daftar'**
+  /// **'Daftar disini'**
   String get register;
+
+  /// Confirm button text
+  ///
+  /// In id, this message translates to:
+  /// **'Konfirmasi'**
+  String get confirm;
+
+  /// Validation message when field is empty
+  ///
+  /// In id, this message translates to:
+  /// **'Semua kolom wajib diisi'**
+  String get fieldRequired;
 
   /// Email field label
   ///
