@@ -3,7 +3,7 @@ import 'package:maha_apps_v2/core/router/route_paths.dart';
 import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 
 class MenuMapper {
-  static const String absensi = 'ABSENSI_PEGAWAI';
+  static const String absensi = 'ABSENSI';
   static const String mengamati = 'MENGAMATI';
   static const String persetujuan = 'PERSETUJUAN';
   static const String rencanaKerja = 'RENCANA_KERJA';

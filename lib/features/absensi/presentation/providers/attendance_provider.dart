@@ -13,7 +13,8 @@ class AttendanceProvider extends ChangeNotifier {
   final SubmitAttendance submitAttendanceUseCase;
 
   AttendanceProvider({
-    required this.getTodayAttendance,n    required this.getAbsensiMenuIDs,
+    required this.getTodayAttendance,
+    required this.getAbsensiMenuIDs,
     required this.submitAttendanceUseCase,
   });
 
@@ -113,7 +114,7 @@ class AttendanceProvider extends ChangeNotifier {
       final time = DateFormat('HH:mm:ss').format(now);
       
       // Determine status based on current attendance state
-      int status = _determineAttendanceStatus();
+      int status = determineAttendanceStatus();
 
       final result = await submitAttendanceUseCase(
         employeeId: employeeId,
@@ -145,7 +146,7 @@ class AttendanceProvider extends ChangeNotifier {
     }
   }
 
-  int _determineAttendanceStatus() {
+  int determineAttendanceStatus() {
     if (_attendanceToday == null) return 1; // Default to clock-in
     
     // Status logic from V1:
