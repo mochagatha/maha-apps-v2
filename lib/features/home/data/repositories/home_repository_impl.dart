@@ -3,6 +3,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/employee.dart';
+import '../../domain/entities/kpi.dart';
 import '../../domain/entities/menu_item.dart';
 import '../../domain/entities/notification_count.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -25,10 +26,10 @@ class HomeRepositoryImpl implements HomeRepository {
     if (await networkInfo.isConnected) {
       try {
         final employeeModel = await remoteDataSource.getEmployeeProfile();
-        
+
         // Cache the employee profile
         await localDataSource.cacheEmployeeProfile(employeeModel);
-        
+
         return Right(employeeModel.toEntity());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
@@ -57,10 +58,10 @@ class HomeRepositoryImpl implements HomeRepository {
     if (await networkInfo.isConnected) {
       try {
         final menuModels = await remoteDataSource.getEmployeeMenus();
-        
+
         // Cache the menus
         await localDataSource.cacheMenus(menuModels);
-        
+
         return Right(menuModels.map((model) => model.toEntity()).toList());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
@@ -90,6 +91,28 @@ class HomeRepositoryImpl implements HomeRepository {
       try {
         final notificationModel = await remoteDataSource.getNotificationCount();
         return Right(notificationModel.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure('No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Kpi>> getKpiSummary({
+    required int month,
+    required int year,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final kpiModel = await remoteDataSource.getKpiSummary(
+          month: month,
+          year: year,
+        );
+        return Right(kpiModel.toEntity());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
       } on Exception catch (e) {

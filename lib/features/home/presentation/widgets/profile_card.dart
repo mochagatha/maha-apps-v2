@@ -31,7 +31,9 @@ class ProfileCard extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           content: SizedBox(
             width: MediaQuery.of(context).size.width - 120,
             child: Column(
@@ -39,8 +41,11 @@ class ProfileCard extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/images/icon/logout.png',
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.logout, size: 64, color: AppColors.primary),
+                  errorBuilder: (context, error, stackTrace) => const Icon(
+                    Icons.logout,
+                    size: 64,
+                    color: AppColors.primary,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text.rich(
@@ -84,7 +89,10 @@ class ProfileCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
-                            side: const BorderSide(color: AppColors.primary, width: 1.5),
+                            side: const BorderSide(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
                           ),
                         ),
                         child: Text(context.l10n.yes),
@@ -101,7 +109,9 @@ class ProfileCard extends StatelessWidget {
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                         ),
                         child: Text(context.l10n.cancel),
                       ),
@@ -118,51 +128,73 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If employee is null, we can still show a skeleton or return mostly empty,
-    // but the parent checks for null usually.
-    // We'll handle it gracefully just in case.
-
     final hasNotifications = (notificationCount?.notificationCount ?? 0) > 0;
     // Fallback image if null
     final photoUrl = employee?.biodata?.photoUrl;
     final fullName = employee?.fullname ?? 'Visitor';
     final jobTitle = employee?.jobTitleName ?? 'Guest';
 
-    return Stack(
-      children: [
-        Container(
-          height: 160,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+    return SafeArea(
+      bottom: false,
+      child: Stack(
+        children: [
+          // Background Blur Image (V1 decoration)
+          // We can put it here, or in the parent. Let's keep it here but make sure it aligns.
+          Container(
+            alignment: Alignment.topCenter,
+            child: Opacity(
+              opacity: 0.3, // Subtle effect
+              child: Image.asset(
+                'assets/images/maha-blur.png',
+                width: double.infinity,
+                fit: BoxFit.cover,
+                height: 150,
+                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              ),
+            ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
+
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              top: 20.0,
+              bottom: 40.0,
+            ), // Extra bottom padding for overlap space
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Left side: Avatar and Info
                 Expanded(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Avatar
-                      CircleAvatar(
-                        radius: 23,
-                        backgroundColor: Colors.grey[200],
-                        backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-                        child: photoUrl == null
-                            ? Text(
-                                _getInitials(fullName),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary,
-                                ),
-                              )
-                            : null,
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: CircleAvatar(
+                          radius: 28, // Slightly larger
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage: photoUrl != null
+                              ? NetworkImage(photoUrl)
+                              : null,
+                          child: photoUrl == null
+                              ? Text(
+                                  _getInitials(fullName),
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                )
+                              : null,
+                        ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       // Info
                       Expanded(
                         child: GestureDetector(
@@ -171,27 +203,38 @@ class ProfileCard extends StatelessWidget {
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 fullName,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16, // Larger font
+                                  fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text(
-                                jobTitle,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  jobTitle,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -210,17 +253,26 @@ class ProfileCard extends StatelessWidget {
                         // TODO: Notification Screen
                       },
                       child: Stack(
+                        clipBehavior: Clip.none,
                         children: [
-                          const Icon(Icons.notifications, color: Colors.white, size: 25),
+                          const Icon(
+                            Icons.notifications_none_outlined,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                           if (hasNotifications)
                             Positioned(
-                              top: 0,
-                              right: 0,
+                              top: -2,
+                              right: -2,
                               child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: const BoxDecoration(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
                                   color: Colors.red,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1,
+                                  ),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -228,14 +280,14 @@ class ProfileCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 16),
                     // Logout Icon
                     GestureDetector(
                       onTap: () => _showLogoutDialog(context),
                       child: const Icon(
-                        Icons.logout, // Using standard icon instead of FontAwesome for now
+                        Icons.logout, // Or specific door icon if available
                         color: Colors.white,
-                        size: 20, // Slightly smaller like V1
+                        size: 28,
                       ),
                     ),
                   ],
@@ -243,42 +295,8 @@ class ProfileCard extends StatelessWidget {
               ],
             ),
           ),
-        ),
-
-        // Blur Effect Image (V1 decoration)
-        Container(
-          alignment: Alignment.topCenter,
-          margin: const EdgeInsets.only(top: 20),
-          child: Image.asset(
-            'assets/images/maha-blur.png',
-            width: 250,
-            height: 120,
-            errorBuilder: (_, __, ___) => const SizedBox.shrink(), // Hides if missing
-          ),
-        ),
-
-        // Notification Badge Overlay on Avatar (Like in V1, though it was redundant there, we keep it if desired)
-        // V1 had a badge on the avatar implementation too.
-        if (hasNotifications)
-          Positioned(
-            top: 55, // Adjust based on layout
-            left: 12 + 46.0 - 15, // Approx avatar width helpers
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-              child: Text(
-                '${notificationCount!.notificationCount}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

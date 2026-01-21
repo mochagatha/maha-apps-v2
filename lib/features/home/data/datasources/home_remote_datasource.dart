@@ -4,6 +4,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/constants.dart';
 import '../models/employee_model.dart';
+import '../models/kpi_model.dart';
 import '../models/menu_item_model.dart';
 import '../models/notification_count_model.dart';
 
@@ -16,6 +17,9 @@ abstract class HomeRemoteDataSource {
 
   /// Get notification count from API
   Future<NotificationCountModel> getNotificationCount();
+
+  /// Get KPI summary from API
+  Future<KpiModel> getKpiSummary({required int month, required int year});
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -68,18 +72,16 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       // Token is automatically added by interceptor
       final response = await client.dioGolang.get(
         AppConstants.endpointEmployeeMenus,
-        queryParameters: {
-          'employee_id': employeeId,
-        },
+        queryParameters: {'employee_id': employeeId},
       );
 
       if (response.statusCode == 200) {
         print('DEBUG: Menu Response Data: ${response.data}'); // Debugging line
         final List<dynamic> menusJson = response.data['data'] ?? [];
-        print('DEBUG: Parsed Menus Count: ${menusJson.length}'); // Debugging line
-        return menusJson
-            .map((json) => MenuItemModel.fromJson(json))
-            .toList();
+        print(
+          'DEBUG: Parsed Menus Count: ${menusJson.length}',
+        ); // Debugging line
+        return menusJson.map((json) => MenuItemModel.fromJson(json)).toList();
       } else {
         throw ServerException(
           response.data['message'] ?? 'Failed to get employee menus',
@@ -110,10 +112,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       // Method: POST with body { employee_id, job_title_id }
       final response = await client.dioGolang.post(
         '/employee/employee-notification/count-by-job-title',
-        data: {
-          'employee_id': employeeId,
-          'job_title_id': jobTitleId ?? 0,
-        },
+        data: {'employee_id': employeeId, 'job_title_id': jobTitleId ?? 0},
       );
 
       if (response.statusCode == 200) {
@@ -127,7 +126,35 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (e is ServerException) {
         rethrow;
       }
-      throw ServerException('Failed to get notification count: ${e.toString()}');
+      throw ServerException(
+        'Failed to get notification count: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<KpiModel> getKpiSummary({
+    required int month,
+    required int year,
+  }) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-monitoring-kpi/get-by-month',
+        data: {'month': month, 'year': year},
+      );
+
+      if (response.statusCode == 200) {
+        return KpiModel.fromJson(response.data);
+      } else {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to get KPI summary',
+        );
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to get KPI summary: ${e.toString()}');
     }
   }
 }

@@ -25,6 +25,7 @@ import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/domain/repositories/home_repository.dart';
 import '../../features/home/domain/usecases/get_employee_menus.dart';
 import '../../features/home/domain/usecases/get_employee_profile.dart';
+import '../../features/home/domain/usecases/get_kpi_summary.dart';
 import '../../features/home/domain/usecases/get_notification_count.dart';
 import '../../features/home/presentation/providers/home_provider.dart';
 
@@ -33,7 +34,8 @@ import '../../features/profile/data/datasources/profile_local_datasource.dart';
 import '../../features/profile/data/datasources/profile_remote_datasource.dart';
 import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/repositories/profile_repository.dart';
-import '../../features/profile/domain/usecases/get_employee_profile.dart' as profile_usecases;
+import '../../features/profile/domain/usecases/get_employee_profile.dart'
+    as profile_usecases;
 import '../../features/profile/domain/usecases/update_employee_profile.dart';
 import '../../features/profile/domain/usecases/update_profile_picture.dart';
 import '../../features/profile/presentation/providers/profile_provider.dart';
@@ -46,7 +48,6 @@ import '../../features/absensi/domain/usecases/get_absensi_menu_ids.dart';
 import '../../features/absensi/domain/usecases/get_today_attendance.dart';
 import '../../features/absensi/domain/usecases/submit_attendance.dart';
 import '../../features/absensi/presentation/providers/attendance_provider.dart';
-
 
 final sl = GetIt.instance;
 
@@ -97,6 +98,7 @@ Future<void> init() async {
       getEmployeeProfile: sl(),
       getEmployeeMenus: sl(),
       getNotificationCount: sl(),
+      getKpiSummary: sl(),
     ),
   );
 
@@ -104,6 +106,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetEmployeeProfile(sl()));
   sl.registerLazySingleton(() => GetEmployeeMenus(sl()));
   sl.registerLazySingleton(() => GetNotificationCount(sl()));
+  sl.registerLazySingleton(() => GetKpiSummary(sl()));
 
   // Repository
   sl.registerLazySingleton<HomeRepository>(
@@ -173,9 +176,7 @@ Future<void> init() async {
 
   // Repository
   sl.registerLazySingleton<AttendanceRepository>(
-    () => AttendanceRepositoryImpl(
-      remoteDataSource: sl(),
-    ),
+    () => AttendanceRepositoryImpl(remoteDataSource: sl()),
   );
 
   // Data sources
@@ -183,13 +184,10 @@ Future<void> init() async {
     () => AttendanceRemoteDataSourceImpl(client: sl()),
   );
 
-
   //! Core
   // Network
-  sl.registerLazySingleton<NetworkInfo>(
-    () => NetworkInfoImpl(sl()),
-  );
-  
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+
   // API Client
   sl.registerLazySingleton<ApiClient>(() => ApiClient());
 
