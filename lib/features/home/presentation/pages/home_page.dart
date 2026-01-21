@@ -286,7 +286,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                         // Let's add a Transform.translate to pull it up if needed, or rely on ProfileCard sizing.
                         // In V1, the card is significantly overlapping the bottom of the red area.
-                        if (homeProvider.employee?.type == 'worker') ...[
+                        if (homeProvider.employee?.type != 'worker') ...[
                           Transform.translate(
                             offset: const Offset(0, -30), // Pull up to overlap
                             child: PointsCard(kpi: homeProvider.kpi),

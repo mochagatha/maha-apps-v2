@@ -15,31 +15,55 @@ class EmployeeModel extends Employee {
     String? type,
     BiodataModel? biodata,
   }) : super(
-          id: id,
-          fullname: fullname,
-          email: email,
-          jobTitleId: jobTitleId,
-          jobTitleName: jobTitleName,
-          departmentId: departmentId,
-          departmentName: departmentName,
-          branchCode: branchCode,
-          branchName: branchName,
-          status: status,
-          type: type,
-          biodata: biodata,
-        );
+         id: id,
+         fullname: fullname,
+         email: email,
+         jobTitleId: jobTitleId,
+         jobTitleName: jobTitleName,
+         departmentId: departmentId,
+         departmentName: departmentName,
+         branchCode: branchCode,
+         branchName: branchName,
+         status: status,
+         type: type,
+         biodata: biodata,
+       );
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
+    // Handle nested job_title object (V1 API structure) or flat job_title_name
+    String jobTitleName = '';
+    if (json['job_title'] != null && json['job_title'] is Map) {
+      jobTitleName = json['job_title']['name'] ?? '';
+    } else if (json['job_title_name'] != null) {
+      jobTitleName = json['job_title_name'];
+    }
+
+    // Handle nested department object or flat department_name
+    String departmentName = '';
+    if (json['department'] != null && json['department'] is Map) {
+      departmentName = json['department']['department_name'] ?? '';
+    } else if (json['department_name'] != null) {
+      departmentName = json['department_name'];
+    }
+
+    // Handle nested branch object or flat branch_name
+    String branchName = '';
+    if (json['branch'] != null && json['branch'] is Map) {
+      branchName = json['branch']['branch_name'] ?? '';
+    } else if (json['branch_name'] != null) {
+      branchName = json['branch_name'];
+    }
+
     return EmployeeModel(
       id: json['id'] ?? 0,
       fullname: json['fullname'] ?? '',
       email: json['email'] ?? '',
       jobTitleId: json['job_title_id'] ?? 0,
-      jobTitleName: json['job_title_name'] ?? '',
+      jobTitleName: jobTitleName,
       departmentId: json['department_id'] ?? 0,
-      departmentName: json['department_name'] ?? '',
+      departmentName: departmentName,
       branchCode: json['branch_code'] ?? '',
-      branchName: json['branch_name'] ?? '',
+      branchName: branchName,
       status: json['status'] ?? 0,
       type: json['type'],
       biodata: json['biodata'] != null
@@ -61,9 +85,7 @@ class EmployeeModel extends Employee {
       'branch_name': branchName,
       'status': status,
       'type': type,
-      'biodata': biodata != null
-          ? (biodata as BiodataModel).toJson()
-          : null,
+      'biodata': biodata != null ? (biodata as BiodataModel).toJson() : null,
     };
   }
 
@@ -92,11 +114,11 @@ class BiodataModel extends Biodata {
     String? address,
     String? photoUrl,
   }) : super(
-          gender: gender,
-          phone: phone,
-          address: address,
-          photoUrl: photoUrl,
-        );
+         gender: gender,
+         phone: phone,
+         address: address,
+         photoUrl: photoUrl,
+       );
 
   factory BiodataModel.fromJson(Map<String, dynamic> json) {
     return BiodataModel(
