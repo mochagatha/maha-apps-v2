@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../core/router/route_paths.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
+import 'terms_and_conditions_sheet.dart';
 
 class PinVerificationDialog extends StatefulWidget {
   const PinVerificationDialog({super.key});
@@ -17,10 +17,7 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     6,
     (index) => TextEditingController(),
   );
-  final List<FocusNode> _focusNodes = List.generate(
-    6,
-    (index) => FocusNode(),
-  );
+  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   @override
   void dispose() {
@@ -37,28 +34,25 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     if (value.isNotEmpty && index < 5) {
       _focusNodes[index + 1].requestFocus();
     }
-    
-    // Check if all fields are filled
-    // if (_controllers.every((controller) => controller.text.isNotEmpty)) {
-    //   _verifyCode();
-    // }
+    setState(() {}); // Rebuild to update button state
   }
 
   void _onBackspace(int index) {
     if (index > 0 && _controllers[index].text.isEmpty) {
       _focusNodes[index - 1].requestFocus();
     }
+    setState(() {}); // Rebuild to update button state
   }
 
   Future<void> _verifyCode() async {
     final code = _controllers.map((c) => c.text).join();
-    
+
     // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+        child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0),
       ),
     );
 
@@ -98,27 +92,19 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             context.l10n.pinVerificationTitle,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             context.l10n.pinVerificationMessage,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.black54,
-            ),
+            style: const TextStyle(fontSize: 12, color: Colors.black54),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -147,9 +133,7 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
                       borderSide: const BorderSide(color: AppColors.primary),
                     ),
                   ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) => _onDigitChanged(index, value),
                   onTap: () {
                     if (_controllers[index].text.isNotEmpty) {
@@ -164,17 +148,15 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                if (_controllers.every((c) => c.text.isNotEmpty)) {
-                  _verifyCode();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(content: Text(context.l10n.fieldRequired)),
-                  );
-                }
-              },
+              onPressed: _controllers.every((c) => c.text.isNotEmpty)
+                  ? () {
+                      _verifyCode();
+                    }
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
+                disabledBackgroundColor:
+                    Colors.grey[300], // Light gray for disabled state
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
@@ -191,159 +173,6 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class TermsAndConditionsSheet extends StatefulWidget {
-  const TermsAndConditionsSheet({super.key});
-
-  @override
-  State<TermsAndConditionsSheet> createState() => _TermsAndConditionsSheetState();
-}
-
-class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
-  bool _isAgreed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: 0.7,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          children: [
-            // Handle bar
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Container(
-                height: 5,
-                width: 70,
-                decoration: BoxDecoration(
-                  color: AppColors.neutral5,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            
-            Divider(color: AppColors.neutral3, height: 1),
-            const SizedBox(height: 20),
-
-            // Logo
-            Image.asset(
-              'assets/maha.png',
-              height: 60,
-            ),
-            const SizedBox(height: 20),
-
-            // Title
-            Text(
-              context.l10n.termsAndConditionsTitle,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-
-            // Description
-            Text(
-              context.l10n.termsAndConditionsMessage,
-              style: const TextStyle(fontSize: 13),
-              textAlign: TextAlign.start,
-            ),
-            const SizedBox(height: 16),
-
-            // Links
-            Row(
-              children: [
-                const Icon(Icons.circle, size: 5),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    // TODO: Navigate to terms page
-                  },
-                  child: Text(
-                    context.l10n.termsOfUse,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.circle, size: 5),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    // TODO: Navigate to privacy page
-                  },
-                  child: Text(
-                    context.l10n.privacyNotice,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const Spacer(),
-
-            // Agreement checkbox
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.neutral2,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Checkbox(
-                    value: _isAgreed,
-                    activeColor: AppColors.primary,
-                    onChanged: (value) {
-                      setState(() {
-                        _isAgreed = value ?? false;
-                      });
-                    },
-                  ),
-                  Expanded(
-                    child: Text(
-                      context.l10n.agreeTerms,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Agree button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isAgreed
-                    ? () {
-                        Navigator.pop(context);
-                        context.go(RoutePaths.register);
-                      }
-                    : null,
-                child: Text(context.l10n.iAgree),
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
       ),
     );
   }

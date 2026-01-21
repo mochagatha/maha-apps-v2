@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -71,7 +72,7 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _getCurrentLocation() async {
     setState(() => _isLoadingLocation = true);
-    
+
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() => _isLoadingLocation = false);
@@ -103,9 +104,9 @@ class _CameraPageState extends State<CameraPage> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to get location: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to get location: $e')));
       }
     }
 
@@ -120,9 +121,9 @@ class _CameraPageState extends State<CameraPage> {
           _imagePath = file.path;
         });
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to take picture: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to take picture: $e')));
       }
     }
   }
@@ -140,7 +141,10 @@ class _CameraPageState extends State<CameraPage> {
           (camera) => camera.lensDirection == CameraLensDirection.front,
         );
       }
-      _cameraController = CameraController(newDescription, ResolutionPreset.medium);
+      _cameraController = CameraController(
+        newDescription,
+        ResolutionPreset.medium,
+      );
       _cameraController!.initialize().then((_) {
         if (!mounted) return;
         setState(() {});
@@ -157,13 +161,14 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     if (_currentPosition == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location not available')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Location not available')));
       return;
     }
 
-    final location = '${_currentPosition!.latitude},${_currentPosition!.longitude}';
+    final location =
+        '${_currentPosition!.latitude},${_currentPosition!.longitude}';
     widget.onPhotoTaken(_imagePath!, location);
     Navigator.of(context).pop();
   }
@@ -214,45 +219,57 @@ class _CameraPageState extends State<CameraPage> {
                     ],
                   )
                 : const Center(
-                    child: CircularProgressIndicator(),
+                    child: SpinKitThreeBounce(
+                      color: AppColors.primary,
+                      size: 24.0,
+                    ),
                   ),
           ),
-          
+
           // Location Info
           Expanded(
             flex: 1,
             child: Container(
               padding: const EdgeInsets.all(16),
               child: _isLoadingLocation
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(
+                      child: SpinKitThreeBounce(
+                        color: AppColors.primary,
+                        size: 50.0,
+                      ),
+                    )
                   : _currentPosition != null
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.location_on, color: Colors.red, size: 32),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Lat: ${_currentPosition!.latitude.toStringAsFixed(6)}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              'Long: ${_currentPosition!.longitude.toStringAsFixed(6)}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.location_off, color: Colors.grey),
-                            const SizedBox(height: 8),
-                            const Text('Location not available'),
-                            TextButton(
-                              onPressed: _getCurrentLocation,
-                              child: const Text('Retry'),
-                            ),
-                          ],
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 32,
                         ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Lat: ${_currentPosition!.latitude.toStringAsFixed(6)}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          'Long: ${_currentPosition!.longitude.toStringAsFixed(6)}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.location_off, color: Colors.grey),
+                        const SizedBox(height: 8),
+                        const Text('Location not available'),
+                        TextButton(
+                          onPressed: _getCurrentLocation,
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
             ),
           ),
         ],
@@ -284,7 +301,7 @@ class _CameraPageState extends State<CameraPage> {
                   foregroundColor: Colors.white,
                 ),
               ),
-            
+
             if (_imagePath != null)
               ElevatedButton.icon(
                 onPressed: _submitAttendance,

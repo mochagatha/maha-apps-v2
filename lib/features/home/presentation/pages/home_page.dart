@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/home_provider.dart';
@@ -65,7 +66,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             canPop: false,
             child: AlertDialog(
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width - 120,
                 child: Column(
@@ -73,8 +76,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   children: [
                     Image.asset(
                       'assets/images/icon/success-register.png',
-                      errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.warning, size: 50, color: Colors.amber),
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.warning,
+                        size: 50,
+                        color: Colors.amber,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -91,7 +97,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           // For now just close or stay, but V1 pushes RejectStatementScreen
                           // We don't have that route yet, so we just show snackbar
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(context.l10n.rejectStatusDetailsComingSoon)),
+                            SnackBar(
+                              content: Text(
+                                context.l10n.rejectStatusDetailsComingSoon,
+                              ),
+                            ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -119,7 +129,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             canPop: false,
             child: AlertDialog(
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width - 120,
                 child: Column(
@@ -170,7 +182,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.message, size: 16), // Use simple icon for now
+                            Icon(
+                              Icons.message,
+                              size: 16,
+                            ), // Use simple icon for now
                             const SizedBox(width: 8),
                             Text(context.l10n.contactAdmin),
                           ],
@@ -193,14 +208,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       body: Consumer<HomeProvider>(
         builder: (context, homeProvider, child) {
           // Check status logic
-          if (homeProvider.status == HomeStatus.loaded && homeProvider.employee != null) {
+          if (homeProvider.status == HomeStatus.loaded &&
+              homeProvider.employee != null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _checkStatus(context, homeProvider.employee!.status);
             });
           }
 
           if (homeProvider.isLoading && homeProvider.employee == null) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(
+              child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0),
+            );
           }
 
           if (homeProvider.hasError && homeProvider.employee == null) {
@@ -208,7 +226,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, size: 64, color: AppColors.error),
+                  const Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: AppColors.error,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     homeProvider.errorMessage ?? 'An error occurred',
@@ -260,7 +282,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                     // Version & Copyright
                     Text(
-                      context.l10n.appVersion('1.0.0'), // TODO: Get from package_info
+                      context.l10n.appVersion(
+                        '1.0.0',
+                      ), // TODO: Get from package_info
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w300,
@@ -270,7 +294,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     const SizedBox(height: 10),
                     Text(
                       context.l10n.copyright(DateTime.now().year.toString()),
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
 
                     const SizedBox(height: 16),

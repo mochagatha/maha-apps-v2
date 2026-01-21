@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
@@ -64,9 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
           // Loading state
           if (profileProvider.isLoading && profileProvider.employee == null) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primary,
-              ),
+              child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0),
             );
           }
 
@@ -115,9 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   // Points Card
                   if (employee != null && employee.type != 'worker')
-                    ProfilePointsCard(
-                      points: employee.totalPoint,
-                    ),
+                    ProfilePointsCard(points: employee.totalPoint),
 
                   const SizedBox(height: 24),
 
@@ -151,7 +148,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          context.l10n.copyright(DateTime.now().year.toString()),
+                          context.l10n.copyright(
+                            DateTime.now().year.toString(),
+                          ),
                           style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
@@ -179,9 +178,9 @@ class _ProfilePageState extends State<ProfilePage> {
         label: context.l10n.dataDiri,
         onTap: () {
           // TODO: Navigate to Data Diri page
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Feature coming soon')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
         },
       ),
       ProfileMenuItem(
@@ -189,9 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
         label: context.l10n.education,
         onTap: () {
           // TODO: Navigate to Education page
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Feature coming soon')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
         },
       ),
       ProfileMenuItem(
@@ -199,9 +198,9 @@ class _ProfilePageState extends State<ProfilePage> {
         label: context.l10n.skill,
         onTap: () {
           // TODO: Navigate to Skill page
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Feature coming soon')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
         },
       ),
       ProfileMenuItem(
@@ -209,9 +208,9 @@ class _ProfilePageState extends State<ProfilePage> {
         label: context.l10n.family,
         onTap: () {
           // TODO: Navigate to Family page
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Feature coming soon')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
         },
       ),
     ];
@@ -224,9 +223,9 @@ class _ProfilePageState extends State<ProfilePage> {
         label: context.l10n.changePassword,
         onTap: () {
           // TODO: Navigate to Change Password page
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Feature coming soon')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
         },
       ),
       ProfileMenuItem(
@@ -234,9 +233,9 @@ class _ProfilePageState extends State<ProfilePage> {
         label: context.l10n.secureAccount,
         onTap: () {
           // TODO: Navigate to Security page
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Feature coming soon')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
         },
       ),
       ProfileMenuItem(

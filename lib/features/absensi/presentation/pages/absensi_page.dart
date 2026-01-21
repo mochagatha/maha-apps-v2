@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/attendance_provider.dart';
 import '../widgets/absensi_app_bar.dart';
@@ -70,7 +71,12 @@ class _AbsensiPageState extends State<AbsensiPage> {
               return Stack(
                 children: [
                   const AbsensiAppBar(),
-                  const Center(child: CircularProgressIndicator()),
+                  const Center(
+                    child: SpinKitThreeBounce(
+                      color: AppColors.primary,
+                      size: 50.0,
+                    ),
+                  ),
                 ],
               );
             }
@@ -106,7 +112,8 @@ class _AbsensiPageState extends State<AbsensiPage> {
             }
 
             final data = provider.attendanceToday!;
-            final hasClockOut = data.clockOut != null && data.clockOut != 'null';
+            final hasClockOut =
+                data.clockOut != null && data.clockOut != 'null';
             final hasClockIn = data.clockIn != null && data.clockIn != 'null';
 
             return RefreshIndicator(
@@ -129,7 +136,9 @@ class _AbsensiPageState extends State<AbsensiPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
@@ -148,7 +157,8 @@ class _AbsensiPageState extends State<AbsensiPage> {
 
                               // Clock In & Clock Out Row
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   AttendanceCard(
                                     title: 'Masuk',
@@ -175,12 +185,15 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                 title: 'Istirahat',
                                 time: data.breakFinish,
                                 photoUrl: data.breakFinishPhoto,
-                                colorStatus: data.breakFinish == null ? 9 : (data.isLateBreak ?? 0),
+                                colorStatus: data.breakFinish == null
+                                    ? 9
+                                    : (data.isLateBreak ?? 0),
                                 clockType: data.breakFinishType ?? 1,
                               ),
 
                               // Overtime (if exists)
-                              if (data.overtimeStart != null && data.overtimeStart != 'null') ...[
+                              if (data.overtimeStart != null &&
+                                  data.overtimeStart != 'null') ...[
                                 const SizedBox(height: 24),
                                 Row(
                                   children: [
@@ -195,7 +208,9 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                       title: 'Lembur',
                                       time: data.overtimeFinish,
                                       photoUrl: data.overtimeFinishPhotoUrl,
-                                      colorStatus: data.overtimeFinish == null ? 6 : 20,
+                                      colorStatus: data.overtimeFinish == null
+                                          ? 6
+                                          : 20,
                                     ),
                                   ],
                                 ),
@@ -207,71 +222,115 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                 SizedBox(
                                   width: double.infinity,
                                   child: provider.isSubmitting
-                                      ? const Center(child: CircularProgressIndicator())
+                                      ? const Center(
+                                          child: SpinKitThreeBounce(
+                                            color: AppColors.primary,
+                                            size: 24.0,
+                                          ),
+                                        )
                                       : ElevatedButton.icon(
-                                    onPressed: () async {
-                                      if (_employeeId == null || _branchCode == null) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Data karyawan tidak ditemukan')),
-                                        );
-                                        return;
-                                      }
-
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CameraPage(
-                                            status: provider.determineAttendanceStatus(),
-                                            onPhotoTaken: (photoPath, location) async {
-                                              await provider.submitAttendance(
-                                                employeeId: _employeeId!,
-                                                photoPath: photoPath,
-                                                location: location,
-                                                branchCode: _branchCode!,
-                                                isWorker: _employeeType == 'worker',
+                                          onPressed: () async {
+                                            if (_employeeId == null ||
+                                                _branchCode == null) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    'Data karyawan tidak ditemukan',
+                                                  ),
+                                                ),
                                               );
+                                              return;
+                                            }
 
-                                              if (provider.errorMessage == null) {
-                                                if (context.mounted) {
-                                                  await context.read<AttendanceProvider>().loadData(
-                                                    employeeId: _employeeId!,
-                                                    jobTitleId: _jobTitleId!,
-                                                    parentMenuId: 1,
-                                                    isWorker: _employeeType == 'worker',
-                                                  );
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    const SnackBar(content: Text('Absensi berhasil!')),
-                                                  );
-                                                }
-                                              } else {
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(content: Text(provider.errorMessage!)),
-                                                  );
-                                                }
-                                              }
-                                            },
+                                            await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => CameraPage(
+                                                  status: provider
+                                                      .determineAttendanceStatus(),
+                                                  onPhotoTaken: (photoPath, location) async {
+                                                    await provider
+                                                        .submitAttendance(
+                                                          employeeId:
+                                                              _employeeId!,
+                                                          photoPath: photoPath,
+                                                          location: location,
+                                                          branchCode:
+                                                              _branchCode!,
+                                                          isWorker:
+                                                              _employeeType ==
+                                                              'worker',
+                                                        );
+
+                                                    if (provider.errorMessage ==
+                                                        null) {
+                                                      if (context.mounted) {
+                                                        await context
+                                                            .read<
+                                                              AttendanceProvider
+                                                            >()
+                                                            .loadData(
+                                                              employeeId:
+                                                                  _employeeId!,
+                                                              jobTitleId:
+                                                                  _jobTitleId!,
+                                                              parentMenuId: 1,
+                                                              isWorker:
+                                                                  _employeeType ==
+                                                                  'worker',
+                                                            );
+                                                        ScaffoldMessenger.of(
+                                                          context,
+                                                        ).showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text(
+                                                              'Absensi berhasil!',
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                    } else {
+                                                      if (context.mounted) {
+                                                        ScaffoldMessenger.of(
+                                                          context,
+                                                        ).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              provider
+                                                                  .errorMessage!,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(Icons.photo_camera),
+                                          label: Text(
+                                            hasClockIn == false
+                                                ? 'Ambil Absen Masuk'
+                                                : data.breakFinish == null
+                                                ? 'Ambil Absen Istirahat'
+                                                : 'Ambil Absen Pulang',
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.primary,
+                                            foregroundColor: Colors.white,
+                                            minimumSize: const Size(
+                                              double.infinity,
+                                              45,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    icon: const Icon(Icons.photo_camera),
-                                    label: Text(
-                                      hasClockIn == false
-                                          ? 'Ambil Absen Masuk'
-                                          : data.breakFinish == null
-                                          ? 'Ambil Absen Istirahat'
-                                          : 'Ambil Absen Pulang',
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.primary,
-                                      foregroundColor: Colors.white,
-                                      minimumSize: const Size(double.infinity, 45),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                    ),
-                                  ),
                                 ),
                               ],
 
@@ -282,12 +341,13 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                 GridView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 1.2,
-                                  ),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio: 1.2,
+                                      ),
                                   itemCount: provider.menuIDs.length,
                                   itemBuilder: (context, index) {
                                     return Card(
@@ -298,7 +358,9 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                           child: Text(
                                             provider.menuIDs[index],
                                             textAlign: TextAlign.center,
-                                            style: const TextStyle(fontSize: 12),
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
                                           ),
                                         ),
                                       ),

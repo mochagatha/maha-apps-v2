@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
@@ -36,9 +37,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
     if (_accountType == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.fieldRequired)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.fieldRequired)));
       return;
     }
 
@@ -46,18 +47,19 @@ class _RegisterPageState extends State<RegisterPage> {
     FocusScope.of(context).unfocus();
 
     final authProvider = context.read<AuthProvider>();
-    
+
     await authProvider.registerUser(
       fullname: _fullnameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
       // Pass account type if backend supports it
-      // type: _accountType, 
+      // type: _accountType,
     );
 
     if (!mounted) return;
 
-    if (authProvider.status == AuthStatus.unauthenticated && authProvider.errorMessage == null) {
+    if (authProvider.status == AuthStatus.unauthenticated &&
+        authProvider.errorMessage == null) {
       // Registration successful
       showDialog(
         context: context,
@@ -69,11 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 64,
-              ),
+              const Icon(Icons.check_circle, color: Colors.green, size: 64),
               const SizedBox(height: 16),
               Text(
                 context.l10n.registrationSuccess,
@@ -168,12 +166,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Fullname Field
                     Text(
                       context.l10n.fullname,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _fullnameController,
-                      decoration: _buildInputDecoration(context.l10n.enterFullname),
+                      decoration: _buildInputDecoration(
+                        context.l10n.enterFullname,
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return context.l10n.fullnameRequired;
@@ -186,7 +189,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Account Type
                     Text(
                       context.l10n.accountType,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -229,12 +235,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Email Field
                     Text(
                       context.l10n.email,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _emailController,
-                      decoration: _buildInputDecoration(context.l10n.enterEmail),
+                      decoration: _buildInputDecoration(
+                        context.l10n.enterEmail,
+                      ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -251,25 +262,33 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Password Field
                     Text(
                       context.l10n.password,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _isPasswordObscure,
-                      decoration: _buildInputDecoration(context.l10n.enterPassword).copyWith(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isPasswordObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: Colors.grey,
+                      decoration:
+                          _buildInputDecoration(
+                            context.l10n.enterPassword,
+                          ).copyWith(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordObscure
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordObscure = !_isPasswordObscure;
+                                });
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordObscure = !_isPasswordObscure;
-                            });
-                          },
-                        ),
-                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return context.l10n.passwordRequired;
@@ -285,25 +304,34 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Confirm Password Field
                     Text(
                       context.l10n.confirmPassword,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: _isConfirmPasswordObscure,
-                      decoration: _buildInputDecoration(context.l10n.enterPassword).copyWith(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isConfirmPasswordObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: Colors.grey,
+                      decoration:
+                          _buildInputDecoration(
+                            context.l10n.enterPassword,
+                          ).copyWith(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isConfirmPasswordObscure
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isConfirmPasswordObscure =
+                                      !_isConfirmPasswordObscure;
+                                });
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _isConfirmPasswordObscure = !_isConfirmPasswordObscure;
-                            });
-                          },
-                        ),
-                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return context.l10n.passwordRequired;
@@ -314,14 +342,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         return null;
                       },
                     ),
-                    
+
                     const SizedBox(height: 60),
 
                     // Register Button
                     SizedBox(
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading ? null : _handleRegister,
+                        onPressed: authProvider.isLoading
+                            ? null
+                            : _handleRegister,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -333,13 +363,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         child: authProvider.isLoading
-                            ? const SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
+                            ? const SpinKitThreeBounce(
+                                color: Colors.white,
+                                size: 24.0,
                               )
                             : Text(
                                 context.l10n.createAccount,
@@ -362,7 +388,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: Colors.grey,
                           ),
                           children: [
-                            TextSpan(text: '${context.l10n.alreadyHaveAccount} '),
+                            TextSpan(
+                              text: '${context.l10n.alreadyHaveAccount} ',
+                            ),
                             TextSpan(
                               text: context.l10n.login,
                               style: const TextStyle(
