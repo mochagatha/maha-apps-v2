@@ -87,9 +87,9 @@ class PointsCard extends StatelessWidget {
                       final remaining = (target - current).clamp(0, target);
 
                       if (target > 0 && current >= target) {
-                        return 'Target tercapai!';
+                        return context.l10n.targetReachedSimplified;
                       }
-                      return '$remaining Poin belum tercapai'; // TODO: Localize 'Poin belum tercapai'
+                      return context.l10n.pointsNotReached(remaining);
                     }(),
                     style: TextStyle(
                       fontSize: 11,

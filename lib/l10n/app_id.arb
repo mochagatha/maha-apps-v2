@@ -391,5 +391,28 @@
   "menuRekrutmen": "Rekrutmen",
   "menuPengaturan": "Pengaturan",
   "menuUpdateKontrak": "Update Kontrak",
-  "menuKpi": "Monitoring KPI"
+  "menuKpi": "Monitoring KPI",
+  
+  "verificationErrorTitle": "Maaf Sebelumnya!",
+  "verificationErrorPart1": "Akun Anda belum ",
+  "verificationErrorPart2": "terverifikasi",
+  "verificationErrorPart3": ". Silahkan\nhubungi ",
+  "verificationErrorPart4": "HRD",
+  "verificationErrorPart5": " Maha segera !",
+  "targetReachedSimplified": "Target tercapai!",
+  "pointsNotReached": "{remaining} Poin belum tercapai",
+  "@pointsNotReached": {
+    "description": "Points not reached message",
+    "placeholders": {
+        "remaining": {
+            "type": "int",
+            "example": "100"
+        }
+    }
+  },
+  "ePresensi": "E-Presensi",
+  
+  "pageNotFoundTitle": "Halaman Tidak Ditemukan",
+  "pageNotFoundMessage": "Halaman yang Anda cari tidak ditemukan atau fitur ini belum diimplementasikan.",
+  "back": "Kembali"
 }

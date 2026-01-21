@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../shared/theme/app_theme.dart';
+import '../../../../../core/utils/localization_extension.dart';
 
 class AbsensiAppBar extends StatelessWidget {
   const AbsensiAppBar({super.key});
@@ -26,9 +27,9 @@ class AbsensiAppBar extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              const Text(
-                'E-Presensi',
-                style: TextStyle(
+              Text(
+                context.l10n.ePresensi,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 class VerificationErrorDialog extends StatelessWidget {
   const VerificationErrorDialog({super.key});
@@ -19,9 +20,9 @@ class VerificationErrorDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Maaf Sebelumnya!', // TODO: Localize
-            style: TextStyle(
+          Text(
+            context.l10n.verificationErrorTitle,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -49,23 +50,23 @@ class VerificationErrorDialog extends StatelessWidget {
                 fontFamily: 'Poppins',
               ),
               children: [
-                const TextSpan(text: 'Akun Anda belum '), // TODO: Localize
-                const TextSpan(
-                  text: 'terverifikasi',
-                  style: TextStyle(
+                TextSpan(text: context.l10n.verificationErrorPart1),
+                TextSpan(
+                  text: context.l10n.verificationErrorPart2,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                const TextSpan(text: '. Silahkan\nhubungi '), // TODO: Localize
-                const TextSpan(
-                  text: 'HRD',
-                  style: TextStyle(
+                TextSpan(text: context.l10n.verificationErrorPart3),
+                TextSpan(
+                  text: context.l10n.verificationErrorPart4,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                const TextSpan(text: ' Maha segera !'), // TODO: Localize
+                TextSpan(text: context.l10n.verificationErrorPart5),
               ],
             ),
           ),
@@ -99,9 +100,12 @@ class VerificationErrorDialog extends StatelessWidget {
                     color: Colors.white,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Hubungi Admin', // TODO: Localize
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  Text(
+                    context.l10n.contactAdmin,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

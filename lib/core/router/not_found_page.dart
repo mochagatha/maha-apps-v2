@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../shared/theme/app_theme.dart';
+import '../../core/utils/localization_extension.dart';
 
 class NotFoundPage extends StatelessWidget {
   const NotFoundPage({super.key});
@@ -47,9 +48,9 @@ class NotFoundPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Halaman Tidak Ditemukan',
-                style: TextStyle(
+              Text(
+                context.l10n.pageNotFoundTitle,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -57,9 +58,9 @@ class NotFoundPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Halaman yang Anda cari tidak ditemukan atau fitur ini belum diimplementasikan.',
-                style: TextStyle(
+              Text(
+                context.l10n.pageNotFoundMessage,
+                style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.neutral5,
                   height: 1.5,
@@ -81,7 +82,7 @@ class NotFoundPage extends StatelessWidget {
                     side: const BorderSide(color: AppColors.primary),
                     elevation: 0,
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(context.l10n.back),
                 ),
               ),
             ],

@@ -320,4 +320,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuKpi => 'KPI Monitoring';
+
+  @override
+  String get verificationErrorTitle => 'Sorry!';
+
+  @override
+  String get verificationErrorPart1 => 'Your account is not ';
+
+  @override
+  String get verificationErrorPart2 => 'verified';
+
+  @override
+  String get verificationErrorPart3 => '. Please\ncontact ';
+
+  @override
+  String get verificationErrorPart4 => 'HRD';
+
+  @override
+  String get verificationErrorPart5 => ' Maha immediately!';
+
+  @override
+  String get targetReachedSimplified => 'Target reached!';
+
+  @override
+  String pointsNotReached(int remaining) {
+    return '$remaining Points not reached';
+  }
+
+  @override
+  String get ePresensi => 'E-Attendance';
+
+  @override
+  String get pageNotFoundTitle => 'Page Not Found';
+
+  @override
+  String get pageNotFoundMessage =>
+      'The page you are looking for was not found or this feature has not been implemented yet.';
+
+  @override
+  String get back => 'Back';
 }

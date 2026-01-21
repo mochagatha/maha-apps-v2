@@ -321,4 +321,43 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get menuKpi => 'Monitoring KPI';
+
+  @override
+  String get verificationErrorTitle => 'Maaf Sebelumnya!';
+
+  @override
+  String get verificationErrorPart1 => 'Akun Anda belum ';
+
+  @override
+  String get verificationErrorPart2 => 'terverifikasi';
+
+  @override
+  String get verificationErrorPart3 => '. Silahkan\nhubungi ';
+
+  @override
+  String get verificationErrorPart4 => 'HRD';
+
+  @override
+  String get verificationErrorPart5 => ' Maha segera !';
+
+  @override
+  String get targetReachedSimplified => 'Target tercapai!';
+
+  @override
+  String pointsNotReached(int remaining) {
+    return '$remaining Poin belum tercapai';
+  }
+
+  @override
+  String get ePresensi => 'E-Presensi';
+
+  @override
+  String get pageNotFoundTitle => 'Halaman Tidak Ditemukan';
+
+  @override
+  String get pageNotFoundMessage =>
+      'Halaman yang Anda cari tidak ditemukan atau fitur ini belum diimplementasikan.';
+
+  @override
+  String get back => 'Kembali';
 }

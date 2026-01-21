@@ -685,6 +685,78 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Monitoring KPI'**
   String get menuKpi;
+
+  /// No description provided for @verificationErrorTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Maaf Sebelumnya!'**
+  String get verificationErrorTitle;
+
+  /// No description provided for @verificationErrorPart1.
+  ///
+  /// In id, this message translates to:
+  /// **'Akun Anda belum '**
+  String get verificationErrorPart1;
+
+  /// No description provided for @verificationErrorPart2.
+  ///
+  /// In id, this message translates to:
+  /// **'terverifikasi'**
+  String get verificationErrorPart2;
+
+  /// No description provided for @verificationErrorPart3.
+  ///
+  /// In id, this message translates to:
+  /// **'. Silahkan\nhubungi '**
+  String get verificationErrorPart3;
+
+  /// No description provided for @verificationErrorPart4.
+  ///
+  /// In id, this message translates to:
+  /// **'HRD'**
+  String get verificationErrorPart4;
+
+  /// No description provided for @verificationErrorPart5.
+  ///
+  /// In id, this message translates to:
+  /// **' Maha segera !'**
+  String get verificationErrorPart5;
+
+  /// No description provided for @targetReachedSimplified.
+  ///
+  /// In id, this message translates to:
+  /// **'Target tercapai!'**
+  String get targetReachedSimplified;
+
+  /// Points not reached message
+  ///
+  /// In id, this message translates to:
+  /// **'{remaining} Poin belum tercapai'**
+  String pointsNotReached(int remaining);
+
+  /// No description provided for @ePresensi.
+  ///
+  /// In id, this message translates to:
+  /// **'E-Presensi'**
+  String get ePresensi;
+
+  /// No description provided for @pageNotFoundTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Halaman Tidak Ditemukan'**
+  String get pageNotFoundTitle;
+
+  /// No description provided for @pageNotFoundMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Halaman yang Anda cari tidak ditemukan atau fitur ini belum diimplementasikan.'**
+  String get pageNotFoundMessage;
+
+  /// No description provided for @back.
+  ///
+  /// In id, this message translates to:
+  /// **'Kembali'**
+  String get back;
 }
 
 class _AppLocalizationsDelegate

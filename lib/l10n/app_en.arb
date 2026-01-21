@@ -107,5 +107,19 @@
   "menuRekrutmen": "Recruitment",
   "menuPengaturan": "Settings",
   "menuUpdateKontrak": "Update Contract",
-  "menuKpi": "KPI Monitoring"
+  "menuKpi": "KPI Monitoring",
+  
+  "verificationErrorTitle": "Sorry!",
+  "verificationErrorPart1": "Your account is not ",
+  "verificationErrorPart2": "verified",
+  "verificationErrorPart3": ". Please\ncontact ",
+  "verificationErrorPart4": "HRD",
+  "verificationErrorPart5": " Maha immediately!",
+  "targetReachedSimplified": "Target reached!",
+  "pointsNotReached": "{remaining} Points not reached",
+  "ePresensi": "E-Attendance",
+  
+  "pageNotFoundTitle": "Page Not Found",
+  "pageNotFoundMessage": "The page you are looking for was not found or this feature has not been implemented yet.",
+  "back": "Back"
 }
