@@ -33,4 +33,7 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+
+  /// Verify company code
+  Future<Either<Failure, bool>> verifyCompanyCode(String code);
 }

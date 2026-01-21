@@ -17,6 +17,11 @@ class CacheException implements Exception {
   String toString() => 'CacheException: $message';
 }
 
+class CompanyCodeNotVerifiedException implements Exception {
+  final String message;
+  CompanyCodeNotVerifiedException([this.message = 'Akun belum terverifikasi']);
+}
+
 class NetworkException implements Exception {
   final String message;
   NetworkException(this.message);

@@ -140,4 +140,24 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(NetworkFailure('No internet connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> verifyCompanyCode(String code) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.verifyCompanyCode(code);
+        return Right(result);
+      } on CompanyCodeNotVerifiedException catch (e) {
+        return Left(
+          ServerFailure(e.message),
+        ); // Or a specific failure type if needed
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure('No internet connection'));
+    }
+  }
 }

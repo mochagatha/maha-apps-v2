@@ -9,7 +9,10 @@ import '../models/register_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   /// Login with email and password
-  Future<AuthResponseModel> login({required String email, required String password});
+  Future<AuthResponseModel> login({
+    required String email,
+    required String password,
+  });
 
   /// Logout (if API endpoint exists)
   Future<void> logout();
@@ -20,6 +23,9 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  /// Verify company code
+  Future<bool> verifyCompanyCode(String code);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -28,7 +34,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<AuthResponseModel> login({required String email, required String password}) async {
+  Future<AuthResponseModel> login({
+    required String email,
+    required String password,
+  }) async {
     try {
       final response = await client.dioGolang.post(
         AppConstants.endpointLogin,
@@ -46,9 +55,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final errorData = e.response?.data;
       String message = 'Email Atau Password Salah';
 
-      if (errorData is List && errorData.isNotEmpty && errorData.first is Map<String, dynamic>) {
+      if (errorData is List &&
+          errorData.isNotEmpty &&
+          errorData.first is Map<String, dynamic>) {
         message = errorData.first['message'] ?? 'Terjadi kesalahan Hubungi HRD';
-      } else if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
+      } else if (errorData is Map<String, dynamic> &&
+          errorData.containsKey('message')) {
         message = errorData['message'];
       }
 
@@ -87,16 +99,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return RegisterResponseModel.fromJson(response.data);
       } else {
-        throw ServerException(response.data['message'] ?? 'Registration failed');
+        throw ServerException(
+          response.data['message'] ?? 'Registration failed',
+        );
       }
     } on DioException catch (e) {
       // Handler specific for error format
       final errorData = e.response?.data;
       String message = 'Registration failed';
 
-      if (errorData is List && errorData.isNotEmpty && errorData.first is Map<String, dynamic>) {
-        message = errorData.first['message'] ?? 'Terjadi kesalahan. Silakan coba lagi.';
-      } else if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
+      if (errorData is List &&
+          errorData.isNotEmpty &&
+          errorData.first is Map<String, dynamic>) {
+        message =
+            errorData.first['message'] ??
+            'Terjadi kesalahan. Silakan coba lagi.';
+      } else if (errorData is Map<String, dynamic> &&
+          errorData.containsKey('message')) {
         message = errorData['message'];
       }
 
@@ -106,6 +125,41 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         rethrow;
       }
       throw ServerException('Failed to register: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<bool> verifyCompanyCode(String code) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/letter/code-company/compare',
+        data: {'code': code},
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw ServerException('Invalid code');
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw CompanyCodeNotVerifiedException();
+      }
+
+      final errorData = e.response?.data;
+      String message = 'Verification failed';
+
+      if (errorData is Map<String, dynamic> &&
+          errorData.containsKey('message')) {
+        message = errorData['message'];
+      }
+
+      throw ServerException(message);
+    } catch (e) {
+      if (e is CompanyCodeNotVerifiedException || e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to verify code: ${e.toString()}');
     }
   }
 }

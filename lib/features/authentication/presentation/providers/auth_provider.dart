@@ -13,6 +13,7 @@ import '../../domain/usecases/login.dart';
 import '../../domain/usecases/logout.dart';
 import '../../domain/usecases/register.dart';
 import '../../domain/usecases/save_login_status.dart';
+import '../../domain/usecases/verify_company_code.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
@@ -23,6 +24,7 @@ class AuthProvider extends ChangeNotifier {
   final CheckAuthStatus checkAuthStatus;
   final Register register;
   final SaveLoginStatus saveLoginStatus;
+  final VerifyCompanyCode verifyCompanyCode;
 
   AuthProvider({
     required this.login,
@@ -31,6 +33,7 @@ class AuthProvider extends ChangeNotifier {
     required this.checkAuthStatus,
     required this.register,
     required this.saveLoginStatus,
+    required this.verifyCompanyCode,
   });
 
   AuthStatus _status = AuthStatus.initial;
@@ -45,14 +48,16 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _status == AuthStatus.loading;
 
   /// Login user
-  Future<void> loginUser(String email, String password, {bool rememberMe = false}) async {
+  Future<void> loginUser(
+    String email,
+    String password, {
+    bool rememberMe = false,
+  }) async {
     _status = AuthStatus.loading;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await login(
-      LoginParams(email: email, password: password),
-    );
+    final result = await login(LoginParams(email: email, password: password));
 
     await result.fold(
       (failure) async {
@@ -65,28 +70,33 @@ class AuthProvider extends ChangeNotifier {
         // This matches V1 flow: login -> getDataEmployeeByToken -> save employee data
         try {
           final prefs = await SharedPreferences.getInstance();
-          
+
           // First save the token so we can use it for the next request
           if (authResponse.data.token != null) {
             await prefs.setString('auth_token', authResponse.data.token!);
-            await prefs.setString('refresh_token', authResponse.data.refreshToken ?? authResponse.data.token!);
+            await prefs.setString(
+              'refresh_token',
+              authResponse.data.refreshToken ?? authResponse.data.token!,
+            );
           }
-          
+
           // Now fetch employee data using the token
           // V1 uses: POST BASE_URL_GOLANG/employee/get-by-token
           final dio = Dio();
           dio.options.baseUrl = dotenv.env['BASE_URL_GOLANG'] ?? '';
           dio.options.headers['Authorization'] = authResponse.data.token;
-          
+
           // V1 calls this endpoint after login to get employee data
           final profileResponse = await dio.post('/employee/get-by-token');
-          
-          if (profileResponse.statusCode == 200 && profileResponse.data['status'] == 'success') {
+
+          if (profileResponse.statusCode == 200 &&
+              profileResponse.data['status'] == 'success') {
             final employeeData = profileResponse.data['data'];
             final employeeId = employeeData['id'] as int?;
             final jobTitleId = employeeData['job_title']?['id'] as int?;
-            final branchCode = employeeData['branch']?['branch_code'] as String?;
-            
+            final branchCode =
+                employeeData['branch']?['branch_code'] as String?;
+
             // Update user with employee_id and job_title_id
             final updatedUser = UserModel(
               employeeId: employeeId,
@@ -95,26 +105,27 @@ class AuthProvider extends ChangeNotifier {
               token: authResponse.data.token,
               refreshToken: authResponse.data.refreshToken,
             );
-            
+
             // Save updated user
-            await prefs.setString('user_data', json.encode(updatedUser.toJson()));
+            await prefs.setString(
+              'user_data',
+              json.encode(updatedUser.toJson()),
+            );
             if (employeeId != null) {
               await prefs.setInt('employee_id', employeeId);
             }
             if (jobTitleId != null) {
               await prefs.setInt('job_title_id', jobTitleId);
             }
-            
+
             _user = updatedUser;
           }
-          
-
 
           // Save login status
           if (rememberMe) {
             await saveLoginStatus(SaveLoginStatusParams(rememberMe: true));
           }
-          
+
           _status = AuthStatus.authenticated;
           _errorMessage = null;
         } catch (e) {
@@ -206,11 +217,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await register(
-      RegisterParams(
-        fullname: fullname,
-        email: email,
-        password: password,
-      ),
+      RegisterParams(fullname: fullname, email: email, password: password),
     );
 
     result.fold(
@@ -226,5 +233,29 @@ class AuthProvider extends ChangeNotifier {
     );
 
     notifyListeners();
+  }
+
+  /// Verify company code
+  Future<bool> verifyCode(String code) async {
+    _status = AuthStatus.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    final result = await verifyCompanyCode(VerifyCompanyCodeParams(code: code));
+
+    return result.fold(
+      (failure) {
+        _status = AuthStatus.error;
+        _errorMessage = failure.message;
+        notifyListeners();
+        return false;
+      },
+      (success) {
+        _status = AuthStatus.unauthenticated;
+        _errorMessage = null;
+        notifyListeners();
+        return true;
+      },
+    );
   }
 }

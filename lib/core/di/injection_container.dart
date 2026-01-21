@@ -16,6 +16,7 @@ import '../../features/authentication/domain/usecases/login.dart';
 import '../../features/authentication/domain/usecases/logout.dart';
 import '../../features/authentication/domain/usecases/register.dart';
 import '../../features/authentication/domain/usecases/save_login_status.dart';
+import '../../features/authentication/domain/usecases/verify_company_code.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
 
 // Home feature imports
@@ -62,6 +63,7 @@ Future<void> init() async {
       checkAuthStatus: sl(),
       register: sl(),
       saveLoginStatus: sl(),
+      verifyCompanyCode: sl(),
     ),
   );
 
@@ -72,6 +74,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CheckAuthStatus(sl()));
   sl.registerLazySingleton(() => Register(sl()));
   sl.registerLazySingleton(() => SaveLoginStatus(sl()));
+  sl.registerLazySingleton(() => VerifyCompanyCode(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(

@@ -8,7 +8,6 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
-import 'route_paths.dart';
 import '../../shared/widgets/scaffold_with_navbar.dart';
 import 'package:provider/provider.dart';
 import '../di/injection_container.dart';
@@ -25,7 +24,7 @@ class AppRouter {
       initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
 
-      // Redirect logic 
+      // Redirect logic
       redirect: (context, state) {
         return null;
       },
@@ -68,7 +67,8 @@ class AppRouter {
                 GoRoute(
                   path: RoutePaths.pesan,
                   name: RouteNames.pesan,
-                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
+                  builder: (context, state) =>
+                      const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
             ),

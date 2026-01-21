@@ -5,6 +5,11 @@ import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import 'terms_and_conditions_sheet.dart';
 
+import 'package:provider/provider.dart';
+import '../../../../core/error/failures.dart';
+import '../providers/auth_provider.dart';
+import 'verification_error_dialog.dart';
+
 class PinVerificationDialog extends StatefulWidget {
   const PinVerificationDialog({super.key});
 
@@ -18,6 +23,10 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     (index) => TextEditingController(),
   );
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+  final List<FocusNode> _keyboardFocusNodes = List.generate(
+    6,
+    (index) => FocusNode(debugLabel: "Keyboard $index"),
+  );
 
   @override
   void dispose() {
@@ -25,6 +34,9 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
       controller.dispose();
     }
     for (var node in _focusNodes) {
+      node.dispose();
+    }
+    for (var node in _keyboardFocusNodes) {
       node.dispose();
     }
     super.dispose();
@@ -56,24 +68,46 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
       ),
     );
 
-    // Simulate API call - In real implementation, call API to verify code
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final success = await context.read<AuthProvider>().verifyCode(code);
 
-    if (!mounted) return;
-    Navigator.pop(context); // Close loading
+      if (!mounted) return;
+      Navigator.pop(context); // Close loading
 
-    // For now, accept any 6-digit code
-    // TODO: Implement actual API verification
-    if (code.length == 6) {
-      Navigator.pop(context); // Close PIN dialog
-      _showTermsAndConditions();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.pinInvalid),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      if (success) {
+        Navigator.pop(context); // Close PIN dialog
+        _showTermsAndConditions();
+      } else {
+        // Generic error handled by provider state, show snackbar if needed
+        final errorMessage = context.read<AuthProvider>().errorMessage;
+        if (errorMessage != null) {
+          Navigator.pop(context); // Close PIN dialog
+          showDialog(
+            context: context,
+            builder: (context) => const VerificationErrorDialog(),
+          );
+        }
+      }
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context); // Close loading
+
+      if (e is ServerFailure && e.message == 'Akun belum terverifikasi') {
+        // Show Verification Error Dialog
+        showDialog(
+          context: context,
+          builder: (context) => const VerificationErrorDialog(),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString().replaceAll('ServerFailure: ', ''),
+            ), // Clean up error message
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 
@@ -114,32 +148,41 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
               6,
               (index) => SizedBox(
                 width: 40,
-                child: TextField(
-                  controller: _controllers[index],
-                  focusNode: _focusNodes[index],
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  maxLength: 1,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    counterText: '',
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: Colors.grey),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.primary),
-                    ),
-                  ),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onChanged: (value) => _onDigitChanged(index, value),
-                  onTap: () {
-                    if (_controllers[index].text.isNotEmpty) {
-                      _controllers[index].clear();
+                child: KeyboardListener(
+                  focusNode: _keyboardFocusNodes[index],
+                  onKeyEvent: (event) {
+                    if (event is KeyDownEvent &&
+                        event.logicalKey == LogicalKeyboardKey.backspace) {
+                      _onBackspace(index);
                     }
                   },
+                  child: TextField(
+                    controller: _controllers[index],
+                    focusNode: _focusNodes[index],
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    maxLength: 1,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      counterText: '',
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: AppColors.primary),
+                      ),
+                    ),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onChanged: (value) => _onDigitChanged(index, value),
+                    onTap: () {
+                      if (_controllers[index].text.isNotEmpty) {
+                        _controllers[index].clear();
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
