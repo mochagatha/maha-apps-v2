@@ -65,6 +65,10 @@
   
   "logoutConfirmTitle": "Are you sure you want to log out?",
   "logoutConfirmMessage": "Log out from application",
+  "logout": "Logout",
+  "logoutConfirmation1": "Are you sure you want to ",
+  "logoutConfirmation2": "logout ",
+  "logoutConfirmation3": "from the application?",
   "yes": "Yes",
   "no": "No",
   "cancel": "Cancel",

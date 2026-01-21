@@ -184,16 +184,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutConfirmMessage => 'Log out from application';
 
   @override
-  String get logout => 'Keluar';
+  String get logout => 'Logout';
 
   @override
-  String get logoutConfirmation1 => 'Apakah Anda yakin ingin ';
+  String get logoutConfirmation1 => 'Are you sure you want to ';
 
   @override
-  String get logoutConfirmation2 => 'keluar ';
+  String get logoutConfirmation2 => 'logout ';
 
   @override
-  String get logoutConfirmation3 => 'dari aplikasi?';
+  String get logoutConfirmation3 => 'from the application?';
 
   @override
   String get yes => 'Yes';
