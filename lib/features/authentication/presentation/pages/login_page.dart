@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,10 @@ class _LoginPageState extends State<LoginPage> {
       context.go(RoutePaths.home);
     } else if (authProvider.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authProvider.errorMessage!), backgroundColor: AppColors.error),
+        SnackBar(
+          content: Text(authProvider.errorMessage!),
+          backgroundColor: AppColors.error,
+        ),
       );
     }
   }
@@ -84,36 +88,51 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: MediaQuery.of(context).size.height * 0.08),
 
                     // Role Dropdown (Optional Helper)
-                    DropdownButtonFormField<String>(
-                      value: _selectedRole,
-                      decoration: InputDecoration(
-                        labelText: context.l10n.selectRole,
-                        prefixIcon: const Icon(Icons.people_outline),
+                    Visibility(
+                      visible: kDebugMode,
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedRole,
+                        decoration: InputDecoration(
+                          labelText: context.l10n.selectRole,
+                          prefixIcon: const Icon(Icons.people_outline),
+                        ),
+                        items: _emailOptions.keys.map((role) {
+                          return DropdownMenuItem(
+                            value: role,
+                            child: Text(role),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedRole = value;
+                              _emailController.text = _emailOptions[value]!;
+                              _passwordController.text =
+                                  'E!!fu!0T--T4~h@7hQ'; // Default default
+                            });
+                          }
+                        },
                       ),
-                      items: _emailOptions.keys.map((role) {
-                        return DropdownMenuItem(value: role, child: Text(role));
-                      }).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            _selectedRole = value;
-                            _emailController.text = _emailOptions[value]!;
-                            _passwordController.text = 'E!!fu!0T--T4~h@7hQ'; // Default default
-                          });
-                        }
-                      },
                     ),
                     const SizedBox(height: 24),
 
                     // Email Field
                     Text(
                       context.l10n.email,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(hintText: context.l10n.enterEmail),
+                      decoration: InputDecoration(
+                        hintText: context.l10n.enterEmail,
+                      ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -127,7 +146,10 @@ class _LoginPageState extends State<LoginPage> {
                     // Password Field
                     Text(
                       context.l10n.password,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -136,7 +158,11 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         hintText: context.l10n.enterPassword,
                         suffixIcon: IconButton(
-                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                          icon: Icon(
+                            _isObscure
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
                           onPressed: () {
                             setState(() {
                               _isObscure = !_isObscure;
@@ -160,7 +186,6 @@ class _LoginPageState extends State<LoginPage> {
                     // Checkbox & Forgot Password
                     Row(
                       children: [
-                        
                         const Spacer(),
                         TextButton(
                           onPressed: () {
@@ -183,7 +208,10 @@ class _LoginPageState extends State<LoginPage> {
                           ? const SizedBox(
                               height: 24,
                               width: 24,
-                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
                             )
                           : Text(context.l10n.login),
                     ),
@@ -194,7 +222,10 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
                           children: [
                             TextSpan(text: '${context.l10n.dontHaveAccount} '),
                             TextSpan(
@@ -207,7 +238,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ..onTap = () {
                                   showDialog(
                                     context: context,
-                                    builder: (context) => const PinVerificationDialog(),
+                                    builder: (context) =>
+                                        const PinVerificationDialog(),
                                   );
                                 },
                             ),
@@ -220,7 +252,10 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                       child: Text(
                         context.l10n.copyright(DateTime.now().year.toString()),
-                        style: const TextStyle(color: AppColors.neutral5, fontSize: 12),
+                        style: const TextStyle(
+                          color: AppColors.neutral5,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
