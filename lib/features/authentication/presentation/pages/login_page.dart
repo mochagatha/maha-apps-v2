@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                     // Logo
                     Center(child: Image.asset('assets/maha.png', height: 100)),
 
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                     // Role Dropdown (Optional Helper)
                     Visibility(
