@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/route_paths.dart';
@@ -284,10 +285,10 @@ class ProfileCard extends StatelessWidget {
                     // Logout Icon
                     GestureDetector(
                       onTap: () => _showLogoutDialog(context),
-                      child: const Icon(
-                        Icons.logout, // Or specific door icon if available
+                      child: const FaIcon(
+                        FontAwesomeIcons.doorOpen,
                         color: Colors.white,
-                        size: 28,
+                        size: 18,
                       ),
                     ),
                   ],

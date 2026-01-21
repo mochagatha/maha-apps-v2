@@ -42,6 +42,7 @@ class MenuGrid extends StatelessWidget {
     }
 
     return GridView.builder(
+      padding: EdgeInsets.only(top: 8),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
         mainAxisSpacing: 10,
@@ -73,14 +74,16 @@ class MenuGrid extends StatelessWidget {
             if (route != null) {
               context.push(route);
             } else {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text('Feature ${menu.label} coming soon!')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Feature ${menu.label} coming soon!')),
+              );
             }
           },
           child: Container(
             decoration: BoxDecoration(
-              color: MediaQuery.of(context).size.width > 600 ? Colors.white : Colors.transparent,
+              color: MediaQuery.of(context).size.width > 600
+                  ? Colors.white
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               boxShadow: MediaQuery.of(context).size.width > 600
                   ? [
@@ -102,13 +105,20 @@ class MenuGrid extends StatelessWidget {
                     isAsset
                         ? Image.asset(
                             iconAsset,
-                            width: MediaQuery.of(context).size.width > 600 ? 60 : 50,
-                            height: MediaQuery.of(context).size.width > 600 ? 60 : 50,
-                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                            width: MediaQuery.of(context).size.width > 600
+                                ? 60
+                                : 50,
+                            height: MediaQuery.of(context).size.width > 600
+                                ? 60
+                                : 50,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.error),
                           )
                         : Icon(
                             Icons.apps,
-                            size: MediaQuery.of(context).size.width > 600 ? 50 : 40,
+                            size: MediaQuery.of(context).size.width > 600
+                                ? 50
+                                : 40,
                             color: AppColors.primary,
                           ),
                     if (badgeCount > 0)

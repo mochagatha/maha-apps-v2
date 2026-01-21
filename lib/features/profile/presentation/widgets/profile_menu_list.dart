@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../shared/theme/app_theme.dart';
 
 /// Profile menu item model
 class ProfileMenuItem {
-  final String icon;
+  final String assetPath;
   final String label;
   final VoidCallback onTap;
+  final Color? textColor;
 
   const ProfileMenuItem({
-    required this.icon,
+    required this.assetPath,
     required this.label,
     required this.onTap,
+    this.textColor,
   });
 }
 
@@ -19,11 +22,7 @@ class ProfileMenuList extends StatelessWidget {
   final String title;
   final List<ProfileMenuItem> items;
 
-  const ProfileMenuList({
-    super.key,
-    required this.title,
-    required this.items,
-  });
+  const ProfileMenuList({super.key, required this.title, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +33,16 @@ class ProfileMenuList extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 13,
-            color: AppColors.neutral6,
+            color: Color(0xff5F5F5F),
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 8),
         Container(
+          padding: const EdgeInsets.all(1.5),
+          width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(
-              color: AppColors.neutral4,
-              width: 0.5,
-            ),
+            border: Border.all(color: Colors.grey, width: 0.5),
           ),
           child: Column(
             children: List.generate(
@@ -61,10 +58,7 @@ class ProfileMenuList extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem({
-    required ProfileMenuItem item,
-    required bool isLast,
-  }) {
+  Widget _buildMenuItem({required ProfileMenuItem item, required bool isLast}) {
     return InkWell(
       onTap: item.onTap,
       child: Container(
@@ -72,68 +66,35 @@ class ProfileMenuList extends StatelessWidget {
           border: Border(
             bottom: isLast
                 ? BorderSide.none
-                : const BorderSide(
-                    color: AppColors.neutral4,
-                    width: 0.5,
-                  ),
+                : const BorderSide(color: Colors.grey, width: 0.5),
           ),
         ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 14,
-          horizontal: 12,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                Icon(
-                  _getIconData(item.icon),
-                  size: 20,
-                  color: AppColors.primary,
+                SvgPicture.asset(
+                  item.assetPath,
+                  width: 24, // Estimate size matching V1 likely around 24-30
+                  height: 24,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Text(
                   item.label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: item.textColor ?? Colors.black,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
-            const Icon(
-              Icons.chevron_right,
-              size: 20,
-              color: AppColors.neutral6,
-            ),
+            const Icon(Icons.arrow_forward_ios, size: 18),
           ],
         ),
       ),
     );
-  }
-
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'person':
-        return Icons.person_outline;
-      case 'school':
-        return Icons.school_outlined;
-      case 'work':
-        return Icons.work_outline;
-      case 'family':
-        return Icons.family_restroom_outlined;
-      case 'lock':
-        return Icons.lock_outline;
-      case 'security':
-        return Icons.security_outlined;
-      case 'settings':
-        return Icons.settings_outlined;
-      case 'logout':
-        return Icons.logout;
-      default:
-        return Icons.circle_outlined;
-    }
   }
 }

@@ -155,7 +155,7 @@ Future<void> init() async {
 
   // Data sources
   sl.registerLazySingleton<ProfileRemoteDataSource>(
-    () => ProfileRemoteDataSourceImpl(client: sl()),
+    () => ProfileRemoteDataSourceImpl(client: sl(), sharedPreferences: sl()),
   );
 
   sl.registerLazySingleton<ProfileLocalDataSource>(

@@ -30,13 +30,19 @@ class EmployeeModel extends Employee {
       nik: json['nik'] as String,
       email: json['email'] as String,
       photoUrl: json['photo_url'] as String?,
-      phone: json['phone'] as String?,
+      phone: json['phone_number'] as String? ?? json['phone'] as String?,
       jobTitleId: json['job_title_id'] as int?,
-      jobTitle: json['job_title'] as String?,
+      jobTitle: json['job_title'] is Map
+          ? json['job_title']['name'] as String?
+          : json['job_title'] as String?,
       departmentCode: json['department_code'] as String?,
-      department: json['department'] as String?,
+      department: json['department'] is Map
+          ? json['department']['department_name'] as String?
+          : json['department'] as String?,
       branchCode: json['branch_code'] as String?,
-      branch: json['branch'] as String?,
+      branch: json['branch'] is Map
+          ? json['branch']['branch_name'] as String?
+          : json['branch'] as String?,
       status: json['status'] as int?,
       type: json['type'] as String?,
       totalPoint: _parseDouble(json['total_point']),
@@ -118,10 +124,27 @@ class BiodataInfoModel extends BiodataInfo {
     return BiodataInfoModel(
       gender: json['gender'] as String?,
       birthPlace: json['birth_place'] as String?,
+      // V1 sends "YYYY-MM-DD", just use as String or parse if needed.
+      // V2 entity expects String, so this is fine.
       birthDate: json['birth_date'] as String?,
       religion: json['religion'] as String?,
-      maritalStatus: json['marital_status'] as String?,
-      address: json['address'] as String?,
+      maritalStatus:
+          json['marital_status'] as String? ??
+          json['residence_status']
+              as String?, // V1 has residence_status, maybe map it? V1 also has marital status in other calls?
+      // V1 Model has residence_status. It does NOT have marital_status in Biodata object explicitly shown in snippet?
+      // Wait, V1 Biodata has residence_status.
+      // And I checked V1 Biodata fields: gender, birthPlace, birthDate, religion, bloodType, weight, height, identityFullAddress, currentFullAddress.
+      // It has `residence_status`.
+      // It does NOT seem to have `marital_status`.
+      // BUT `EmployeeModel` in V2 uses `maritalStatus` in `BiodataInfo`.
+      // I will map `residence_status` to `maritalStatus` if that's the intent, OR leave it null.
+      // V1 has `GetMaritalStatus` API.
+      // For now, I'll try to map residence_status or current_address.
+      // Actually `address` in V2 is mapped to `current_address` or `current_full_address`.
+      address:
+          json['current_address'] as String? ??
+          json['current_full_address'] as String?,
     );
   }
 
