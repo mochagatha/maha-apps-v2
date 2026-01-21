@@ -8,6 +8,7 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
 import 'route_paths.dart';
+import 'not_found_page.dart';
 import '../../shared/widgets/scaffold_with_navbar.dart';
 import 'package:provider/provider.dart';
 import '../di/injection_container.dart';
@@ -101,24 +102,7 @@ class AppRouter {
       ],
 
       errorBuilder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(title: const Text('Error')),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                const SizedBox(height: 16),
-                Text('Page not found: ${state.matchedLocation}'),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () => context.go(RoutePaths.splash),
-                  child: const Text('Go to Home'),
-                ),
-              ],
-            ),
-          ),
-        );
+        return const NotFoundPage();
       },
     );
   }
