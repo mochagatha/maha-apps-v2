@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
+import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
+import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
 import '../../features/authentication/presentation/providers/forgot_password_provider.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
@@ -52,6 +54,16 @@ class AppRouter {
           path: RoutePaths.forgotPassword,
           name: RouteNames.forgotPassword,
           builder: (context, state) => const InputEmailForgetPasswordPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.termsAndConditions,
+          name: RouteNames.termsAndConditions,
+          builder: (context, state) => const TermsAndConditionsPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.privacyNotice,
+          name: RouteNames.privacyNotice,
+          builder: (context, state) => const PrivacyNoticePage(),
         ),
 
         // StatefulShellRoute for Bottom Navigation with persisted state

@@ -5,15 +5,17 @@ class RoutePaths {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
-  
+  static const String termsAndConditions = '/terms-and-conditions';
+  static const String privacyNotice = '/privacy-notice';
+
   // Home
   static const String home = '/home';
   static const String pesan = '/pesan';
   static const String calendar = '/calendar';
-  
+
   // Profile
   static const String profile = '/profile';
-  
+
   // Settings
   static const String setting = '/settings';
   static const String settings = '/settings'; // Legacy/Duplicate?

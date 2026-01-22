@@ -47,7 +47,10 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
               // Title
               Text(
                 context.l10n.termsAndConditionsTitle,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -67,7 +70,7 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      // TODO: Navigate to terms page
+                      context.push(RoutePaths.termsAndConditions);
                     },
                     child: Text(
                       context.l10n.termsOfUse,
@@ -87,7 +90,7 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      // TODO: Navigate to privacy page
+                      context.push(RoutePaths.privacyNotice);
                     },
                     child: Text(
                       context.l10n.privacyNotice,

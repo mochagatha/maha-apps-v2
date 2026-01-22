@@ -5,15 +5,17 @@ class RouteNames {
   static const String login = 'login';
   static const String register = 'register';
   static const String forgotPassword = 'forgot-password';
-  
+  static const String termsAndConditions = 'termsAndConditions';
+  static const String privacyNotice = 'privacyNotice';
+
   // Home
   static const String home = 'home';
   static const String pesan = 'pesan';
   static const String calendar = 'calendar';
-  
+
   // Profile
   static const String profile = 'profile';
-  
+
   // Settings
   static const String setting = 'setting';
   static const String settings = 'settings';
