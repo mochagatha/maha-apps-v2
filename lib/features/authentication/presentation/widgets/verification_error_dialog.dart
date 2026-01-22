@@ -17,101 +17,103 @@ class VerificationErrorDialog extends StatelessWidget {
         ), // Dotted line simulation if needed, but solid blue for now as per image border hint
       ),
       contentPadding: const EdgeInsets.all(20),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            context.l10n.verificationErrorTitle,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 20),
-          Image.asset(
-            'assets/images/icon/success-register.png',
-            height: 120,
-            errorBuilder: (_, __, ___) => const Icon(
-              Icons.support_agent,
-              size: 80,
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(height: 20),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
+      content: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              context.l10n.verificationErrorTitle,
               style: const TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
-                fontFamily: 'Poppins',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
-              children: [
-                TextSpan(text: context.l10n.verificationErrorPart1),
-                TextSpan(
-                  text: context.l10n.verificationErrorPart2,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                TextSpan(text: context.l10n.verificationErrorPart3),
-                TextSpan(
-                  text: context.l10n.verificationErrorPart4,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                TextSpan(text: context.l10n.verificationErrorPart5),
-              ],
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () async {
-                final Uri whatsapp = Uri.parse(
-                  "https://wa.me/6281364993863?text=${Uri.encodeComponent('Halo Admin, Saya ingin konfirmasi pendaftaran akun Maha Apps saya.')}",
-                );
-                if (await canLaunchUrl(whatsapp)) {
-                  launchUrl(whatsapp);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFE50914), // Red color
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+
+            const SizedBox(height: 20),
+            Image.asset(
+              'assets/images/icon/success-register.png',
+              height: 120,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.support_agent,
+                size: 80,
+                color: AppColors.primary,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            ),
+            const SizedBox(height: 20),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                  fontFamily: 'Poppins',
+                ),
                 children: [
-                  Image.asset(
-                    'assets/images/icon/whatsapp.png',
-                    width: 20,
-                    height: 20,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    context.l10n.contactAdmin,
+                  TextSpan(text: context.l10n.verificationErrorPart1),
+                  TextSpan(
+                    text: context.l10n.verificationErrorPart2,
                     style: const TextStyle(
-                      fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
+                  TextSpan(text: context.l10n.verificationErrorPart3),
+                  TextSpan(
+                    text: context.l10n.verificationErrorPart4,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  TextSpan(text: context.l10n.verificationErrorPart5),
                 ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final Uri whatsapp = Uri.parse(
+                    "https://wa.me/6281364993863?text=${Uri.encodeComponent('Halo Admin, Saya ingin konfirmasi pendaftaran akun Maha Apps saya.')}",
+                  );
+                  if (await canLaunchUrl(whatsapp)) {
+                    launchUrl(whatsapp);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE50914), // Red color
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/icon/whatsapp.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      context.l10n.contactAdmin,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

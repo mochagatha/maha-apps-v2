@@ -62,38 +62,40 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              // v1 doesn't seem to have the big illustration here, but the design image might.
-              // Assuming simple form like v1 screenshot or design.
-              Text(
-                'Ubah Kata Sandi Anda',
-                style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Silahkan ubah kata sandi lama Anda untuk keamanan Akun',
-                style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
-              ),
-              const SizedBox(height: 20),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                // v1 doesn't seem to have the big illustration here, but the design image might.
+                // Assuming simple form like v1 screenshot or design.
+                Text(
+                  'Ubah Kata Sandi Anda',
+                  style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Silahkan ubah kata sandi lama Anda untuk keamanan Akun',
+                  style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 20),
 
-              _buildTextField(
-                controller: _newPasswordController,
-                label: 'Masukkan Kata Sandi Baru',
-                hint: '******',
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _confirmPasswordController,
-                label: 'Konfirmasi Kata Sandi Baru',
-                hint: '******',
-              ),
-            ],
+                _buildTextField(
+                  controller: _newPasswordController,
+                  label: 'Masukkan Kata Sandi Baru',
+                  hint: '******',
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: _confirmPasswordController,
+                  label: 'Konfirmasi Kata Sandi Baru',
+                  hint: '******',
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -173,13 +175,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              CircularProgressIndicator(color: Colors.white),
-              SizedBox(height: 20),
-              Text('Sedang memproses...', style: TextStyle(color: Colors.white)),
-            ],
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                CircularProgressIndicator(color: Colors.white),
+                SizedBox(height: 20),
+                Text('Sedang memproses...', style: TextStyle(color: Colors.white)),
+              ],
+            ),
           ),
         );
       },
@@ -192,13 +196,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('Berhasil'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 60),
-            const SizedBox(height: 16),
-            const Text('Kata sandi lama Anda telah diubah!'),
-          ],
+        content: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.check_circle, color: Colors.green, size: 60),
+              const SizedBox(height: 16),
+              const Text('Kata sandi lama Anda telah diubah!'),
+            ],
+          ),
         ),
         actions: [
           TextButton(

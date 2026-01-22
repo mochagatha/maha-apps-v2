@@ -56,59 +56,61 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
         elevation: 0,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: SvgPicture.asset(
-                    "assets/images/icon/forgot_password.svg",
-                    height: 250, // Added height for better control
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: SvgPicture.asset(
+                      "assets/images/icon/forgot_password.svg",
+                      height: 250, // Added height for better control
+                    ),
                   ),
                 ),
-              ),
-              Text(
-                'Reset Kata Sandi Anda',
-                style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Masukkan E-mail yang pernah terdaftar untuk melanjutkan reset password',
-                style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Email',
-                style: AppTextStyles.headingTwoSemiBold(
-                  context,
-                ).copyWith(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: 'contoh : ulil.ambri@mahasejahtera.com',
-                  hintStyle: TextStyle(color: Colors.grey[400]),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.primary),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                Text(
+                  'Reset Kata Sandi Anda',
+                  style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
                 ),
-              ),
-            ],
+                const SizedBox(height: 8),
+                Text(
+                  'Masukkan E-mail yang pernah terdaftar untuk melanjutkan reset password',
+                  style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Email',
+                  style: AppTextStyles.headingTwoSemiBold(
+                    context,
+                  ).copyWith(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    hintText: 'contoh : ulil.ambri@mahasejahtera.com',
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: AppColors.primary),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
