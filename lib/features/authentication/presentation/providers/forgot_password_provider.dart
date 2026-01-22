@@ -61,7 +61,9 @@ class ForgotPasswordProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = await verifyOtpUseCase(VerifyOtpParams(email: email, code: code));
+    final result = await verifyOtpUseCase(
+      VerifyOtpParams(email: email, code: code),
+    );
 
     result.fold(
       (failure) {
@@ -77,13 +79,29 @@ class ForgotPasswordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> resetPassword(String password, String confirmationPassword) async {
+  Future<void> resetPassword(
+    String password,
+    String confirmationPassword,
+  ) async {
+    print('🔄 Provider: resetPassword called');
+    print(
+      '  Verification Data: ${_verificationData != null ? "EXISTS" : "NULL"}',
+    );
+
     if (_verificationData == null) {
+      print('❌ Provider: Missing verification data');
       _state = ForgotPasswordState.error;
       _errorMessage = "Missing verification data";
       notifyListeners();
       return;
     }
+
+    print('  Employee ID: ${_verificationData!.employeeId}');
+    print(
+      '  Old Password: ${_verificationData!.oldPassword.isNotEmpty ? "EXISTS" : "EMPTY"}',
+    );
+    print('  New Password Length: ${password.length}');
+    print('  Confirmation Password Length: ${confirmationPassword.length}');
 
     _state = ForgotPasswordState.loading;
     _errorMessage = null;
@@ -100,10 +118,12 @@ class ForgotPasswordProvider extends ChangeNotifier {
 
     result.fold(
       (failure) {
+        print('❌ Provider: Reset password failed - ${failure.message}');
         _state = ForgotPasswordState.error;
         _errorMessage = failure.message;
       },
       (success) {
+        print('✅ Provider: Reset password successful');
         _state = ForgotPasswordState.success;
       },
     );

@@ -30,6 +30,30 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     super.initState();
     _newPasswordController.addListener(_validateInput);
     _confirmPasswordController.addListener(_validateInput);
+
+    // Validate that verification data exists
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<ForgotPasswordProvider>();
+      print('🔍 Reset Password Page: Checking verification data');
+
+      if (provider.verificationData == null) {
+        print('❌ Reset Password Page: No verification data found');
+        ErrorDialog.show(
+          context,
+          title: 'Data Verifikasi Tidak Ditemukan',
+          message: 'Silakan lakukan verifikasi OTP terlebih dahulu.',
+        );
+        // Navigate back after showing error
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            context.go('/forgot-password');
+          }
+        });
+      } else {
+        print('✅ Reset Password Page: Verification data exists');
+        print('  Employee ID: ${provider.verificationData!.employeeId}');
+      }
+    });
   }
 
   void _validateInput() {
@@ -135,6 +159,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           child: ElevatedButton(
             onPressed: _isButtonEnabled
                 ? () async {
+                    print('🔘 Reset Password Button: Clicked');
+
                     LoadingDialog.show(
                       context,
                       message: 'Mengubah kata sandi...',
@@ -142,6 +168,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
                     try {
                       final provider = context.read<ForgotPasswordProvider>();
+
+                      print(
+                        '🔘 Reset Password Button: Calling provider.resetPassword',
+                      );
                       await provider.resetPassword(
                         _newPasswordController.text,
                         _confirmPasswordController.text,
@@ -152,6 +182,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       LoadingDialog.hide(context); // Close loading dialog
 
                       if (provider.state == ForgotPasswordState.success) {
+                        print('✅ Reset Password Button: Success');
                         SuccessDialog.show(
                           context,
                           title: 'Berhasil',
@@ -162,6 +193,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           },
                         );
                       } else if (provider.state == ForgotPasswordState.error) {
+                        print(
+                          '❌ Reset Password Button: Error - ${provider.errorMessage}',
+                        );
                         ErrorDialog.show(
                           context,
                           title: 'Gagal Mengubah Kata Sandi',
@@ -171,13 +205,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         );
                       }
                     } catch (e) {
+                      print('❌ Reset Password Button: Exception caught - $e');
                       if (!mounted) return;
                       LoadingDialog.hide(context);
                       ErrorDialog.show(
                         context,
                         title: 'Terjadi Kesalahan',
                         message:
-                            'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+                            'Terjadi kesalahan yang tidak terduga: ${e.toString()}',
                       );
                     }
                   }
