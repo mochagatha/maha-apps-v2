@@ -27,36 +27,53 @@ class ForgotPasswordRemoteDataSourceImpl implements ForgotPasswordRemoteDataSour
     final url = EnvConfig.apiBaseUrl + ApiEndpoints.sendOtp;
     try {
       final response = await client.dio.post(url, data: {"email": email});
-      if (response.statusCode == 200) {
-        return ForgotPasswordStatusModel.fromJson(response.data);
+      // v1 returns: {status, code, message}
+      // Check if response has valid structure
+      if (response.data != null && response.data is Map && response.data.containsKey('code')) {
+        final code = response.data['code'];
+        if (code == 200) {
+          return ForgotPasswordStatusModel.fromJson(response.data);
+        } else {
+          // Server returned error code (e.g., 400 for email not found)
+          throw ServerException(response.data['message'] ?? 'Failed to send OTP');
+        }
       } else {
-        throw ServerException(response.data['message'] ?? 'Failed to send OTP');
+        throw ServerException('Invalid response format');
       }
     } on DioException catch (e) {
-      throw ServerException(e.response?.data['message'] ?? e.message ?? 'Server Error');
+      if (e.response?.data != null && e.response!.data is Map) {
+        throw ServerException(e.response!.data['message'] ?? e.message ?? 'Server Error');
+      }
+      throw ServerException(e.message ?? 'Server Error');
     } catch (e) {
+      if (e is ServerException) rethrow;
       throw ServerException(e.toString());
     }
   }
 
   @override
   Future<ForgotPasswordVerificationDataModel> verifyOtp(String email, String code) async {
-    // Note: Assuming endpoint is defined in ApiEndpoints or using the string directly if not.
-    // Based on previous reads: static const String verifyOtp = '/employee/verify-otp-forgot-password';
     final url = EnvConfig.apiBaseUrl + ApiEndpoints.verifyOtp;
     try {
-      final response = await client.dio.post(url, data: {
-        "email": email,
-        "code": code,
-      });
-      if (response.statusCode == 200) {
-        return ForgotPasswordVerificationDataModel.fromJson(response.data);
+      final response = await client.dio.post(url, data: {"email": email, "code": code});
+      // v1 returns: {status, code, message, data: {employee_id, old_password}}
+      if (response.data != null && response.data is Map && response.data.containsKey('code')) {
+        final responseCode = response.data['code'];
+        if (responseCode == 200) {
+          return ForgotPasswordVerificationDataModel.fromJson(response.data);
+        } else {
+          throw ServerException(response.data['message'] ?? 'Failed to verify OTP');
+        }
       } else {
-        throw ServerException(response.data['message'] ?? 'Failed to verify OTP');
+        throw ServerException('Invalid response format');
       }
     } on DioException catch (e) {
-      throw ServerException(e.response?.data['message'] ?? e.message ?? 'Server Error');
+      if (e.response?.data != null && e.response!.data is Map) {
+        throw ServerException(e.response!.data['message'] ?? e.message ?? 'Server Error');
+      }
+      throw ServerException(e.message ?? 'Server Error');
     } catch (e) {
+      if (e is ServerException) rethrow;
       throw ServerException(e.toString());
     }
   }
@@ -70,20 +87,33 @@ class ForgotPasswordRemoteDataSourceImpl implements ForgotPasswordRemoteDataSour
   ) async {
     final url = EnvConfig.apiBaseUrl + ApiEndpoints.resetPassword;
     try {
-      final response = await client.dio.post(url, data: {
-        "employee_id": id,
-        "old_password": oldPassword,
-        "password": password,
-        "password_confirmation": confirmationPassword,
-      });
-      if (response.statusCode == 200) {
-        return;
+      final response = await client.dio.post(
+        url,
+        data: {
+          "employee_id": id,
+          "old_password": oldPassword,
+          "password": password,
+          "password_confirmation": confirmationPassword,
+        },
+      );
+      // v1 returns: {status, code, message}
+      if (response.data != null && response.data is Map && response.data.containsKey('code')) {
+        final responseCode = response.data['code'];
+        if (responseCode == 200) {
+          return;
+        } else {
+          throw ServerException(response.data['message'] ?? 'Failed to reset password');
+        }
       } else {
-        throw ServerException(response.data['message'] ?? 'Failed to reset password');
+        throw ServerException('Invalid response format');
       }
     } on DioException catch (e) {
-      throw ServerException(e.response?.data['message'] ?? e.message ?? 'Server Error');
+      if (e.response?.data != null && e.response!.data is Map) {
+        throw ServerException(e.response!.data['message'] ?? e.message ?? 'Server Error');
+      }
+      throw ServerException(e.message ?? 'Server Error');
     } catch (e) {
+      if (e is ServerException) rethrow;
       throw ServerException(e.toString());
     }
   }

@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
+import '../../../../shared/widgets/loading_dialog.dart';
+import '../../../../shared/widgets/error_dialog.dart';
 import '../providers/forgot_password_provider.dart';
 import 'reset_password_page.dart';
 
@@ -91,14 +93,14 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                 const SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Center(
                   child: SvgPicture.asset(
                     "assets/images/icon/forgot_password.svg", // Using the same icon as per v1 implies, or pes_verifikasi_otp.svg if available
-                     height: 150,
+                    height: 150,
                   ),
                 ),
-                 const SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   'Masukkan Kode Verifikasi',
                   style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
@@ -112,10 +114,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                     children: [
                       TextSpan(
                         text: widget.email,
-                        style: AppTextStyles.bodyStyle(context).copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: AppTextStyles.bodyStyle(
+                          context,
+                        ).copyWith(color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -128,23 +129,39 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                   showFieldAsBox: true,
                   onCodeChanged: (String code) {},
                   onSubmit: (String verificationCode) async {
-                    _showLoadingDialog(context);
-                     final provider = context.read<ForgotPasswordProvider>();
-                     await provider.verifyOtp(widget.email, verificationCode);
-                     
-                     if (context.mounted) {
-                       Navigator.pop(context); // Close loading dialog
-                       if (provider.state == ForgotPasswordState.success) {
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => const ResetPasswordPage())
-                          );
-                       } else if (provider.state == ForgotPasswordState.error) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(provider.errorMessage ?? 'Kode OTP Tidak Sesuai')),
-                          );
-                       }
-                     }
+                    LoadingDialog.show(context, message: 'Memverifikasi kode OTP...');
+
+                    try {
+                      final provider = context.read<ForgotPasswordProvider>();
+                      await provider.verifyOtp(widget.email, verificationCode);
+
+                      if (!mounted) return;
+
+                      LoadingDialog.hide(context); // Close loading dialog
+
+                      if (provider.state == ForgotPasswordState.success) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ResetPasswordPage()),
+                        );
+                      } else if (provider.state == ForgotPasswordState.error) {
+                        ErrorDialog.show(
+                          context,
+                          title: 'Kode OTP Salah',
+                          message:
+                              provider.errorMessage ??
+                              'Kode OTP yang Anda masukkan tidak sesuai. Silakan coba lagi.',
+                        );
+                      }
+                    } catch (e) {
+                      if (!mounted) return;
+                      LoadingDialog.hide(context);
+                      ErrorDialog.show(
+                        context,
+                        title: 'Terjadi Kesalahan',
+                        message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 20),
@@ -155,26 +172,52 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                     style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
                     children: [
                       TextSpan(
-                        text: isResendEnabled
-                            ? 'Kirim Ulang'
-                            : 'Kirim Ulang dalam $timerText',
+                        text: isResendEnabled ? 'Kirim Ulang' : 'Kirim Ulang dalam $timerText',
                         style: AppTextStyles.bodyStyle(context).copyWith(
-                          color: isResendEnabled
-                              ? AppColors.primary
-                              : Colors.grey,
+                          color: isResendEnabled ? AppColors.primary : Colors.grey,
                           fontWeight: FontWeight.bold,
                         ),
                         recognizer: isResendEnabled
                             ? (TapGestureRecognizer()
-                              ..onTap = () async {
-                                await context.read<ForgotPasswordProvider>().sendOtp(widget.email);
-                                 if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('OTP sent successfully!')),
+                                ..onTap = () async {
+                                  LoadingDialog.show(context, message: 'Mengirim ulang OTP...');
+
+                                  try {
+                                    final provider = context.read<ForgotPasswordProvider>();
+                                    await provider.sendOtp(widget.email);
+
+                                    if (!mounted) return;
+
+                                    LoadingDialog.hide(context);
+
+                                    if (provider.state == ForgotPasswordState.success) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Kode OTP berhasil dikirim ulang!'),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                      startTimer();
+                                    } else {
+                                      ErrorDialog.show(
+                                        context,
+                                        title: 'Gagal Mengirim OTP',
+                                        message:
+                                            provider.errorMessage ??
+                                            'Gagal mengirim ulang kode OTP. Silakan coba lagi.',
+                                      );
+                                    }
+                                  } catch (e) {
+                                    if (!mounted) return;
+                                    LoadingDialog.hide(context);
+                                    ErrorDialog.show(
+                                      context,
+                                      title: 'Terjadi Kesalahan',
+                                      message:
+                                          'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
                                     );
-                                 }
-                                startTimer();
-                              })
+                                  }
+                                })
                             : null,
                       ),
                     ],
@@ -185,31 +228,6 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
           ),
         ),
       ),
-    );
-  }
-
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                CircularProgressIndicator(color: Colors.white),
-                SizedBox(height: 20),
-                Text(
-                  'Sedang memverifikasi OTP...',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

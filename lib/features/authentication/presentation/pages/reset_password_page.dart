@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
+import '../../../../shared/widgets/loading_dialog.dart';
+import '../../../../shared/widgets/success_dialog.dart';
+import '../../../../shared/widgets/error_dialog.dart';
 import '../providers/forgot_password_provider.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -109,24 +112,46 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           child: ElevatedButton(
             onPressed: _isButtonEnabled
                 ? () async {
-                    _showLoadingDialog(context);
-                    final provider = context.read<ForgotPasswordProvider>();
-                    await provider.resetPassword(
-                      _newPasswordController.text,
-                      _confirmPasswordController.text,
-                    );
+                    LoadingDialog.show(context, message: 'Mengubah kata sandi...');
 
-                    if (context.mounted) {
-                      Navigator.pop(context); // Close loading dialog
+                    try {
+                      final provider = context.read<ForgotPasswordProvider>();
+                      await provider.resetPassword(
+                        _newPasswordController.text,
+                        _confirmPasswordController.text,
+                      );
+
+                      if (!mounted) return;
+
+                      LoadingDialog.hide(context); // Close loading dialog
+
                       if (provider.state == ForgotPasswordState.success) {
-                        _showSuccessDialog(context);
+                        SuccessDialog.show(
+                          context,
+                          title: 'Berhasil',
+                          message: 'Kata sandi Anda telah berhasil diubah!',
+                          onConfirm: () {
+                            context.go('/login');
+                            provider.resetState();
+                          },
+                        );
                       } else if (provider.state == ForgotPasswordState.error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(provider.errorMessage ?? 'Gagal mengubah kata sandi'),
-                          ),
+                        ErrorDialog.show(
+                          context,
+                          title: 'Gagal Mengubah Kata Sandi',
+                          message:
+                              provider.errorMessage ??
+                              'Gagal mengubah kata sandi. Silakan coba lagi.',
                         );
                       }
+                    } catch (e) {
+                      if (!mounted) return;
+                      LoadingDialog.hide(context);
+                      ErrorDialog.show(
+                        context,
+                        title: 'Terjadi Kesalahan',
+                        message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+                      );
                     }
                   }
                 : null,
@@ -165,63 +190,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
       ],
-    );
-  }
-
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                CircularProgressIndicator(color: Colors.white),
-                SizedBox(height: 20),
-                Text('Sedang memproses...', style: TextStyle(color: Colors.white)),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showSuccessDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Berhasil'),
-        content: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.check_circle, color: Colors.green, size: 60),
-              const SizedBox(height: 16),
-              const Text('Kata sandi lama Anda telah diubah!'),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close dialog
-              context.go('/login'); // Navigate to login
-              context.read<ForgotPasswordProvider>().resetState();
-            },
-            style: TextButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 45),
-            ),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
     );
   }
 }
