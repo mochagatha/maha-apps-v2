@@ -19,8 +19,11 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _isButtonEnabled = false;
+  bool _isNewPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   void initState() {
@@ -32,8 +35,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   void _validateInput() {
     setState(() {
       _isButtonEnabled =
-          _newPasswordController.text.isNotEmpty &&
-          _confirmPasswordController.text.isNotEmpty &&
+          _newPasswordController.text.length >= 6 &&
+          _confirmPasswordController.text.length >= 6 &&
           _newPasswordController.text == _confirmPasswordController.text;
     });
   }
@@ -54,7 +57,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             onTap: () {
               context.pop();
             },
-            child: const FaIcon(FontAwesomeIcons.circleChevronLeft, color: Colors.white, size: 24),
+            child: const FaIcon(
+              FontAwesomeIcons.circleChevronLeft,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
         ),
         title: const Text(
@@ -77,12 +84,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 // Assuming simple form like v1 screenshot or design.
                 Text(
                   'Ubah Kata Sandi Anda',
-                  style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
+                  style: AppTextStyles.headingTwoSemiBold(
+                    context,
+                  ).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Silahkan ubah kata sandi lama Anda untuk keamanan Akun',
-                  style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
+                  style: AppTextStyles.bodyStyle(
+                    context,
+                  ).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 20),
 
@@ -90,12 +101,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   controller: _newPasswordController,
                   label: 'Masukkan Kata Sandi Baru',
                   hint: '******',
+                  isPasswordVisible: _isNewPasswordVisible,
+                  onToggleVisibility: () {
+                    setState(() {
+                      _isNewPasswordVisible = !_isNewPasswordVisible;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
                   controller: _confirmPasswordController,
                   label: 'Konfirmasi Kata Sandi Baru',
                   hint: '******',
+                  isPasswordVisible: _isConfirmPasswordVisible,
+                  onToggleVisibility: () {
+                    setState(() {
+                      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                    });
+                  },
                 ),
               ],
             ),
@@ -112,7 +135,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           child: ElevatedButton(
             onPressed: _isButtonEnabled
                 ? () async {
-                    LoadingDialog.show(context, message: 'Mengubah kata sandi...');
+                    LoadingDialog.show(
+                      context,
+                      message: 'Mengubah kata sandi...',
+                    );
 
                     try {
                       final provider = context.read<ForgotPasswordProvider>();
@@ -150,19 +176,28 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       ErrorDialog.show(
                         context,
                         title: 'Terjadi Kesalahan',
-                        message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+                        message:
+                            'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
                       );
                     }
                   }
                 : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _isButtonEnabled ? AppColors.primary : Colors.grey,
+              backgroundColor: _isButtonEnabled
+                  ? Colors.red
+                  : Colors.grey.shade300,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text(
               'Simpan',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -174,6 +209,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     required TextEditingController controller,
     required String label,
     required String hint,
+    required bool isPasswordVisible,
+    required VoidCallback onToggleVisibility,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,11 +219,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
-          obscureText: true,
+          obscureText: !isPasswordVisible,
           decoration: InputDecoration(
             hintText: hint,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            suffixIcon: IconButton(
+              icon: FaIcon(
+                isPasswordVisible
+                    ? FontAwesomeIcons.eye
+                    : FontAwesomeIcons.eyeSlash,
+                size: 20,
+                color: Colors.grey,
+              ),
+              onPressed: onToggleVisibility,
+            ),
           ),
         ),
       ],

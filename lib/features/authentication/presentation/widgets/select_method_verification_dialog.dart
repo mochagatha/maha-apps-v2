@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,18 +14,13 @@ class SelectMethodVerificationDialog extends StatefulWidget {
   const SelectMethodVerificationDialog({super.key, required this.email});
 
   @override
-  State<SelectMethodVerificationDialog> createState() => _SelectMethodVerificationDialogState();
+  State<SelectMethodVerificationDialog> createState() =>
+      _SelectMethodVerificationDialogState();
 }
 
-class _SelectMethodVerificationDialogState extends State<SelectMethodVerificationDialog> {
-  Timer? _debounce;
+class _SelectMethodVerificationDialogState
+    extends State<SelectMethodVerificationDialog> {
   bool _isProcessing = false;
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    super.dispose();
-  }
 
   Future<void> _handleSendOtp() async {
     // Prevent multiple taps
@@ -36,114 +30,111 @@ class _SelectMethodVerificationDialogState extends State<SelectMethodVerificatio
       _isProcessing = true;
     });
 
-    // Debounce
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    // Get root navigator before closing bottom sheet
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
 
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (!mounted) return;
+    // Close method selection dialog (bottom sheet)
+    Navigator.of(context).pop();
 
-      // Get root navigator before closing bottom sheet
-      final rootNavigator = Navigator.of(context, rootNavigator: true);
+    // Wait a bit for bottom sheet animation to complete
+    await Future.delayed(const Duration(milliseconds: 100));
 
-      // Close method selection dialog (bottom sheet)
-      Navigator.of(context).pop();
+    // Show loading dialog using root navigator context
+    rootNavigator.push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: false,
+        barrierColor: Colors.black54,
+        pageBuilder: (BuildContext context, _, __) {
+          return const LoadingDialog(message: 'Mengirim kode OTP...');
+        },
+      ),
+    );
 
-      // Wait a bit for bottom sheet animation to complete
-      await Future.delayed(const Duration(milliseconds: 100));
+    try {
+      final provider = context.read<ForgotPasswordProvider>();
+      await provider.sendOtp(widget.email);
 
-      // Show loading dialog using root navigator context
-      rootNavigator.push(
-        PageRouteBuilder(
-          opaque: false,
+      // Remove the mounted check here because this widget (SelectMethodVerificationDialog)
+      // is ALREADY popped/disposed above. So mounted will be false.
+      // But we still need to close the loading dialog we opened on the rootNavigator.
+
+      // Close loading dialog
+      rootNavigator.pop();
+
+      // Small delay to ensure loading dialog is fully closed
+      await Future.delayed(const Duration(milliseconds: 50));
+
+      if (provider.state == ForgotPasswordState.success) {
+        // Show success dialog
+        await showDialog(
+          context: rootNavigator.context,
           barrierDismissible: false,
-          barrierColor: Colors.black54,
-          pageBuilder: (BuildContext context, _, __) {
-            return const LoadingDialog(message: 'Mengirim kode OTP...');
+          builder: (BuildContext context) {
+            return SuccessDialog(
+              title: 'OTP Terkirim',
+              message: 'Kode verifikasi telah dikirim ke email ${widget.email}',
+              onConfirm: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        VerificationCodePage(email: widget.email),
+                  ),
+                );
+              },
+            );
           },
-        ),
-      );
-
-      try {
-        final provider = context.read<ForgotPasswordProvider>();
-        await provider.sendOtp(widget.email);
-
-        if (!mounted) return;
-
-        // Close loading dialog
-        rootNavigator.pop();
-
-        // Small delay to ensure loading dialog is fully closed
-        await Future.delayed(const Duration(milliseconds: 50));
-
-        if (provider.state == ForgotPasswordState.success) {
-          // Show success dialog
-          await showDialog(
-            context: rootNavigator.context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return SuccessDialog(
-                title: 'OTP Terkirim',
-                message: 'Kode verifikasi telah dikirim ke email ${widget.email}',
-                onConfirm: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => VerificationCodePage(email: widget.email),
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        } else if (provider.state == ForgotPasswordState.error) {
-          // Show error dialog
-          await showDialog(
-            context: rootNavigator.context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return ErrorDialog(
-                title: 'Gagal Mengirim OTP',
-                message:
-                    provider.errorMessage ??
-                    'Email yang Anda masukkan tidak terdaftar atau terjadi kesalahan. Silakan coba lagi.',
-              );
-            },
-          );
-        } else {
-          // Handle unexpected state
-          await showDialog(
-            context: rootNavigator.context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return const ErrorDialog(
-                title: 'Terjadi Kesalahan',
-                message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
-              );
-            },
-          );
-        }
-      } catch (e) {
-        if (!mounted) return;
-        rootNavigator.pop(); // Close loading
-
+        );
+      } else if (provider.state == ForgotPasswordState.error) {
+        // Show error dialog
+        await showDialog(
+          context: rootNavigator.context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ErrorDialog(
+              title: 'Gagal Mengirim OTP',
+              message:
+                  provider.errorMessage ??
+                  'Email yang Anda masukkan tidak terdaftar atau terjadi kesalahan. Silakan coba lagi.',
+            );
+          },
+        );
+      } else {
+        // Handle unexpected state
         await showDialog(
           context: rootNavigator.context,
           barrierDismissible: false,
           builder: (BuildContext context) {
             return const ErrorDialog(
               title: 'Terjadi Kesalahan',
-              message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+              message:
+                  'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
             );
           },
         );
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isProcessing = false;
-          });
-        }
       }
-    });
+    } catch (e) {
+      // Also remove mounted check here
+      rootNavigator.pop(); // Close loading
+
+      await showDialog(
+        context: rootNavigator.context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const ErrorDialog(
+            title: 'Terjadi Kesalahan',
+            message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+          );
+        },
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
+    }
   }
 
   @override
@@ -169,7 +160,10 @@ class _SelectMethodVerificationDialogState extends State<SelectMethodVerificatio
                   'Pilih Metode Verifikasi',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -204,14 +198,20 @@ class _SelectMethodVerificationDialogState extends State<SelectMethodVerificatio
                           color: AppColors.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.email, color: AppColors.primary),
+                        child: const Icon(
+                          Icons.email,
+                          color: AppColors.primary,
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('E-mail ke', style: TextStyle(fontWeight: FontWeight.bold)),
+                            const Text(
+                              'E-mail ke',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             Text(
                               widget.email,
                               style: const TextStyle(color: Colors.grey),
