@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                         const Spacer(),
                         TextButton(
                           onPressed: () {
-                            // TODO: Navigate to forgot password
+                            context.push(RoutePaths.forgotPassword);
                           },
                           child: Text(
                             context.l10n.forgotPassword,

@@ -8,7 +8,6 @@ import 'terms_and_conditions_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/error/failures.dart';
 import '../providers/auth_provider.dart';
-import 'verification_error_dialog.dart';
 
 class PinVerificationDialog extends StatefulWidget {
   const PinVerificationDialog({super.key});
@@ -27,6 +26,7 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     6,
     (index) => FocusNode(debugLabel: "Keyboard $index"),
   );
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -46,14 +46,18 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     if (value.isNotEmpty && index < 5) {
       _focusNodes[index + 1].requestFocus();
     }
-    setState(() {}); // Rebuild to update button state
+    setState(() {
+      _errorMessage = null;
+    }); // Rebuild to update button state
   }
 
   void _onBackspace(int index) {
     if (index > 0 && _controllers[index].text.isEmpty) {
       _focusNodes[index - 1].requestFocus();
     }
-    setState(() {}); // Rebuild to update button state
+    setState(() {
+      _errorMessage = null;
+    }); // Rebuild to update button state
   }
 
   Future<void> _verifyCode() async {
@@ -63,9 +67,8 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0),
-      ),
+      builder: (context) =>
+          const Center(child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0)),
     );
 
     try {
@@ -78,32 +81,22 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
         Navigator.pop(context); // Close PIN dialog
         _showTermsAndConditions();
       } else {
-        // Generic error handled by provider state, show snackbar if needed
-        final errorMessage = context.read<AuthProvider>().errorMessage;
-        if (errorMessage != null) {
-          Navigator.pop(context); // Close PIN dialog
-          showDialog(
-            context: context,
-            builder: (context) => const VerificationErrorDialog(),
-          );
-        }
+        setState(() {
+          _errorMessage = "Maaf Kode Perusahaan yang Anda masukkan salah!";
+        });
       }
     } catch (e) {
       if (!mounted) return;
       Navigator.pop(context); // Close loading
 
       if (e is ServerFailure && e.message == 'Akun belum terverifikasi') {
-        // Show Verification Error Dialog
-        showDialog(
-          context: context,
-          builder: (context) => const VerificationErrorDialog(),
-        );
+        setState(() {
+          _errorMessage = "Maaf Kode Perusahaan yang Anda masukkan salah!";
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              e.toString().replaceAll('ServerFailure: ', ''),
-            ), // Clean up error message
+            content: Text(e.toString().replaceAll('ServerFailure: ', '')), // Clean up error message
             backgroundColor: AppColors.error,
           ),
         );
@@ -151,8 +144,7 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
                 child: KeyboardListener(
                   focusNode: _keyboardFocusNodes[index],
                   onKeyEvent: (event) {
-                    if (event is KeyDownEvent &&
-                        event.logicalKey == LogicalKeyboardKey.backspace) {
+                    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
                       _onBackspace(index);
                     }
                   },
@@ -187,6 +179,15 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
               ),
             ),
           ),
+
+          if (_errorMessage != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              _errorMessage!,
+              style: const TextStyle(fontSize: 10, color: AppColors.error),
+              textAlign: TextAlign.center,
+            ),
+          ],
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
@@ -198,20 +199,14 @@ class _PinVerificationDialogState extends State<PinVerificationDialog> {
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                disabledBackgroundColor:
-                    Colors.grey[300], // Light gray for disabled state
+                disabledBackgroundColor: Colors.grey[300], // Light gray for disabled state
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               child: Text(
                 context.l10n.confirm,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),

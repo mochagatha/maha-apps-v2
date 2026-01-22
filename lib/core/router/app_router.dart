@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
+import '../../features/authentication/presentation/pages/forgot_password_page.dart';
+import '../../features/authentication/presentation/providers/forgot_password_provider.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -45,6 +47,14 @@ class AppRouter {
           path: RoutePaths.register,
           name: RouteNames.register,
           builder: (context, state) => const RegisterPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.forgotPassword,
+          name: RouteNames.forgotPassword,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<ForgotPasswordProvider>(),
+            child: const InputEmailForgetPasswordPage(),
+          ),
         ),
 
         // StatefulShellRoute for Bottom Navigation with persisted state
