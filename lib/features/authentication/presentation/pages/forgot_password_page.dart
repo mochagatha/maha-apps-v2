@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
 import '../providers/forgot_password_provider.dart';
+import '../widgets/select_method_verification_dialog.dart';
 
 class InputEmailForgetPasswordPage extends StatefulWidget {
   const InputEmailForgetPasswordPage({super.key});
@@ -82,10 +83,9 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
               const SizedBox(height: 20),
               Text(
                 'Email',
-                style: AppTextStyles.headingTwoSemiBold(context).copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTextStyles.headingTwoSemiBold(
+                  context,
+                ).copyWith(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -101,7 +101,7 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Colors.grey[300]!),
                   ),
-                   focusedBorder: OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: const BorderSide(color: AppColors.primary),
                   ),
@@ -116,79 +116,44 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
         height: 70,
         elevation: 0,
         color: Colors.white,
-        child: Padding(
-          // Added padding for better layout
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Consumer<ForgotPasswordProvider>(
-            builder: (context, provider, child) {
-              if (provider.state == ForgotPasswordState.loading) {
-                return ElevatedButton(
-                  onPressed: null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: AppColors.primary, width: 1.0),
-                    ),
-                  ),
-                  child: const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ),
-                );
-              }
+        child: Consumer<ForgotPasswordProvider>(
+          builder: (context, provider, child) {
+            // Removed loading state check here because loading now happens in the dialog/subsequent pages
+            // OR keeping it if we want to blocking load on this page?
+            // The design shows dialog for loading. So we don't need to block this button with loading content necessarily.
+            // But let's keep it simple and just show the button always enabled if valid.
 
-              return ElevatedButton(
-                onPressed: provider.isButtonEnabled
-                    ? () async {
-                        await provider.sendOtp(_emailController.text);
-                        if (context.mounted) {
-                          if (provider.state == ForgotPasswordState.success) {
-                            // Navigate to OTP Verification (Not implemented yet)
-                            ScaffoldMessenger.of(
-                              context,
-                            ).showSnackBar(const SnackBar(content: Text('OTP sent successfully!')));
-                          } else if (provider.state == ForgotPasswordState.error) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Error'),
-                                content: Text(provider.errorMessage ?? 'Unknown error'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        }
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: provider.isButtonEnabled 
-                      ? AppColors.primary 
-                      : Colors.grey, // Grey when disabled
-                  disabledBackgroundColor: Colors.grey,
-                  padding: const EdgeInsets.symmetric(vertical: 12.0), // Increased padding
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(
-                      color: provider.isButtonEnabled ? AppColors.primary : Colors.grey, 
-                      width: 1.0
-                    ),
+            return ElevatedButton(
+              onPressed: provider.isButtonEnabled
+                  ? () async {
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) =>
+                            SelectMethodVerificationDialog(email: _emailController.text),
+                      );
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: provider.isButtonEnabled
+                    ? AppColors.primary
+                    : Colors.grey, // Grey when disabled
+                disabledBackgroundColor: Colors.grey,
+                padding: const EdgeInsets.symmetric(vertical: 12.0), // Increased padding
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(
+                    color: provider.isButtonEnabled ? AppColors.primary : Colors.grey,
+                    width: 1.0,
                   ),
                 ),
-                child: const Text(
-                  'Lanjut',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-              );
-            },
-          ),
+              ),
+              child: const Text(
+                'Lanjut',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            );
+          },
         ),
       ),
     );

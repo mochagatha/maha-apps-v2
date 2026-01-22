@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/router/app_router.dart';
 import 'features/authentication/presentation/providers/auth_provider.dart';
+import 'features/authentication/presentation/providers/forgot_password_provider.dart';
 import 'features/home/presentation/providers/home_provider.dart';
 import 'features/profile/presentation/providers/profile_provider.dart';
 import 'l10n/app_localizations.dart';
@@ -40,6 +41,10 @@ class MyApp extends StatelessWidget {
         // Profile Provider from GetIt
         ChangeNotifierProvider(
           create: (_) => di.sl<ProfileProvider>(),
+        ),
+        // Forgot Password Provider from GetIt
+        ChangeNotifierProvider(
+          create: (_) => di.sl<ForgotPasswordProvider>(),
         ),
       ],
       child: MaterialApp.router(

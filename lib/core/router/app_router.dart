@@ -51,10 +51,7 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.forgotPassword,
           name: RouteNames.forgotPassword,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<ForgotPasswordProvider>(),
-            child: const InputEmailForgetPasswordPage(),
-          ),
+          builder: (context, state) => const InputEmailForgetPasswordPage(),
         ),
 
         // StatefulShellRoute for Bottom Navigation with persisted state

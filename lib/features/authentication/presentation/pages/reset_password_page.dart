@@ -1,0 +1,221 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/theme/app_text_styles.dart';
+import '../providers/forgot_password_provider.dart';
+
+class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({super.key});
+
+  @override
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _newPasswordController.addListener(_validateInput);
+    _confirmPasswordController.addListener(_validateInput);
+  }
+
+  void _validateInput() {
+    setState(() {
+      _isButtonEnabled =
+          _newPasswordController.text.isNotEmpty &&
+          _confirmPasswordController.text.isNotEmpty &&
+          _newPasswordController.text == _confirmPasswordController.text;
+    });
+  }
+
+  @override
+  void dispose() {
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: Center(
+          child: GestureDetector(
+            onTap: () {
+              context.pop();
+            },
+            child: const FaIcon(FontAwesomeIcons.circleChevronLeft, color: Colors.white, size: 24),
+          ),
+        ),
+        title: const Text(
+          'Ubah Kata Sandi',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: AppColors.primary,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              // v1 doesn't seem to have the big illustration here, but the design image might.
+              // Assuming simple form like v1 screenshot or design.
+              Text(
+                'Ubah Kata Sandi Anda',
+                style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Silahkan ubah kata sandi lama Anda untuk keamanan Akun',
+                style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
+              ),
+              const SizedBox(height: 20),
+
+              _buildTextField(
+                controller: _newPasswordController,
+                label: 'Masukkan Kata Sandi Baru',
+                hint: '******',
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _confirmPasswordController,
+                label: 'Konfirmasi Kata Sandi Baru',
+                hint: '******',
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        height: 80,
+        elevation: 0,
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: _isButtonEnabled
+                ? () async {
+                    _showLoadingDialog(context);
+                    final provider = context.read<ForgotPasswordProvider>();
+                    await provider.resetPassword(
+                      _newPasswordController.text,
+                      _confirmPasswordController.text,
+                    );
+
+                    if (context.mounted) {
+                      Navigator.pop(context); // Close loading dialog
+                      if (provider.state == ForgotPasswordState.success) {
+                        _showSuccessDialog(context);
+                      } else if (provider.state == ForgotPasswordState.error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(provider.errorMessage ?? 'Gagal mengubah kata sandi'),
+                          ),
+                        );
+                      }
+                    }
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _isButtonEnabled ? AppColors.primary : Colors.grey,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: const Text(
+              'Simpan',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: hint,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              CircularProgressIndicator(color: Colors.white),
+              SizedBox(height: 20),
+              Text('Sedang memproses...', style: TextStyle(color: Colors.white)),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Berhasil'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle, color: Colors.green, size: 60),
+            const SizedBox(height: 16),
+            const Text('Kata sandi lama Anda telah diubah!'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              context.go('/login'); // Navigate to login
+              context.read<ForgotPasswordProvider>().resetState();
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 45),
+            ),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+}

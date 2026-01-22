@@ -17,8 +17,6 @@ import '../../features/authentication/domain/usecases/logout.dart';
 import '../../features/authentication/domain/usecases/register.dart';
 import '../../features/authentication/domain/usecases/save_login_status.dart';
 import '../../features/authentication/domain/usecases/verify_company_code.dart';
-import '../../features/authentication/domain/usecases/verify_company_code.dart';
-import '../../features/authentication/domain/usecases/verify_company_code.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
 
 // Forgot Password
@@ -26,8 +24,9 @@ import '../../features/authentication/data/datasources/forgot_password_remote_da
 import '../../features/authentication/data/repositories/forgot_password_repository_impl.dart';
 import '../../features/authentication/domain/repositories/forgot_password_repository.dart';
 import '../../features/authentication/domain/usecases/send_otp.dart';
+import '../../features/authentication/domain/usecases/verify_otp.dart';
+import '../../features/authentication/domain/usecases/reset_password.dart';
 import '../../features/authentication/presentation/providers/forgot_password_provider.dart';
-
 
 // Home feature imports
 import '../../features/home/data/datasources/home_local_datasource.dart';
@@ -45,8 +44,7 @@ import '../../features/profile/data/datasources/profile_local_datasource.dart';
 import '../../features/profile/data/datasources/profile_remote_datasource.dart';
 import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/repositories/profile_repository.dart';
-import '../../features/profile/domain/usecases/get_employee_profile.dart'
-    as profile_usecases;
+import '../../features/profile/domain/usecases/get_employee_profile.dart' as profile_usecases;
 import '../../features/profile/domain/usecases/update_employee_profile.dart';
 import '../../features/profile/domain/usecases/update_profile_picture.dart';
 import '../../features/profile/presentation/providers/profile_provider.dart';
@@ -80,6 +78,8 @@ Future<void> init() async {
   sl.registerFactory(
     () => ForgotPasswordProvider(
       sendOtpUseCase: sl(),
+      verifyOtpUseCase: sl(),
+      resetPasswordUseCase: sl(),
     ),
   );
 
@@ -93,28 +93,20 @@ Future<void> init() async {
   sl.registerLazySingleton(() => VerifyCompanyCode(sl()));
 
   sl.registerLazySingleton(() => SendOtp(sl()));
+  sl.registerLazySingleton(() => VerifyOtp(sl()));
+  sl.registerLazySingleton(() => ResetPassword(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
-      remoteDataSource: sl(),
-      localDataSource: sl(),
-      networkInfo: sl(),
-    ),
+    () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()),
   );
 
   sl.registerLazySingleton<ForgotPasswordRepository>(
-    () => ForgotPasswordRepositoryImpl(
-      remoteDataSource: sl(),
-      networkInfo: sl(),
-    ),
+    () => ForgotPasswordRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
   );
 
   // Data sources
-  sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(client: sl()),
-  );
-
+  sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(client: sl()));
 
   sl.registerLazySingleton<ForgotPasswordRemoteDataSource>(
     () => ForgotPasswordRemoteDataSourceImpl(client: sl()),
@@ -143,17 +135,11 @@ Future<void> init() async {
 
   // Repository
   sl.registerLazySingleton<HomeRepository>(
-    () => HomeRepositoryImpl(
-      remoteDataSource: sl(),
-      localDataSource: sl(),
-      networkInfo: sl(),
-    ),
+    () => HomeRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()),
   );
 
   // Data sources
-  sl.registerLazySingleton<HomeRemoteDataSource>(
-    () => HomeRemoteDataSourceImpl(client: sl()),
-  );
+  sl.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(client: sl()));
 
   sl.registerLazySingleton<HomeLocalDataSource>(
     () => HomeLocalDataSourceImpl(sharedPreferences: sl()),
@@ -176,11 +162,7 @@ Future<void> init() async {
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(
-      remoteDataSource: sl(),
-      localDataSource: sl(),
-      networkInfo: sl(),
-    ),
+    () => ProfileRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()),
   );
 
   // Data sources
