@@ -182,6 +182,15 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Reset to unauthenticated state
+  void resetToUnauthenticated() {
+    if (_status == AuthStatus.loading) {
+      _status = AuthStatus.unauthenticated;
+      _errorMessage = null;
+      notifyListeners();
+    }
+  }
+
   /// Register new user
   Future<void> registerUser({
     required String fullname,

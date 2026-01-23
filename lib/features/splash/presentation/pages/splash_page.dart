@@ -50,13 +50,13 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD9D9D9), // Remove gray background
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Lottie.asset(
             'assets/splash.json',
-            repeat: true,
+            repeat: false,
             fit: BoxFit.contain, // Ensure proper fitting without background
             delegates: LottieDelegates(
               values: [

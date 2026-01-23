@@ -34,6 +34,19 @@ class _LoginPageState extends State<LoginPage> {
   String? _selectedRole;
 
   @override
+  void initState() {
+    super.initState();
+    // Reset auth status ketika masuk ke login page
+    // untuk menghindari tombol login dalam kondisi loading
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = context.read<AuthProvider>();
+      if (authProvider.status == AuthStatus.loading) {
+        authProvider.resetToUnauthenticated();
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
