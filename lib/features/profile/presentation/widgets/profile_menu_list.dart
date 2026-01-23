@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../shared/theme/app_theme.dart';
 
 /// Profile menu item model
 class ProfileMenuItem {
@@ -47,10 +46,7 @@ class ProfileMenuList extends StatelessWidget {
           child: Column(
             children: List.generate(
               items.length,
-              (index) => _buildMenuItem(
-                item: items[index],
-                isLast: index == items.length - 1,
-              ),
+              (index) => _buildMenuItem(item: items[index], isLast: index == items.length - 1),
             ),
           ),
         ),
@@ -64,9 +60,7 @@ class ProfileMenuList extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: Border(
-            bottom: isLast
-                ? BorderSide.none
-                : const BorderSide(color: Colors.grey, width: 0.5),
+            bottom: isLast ? BorderSide.none : const BorderSide(color: Colors.grey, width: 0.5),
           ),
         ),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),

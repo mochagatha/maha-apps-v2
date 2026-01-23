@@ -23,6 +23,9 @@ abstract class AuthLocalDataSource {
 
   /// Clear all auth data
   Future<void> clearAuthData();
+
+  /// Get cached token
+  Future<String?> getToken();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -61,16 +64,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         await sharedPreferences.setString(AppConstants.keyToken, user.token!);
       }
       if (user.refreshToken != null) {
-        await sharedPreferences.setString(
-          AppConstants.keyRefreshToken,
-          user.refreshToken!,
-        );
+        await sharedPreferences.setString(AppConstants.keyRefreshToken, user.refreshToken!);
       }
       if (user.branchCode != null) {
-        await sharedPreferences.setString(
-          AppConstants.keyBranchCode,
-          user.branchCode!,
-        );
+        await sharedPreferences.setString(AppConstants.keyBranchCode, user.branchCode!);
       }
     } catch (e) {
       throw CacheException('Failed to cache user: ${e.toString()}');
@@ -99,8 +96,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<bool> isLoggedIn() async {
     try {
-      final isLoggedIn =
-          sharedPreferences.getBool(AppConstants.keyIsLoggedIn) ?? false;
+      final isLoggedIn = sharedPreferences.getBool(AppConstants.keyIsLoggedIn) ?? false;
       final token = sharedPreferences.getString(AppConstants.keyToken);
       return isLoggedIn && token != null && token.isNotEmpty;
     } catch (e) {
@@ -120,6 +116,15 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       // await sharedPreferences.remove(AppConstants.keyRememberMe);
     } catch (e) {
       throw CacheException('Failed to clear auth data: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<String?> getToken() async {
+    try {
+      return sharedPreferences.getString(AppConstants.keyToken);
+    } catch (e) {
+      return null;
     }
   }
 }

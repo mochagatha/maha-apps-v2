@@ -29,10 +29,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     if (await networkInfo.isConnected) {
       try {
-        final authResponse = await remoteDataSource.login(
-          email: email,
-          password: password,
-        );
+        final authResponse = await remoteDataSource.login(email: email, password: password);
 
         // Cache user data
         await localDataSource.cacheUser(authResponse.data as UserModel);
@@ -148,9 +145,32 @@ class AuthRepositoryImpl implements AuthRepository {
         final result = await remoteDataSource.verifyCompanyCode(code);
         return Right(result);
       } on CompanyCodeNotVerifiedException catch (e) {
-        return Left(
-          ServerFailure(e.message),
-        ); // Or a specific failure type if needed
+        return Left(ServerFailure(e.message)); // Or a specific failure type if needed
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure('No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getProfile() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final token = await localDataSource.getToken();
+        if (token == null) {
+          return Left(CacheFailure('No token found'));
+        }
+
+        final userModel = await remoteDataSource.getProfile(token);
+
+        // Update cache
+        await localDataSource.cacheUser(userModel);
+
+        return Right(userModel);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
       } on Exception catch (e) {

@@ -17,6 +17,7 @@ import '../../features/authentication/domain/usecases/logout.dart';
 import '../../features/authentication/domain/usecases/register.dart';
 import '../../features/authentication/domain/usecases/save_login_status.dart';
 import '../../features/authentication/domain/usecases/verify_company_code.dart';
+import '../../features/authentication/domain/usecases/get_profile.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
 
 // Forgot Password
@@ -58,6 +59,9 @@ import '../../features/absensi/domain/usecases/get_today_attendance.dart';
 import '../../features/absensi/domain/usecases/submit_attendance.dart';
 import '../../features/absensi/presentation/providers/attendance_provider.dart';
 
+// Biodata feature imports
+import '../../features/biodata/presentation/providers/biodata_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -72,6 +76,7 @@ Future<void> init() async {
       register: sl(),
       saveLoginStatus: sl(),
       verifyCompanyCode: sl(),
+      getProfile: sl(),
     ),
   );
 
@@ -95,6 +100,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SendOtp(sl()));
   sl.registerLazySingleton(() => VerifyOtp(sl()));
   sl.registerLazySingleton(() => ResetPassword(sl()));
+  
+  sl.registerLazySingleton(() => GetProfile(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
@@ -197,6 +204,13 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<AttendanceRemoteDataSource>(
     () => AttendanceRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Biodata
+  sl.registerFactory(
+    () => BiodataProvider(
+      getEmployeeProfile: sl(),
+    ),
   );
 
   //! Core

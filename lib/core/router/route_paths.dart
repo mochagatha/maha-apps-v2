@@ -39,4 +39,5 @@ class RoutePaths {
   static const String recruitment = '/recruitment';
   static const String contractUpdates = '/contract-updates';
   static const String kpi = '/kpi';
+  static const String welcomeBiodata = '/biodata/welcome';
 }

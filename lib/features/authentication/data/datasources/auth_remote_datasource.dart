@@ -6,13 +6,11 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/constants.dart';
 import '../models/auth_response_model.dart';
 import '../models/register_response_model.dart';
+import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   /// Login with email and password
-  Future<AuthResponseModel> login({
-    required String email,
-    required String password,
-  });
+  Future<AuthResponseModel> login({required String email, required String password});
 
   /// Logout (if API endpoint exists)
   Future<void> logout();
@@ -26,6 +24,9 @@ abstract class AuthRemoteDataSource {
 
   /// Verify company code
   Future<bool> verifyCompanyCode(String code);
+
+  /// Get user profile
+  Future<UserModel> getProfile(String token);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -34,10 +35,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<AuthResponseModel> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<AuthResponseModel> login({required String email, required String password}) async {
     try {
       final response = await client.dioGolang.post(
         AppConstants.endpointLogin,
@@ -55,12 +53,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final errorData = e.response?.data;
       String message = 'Email Atau Password Salah';
 
-      if (errorData is List &&
-          errorData.isNotEmpty &&
-          errorData.first is Map<String, dynamic>) {
+      if (errorData is List && errorData.isNotEmpty && errorData.first is Map<String, dynamic>) {
         message = errorData.first['message'] ?? 'Terjadi kesalahan Hubungi HRD';
-      } else if (errorData is Map<String, dynamic> &&
-          errorData.containsKey('message')) {
+      } else if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
         message = errorData['message'];
       }
 
@@ -99,23 +94,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return RegisterResponseModel.fromJson(response.data);
       } else {
-        throw ServerException(
-          response.data['message'] ?? 'Registration failed',
-        );
+        throw ServerException(response.data['message'] ?? 'Registration failed');
       }
     } on DioException catch (e) {
       // Handler specific for error format
       final errorData = e.response?.data;
       String message = 'Registration failed';
 
-      if (errorData is List &&
-          errorData.isNotEmpty &&
-          errorData.first is Map<String, dynamic>) {
-        message =
-            errorData.first['message'] ??
-            'Terjadi kesalahan. Silakan coba lagi.';
-      } else if (errorData is Map<String, dynamic> &&
-          errorData.containsKey('message')) {
+      if (errorData is List && errorData.isNotEmpty && errorData.first is Map<String, dynamic>) {
+        message = errorData.first['message'] ?? 'Terjadi kesalahan. Silakan coba lagi.';
+      } else if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
         message = errorData['message'];
       }
 
@@ -149,8 +137,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final errorData = e.response?.data;
       String message = 'Verification failed';
 
-      if (errorData is Map<String, dynamic> &&
-          errorData.containsKey('message')) {
+      if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
         message = errorData['message'];
       }
 
@@ -160,6 +147,44 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         rethrow;
       }
       throw ServerException('Failed to verify code: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<UserModel> getProfile(String token) async {
+    try {
+      final response = await client.dioGolang.post(
+        AppConstants.endpointGetByToken, // Assuming this constant exists or will be added
+        options: Options(headers: {'Authorization': token}),
+      );
+
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        final employeeData = response.data['data'];
+
+        // Map specific fields to UserModel
+        final employeeId = employeeData['id'] as int?;
+        final jobTitleId = employeeData['job_title']?['id'] as int?;
+        final branchCode = employeeData['branch']?['branch_code'] as String?;
+        final status = employeeData['status'] as int?;
+
+        return UserModel(
+          employeeId: employeeId,
+          jobTitleId: jobTitleId,
+          branchCode: branchCode,
+          status: status,
+          token: token,
+        );
+      } else {
+        throw ServerException('Failed to fetch profile');
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw ServerException('Unauthorized');
+      }
+      throw ServerException('Failed to fetch profile: ${e.message}');
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException('Failed to fetch profile: ${e.toString()}');
     }
   }
 }

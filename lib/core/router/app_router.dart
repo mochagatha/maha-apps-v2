@@ -6,7 +6,6 @@ import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
 import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
-import '../../features/authentication/presentation/providers/forgot_password_provider.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -18,6 +17,8 @@ import 'package:provider/provider.dart';
 import '../di/injection_container.dart';
 import '../../features/absensi/presentation/pages/absensi_page.dart';
 import '../../features/absensi/presentation/providers/attendance_provider.dart';
+import '../../features/biodata/presentation/pages/welcome_page.dart';
+import '../../features/biodata/presentation/providers/biodata_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -87,8 +88,7 @@ class AppRouter {
                 GoRoute(
                   path: RoutePaths.pesan,
                   name: RouteNames.pesan,
-                  builder: (context, state) =>
-                      const Scaffold(body: Center(child: Text("Pesan"))),
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
             ),
@@ -116,6 +116,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<AttendanceProvider>(),
             child: const AbsensiPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.welcomeBiodata,
+          name: RouteNames.welcomeBiodata,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<BiodataProvider>(),
+            child: const WelcomeBiodata(),
           ),
         ),
       ],

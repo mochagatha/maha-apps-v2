@@ -36,4 +36,7 @@ abstract class AuthRepository {
 
   /// Verify company code
   Future<Either<Failure, bool>> verifyCompanyCode(String code);
+
+  /// Get user profile
+  Future<Either<Failure, User>> getProfile();
 }

@@ -1,11 +1,7 @@
 // Auth Provider - State management for authentication
-import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../../data/models/user_model.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/check_auth_status.dart';
 import '../../domain/usecases/get_current_user.dart';
@@ -14,6 +10,7 @@ import '../../domain/usecases/logout.dart';
 import '../../domain/usecases/register.dart';
 import '../../domain/usecases/save_login_status.dart';
 import '../../domain/usecases/verify_company_code.dart';
+import '../../domain/usecases/get_profile.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
@@ -25,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
   final Register register;
   final SaveLoginStatus saveLoginStatus;
   final VerifyCompanyCode verifyCompanyCode;
+  final GetProfile getProfile;
 
   AuthProvider({
     required this.login,
@@ -34,6 +32,7 @@ class AuthProvider extends ChangeNotifier {
     required this.register,
     required this.saveLoginStatus,
     required this.verifyCompanyCode,
+    required this.getProfile,
   });
 
   AuthStatus _status = AuthStatus.initial;
@@ -48,11 +47,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _status == AuthStatus.loading;
 
   /// Login user
-  Future<void> loginUser(
-    String email,
-    String password, {
-    bool rememberMe = false,
-  }) async {
+  Future<void> loginUser(String email, String password, {bool rememberMe = false}) async {
     _status = AuthStatus.loading;
     _errorMessage = null;
     notifyListeners();
@@ -66,74 +61,37 @@ class AuthProvider extends ChangeNotifier {
         _user = null;
       },
       (authResponse) async {
-        // Login successful, now fetch employee profile to get employee_id and job_title_id
-        // This matches V1 flow: login -> getDataEmployeeByToken -> save employee data
-        try {
-          final prefs = await SharedPreferences.getInstance();
+        // Login successful, save token first
+        final prefs = await SharedPreferences.getInstance();
+        if (authResponse.data.token != null) {
+          await prefs.setString('auth_token', authResponse.data.token!);
+          await prefs.setString(
+            'refresh_token',
+            authResponse.data.refreshToken ?? authResponse.data.token!,
+          );
+        }
 
-          // First save the token so we can use it for the next request
-          if (authResponse.data.token != null) {
-            await prefs.setString('auth_token', authResponse.data.token!);
-            await prefs.setString(
-              'refresh_token',
-              authResponse.data.refreshToken ?? authResponse.data.token!,
-            );
-          }
+        // Fetch user profile using UseCase
+        final profileResult = await getProfile(const NoParams());
 
-          // Now fetch employee data using the token
-          // V1 uses: POST BASE_URL_GOLANG/employee/get-by-token
-          final dio = Dio();
-          dio.options.baseUrl = dotenv.env['BASE_URL_GOLANG'] ?? '';
-          dio.options.headers['Authorization'] = authResponse.data.token;
+        profileResult.fold(
+          (failure) {
+            // Even if profile fetch fails, we're still logged in
+            // But we should try to use the data we got from login at least
+            _status = AuthStatus.authenticated;
+            _user = authResponse.data;
+            _errorMessage = null; // or show a warning?
+          },
+          (user) {
+            _status = AuthStatus.authenticated;
+            _user = user;
+            _errorMessage = null;
+          },
+        );
 
-          // V1 calls this endpoint after login to get employee data
-          final profileResponse = await dio.post('/employee/get-by-token');
-
-          if (profileResponse.statusCode == 200 &&
-              profileResponse.data['status'] == 'success') {
-            final employeeData = profileResponse.data['data'];
-            final employeeId = employeeData['id'] as int?;
-            final jobTitleId = employeeData['job_title']?['id'] as int?;
-            final branchCode =
-                employeeData['branch']?['branch_code'] as String?;
-
-            // Update user with employee_id and job_title_id
-            final updatedUser = UserModel(
-              employeeId: employeeId,
-              jobTitleId: jobTitleId,
-              branchCode: branchCode ?? authResponse.data.branchCode,
-              token: authResponse.data.token,
-              refreshToken: authResponse.data.refreshToken,
-            );
-
-            // Save updated user
-            await prefs.setString(
-              'user_data',
-              json.encode(updatedUser.toJson()),
-            );
-            if (employeeId != null) {
-              await prefs.setInt('employee_id', employeeId);
-            }
-            if (jobTitleId != null) {
-              await prefs.setInt('job_title_id', jobTitleId);
-            }
-
-            _user = updatedUser;
-          }
-
-          // Save login status
-          if (rememberMe) {
-            await saveLoginStatus(SaveLoginStatusParams(rememberMe: true));
-          }
-
-          _status = AuthStatus.authenticated;
-          _errorMessage = null;
-        } catch (e) {
-          debugPrint('Error fetching employee data after login: $e');
-          // Even if profile fetch fails, we're still logged in
-          _status = AuthStatus.authenticated;
-          _user = authResponse.data;
-          _errorMessage = null;
+        // Save login status
+        if (rememberMe) {
+          await saveLoginStatus(SaveLoginStatusParams(rememberMe: true));
         }
       },
     );
@@ -180,14 +138,32 @@ class AuthProvider extends ChangeNotifier {
         if (isLoggedIn) {
           // Get user data
           final userResult = await getCurrentUser(const NoParams());
-          userResult.fold(
-            (failure) {
+          await userResult.fold(
+            (failure) async {
               _status = AuthStatus.unauthenticated;
               _user = null;
             },
-            (user) {
-              _status = AuthStatus.authenticated;
-              _user = user;
+            (user) async {
+              // User is logged in locally, now try to fetch fresh profile
+              // to ensure we have the latest status
+              if (user.token != null) {
+                final profileResult = await getProfile(const NoParams());
+                profileResult.fold(
+                  (failure) {
+                    // If fetch fails, we fall back to cached user
+                    // (or should we?)
+                    _status = AuthStatus.authenticated;
+                    _user = user;
+                  },
+                  (freshUser) {
+                    _status = AuthStatus.authenticated;
+                    _user = freshUser;
+                  },
+                );
+              } else {
+                _status = AuthStatus.authenticated;
+                _user = user;
+              }
             },
           );
         } else {

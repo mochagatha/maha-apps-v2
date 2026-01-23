@@ -57,13 +57,14 @@ class _LoginPageState extends State<LoginPage> {
     if (!mounted) return;
 
     if (authProvider.isAuthenticated) {
-      context.go(RoutePaths.home);
+      if (authProvider.user?.status == 1) {
+        context.go(RoutePaths.welcomeBiodata);
+      } else {
+        context.go(RoutePaths.home);
+      }
     } else if (authProvider.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authProvider.errorMessage!),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text(authProvider.errorMessage!), backgroundColor: AppColors.error),
       );
     }
   }
@@ -101,18 +102,14 @@ class _LoginPageState extends State<LoginPage> {
                           prefixIcon: const Icon(Icons.people_outline),
                         ),
                         items: _emailOptions.keys.map((role) {
-                          return DropdownMenuItem(
-                            value: role,
-                            child: Text(role),
-                          );
+                          return DropdownMenuItem(value: role, child: Text(role));
                         }).toList(),
                         onChanged: (value) {
                           if (value != null) {
                             setState(() {
                               _selectedRole = value;
                               _emailController.text = _emailOptions[value]!;
-                              _passwordController.text =
-                                  'E!!fu!0T--T4~h@7hQ'; // Default default
+                              _passwordController.text = 'E!!fu!0T--T4~h@7hQ'; // Default default
                             });
                           }
                         },
@@ -123,17 +120,12 @@ class _LoginPageState extends State<LoginPage> {
                     // Email Field
                     Text(
                       context.l10n.email,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: context.l10n.enterEmail,
-                      ),
+                      decoration: InputDecoration(hintText: context.l10n.enterEmail),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -147,10 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                     // Password Field
                     Text(
                       context.l10n.password,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -159,11 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         hintText: context.l10n.enterPassword,
                         suffixIcon: IconButton(
-                          icon: Icon(
-                            _isObscure
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
+                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
                           onPressed: () {
                             setState(() {
                               _isObscure = !_isObscure;
@@ -184,9 +169,18 @@ class _LoginPageState extends State<LoginPage> {
 
                     const SizedBox(height: 8),
 
-                    // Checkbox & Forgot Password
+                    // Remember Me Checkbox & Forgot Password
                     Row(
                       children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (value) {
+                            setState(() {
+                              _rememberMe = value ?? true;
+                            });
+                          },
+                        ),
+                        Text(context.l10n.rememberMe, style: const TextStyle(fontSize: 14)),
                         const Spacer(),
                         TextButton(
                           onPressed: () {
@@ -194,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Text(
                             context.l10n.forgotPassword,
-                            style: TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ],
@@ -206,10 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                     ElevatedButton(
                       onPressed: authProvider.isLoading ? null : _handleLogin,
                       child: authProvider.isLoading
-                          ? const SpinKitThreeBounce(
-                              color: Colors.white,
-                              size: 24.0,
-                            )
+                          ? const SpinKitThreeBounce(color: Colors.white, size: 24.0)
                           : Text(context.l10n.login),
                     ),
 
@@ -219,10 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                           children: [
                             TextSpan(text: '${context.l10n.dontHaveAccount} '),
                             TextSpan(
@@ -235,8 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ..onTap = () {
                                   showDialog(
                                     context: context,
-                                    builder: (context) =>
-                                        const PinVerificationDialog(),
+                                    builder: (context) => const PinVerificationDialog(),
                                   );
                                 },
                             ),
@@ -249,10 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                       child: Text(
                         context.l10n.copyright(DateTime.now().year.toString()),
-                        style: const TextStyle(
-                          color: AppColors.neutral5,
-                          fontSize: 12,
-                        ),
+                        style: const TextStyle(color: AppColors.neutral5, fontSize: 12),
                       ),
                     ),
                   ],

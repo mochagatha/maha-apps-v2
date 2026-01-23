@@ -13,6 +13,7 @@ class AppConstants {
   static const String endpointLogout = '/auth/logout';
   static const String endpointRegister = '/employee/register';
   static const String endpointRefreshToken = '/employee/refresh-token';
+  static const String endpointGetByToken = '/employee/get-by-token';
 
   // Home endpoints (V1 compatible)
   static const String endpointEmployeeProfile = '/employee/profile';

@@ -35,7 +35,13 @@ class _SplashPageState extends State<SplashPage> {
 
     // Navigate based on auth status
     if (authProvider.isAuthenticated) {
-      context.go(RoutePaths.home);
+      // Check status to match v1 logic
+      // v1 source: employee?.data.status
+      if (authProvider.user?.status == 1) {
+        context.go(RoutePaths.welcomeBiodata);
+      } else {
+        context.go(RoutePaths.home);
+      }
     } else {
       context.go(RoutePaths.login);
     }

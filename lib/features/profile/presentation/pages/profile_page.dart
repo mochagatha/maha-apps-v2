@@ -41,24 +41,10 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text(context.l10n.profilePicture),
         content: const Text('Feature coming soon'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(context.l10n.close),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.close)),
         ],
       ),
     );
-  }
-
-  String _getInitials(String fullname) {
-    if (fullname.isEmpty) return 'U';
-    final names = fullname.trim().split(' ');
-    if (names.length >= 2) {
-      return '${names[0][0]}${names[1][0]}'.toUpperCase();
-    } else if (names.isNotEmpty) {
-      return names[0][0].toUpperCase();
-    }
-    return 'U';
   }
 
   @override
@@ -76,20 +62,14 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           title: const Text(
             'Profil',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
         body: Consumer<ProfileProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading && provider.employee == null) {
-              return const Center(
-                child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0),
-              );
+              return const Center(child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0));
             }
 
             // Error state
@@ -98,11 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: AppColors.error,
-                    ),
+                    const Icon(Icons.error_outline, size: 64, color: AppColors.error),
                     const SizedBox(height: 16),
                     Text(
                       provider.errorMessage ?? 'An error occurred',
@@ -134,10 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                          width: 0.5,
-                        ),
+                        border: Border.all(color: Colors.grey.shade300, width: 0.5),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.1),
@@ -159,17 +132,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                     backgroundColor: Colors.grey[200],
                                     backgroundImage: employee?.photoUrl != null
                                         ? NetworkImage(employee!.photoUrl!)
-                                        : const AssetImage(
-                                                'assets/images/user_placeholder.png',
-                                              )
+                                        : const AssetImage('assets/images/user_placeholder.png')
                                               as ImageProvider,
                                   ),
                                 ),
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         employee?.fullname ?? '-',
@@ -189,10 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(width: 8),
                                           Text(
                                             employee?.nik ?? '-',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey[600],
-                                            ),
+                                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                                           ),
                                         ],
                                       ),
@@ -225,10 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           // Points Section
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             decoration: BoxDecoration(
                               color: Colors.grey[100],
                               borderRadius: const BorderRadius.only(
@@ -247,16 +211,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                       width: 32,
                                       // Fallback if asset missing
                                       placeholderBuilder: (context) =>
-                                          const Icon(
-                                            Icons.stars,
-                                            color: Colors.amber,
-                                            size: 32,
-                                          ),
+                                          const Icon(Icons.stars, color: Colors.amber, size: 32),
                                     ),
                                     const SizedBox(width: 12),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
                                           'Poin saat ini',
@@ -283,9 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 GestureDetector(
                                   onTap: () {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Feature coming soon!'),
-                                      ),
+                                      const SnackBar(content: Text('Feature coming soon!')),
                                     );
                                   },
                                   child: Container(
@@ -299,11 +256,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     child: Row(
                                       children: const [
-                                        Icon(
-                                          Icons.receipt_long,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
+                                        Icon(Icons.receipt_long, color: Colors.white, size: 16),
                                         SizedBox(width: 4),
                                         Text(
                                           'Tukar Poin',
@@ -347,8 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: SvgPicture.asset(
                                   'assets/images/logo_maha.svg',
                                   width: 100,
-                                  placeholderBuilder: (context) =>
-                                      const SizedBox(),
+                                  placeholderBuilder: (context) => const SizedBox(),
                                 ),
                               ),
                             ),
@@ -361,14 +313,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 const Text(
                                   'Kamu sedang dalam\npemantauan nih!',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
+                                  style: TextStyle(color: Colors.white, fontSize: 12),
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       employee?.fullname ?? '-',
@@ -426,55 +374,45 @@ class _ProfilePageState extends State<ProfilePage> {
                           assetPath: 'assets/images/icon/data_diri_profile.svg',
                           label: 'Data Diri',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/performa.svg',
                           label: 'Performa',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/administrasi.svg',
                           label: 'Administrasi',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/entypo_wallet.svg',
                           label: 'Slip Gaji',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/slip_hutang_icon.svg',
                           label: 'Slip Hutang',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                       ],
@@ -491,22 +429,18 @@ class _ProfilePageState extends State<ProfilePage> {
                           assetPath: 'assets/images/icon/log_out.svg',
                           label: 'Pengunduran Diri',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/keamanan_akun.svg',
                           label: 'Ubah Kata Sandi',
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Feature coming soon!'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
                           },
                         ),
                         ProfileMenuItem(
@@ -537,10 +471,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 4),
                           Text(
                             '©opyright IT MAHA  ${DateTime.now().year}',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -635,9 +566,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           content: SizedBox(
             width: MediaQuery.of(context).size.width - 120,
             child: Column(
@@ -645,11 +574,8 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Image.asset(
                   'assets/images/icon/logout.png',
-                  errorBuilder: (_, __, ___) => const Icon(
-                    Icons.logout,
-                    size: 64,
-                    color: AppColors.primary,
-                  ),
+                  errorBuilder: (_, __, ___) =>
+                      const Icon(Icons.logout, size: 64, color: AppColors.primary),
                 ),
                 const SizedBox(height: 20),
                 const Text.rich(
@@ -691,10 +617,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
-                            side: const BorderSide(
-                              color: AppColors.primary,
-                              width: 1.5,
-                            ),
+                            side: const BorderSide(color: AppColors.primary, width: 1.5),
                           ),
                         ),
                         child: Text(context.l10n.yes),
@@ -711,9 +634,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         ),
                         child: Text(context.l10n.cancel),
                       ),
