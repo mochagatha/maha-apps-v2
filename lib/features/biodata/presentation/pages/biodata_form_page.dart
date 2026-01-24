@@ -36,7 +36,10 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
           return Stack(
             children: [
               SingleChildScrollView(
-                padding: const EdgeInsets.only(top: 50, bottom: 90), // Spacing for header and bottom bar
+                padding: const EdgeInsets.only(
+                  top: 50,
+                  bottom: 90,
+                ), // Spacing for header and bottom bar
                 child: Form(
                   key: provider.formKey,
                   child: Padding(
@@ -44,11 +47,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Divider(
-                          color: AppColors.third,
-                          height: 20,
-                          thickness: 10,
-                        ),
+                        const Divider(color: AppColors.third, height: 20, thickness: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
@@ -59,23 +58,25 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                               CustomTextFormField(
                                 controller: provider.nameController,
                                 textCapitalization: TextCapitalization.words,
-                                labelText: 'Masukkan nama lengkap anda..',
-                                validator: (value) =>
-                                    (value == null || value.isEmpty) ? 'Nama lengkap tidak boleh kosong !' : null,
+                                hintText: 'Masukkan nama lengkap anda..',
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Nama lengkap tidak boleh kosong !'
+                                    : null,
                               ),
                               const CustomLabelBiodata(text: 'Nama Panggilan'),
                               CustomTextFormField(
                                 controller: provider.nicknameController,
                                 textCapitalization: TextCapitalization.words,
-                                labelText: 'Masukkan nama panggilan anda..',
-                                validator: (value) =>
-                                    (value == null || value.isEmpty) ? 'Nama panggilan tidak boleh kosong !' : null,
+                                hintText: 'Masukkan nama panggilan anda..',
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Nama panggilan tidak boleh kosong !'
+                                    : null,
                               ),
                               const CustomLabelBiodata(text: 'NIK KTP'),
                               CustomTextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: provider.nikController,
-                                labelText: 'Masukkan NIK anda..',
+                                hintText: 'Masukkan NIK anda..',
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                   LengthLimitingTextInputFormatter(16),
@@ -102,7 +103,9 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
 
                               const CustomLabelBiodata(text: 'Kabupaten/Kota'),
                               provider.isLoadingRegency
-                                  ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                                  ? const Center(
+                                      child: CircularProgressIndicator(color: AppColors.primary),
+                                    )
                                   : _buildDropdown(
                                       context,
                                       value: provider.selectedRegency,
@@ -112,14 +115,16 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                       errorText: 'Kabupaten/Kota tidak boleh kosong !',
                                       enabled: provider.selectedProvince != null,
                                     ),
-                              
+
                               const CustomLabelBiodata(text: 'Kecamatan'),
                               provider.isLoadingDistrict
-                                  ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                                  ? const Center(
+                                      child: CircularProgressIndicator(color: AppColors.primary),
+                                    )
                                   : _buildDropdown(
                                       context,
                                       value: provider.selectedDistrict,
-                                      items: provider.districts, 
+                                      items: provider.districts,
                                       label: 'Pilih Kecamatan anda ..',
                                       onChanged: (val) => provider.setDistrict(val),
                                       errorText: 'Kecamatan tidak boleh kosong !',
@@ -128,7 +133,9 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
 
                               const CustomLabelBiodata(text: 'Kelurahan/Desa'),
                               provider.isLoadingVillage
-                                  ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                                  ? const Center(
+                                      child: CircularProgressIndicator(color: AppColors.primary),
+                                    )
                                   : _buildDropdown(
                                       context,
                                       value: provider.selectedVillage,
@@ -138,55 +145,55 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                       errorText: 'Kelurahan/Desa tidak boleh kosong !',
                                       enabled: provider.selectedDistrict != null,
                                     ),
-                              
+
                               const CustomLabelBiodata(text: 'Kode Pos'),
                               CustomTextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: provider.postalCodeController,
-                                labelText: 'Masukkan kode pos..',
+                                hintText: 'Masukkan kode pos..',
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(5),
+                                  LengthLimitingTextInputFormatter(8),
                                 ],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty) ? 'Kode pos tidak boleh kosong !' : null,
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Kode pos tidak boleh kosong !'
+                                    : null,
                               ),
                               const CustomLabelBiodata(text: 'Alamat'),
-                                CustomTextFormField(
-                                  controller: provider.addressController,
-                                  textCapitalization: TextCapitalization.words,
-                                  labelText: 'Masukkan alamat sesuai KTP anda',
-                                  validator: (value) =>
-                                      (value == null || value.isEmpty) ? 'Alamat tidak boleh kosong !' : null,
+                              CustomTextFormField(
+                                controller: provider.addressController,
+                                textCapitalization: TextCapitalization.words,
+                                hintText: 'Masukkan alamat sesuai KTP anda',
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Alamat tidak boleh kosong !'
+                                    : null,
                               ),
 
                               const CustomTextBiodata(text: 'Alamat saat ini'),
-                                Row(
-                                  children: [
-                                    const Expanded(
-                                      child: ListTile(
-                                        title: Text(
-                                          'Alamat saat ini sama dengan KTP',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: AppColors.primary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        contentPadding: EdgeInsets.zero,
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    child: ListTile(
+                                      title: Text(
+                                        'Alamat saat ini sama dengan KTP',
+                                        style: TextStyle(fontSize: 14),
                                       ),
+                                      contentPadding: EdgeInsets.zero,
                                     ),
-                                    Transform.scale(
-                                      scale: 1,
-                                      child: Switch(
-                                        value: provider.isSwitchOn,
-                                        onChanged: provider.toggleSwitch,
-                                        activeColor: AppColors.primary,
-                                      ),
+                                  ),
+                                  Transform.scale(
+                                    scale: 2 / 3,
+                                    child: Switch(
+                                      value: provider.isSwitchOn,
+                                      activeTrackColor: AppColors.primary.withOpacity(0.5),
+                                      onChanged: provider.toggleSwitch,
+                                      inactiveThumbColor: Colors.grey,
+                                      activeColor: AppColors.primary,
                                     ),
-                                  ],
-                                ),
-                              
+                                  ),
+                                ],
+                              ),
+
                               if (!provider.isSwitchOn) ...[
                                 const CustomLabelBiodata(text: 'Provinsi'),
                                 _buildDropdown(
@@ -202,22 +209,24 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 const CustomLabelBiodata(text: 'Kode Pos'),
                                 CustomTextFormField(
                                   controller: provider.postalCodeDomController,
-                                   keyboardType: TextInputType.number,
-                                   labelText: 'Masukkan kode pos domisili..',
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                      LengthLimitingTextInputFormatter(5),
-                                    ],
-                                   validator: (value) =>
-                                      (value == null || value.isEmpty) ? 'Kode pos tidak boleh kosong' : null,
+                                  keyboardType: TextInputType.number,
+                                  hintText: 'Masukkan kode pos domisili..',
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(8),
+                                  ],
+                                  validator: (value) => (value == null || value.isEmpty)
+                                      ? 'Kode pos tidak boleh kosong'
+                                      : null,
                                 ),
                                 const CustomLabelBiodata(text: 'Alamat'),
                                 CustomTextFormField(
                                   controller: provider.addressDomController,
                                   textCapitalization: TextCapitalization.words,
-                                  labelText: 'Masukkan alamat jalan domisili anda..',
-                                  validator: (value) =>
-                                      (value == null || value.isEmpty) ? 'Alamat domisili tidak boleh kosong' : null,
+                                  hintText: 'Masukkan alamat jalan domisili anda..',
+                                  validator: (value) => (value == null || value.isEmpty)
+                                      ? 'Alamat domisili tidak boleh kosong'
+                                      : null,
                                 ),
                               ],
 
@@ -237,22 +246,24 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                               CustomTextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: provider.phoneController,
-                                labelText: 'Masukkan no handphone..',
+                                hintText: 'Masukkan no handphone..',
                                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty) ? 'No hp tidak boleh kosong !' : null,
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'No hp tidak boleh kosong !'
+                                    : null,
                               ),
 
                               const CustomLabelBiodata(text: 'Kontak Darurat'),
                               CustomTextFormField(
                                 controller: provider.emergencyPhoneController,
                                 keyboardType: TextInputType.number,
-                                labelText: 'Masukkan kontak darurat..',
+                                hintText: 'Masukkan kontak darurat..',
                                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty) ? 'Kontak tidak boleh kosong !' : null,
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Kontak tidak boleh kosong !'
+                                    : null,
                               ),
-                              
+
                               const CustomLabelBiodata(text: 'Jenis Kelamin'),
                               Row(
                                 children: [
@@ -287,27 +298,35 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                               CustomTextFormField(
                                 controller: provider.birthPlaceController,
                                 textCapitalization: TextCapitalization.words,
-                                labelText: 'Masukkan Tempat Lahir Anda.. ',
-                                validator: (value) =>
-                                    (value == null || value.isEmpty) ? 'Tempat lahir tidak boleh kosong !' : null,
+                                hintText: 'Masukkan Tempat Lahir Anda.. ',
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Tempat lahir tidak boleh kosong !'
+                                    : null,
                               ),
 
                               const CustomLabelBiodata(text: 'Tanggal Lahir'),
                               Padding(
-                                padding: const EdgeInsets.only(top: 18.0),
+                                padding: const EdgeInsets.only(top: 8),
                                 child: InkWell(
                                   onTap: () => provider.selectDate(context),
                                   child: IgnorePointer(
                                     child: TextFormField(
                                       controller: provider.birthDateController,
                                       readOnly: true,
-                                      validator: (value) =>
-                                          (value == null || value.isEmpty) ? 'Tanggal Lahir tidak boleh kosong !' : null,
+                                      validator: (value) => (value == null || value.isEmpty)
+                                          ? 'Tanggal Lahir tidak boleh kosong !'
+                                          : null,
                                       decoration: InputDecoration(
-                                        labelText: 'Pilih Tanggal Lahir..',
+                                        hintText: 'Pilih Tanggal Lahir..',
+                                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                                         suffixIcon: const Icon(Icons.calendar_today, size: 20),
-                                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -346,22 +365,29 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                   context.read<BiodataFormProvider>().submit();
-                   // If success logic handles navigation
+                  context.read<BiodataFormProvider>().submit();
+                  // If success logic handles navigation
                 },
-                 style: ElevatedButton.styleFrom(
-                   backgroundColor: AppColors.primary,
-                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                   padding: const EdgeInsets.symmetric(vertical: 12),
-                 ),
-                 child: const Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Text('Selanjutnya', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
-                     SizedBox(width: 8),
-                     Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
-                   ],
-                 ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Selanjutnya',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
+                  ],
+                ),
               ),
             ),
           ],
@@ -370,7 +396,8 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
     );
   }
 
-  Widget _buildDropdown(BuildContext context, {
+  Widget _buildDropdown(
+    BuildContext context, {
     required String? value,
     required Map<String, String> items,
     required String label,
@@ -380,21 +407,20 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
     bool isMap = false, // If true, map keys are values, else keys are IDs
   }) {
     return Padding(
-      padding: const EdgeInsets.only(top: 18.0),
+      padding: const EdgeInsets.only(top: 8),
       child: DropdownButtonFormField<String>(
         value: value,
+        style: const TextStyle(color: Colors.black, fontSize: 14),
         items: items.entries.map((entry) {
-          return DropdownMenuItem<String>(
-            value: entry.key,
-            child: Text(entry.value),
-          );
+          return DropdownMenuItem<String>(value: entry.key, child: Text(entry.value));
         }).toList(),
         onChanged: enabled ? onChanged : null,
         validator: (val) => (val == null || val.isEmpty) ? errorText : null,
         decoration: InputDecoration(
-           labelText: label,
-           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          hintText: label,
+          hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
         menuMaxHeight: 200.0,
       ),
@@ -410,11 +436,8 @@ class CustomLabelBiodata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 18, bottom: 6),
-      child: Text(
-        text,
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xff404040)),
-      ),
+      padding: const EdgeInsets.only(top: 16, bottom: 6),
+      child: Text(text, style: const TextStyle(fontSize: 14)),
     );
   }
 }
@@ -426,18 +449,15 @@ class CustomTextBiodata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 8),
-      child: Text(
-        text,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primary),
-      ),
+      padding: const EdgeInsets.only(top: 24),
+      child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
     );
   }
 }
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
-  final String labelText;
+  final String hintText;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
@@ -446,7 +466,7 @@ class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
     required this.controller,
-    required this.labelText,
+    required this.hintText,
     this.validator,
     this.keyboardType,
     this.inputFormatters,
@@ -456,7 +476,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 8),
       child: TextFormField(
         controller: controller,
         validator: validator,
@@ -464,7 +484,8 @@ class CustomTextFormField extends StatelessWidget {
         inputFormatters: inputFormatters,
         textCapitalization: textCapitalization,
         decoration: InputDecoration(
-          labelText: labelText,
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
@@ -492,13 +513,13 @@ class HeaderScroll extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                 _checkContract(isActive: true, number: 1, title: "Biodata"),
-                 _checkContract(number: 2, title: "Riwayat Pendidikan"),
-                 _checkContract(number: 3, title: "Data Keluarga"),
-                 _checkContract(number: 4, title: "Kelengkapan Dokumen"),
-                 _checkContract(number: 5, title: "Keahlian"),
-                 _checkContract(number: 6, title: "Ambil Foto Selfie"),
-                 _checkContract(number: 7, title: "Ambil Foto Selfie dengan KTP"),
+                _checkContract(isActive: true, number: 1, title: "Biodata"),
+                _checkContract(number: 2, title: "Riwayat Pendidikan"),
+                _checkContract(number: 3, title: "Data Keluarga"),
+                _checkContract(number: 4, title: "Kelengkapan Dokumen"),
+                _checkContract(number: 5, title: "Keahlian"),
+                _checkContract(number: 6, title: "Ambil Foto Selfie"),
+                _checkContract(number: 7, title: "Ambil Foto Selfie dengan KTP"),
               ],
             ),
           ),
@@ -508,46 +529,46 @@ class HeaderScroll extends StatelessWidget {
   }
 
   Widget _checkContract({required int number, required String title, bool isActive = false}) {
-      return Row( 
-        children: [
-            if (number != 1)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    width: 40,
-                    height: 3,
-                    color: isActive ? const Color(0xffFDE0D1) : AppColors.secondary,
-                  ),
-                ),
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isActive ? AppColors.primary : Colors.white,
-                border: Border.all(color: isActive ? AppColors.primary : AppColors.secondary),
-              ),
-              child: Center(
-                child: Text(
-                  number.toString(),
-                  style: TextStyle(
-                    color: isActive ? Colors.white : AppColors.secondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+    return Row(
+      children: [
+        if (number != 1)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Container(
+              width: 40,
+              height: 3,
+              color: isActive ? const Color(0xffFDE0D1) : AppColors.secondary,
             ),
-            const SizedBox(width: 8),
-            Text(
-              title,
+          ),
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isActive ? AppColors.primary : Colors.white,
+            border: Border.all(color: isActive ? AppColors.primary : AppColors.secondary),
+          ),
+          child: Center(
+            child: Text(
+              number.toString(),
               style: TextStyle(
-                fontSize: 16,
-                color: isActive ? AppColors.primary : AppColors.secondary,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                color: isActive ? Colors.white : AppColors.secondary,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
               ),
             ),
-        ],
-      );
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            color: isActive ? AppColors.primary : AppColors.secondary,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ],
+    );
   }
 }

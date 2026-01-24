@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // Pre-filled roles for quick testing (from V1)
   final Map<String, String> _emailOptions = {
-    "Staff": "nur.alimul@mahasejahtera.com",
+    "Staff": "bahrul@mahasejahtera.com",
     "Manajer TI": "setia@mahasejahtera.com",
     "Komisaris": "kris@mahasejahtera.com",
     "Direktur": "hazri@mahasejahtera.com",
