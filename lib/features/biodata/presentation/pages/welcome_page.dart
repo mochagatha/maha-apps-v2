@@ -39,7 +39,7 @@ class _WelcomeBiodataState extends State<WelcomeBiodata> {
               context: context,
               onConfirm: () async {
                 await saveDataToPreferences('biodata', 'nama_lengkap');
-                // context.go(RoutePaths.biodataPageOne);
+                context.goNamed(RouteNames.biodataForm);
               },
             );
           },

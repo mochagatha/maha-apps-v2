@@ -19,6 +19,8 @@ import '../../features/absensi/presentation/pages/absensi_page.dart';
 import '../../features/absensi/presentation/providers/attendance_provider.dart';
 import '../../features/biodata/presentation/pages/welcome_page.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
+import '../../features/biodata/presentation/pages/biodata_form_page.dart';
+import '../../features/biodata/presentation/providers/biodata_form_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -124,6 +126,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<BiodataProvider>(),
             child: const WelcomeBiodata(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.biodataForm,
+          name: RouteNames.biodataForm,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => BiodataFormProvider(),
+            child: const BiodataFormPage(),
           ),
         ),
       ],
