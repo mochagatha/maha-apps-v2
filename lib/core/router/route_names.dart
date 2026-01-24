@@ -40,4 +40,5 @@ class RouteNames {
   static const String contractUpdates = 'contract-updates';
   static const String welcomeBiodata = 'welcome-biodata';
   static const String biodataForm = 'biodata-form';
+  static const String educationForm = 'education-form';
 }

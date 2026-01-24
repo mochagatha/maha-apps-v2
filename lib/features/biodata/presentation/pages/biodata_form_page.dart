@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/biodata_form_provider.dart';
@@ -367,6 +368,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                 onPressed: () {
                   context.read<BiodataFormProvider>().submit();
                   // If success logic handles navigation
+                  context.pushNamed(RouteNames.educationForm);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

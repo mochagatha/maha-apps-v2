@@ -41,4 +41,5 @@ class RoutePaths {
   static const String kpi = '/kpi';
   static const String welcomeBiodata = '/biodata/welcome';
   static const String biodataForm = '/biodata/form';
+  static const String educationForm = '/biodata/education';
 }

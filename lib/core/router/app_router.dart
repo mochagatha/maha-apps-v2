@@ -21,6 +21,8 @@ import '../../features/biodata/presentation/pages/welcome_page.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 import '../../features/biodata/presentation/pages/biodata_form_page.dart';
 import '../../features/biodata/presentation/providers/biodata_form_provider.dart';
+import '../../features/biodata/presentation/pages/education_form_page.dart';
+import '../../features/biodata/presentation/providers/education_form_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -134,6 +136,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => BiodataFormProvider(),
             child: const BiodataFormPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.educationForm,
+          name: RouteNames.educationForm,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => EducationFormProvider(),
+            child: const EducationFormPage(),
           ),
         ),
       ],

@@ -30,7 +30,7 @@ class WelcomeDialogs {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  SvgPicture.asset("assets/images/icon/selamat_bergabung.svg"),
+                  SvgPicture.asset("assets/images/icon/selamat_bergabung.svg", height: 200),
                   const SizedBox(height: 20),
                   const Text(
                     'Semoga Anda dapat memberikan kontribusi terbaik bagi perusahaan PT. Maha Akbar Sejahtera.',
@@ -246,7 +246,7 @@ class WelcomeDialogs {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  Image.asset('assets/images/icon/fill-biodata.png', height: 250),
+                  Image.asset('assets/images/icon/fill-biodata.png', height: 200),
                   const SizedBox(height: 20),
                   const Text.rich(
                     TextSpan(
@@ -269,8 +269,8 @@ class WelcomeDialogs {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                         Navigator.of(context).pop();
-                         onConfirm();
+                        Navigator.of(context).pop();
+                        onConfirm();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
