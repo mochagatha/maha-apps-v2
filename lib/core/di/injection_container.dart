@@ -60,6 +60,10 @@ import '../../features/absensi/domain/usecases/submit_attendance.dart';
 import '../../features/absensi/presentation/providers/attendance_provider.dart';
 
 // Biodata feature imports
+import '../../features/biodata/data/datasources/biodata_remote_datasource.dart';
+import '../../features/biodata/data/repositories/biodata_repository_impl.dart';
+import '../../features/biodata/domain/repositories/biodata_repository.dart';
+import '../../features/biodata/domain/usecases/get_biodata.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 
 final sl = GetIt.instance;
@@ -209,8 +213,21 @@ Future<void> init() async {
   //! Features - Biodata
   sl.registerFactory(
     () => BiodataProvider(
-      getEmployeeProfile: sl(),
+      getBiodata: sl(),
     ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetBiodata(sl()));
+
+  // Repository
+  sl.registerLazySingleton<BiodataRepository>(
+    () => BiodataRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<BiodataRemoteDataSource>(
+    () => BiodataRemoteDataSourceImpl(client: sl(), sharedPreferences: sl()),
   );
 
   //! Core

@@ -1,30 +1,30 @@
 import 'package:flutter/foundation.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../../../profile/domain/entities/employee.dart';
-import '../../../profile/domain/usecases/get_employee_profile.dart';
+import '../../domain/entities/biodata.dart';
+import '../../domain/usecases/get_biodata.dart';
 
 enum BiodataStatus { initial, loading, loaded, error }
 
 class BiodataProvider extends ChangeNotifier {
-  final GetEmployeeProfile getEmployeeProfile;
+  final GetBiodata getBiodata;
 
   BiodataProvider({
-    required this.getEmployeeProfile,
+    required this.getBiodata,
   });
 
   BiodataStatus _status = BiodataStatus.initial;
-  Employee? _employee;
+  Biodata? _biodata;
   String? _errorMessage;
 
   BiodataStatus get status => _status;
-  Employee? get employee => _employee;
+  Biodata? get biodata => _biodata;
   String? get errorMessage => _errorMessage;
 
-  Future<void> loadEmployeeData() async {
+  Future<void> loadBiodata() async {
     _status = BiodataStatus.loading;
     notifyListeners();
 
-    final result = await getEmployeeProfile(NoParams());
+    final result = await getBiodata(NoParams());
 
     result.fold(
       (failure) {
@@ -32,9 +32,9 @@ class BiodataProvider extends ChangeNotifier {
         _errorMessage = failure.message;
         notifyListeners();
       },
-      (employee) {
+      (biodata) {
         _status = BiodataStatus.loaded;
-        _employee = employee;
+        _biodata = biodata;
         notifyListeners();
       },
     );
