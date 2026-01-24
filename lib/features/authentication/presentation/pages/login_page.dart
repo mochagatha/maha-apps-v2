@@ -185,15 +185,6 @@ class _LoginPageState extends State<LoginPage> {
                     // Remember Me Checkbox & Forgot Password
                     Row(
                       children: [
-                        Checkbox(
-                          value: _rememberMe,
-                          onChanged: (value) {
-                            setState(() {
-                              _rememberMe = value ?? true;
-                            });
-                          },
-                        ),
-                        Text(context.l10n.rememberMe, style: const TextStyle(fontSize: 14)),
                         const Spacer(),
                         TextButton(
                           onPressed: () {
