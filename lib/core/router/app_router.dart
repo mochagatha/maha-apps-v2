@@ -23,6 +23,7 @@ import '../../features/biodata/presentation/pages/biodata_form_page.dart';
 import '../../features/biodata/presentation/providers/biodata_form_provider.dart';
 import '../../features/biodata/presentation/pages/education_form_page.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
+import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 
 class AppRouter {
   static GoRouter router() {
@@ -134,7 +135,7 @@ class AppRouter {
           path: RoutePaths.biodataForm,
           name: RouteNames.biodataForm,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => BiodataFormProvider(),
+            create: (_) => BiodataFormProvider(repository: sl<BiodataRepository>()),
             child: const BiodataFormPage(),
           ),
         ),

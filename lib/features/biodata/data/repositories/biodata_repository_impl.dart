@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/biodata.dart';
+import '../../domain/entities/region.dart';
 import '../../domain/repositories/biodata_repository.dart';
 import '../datasources/biodata_remote_datasource.dart';
 
@@ -19,6 +20,46 @@ class BiodataRepositoryImpl implements BiodataRepository {
       return Left(ServerFailure(e.message));
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Province>>> getProvinces() async {
+    try {
+      final remoteProvinces = await remoteDataSource.getProvinces();
+      return Right(remoteProvinces.map((m) => Province(id: m.id, name: m.name)).toList());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Regency>>> getRegencies(String provinceId) async {
+    try {
+      final remoteRegencies = await remoteDataSource.getRegencies(provinceId);
+      return Right(remoteRegencies.map((m) => Regency(id: m.id, name: m.name)).toList());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<District>>> getDistricts(String regencyId) async {
+    try {
+      final remoteDistricts = await remoteDataSource.getDistricts(regencyId);
+      return Right(remoteDistricts.map((m) => District(id: m.id, name: m.name)).toList());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Village>>> getVillages(String districtId) async {
+    try {
+      final remoteVillages = await remoteDataSource.getVillages(districtId);
+      return Right(remoteVillages.map((m) => Village(id: m.id, name: m.name)).toList());
+    } on ServerException catch (e) {
+       return Left(ServerFailure(e.message));
     }
   }
 }

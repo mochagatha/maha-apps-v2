@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../domain/repositories/biodata_repository.dart';
+import '../../../../core/di/injection_container.dart'; // For easier access if needed, but better passed in
+
 class BiodataFormProvider extends ChangeNotifier {
+  final BiodataRepository repository;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  BiodataFormProvider({required this.repository}) {
+     fetchProvinces(); // Auto fetch on create
+  }
 
   // Text Controllers
   final TextEditingController nameController = TextEditingController();
@@ -68,11 +76,16 @@ class BiodataFormProvider extends ChangeNotifier {
     'konghucu': 'Konghucu',
   };
 
-  // Mock Region Data
-  final Map<String, String> provinces = {'1': 'Jawa Barat', '2': 'Jawa Tengah', '3': 'DKI Jakarta'};
-  final Map<String, String> regencies = {'1': 'Bandung', '2': 'Bogor'};
-  final Map<String, String> districts = {'1': 'Coblong', '2': 'Dago'};
-  final Map<String, String> villages = {'1': 'Dago Atas', '2': 'Dago Bawah'};
+  // Region Data
+  Map<String, String> provinces = {};
+  Map<String, String> regencies = {};
+  Map<String, String> districts = {};
+  Map<String, String> villages = {};
+  
+  Map<String, String> provincesDom = {};
+  Map<String, String> regenciesDom = {};
+  Map<String, String> districtsDom = {};
+  Map<String, String> villagesDom = {};
 
 
   // Methods
@@ -104,6 +117,7 @@ class BiodataFormProvider extends ChangeNotifier {
     selectedVillage = null;
     notifyListeners();
     // if (value != null) _fetchRegencies(value);
+    if (value != null) fetchRegencies(value);
   }
 
   void setRegency(String? value) {
@@ -112,6 +126,7 @@ class BiodataFormProvider extends ChangeNotifier {
     selectedVillage = null;
     notifyListeners();
     // if (value != null) _fetchDistricts(value);
+    if (value != null) fetchDistricts(value);
   }
 
   void setDistrict(String? value) {
@@ -119,6 +134,7 @@ class BiodataFormProvider extends ChangeNotifier {
     selectedVillage = null;
     notifyListeners();
     // if (value != null) _fetchVillages(value);
+    if (value != null) fetchVillages(value);
   }
 
   void setVillage(String? value) {
@@ -151,6 +167,95 @@ class BiodataFormProvider extends ChangeNotifier {
   void setVillageDom(String? value) {
     selectedVillageDom = value;
     notifyListeners();
+  }
+
+  // --- Fetch Methods ---
+  Future<void> fetchProvinces() async {
+    final result = await repository.getProvinces();
+    result.fold(
+      (failure) => print('Error fetching provinces: ${failure.message}'), // simplified error handling
+      (data) {
+        provinces = {for (var e in data) e.id.toString(): e.name};
+        provincesDom = provinces; // Same data
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> fetchRegencies(String provinceId, {bool isDom = false}) async {
+    if (isDom) {
+       isLoadingRegencyDom = true;
+       notifyListeners();
+    } else {
+       isLoadingRegency = true;
+       notifyListeners();
+    }
+    
+    final result = await repository.getRegencies(provinceId);
+    
+    result.fold(
+      (failure) => print('Error fetching regencies: ${failure.message}'),
+      (data) {
+        if (isDom) {
+           regenciesDom = {for (var e in data) e.id.toString(): e.name};
+           isLoadingRegencyDom = false;
+        } else {
+           regencies = {for (var e in data) e.id.toString(): e.name};
+           isLoadingRegency = false;
+        }
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> fetchDistricts(String regencyId, {bool isDom = false}) async {
+     if (isDom) {
+       isLoadingDistrictDom = true;
+       notifyListeners();
+    } else {
+       isLoadingDistrict = true;
+       notifyListeners();
+    }
+
+    final result = await repository.getDistricts(regencyId);
+    result.fold(
+      (failure) => print('Error fetching districts: ${failure.message}'),
+      (data) {
+         if (isDom) {
+           districtsDom = {for (var e in data) e.id.toString(): e.name};
+           isLoadingDistrictDom = false;
+        } else {
+           districts = {for (var e in data) e.id.toString(): e.name};
+           isLoadingDistrict = false;
+        }
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> fetchVillages(String districtId, {bool isDom = false}) async {
+     if (isDom) {
+       isLoadingVillageDom = true;
+       notifyListeners();
+    } else {
+       isLoadingVillage = true;
+       notifyListeners();
+    }
+
+    final result = await repository.getVillages(districtId);
+    result.fold(
+      (failure) => print('Error fetching villages: ${failure.message}'),
+      (data) {
+        if (isDom) {
+           villagesDom = {for (var e in data) e.id.toString(): e.name};
+           isLoadingVillageDom = false;
+        } else {
+           villages = {for (var e in data) e.id.toString(): e.name};
+           isLoadingVillage = false;
+        }
+        notifyListeners();
+      },
+    );
   }
 
   Future<void> selectDate(BuildContext context) async {
