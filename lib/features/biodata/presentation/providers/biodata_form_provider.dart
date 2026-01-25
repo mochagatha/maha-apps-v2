@@ -1,55 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../domain/entities/region.dart';
 import '../../domain/repositories/biodata_repository.dart';
-import '../../../../core/di/injection_container.dart'; // For easier access if needed, but better passed in
+// For easier access if needed, but better passed in
 
 class BiodataFormProvider extends ChangeNotifier {
   final BiodataRepository repository;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   BiodataFormProvider({required this.repository}) {
-     fetchProvinces(); // Auto fetch on create
+    fetchProvinces(); // Auto fetch on create
   }
 
   // Text Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController nikController = TextEditingController();
-  
+
   // Identity Address
   final TextEditingController postalCodeController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
-  
+
   // Domicile Address
   final TextEditingController postalCodeDomController = TextEditingController();
   final TextEditingController addressDomController = TextEditingController();
-  
+
   // Contacts
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emergencyPhoneController = TextEditingController();
-  
+
   // Birth
   final TextEditingController birthPlaceController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
 
-  // State Variables
-  String? selectedProvince;
-  String? selectedRegency;
-  String? selectedDistrict;
-  String? selectedVillage;
+  // State Variables - now using model objects
+  dynamic selectedProvince;
+  dynamic selectedRegency;
+  dynamic selectedDistrict;
+  dynamic selectedVillage;
 
-  String? selectedProvinceDom;
-  String? selectedRegencyDom;
-  String? selectedDistrictDom;
-  String? selectedVillageDom;
+  dynamic selectedProvinceDom;
+  dynamic selectedRegencyDom;
+  dynamic selectedDistrictDom;
+  dynamic selectedVillageDom;
 
   String? selectedGender = 'L'; // Default L
   String? selectedReligion;
   String? selectedResidenceStatus; // addressOption
-  
+
   bool isSwitchOn = false; // "Alamat saat ini sama dengan KTP"
-  
+
   // Loading States
   bool isLoadingRegency = false;
   bool isLoadingDistrict = false;
@@ -76,17 +77,16 @@ class BiodataFormProvider extends ChangeNotifier {
     'konghucu': 'Konghucu',
   };
 
-  // Region Data
-  Map<String, String> provinces = {};
-  Map<String, String> regencies = {};
-  Map<String, String> districts = {};
-  Map<String, String> villages = {};
-  
-  Map<String, String> provincesDom = {};
-  Map<String, String> regenciesDom = {};
-  Map<String, String> districtsDom = {};
-  Map<String, String> villagesDom = {};
+  // Region Data - now using List instead of Map
+  List<Province> provinces = [];
+  List<Regency> regencies = [];
+  List<District> districts = [];
+  List<Village> villages = [];
 
+  List<Province> provincesDom = [];
+  List<Regency> regenciesDom = [];
+  List<District> districtsDom = [];
+  List<Village> villagesDom = [];
 
   // Methods
   void toggleSwitch(bool value) {
@@ -103,68 +103,80 @@ class BiodataFormProvider extends ChangeNotifier {
     selectedReligion = value;
     notifyListeners();
   }
-  
+
   void setResidenceStatus(String? value) {
     selectedResidenceStatus = value;
     notifyListeners();
   }
 
   // Region Handlers (Identity)
-  void setProvince(String? value) {
+  void setProvince(dynamic value) {
     selectedProvince = value;
     selectedRegency = null;
     selectedDistrict = null;
     selectedVillage = null;
+    regencies = [];
+    districts = [];
+    villages = [];
     notifyListeners();
-    // if (value != null) _fetchRegencies(value);
-    if (value != null) fetchRegencies(value);
+    if (value != null) fetchRegencies(value.id.toString());
   }
 
-  void setRegency(String? value) {
+  void setRegency(dynamic value) {
     selectedRegency = value;
     selectedDistrict = null;
     selectedVillage = null;
+    districts = [];
+    villages = [];
     notifyListeners();
-    // if (value != null) _fetchDistricts(value);
-    if (value != null) fetchDistricts(value);
+    if (value != null) fetchDistricts(value.id.toString());
   }
 
-  void setDistrict(String? value) {
+  void setDistrict(dynamic value) {
     selectedDistrict = value;
     selectedVillage = null;
+    villages = [];
     notifyListeners();
-    // if (value != null) _fetchVillages(value);
-    if (value != null) fetchVillages(value);
+    if (value != null) fetchVillages(value.id.toString());
   }
 
-  void setVillage(String? value) {
+  void setVillage(dynamic value) {
     selectedVillage = value;
     notifyListeners();
   }
 
   // Region Handlers (Domicile)
-  void setProvinceDom(String? value) {
+  void setProvinceDom(dynamic value) {
     selectedProvinceDom = value;
     selectedRegencyDom = null;
     selectedDistrictDom = null;
     selectedVillageDom = null;
+    regenciesDom = [];
+    districtsDom = [];
+    villagesDom = [];
     notifyListeners();
+    if (value != null) fetchRegencies(value.id.toString(), isDom: true);
   }
 
-  void setRegencyDom(String? value) {
+  void setRegencyDom(dynamic value) {
     selectedRegencyDom = value;
     selectedDistrictDom = null;
     selectedVillageDom = null;
+    districtsDom = [];
+    villagesDom = [];
     notifyListeners();
+    if (value != null) fetchDistricts(value.id.toString(), isDom: true);
   }
 
-  void setDistrictDom(String? value) {
+  void setDistrictDom(dynamic value) {
     selectedDistrictDom = value;
     selectedVillageDom = null;
+    villagesDom = [];
     notifyListeners();
+    if (value != null) fetchVillages(value.id.toString(), isDom: true);
   }
-  
-  void setVillageDom(String? value) {
+
+  void setVillageDom(dynamic value) {
     selectedVillageDom = value;
     notifyListeners();
   }
@@ -172,90 +184,78 @@ class BiodataFormProvider extends ChangeNotifier {
   // --- Fetch Methods ---
   Future<void> fetchProvinces() async {
     final result = await repository.getProvinces();
-    result.fold(
-      (failure) => print('Error fetching provinces: ${failure.message}'), // simplified error handling
-      (data) {
-        provinces = {for (var e in data) e.id.toString(): e.name};
-        provincesDom = provinces; // Same data
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => print('Error fetching provinces: ${failure.message}'), (data) {
+      provinces = data;
+      provincesDom = data; // Same data
+      notifyListeners();
+    });
   }
 
   Future<void> fetchRegencies(String provinceId, {bool isDom = false}) async {
     if (isDom) {
-       isLoadingRegencyDom = true;
-       notifyListeners();
+      isLoadingRegencyDom = true;
+      notifyListeners();
     } else {
-       isLoadingRegency = true;
-       notifyListeners();
+      isLoadingRegency = true;
+      notifyListeners();
     }
-    
+
     final result = await repository.getRegencies(provinceId);
-    
-    result.fold(
-      (failure) => print('Error fetching regencies: ${failure.message}'),
-      (data) {
-        if (isDom) {
-           regenciesDom = {for (var e in data) e.id.toString(): e.name};
-           isLoadingRegencyDom = false;
-        } else {
-           regencies = {for (var e in data) e.id.toString(): e.name};
-           isLoadingRegency = false;
-        }
-        notifyListeners();
-      },
-    );
+
+    result.fold((failure) => print('Error fetching regencies: ${failure.message}'), (data) {
+      if (isDom) {
+        regenciesDom = data;
+        isLoadingRegencyDom = false;
+      } else {
+        regencies = data;
+        isLoadingRegency = false;
+      }
+      notifyListeners();
+    });
   }
 
   Future<void> fetchDistricts(String regencyId, {bool isDom = false}) async {
-     if (isDom) {
-       isLoadingDistrictDom = true;
-       notifyListeners();
+    if (isDom) {
+      isLoadingDistrictDom = true;
+      notifyListeners();
     } else {
-       isLoadingDistrict = true;
-       notifyListeners();
+      isLoadingDistrict = true;
+      notifyListeners();
     }
 
     final result = await repository.getDistricts(regencyId);
-    result.fold(
-      (failure) => print('Error fetching districts: ${failure.message}'),
-      (data) {
-         if (isDom) {
-           districtsDom = {for (var e in data) e.id.toString(): e.name};
-           isLoadingDistrictDom = false;
-        } else {
-           districts = {for (var e in data) e.id.toString(): e.name};
-           isLoadingDistrict = false;
-        }
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => print('Error fetching districts: ${failure.message}'), (data) {
+      if (isDom) {
+        districtsDom = data;
+        isLoadingDistrictDom = false;
+      } else {
+        districts = data;
+        isLoadingDistrict = false;
+      }
+      notifyListeners();
+    });
   }
 
   Future<void> fetchVillages(String districtId, {bool isDom = false}) async {
-     if (isDom) {
-       isLoadingVillageDom = true;
-       notifyListeners();
+    if (isDom) {
+      isLoadingVillageDom = true;
+      notifyListeners();
     } else {
-       isLoadingVillage = true;
-       notifyListeners();
+      isLoadingVillage = true;
+      notifyListeners();
     }
 
     final result = await repository.getVillages(districtId);
-    result.fold(
-      (failure) => print('Error fetching villages: ${failure.message}'),
-      (data) {
-        if (isDom) {
-           villagesDom = {for (var e in data) e.id.toString(): e.name};
-           isLoadingVillageDom = false;
-        } else {
-           villages = {for (var e in data) e.id.toString(): e.name};
-           isLoadingVillage = false;
-        }
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => print('Error fetching villages: ${failure.message}'), (data) {
+      if (isDom) {
+        villagesDom = data;
+        isLoadingVillageDom = false;
+      } else {
+        villages = data;
+        isLoadingVillage = false;
+      }
+      notifyListeners();
+    });
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -286,7 +286,7 @@ class BiodataFormProvider extends ChangeNotifier {
     birthDateController.dispose();
     super.dispose();
   }
-  
+
   Future<void> submit() async {
     if (formKey.currentState?.validate() ?? false) {
       formKey.currentState?.save();

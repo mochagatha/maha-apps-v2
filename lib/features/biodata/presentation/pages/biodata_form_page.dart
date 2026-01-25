@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../shared/widgets/custom_search_dropdown.dart';
+import '../../domain/entities/region.dart';
 import '../providers/biodata_form_provider.dart';
 
 class BiodataFormPage extends StatefulWidget {
@@ -23,8 +24,6 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   context.read<BiodataFormProvider>().initData();
     // });
-    final screenSize = MediaQuery.of(context).size;
-    final screenWidth = screenSize.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -92,60 +91,53 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 },
                               ),
                               const CustomTextBiodata(text: 'Alamat sesuai KTP'),
-                              const CustomLabelBiodata(text: 'Provinsi'),
-                              _buildDropdown(
-                                context,
-                                value: provider.selectedProvince,
+                              const CustomLabelBiodata(text: 'Provinsi Sesuai KTP'),
+                              CustomSearchDropdown<Province>(
+                                label: '',
+                                hint: 'Pilih Provinsi',
                                 items: provider.provinces,
-                                label: 'Pilih provinsi anda ..',
+                                itemAsString: (p0) => p0.name,
+                                selectedItem: provider.selectedProvince,
+                                isLoading: false,
                                 onChanged: (val) => provider.setProvince(val),
-                                errorText: 'Provinsi tidak boleh kosong !',
+                                validator: (val) => val == null ? 'Pilih Provinsi!' : null,
                               ),
 
-                              const CustomLabelBiodata(text: 'Kabupaten/Kota'),
-                              provider.isLoadingRegency
-                                  ? const Center(
-                                      child: CircularProgressIndicator(color: AppColors.primary),
-                                    )
-                                  : _buildDropdown(
-                                      context,
-                                      value: provider.selectedRegency,
-                                      items: provider.regencies,
-                                      label: 'Pilih Kabupaten/Kota anda ..',
-                                      onChanged: (val) => provider.setRegency(val),
-                                      errorText: 'Kabupaten/Kota tidak boleh kosong !',
-                                      enabled: provider.selectedProvince != null,
-                                    ),
+                              const CustomLabelBiodata(text: 'Kota/Kabupaten Sesuai KTP'),
+                              CustomSearchDropdown<Regency>(
+                                label: '',
+                                hint: 'Pilih Kota/Kabupaten',
+                                items: provider.regencies,
+                                itemAsString: (p0) => p0.name,
+                                selectedItem: provider.selectedRegency,
+                                isLoading: provider.isLoadingRegency,
+                                onChanged: (val) => provider.setRegency(val),
+                                validator: (val) => val == null ? 'Pilih Kota/Kabupaten!' : null,
+                              ),
 
-                              const CustomLabelBiodata(text: 'Kecamatan'),
-                              provider.isLoadingDistrict
-                                  ? const Center(
-                                      child: CircularProgressIndicator(color: AppColors.primary),
-                                    )
-                                  : _buildDropdown(
-                                      context,
-                                      value: provider.selectedDistrict,
-                                      items: provider.districts,
-                                      label: 'Pilih Kecamatan anda ..',
-                                      onChanged: (val) => provider.setDistrict(val),
-                                      errorText: 'Kecamatan tidak boleh kosong !',
-                                      enabled: provider.selectedRegency != null,
-                                    ),
+                              const CustomLabelBiodata(text: 'Kecamatan Sesuai KTP'),
+                              CustomSearchDropdown<District>(
+                                label: '',
+                                hint: 'Pilih Kecamatan',
+                                items: provider.districts,
+                                itemAsString: (p0) => p0.name,
+                                selectedItem: provider.selectedDistrict,
+                                isLoading: provider.isLoadingDistrict,
+                                onChanged: (val) => provider.setDistrict(val),
+                                validator: (val) => val == null ? 'Pilih Kecamatan!' : null,
+                              ),
 
-                              const CustomLabelBiodata(text: 'Kelurahan/Desa'),
-                              provider.isLoadingVillage
-                                  ? const Center(
-                                      child: CircularProgressIndicator(color: AppColors.primary),
-                                    )
-                                  : _buildDropdown(
-                                      context,
-                                      value: provider.selectedVillage,
-                                      items: provider.villages,
-                                      label: 'Pilih Kelurahan/Desa anda ..',
-                                      onChanged: (val) => provider.setVillage(val),
-                                      errorText: 'Kelurahan/Desa tidak boleh kosong !',
-                                      enabled: provider.selectedDistrict != null,
-                                    ),
+                              const CustomLabelBiodata(text: 'Kelurahan Sesuai KTP'),
+                              CustomSearchDropdown<Village>(
+                                label: '',
+                                hint: 'Pilih Kelurahan',
+                                items: provider.villages,
+                                itemAsString: (p0) => p0.name,
+                                selectedItem: provider.selectedVillage,
+                                isLoading: provider.isLoadingVillage,
+                                onChanged: (val) => provider.setVillage(val),
+                                validator: (val) => val == null ? 'Pilih Kelurahan!' : null,
+                              ),
 
                               const CustomLabelBiodata(text: 'Kode Pos'),
                               CustomTextFormField(
@@ -196,17 +188,54 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                               ),
 
                               if (!provider.isSwitchOn) ...[
-                                const CustomLabelBiodata(text: 'Provinsi'),
-                                _buildDropdown(
-                                  context,
-                                  value: provider.selectedProvinceDom,
-                                  items: provider.provinces,
-                                  label: 'Pilih provinsi anda ..',
+                                const CustomLabelBiodata(text: 'Provinsi Domisili'),
+                                CustomSearchDropdown<Province>(
+                                  label: '',
+                                  hint: 'Pilih Provinsi',
+                                  items: provider.provincesDom,
+                                  itemAsString: (p0) => p0.name,
+                                  selectedItem: provider.selectedProvinceDom,
+                                  isLoading: false,
                                   onChanged: (val) => provider.setProvinceDom(val),
-                                  errorText: 'Provinsi tidak boleh kosong !',
+                                  validator: (val) => val == null ? 'Pilih Provinsi!' : null,
                                 ),
-                                // ... Duplicate dependent logic for Regency/District/Village Dom if strictly needed
-                                // For brevity, assuming structure follows Identity but uses *Dom* controllers/state
+
+                                const CustomLabelBiodata(text: 'Kota/Kabupaten Domisili'),
+                                CustomSearchDropdown<Regency>(
+                                  label: '',
+                                  hint: 'Pilih Kota/Kabupaten',
+                                  items: provider.regenciesDom,
+                                  itemAsString: (p0) => p0.name,
+                                  selectedItem: provider.selectedRegencyDom,
+                                  isLoading: provider.isLoadingRegencyDom,
+                                  onChanged: (val) => provider.setRegencyDom(val),
+                                  validator: (val) => val == null ? 'Pilih Kota/Kabupaten!' : null,
+                                ),
+
+                                const CustomLabelBiodata(text: 'Kecamatan Domisili'),
+                                CustomSearchDropdown<District>(
+                                  label: '',
+                                  hint: 'Pilih Kecamatan',
+                                  items: provider.districtsDom,
+                                  itemAsString: (p0) => p0.name,
+                                  selectedItem: provider.selectedDistrictDom,
+                                  isLoading: provider.isLoadingDistrictDom,
+                                  onChanged: (val) => provider.setDistrictDom(val),
+                                  validator: (val) => val == null ? 'Pilih Kecamatan!' : null,
+                                ),
+
+                                const CustomLabelBiodata(text: 'Kelurahan Domisili'),
+                                CustomSearchDropdown<Village>(
+                                  label: '',
+                                  hint: 'Pilih Kelurahan',
+                                  items: provider.villagesDom,
+                                  itemAsString: (p0) => p0.name,
+                                  selectedItem: provider.selectedVillageDom,
+                                  isLoading: provider.isLoadingVillageDom,
+                                  onChanged: (val) => provider.setVillageDom(val),
+                                  validator: (val) => val == null ? 'Pilih Kelurahan!' : null,
+                                ),
+
                                 const CustomLabelBiodata(text: 'Kode Pos'),
                                 CustomTextFormField(
                                   controller: provider.postalCodeDomController,
