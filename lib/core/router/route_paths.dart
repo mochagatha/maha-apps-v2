@@ -45,4 +45,10 @@ class RoutePaths {
   static const String familyForm = '/biodata/family';
   static const String documentForm = '/biodata/document';
   static const String skillForm = '/biodata/skill';
+  static const String selfieForm = '/biodata/selfie';
+  static const String selfieCamera = '/biodata/selfie/camera';
+  static const String selfieResult = '/biodata/selfie/result';
+  static const String selfieKtpForm = '/biodata/selfie-ktp';
+  static const String selfieCameraKtp = '/biodata/selfie-ktp/camera';
+  static const String selfieResultKtp = '/biodata/selfie-ktp/result';
 }

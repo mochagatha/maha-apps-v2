@@ -8,6 +8,7 @@ import 'features/authentication/presentation/providers/auth_provider.dart';
 import 'features/authentication/presentation/providers/forgot_password_provider.dart';
 import 'features/home/presentation/providers/home_provider.dart';
 import 'features/profile/presentation/providers/profile_provider.dart';
+import 'features/biodata/presentation/providers/selfie_provider.dart';
 import 'l10n/app_localizations.dart';
 import 'shared/theme/app_theme.dart';
 
@@ -45,6 +46,10 @@ class MyApp extends StatelessWidget {
         // Forgot Password Provider from GetIt
         ChangeNotifierProvider(
           create: (_) => di.sl<ForgotPasswordProvider>(),
+        ),
+        // Selfie Provider (global for biodata flow)
+        ChangeNotifierProvider(
+          create: (_) => SelfieProvider(),
         ),
       ],
       child: MaterialApp.router(

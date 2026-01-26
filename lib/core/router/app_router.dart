@@ -29,6 +29,13 @@ import '../../features/biodata/presentation/pages/document_page.dart';
 import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/pages/skill_page.dart';
 import '../../features/biodata/presentation/providers/skill_provider.dart';
+import '../../features/biodata/presentation/pages/selfie_page.dart';
+import '../../features/biodata/presentation/pages/selfie_camera_page.dart';
+import '../../features/biodata/presentation/pages/selfie_result_page.dart';
+import '../../features/biodata/presentation/pages/selfie_ktp_page.dart';
+import '../../features/biodata/presentation/pages/selfie_ktp_camera_page.dart';
+import '../../features/biodata/presentation/pages/selfie_ktp_result_page.dart';
+import '../../features/biodata/presentation/providers/selfie_provider.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 
 class AppRouter {
@@ -176,6 +183,36 @@ class AppRouter {
             create: (_) => SkillProvider(),
             child: const SkillPage(),
           ),
+        ),
+        GoRoute(
+          path: RoutePaths.selfieForm,
+          name: RouteNames.selfieForm,
+          builder: (context, state) => const SelfiePage(),
+        ),
+        GoRoute(
+          path: RoutePaths.selfieCamera,
+          name: RouteNames.selfieCamera,
+          builder: (context, state) => const SelfieCameraPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.selfieResult,
+          name: RouteNames.selfieResult,
+          builder: (context, state) => const SelfieResultPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.selfieKtpForm,
+          name: RouteNames.selfieKtpForm,
+          builder: (context, state) => const SelfieKtpPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.selfieCameraKtp,
+          name: RouteNames.selfieCameraKtp,
+          builder: (context, state) => const SelfieCameraKtpPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.selfieResultKtp,
+          name: RouteNames.selfieResultKtp,
+          builder: (context, state) => const SelfieKtpResultPage(),
         ),
       ],
 

@@ -44,4 +44,10 @@ class RouteNames {
   static const String familyForm = 'family-form';
   static const String documentForm = 'document-form';
   static const String skillForm = 'skill-form';
+  static const String selfieForm = 'selfie-form';
+  static const String selfieCamera = 'selfie-camera';
+  static const String selfieResult = 'selfie-result';
+  static const String selfieKtpForm = 'selfie-ktp-form';
+  static const String selfieCameraKtp = 'selfie-camera-ktp';
+  static const String selfieResultKtp = 'selfie-result-ktp';
 }
