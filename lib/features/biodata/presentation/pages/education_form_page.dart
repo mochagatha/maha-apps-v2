@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/education_form_provider.dart';
@@ -150,8 +151,11 @@ class _EducationFormPageState extends State<EducationFormPage> {
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  context.read<EducationFormProvider>().submit();
+                onPressed: () async {
+                  await context.read<EducationFormProvider>().submit();
+                  if (context.mounted) {
+                    context.pushNamed(RouteNames.familyForm);
+                  }
                 },
                  style: ElevatedButton.styleFrom(
                    backgroundColor: AppColors.primary,
