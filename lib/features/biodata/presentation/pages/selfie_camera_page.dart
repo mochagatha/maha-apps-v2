@@ -15,33 +15,58 @@ class SelfieCameraPage extends StatefulWidget {
 }
 
 class _SelfieCameraPageState extends State<SelfieCameraPage> {
+  SelfieProvider? _selfieProvider;
+
   // Guides from V1
   final List<String> guideSelfie = [
     'Jelas & Berada di bingkai',
     'Foto Tampak Buram',
     'Wajah Tampak Gelap',
-    'Wajah Terpotong'
+    'Wajah Terpotong',
   ];
 
   final List<String> guideSelfie2 = [
     'Foto Selfie kamu dengan menggunakan pakaian sopan',
     'Foto Selfie jelas (tidak buram)',
     'Foto Selfie dengan cahaya yang cukup (tidak gelap)',
-    'Foto Selfie tidak terpotong'
+    'Foto Selfie tidak terpotong',
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Save provider reference safely
+    _selfieProvider ??= context.read<SelfieProvider>();
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SelfieProvider>().initializeCamera(cameraLensDirection: CameraLensDirection.front);
+      context.read<SelfieProvider>().initializeCamera(
+        cameraLensDirection: CameraLensDirection.front,
+      );
     });
+  }
+
+  @override
+  void deactivate() {
+    // Stop camera when widget is being removed from tree
+    _selfieProvider?.disposeCamera();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    // Dispose camera when leaving this page
+    _selfieProvider?.disposeCamera();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     const double previewAspectRatio = 1.0;
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(title: 'Foto Selfie'),
@@ -57,14 +82,12 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> {
                   child: provider.isCameraInitialized && provider.controller != null
                       ? Transform.scale(
                           scale: provider.controller!.value.aspectRatio / previewAspectRatio,
-                          child: Center(
-                            child: CameraPreview(provider.controller!),
-                          ),
+                          child: Center(child: CameraPreview(provider.controller!)),
                         )
                       : const Center(child: CircularProgressIndicator(color: AppColors.primary)),
                 ),
               ),
-              
+
               // Guide Section
               Expanded(
                 child: Padding(
@@ -97,10 +120,12 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> {
                                           Text(
                                             '${guideSelfie[i]}\n',
                                             style: const TextStyle(
-                                                fontSize: 10, color: Colors.grey),
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
                                             textAlign: TextAlign.center,
                                             maxLines: 2,
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -113,18 +138,14 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> {
                                   children: [
                                     const Text('•'),
                                     const SizedBox(width: 8),
-                                    Expanded(
-                                        child: Text(
-                                      e,
-                                      style: const TextStyle(fontSize: 12),
-                                    )),
+                                    Expanded(child: Text(e, style: const TextStyle(fontSize: 12))),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -140,18 +161,20 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> {
         child: ElevatedButton(
           onPressed: () async {
             final provider = context.read<SelfieProvider>();
-             await provider.takePicture();
-             if (context.mounted && provider.selfieImage != null) {
-               context.pushNamed(RouteNames.selfieResult);
-             }
+            await provider.takePicture();
+            if (context.mounted && provider.selfieImage != null) {
+              // Dispose camera before navigating to prevent camera staying active
+              await provider.disposeCamera();
+              if (context.mounted) {
+                context.pushNamed(RouteNames.selfieResult);
+              }
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 5.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           child: const Text(
             'Ambil Foto Selfie',

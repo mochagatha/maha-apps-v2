@@ -8,7 +8,9 @@ class SelfieProvider extends ChangeNotifier {
   bool isCameraInitialized = false;
   bool isLoading = false;
 
-  Future<void> initializeCamera({CameraLensDirection cameraLensDirection = CameraLensDirection.front}) async {
+  Future<void> initializeCamera({
+    CameraLensDirection cameraLensDirection = CameraLensDirection.front,
+  }) async {
     isCameraInitialized = false;
     // notifyListeners(); // Avoid rebuilding too early if not needed, or helps show loader
 
@@ -19,17 +21,13 @@ class SelfieProvider extends ChangeNotifier {
           (camera) => camera.lensDirection == cameraLensDirection,
           orElse: () => cameras.first,
         );
-        
+
         // Dispose old controller if exists
         if (controller != null) {
           await controller!.dispose();
         }
 
-        controller = CameraController(
-          camera,
-          ResolutionPreset.high,
-          enableAudio: false,
-        );
+        controller = CameraController(camera, ResolutionPreset.high, enableAudio: false);
 
         await controller!.initialize();
         isCameraInitialized = true;
@@ -65,17 +63,22 @@ class SelfieProvider extends ChangeNotifier {
     // selfieKtpImage = null;
     notifyListeners();
   }
-    
+
   // Call this when leaving the flow
   Future<void> disposeCamera() async {
-    await controller?.dispose();
-    controller = null;
-    isCameraInitialized = false;
+    if (controller != null) {
+      await controller!.dispose();
+      controller = null;
+      isCameraInitialized = false;
+      // Don't call notifyListeners here as widget might be disposed
+    }
   }
-  
+
   @override
   void dispose() {
+    // Synchronously dispose controller
     controller?.dispose();
+    controller = null;
     super.dispose();
   }
 }
