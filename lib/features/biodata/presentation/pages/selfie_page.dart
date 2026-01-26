@@ -15,31 +15,39 @@ class SelfiePage extends StatelessWidget {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 80),
+            padding: const EdgeInsets.only(top: 50, bottom: 90),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                 const Text(
-                  'Ambil Foto Selfie',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                  textAlign: TextAlign.center,
+                const Divider(
+                  color: Color(0xffF1F1F1), // AppColors.thirdColor approximation
+                  height: 20,
+                  thickness: 10,
                 ),
-                const SizedBox(height: 15),
-                const Text(
-                  'Lengkapi proses ini dengan mengambil foto wajah Anda. Pastikan wajah terlihat jelas, ya.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                const SizedBox(height: 20),
-                // Using a placeholder icon/image since access to assets might not be perfect, 
-                // but matching structure of v1
-               Expanded(
-                 child: Container(
-                   alignment: Alignment.center,
-                  //  child: Image.asset( 'assets/images/icon/selfie.png'), // Uncomment if asset exists
-                   child: const Icon(Icons.camera_front_outlined, size: 150, color: AppColors.primary),
-                 ),
-               ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Ambil Foto Selfie',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Lengkapi proses ini dengan mengambil foto wajah Anda. Pastikan wajah terlihat jelas, ya.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                      const SizedBox(height: 10),
+                      Image.asset(
+                        'assets/images/icon/selfie.png',
+                        width: MediaQuery.of(context).size.width - 50,
+                        height: MediaQuery.of(context).size.width - 50,
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),

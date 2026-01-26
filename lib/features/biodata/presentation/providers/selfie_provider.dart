@@ -8,39 +8,25 @@ class SelfieProvider extends ChangeNotifier {
   bool isCameraInitialized = false;
   bool isLoading = false;
 
-  Future<void> initializeCamera() async {
-    final cameras = await availableCameras();
-    if (cameras.isNotEmpty) {
-      // Use front camera for selfie, back camera for KTP usually, but let's default to front for selfie
-      // logic can be improved to switch based on mode
-      final frontCamera = cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.front,
-        orElse: () => cameras.first,
-      );
-      
-      controller = CameraController(
-        frontCamera,
-        ResolutionPreset.high,
-        enableAudio: false,
-      );
+  Future<void> initializeCamera({CameraLensDirection cameraLensDirection = CameraLensDirection.front}) async {
+    isCameraInitialized = false;
+    // notifyListeners(); // Avoid rebuilding too early if not needed, or helps show loader
 
-      await controller!.initialize();
-      isCameraInitialized = true;
-      notifyListeners();
-    }
-  }
-  
-  Future<void> initializeCameraKtp() async {
+    try {
       final cameras = await availableCameras();
       if (cameras.isNotEmpty) {
-        // Use back camera for KTP
-        final backCamera = cameras.firstWhere(
-          (camera) => camera.lensDirection == CameraLensDirection.back,
+        final camera = cameras.firstWhere(
+          (camera) => camera.lensDirection == cameraLensDirection,
           orElse: () => cameras.first,
         );
+        
+        // Dispose old controller if exists
+        if (controller != null) {
+          await controller!.dispose();
+        }
 
         controller = CameraController(
-          backCamera,
+          camera,
           ResolutionPreset.high,
           enableAudio: false,
         );
@@ -49,6 +35,9 @@ class SelfieProvider extends ChangeNotifier {
         isCameraInitialized = true;
         notifyListeners();
       }
+    } catch (e) {
+      debugPrint("Error initializing camera: $e");
+    }
   }
 
   Future<void> takePicture({bool isKtp = false}) async {
@@ -72,11 +61,12 @@ class SelfieProvider extends ChangeNotifier {
   }
 
   void resetCamera() {
-    selfieImage = null;
-    selfieKtpImage = null;
+    // selfieImage = null; // Do not clear images on reset, only maybe when starting fresh flow
+    // selfieKtpImage = null;
     notifyListeners();
   }
-
+    
+  // Call this when leaving the flow
   Future<void> disposeCamera() async {
     await controller?.dispose();
     controller = null;

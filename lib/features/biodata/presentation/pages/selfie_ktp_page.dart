@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../core/router/route_names.dart';
-import 'selfie_page.dart'; // Reuse HeaderScrollSelfie
+import 'selfie_page.dart'; // Using HeaderScrollSelfie
 
 class SelfieKtpPage extends StatelessWidget {
   const SelfieKtpPage({super.key});
@@ -16,33 +16,43 @@ class SelfieKtpPage extends StatelessWidget {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 80),
+            padding: const EdgeInsets.only(top: 50, bottom: 90),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                 const Text(
-                  'Ambil Foto Selfie dengan KTP',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                  textAlign: TextAlign.center,
+                const Divider(
+                  color: Color(0xffF1F1F1),
+                  height: 20,
+                  thickness: 10,
                 ),
-                const SizedBox(height: 15),
-                const Text(
-                  'Lengkapi proses ini dengan mengambil foto posisi selfie dengan memegang KTP. Pastikan wajah dan KTP terlihat jelas, ya.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                const SizedBox(height: 20),
-               Expanded(
-                 child: Container(
-                   alignment: Alignment.center,
-                   // Placeholder for KTP selfie asset
-                   child: const Icon(Icons.contact_mail_outlined, size: 150, color: AppColors.primary),
-                 ),
-               ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                       const Text(
+                        'Ambil Foto Selfie dengan KTP',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Lengkapi proses ini dengan mengambil foto posisi selfie dengan memegang KTP. Pastikan wajah dan KTP terlihat jelas, ya.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                      const SizedBox(height: 10),
+                      Image.asset(
+                        'assets/images/icon/selfie_ktp.png',
+                         width: MediaQuery.of(context).size.width - 50,
+                        height: MediaQuery.of(context).size.width - 50,
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-          const HeaderScrollSelfie(step: 7), // Step 7 for KTP
+          const HeaderScrollSelfie(step: 7),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
