@@ -9,7 +9,7 @@ class FamilyProvider extends ChangeNotifier {
   final TextEditingController fatherAgeController = TextEditingController();
   final TextEditingController fatherJobController = TextEditingController();
   final TextEditingController fatherCompanyController = TextEditingController();
-  
+
   final TextEditingController motherNameController = TextEditingController();
   final TextEditingController motherAgeController = TextEditingController();
   final TextEditingController motherJobController = TextEditingController();
@@ -17,7 +17,7 @@ class FamilyProvider extends ChangeNotifier {
 
   String? lifeFatherOption;
   String? lastEducationFatherOption;
-  
+
   String? lifeMotherOption;
   String? lastEducationMotherOption;
 
@@ -26,7 +26,7 @@ class FamilyProvider extends ChangeNotifier {
   final TextEditingController coupleAgeController = TextEditingController();
   final TextEditingController coupleJobController = TextEditingController();
   final TextEditingController coupleCompanyController = TextEditingController();
-  
+
   String? statusMarriedOption;
   String? coupleEducationOption;
   String? statusChildOption; // '1': Belum, '2': Sudah
@@ -52,10 +52,7 @@ class FamilyProvider extends ChangeNotifier {
   List<Map<String, dynamic>> childrenData = []; // To store ID or other meta
 
   // --- Options Maps ---
-  final Map<int, String> itemsMapLife = {
-    1: 'Masih Hidup',
-    2: 'Sudah Meninggal',
-  };
+  final Map<int, String> itemsMapLife = {1: 'Masih Hidup', 2: 'Sudah Meninggal'};
 
   final Map<String, String> itemsEducation = {
     'sd': 'SD',
@@ -69,7 +66,7 @@ class FamilyProvider extends ChangeNotifier {
     's3': 'S3',
   };
 
-   final Map<String, String> itemsLastEducation = {
+  final Map<String, String> itemsLastEducation = {
     'belum sekolah': 'Belum Sekolah',
     'sd': 'SD',
     'smp': 'SMP',
@@ -89,10 +86,7 @@ class FamilyProvider extends ChangeNotifier {
     'duda': 'Duda',
   };
 
-  final Map<String, String> statusChildMap = {
-    '1': 'Belum',
-    '2': 'Sudah',
-  };
+  final Map<String, String> statusChildMap = {'1': 'Belum', '2': 'Sudah'};
 
   // --- Setters ---
   void setLifeFatherOption(String? value) {
@@ -149,7 +143,7 @@ class FamilyProvider extends ChangeNotifier {
       ageSiblingControllers[index].dispose();
       jobSiblingControllers[index].dispose();
       companySiblingControllers[index].dispose();
-      
+
       nameSiblingControllers.removeAt(index);
       ageSiblingControllers.removeAt(index);
       jobSiblingControllers.removeAt(index);
@@ -188,7 +182,7 @@ class FamilyProvider extends ChangeNotifier {
   }
 
   void removeChildren(int index) {
-     if (index >= 0 && index < nameChildrenControllers.length) {
+    if (index >= 0 && index < nameChildrenControllers.length) {
       nameChildrenControllers[index].dispose();
       ageChildrenControllers[index].dispose();
       jobChildrenControllers[index].dispose();
@@ -202,7 +196,7 @@ class FamilyProvider extends ChangeNotifier {
       genderChildrenControllers.removeAt(index);
       isNewChildren.removeAt(index);
       notifyListeners();
-     }
+    }
   }
 
   void setChildGender(int index, String value) {
@@ -219,12 +213,17 @@ class FamilyProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> submit() async {
-    if (formKey.currentState?.validate() ?? false) {
-      print("Submitting Family Form...");
-      // Handle data collection and API submission here
-      // For now we just validate
+  Future<bool> submit() async {
+    final isFormValid = formKey.currentState?.validate() ?? false;
+
+    if (!isFormValid) {
+      return false;
     }
+
+    formKey.currentState?.save();
+    debugPrint("Submitting Family Form...");
+    // Handle data collection and API submission here
+    return true;
   }
 
   @override
@@ -233,7 +232,7 @@ class FamilyProvider extends ChangeNotifier {
     fatherAgeController.dispose();
     fatherJobController.dispose();
     fatherCompanyController.dispose();
-    
+
     motherNameController.dispose();
     motherAgeController.dispose();
     motherJobController.dispose();

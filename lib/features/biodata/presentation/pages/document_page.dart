@@ -204,9 +204,11 @@ class DocumentPage extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  context.read<DocumentProvider>().submit();
-                  if (context.mounted) {
+                onPressed: () async {
+                  final provider = context.read<DocumentProvider>();
+                  final isValid = await provider.submit();
+
+                  if (isValid && context.mounted) {
                     context.pushNamed(RouteNames.skillForm);
                   }
                 },

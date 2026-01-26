@@ -165,9 +165,21 @@ class SkillPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () async {
-                  await context.read<SkillProvider>().submit();
-                  if (context.mounted) {
+                  final provider = context.read<SkillProvider>();
+                  final isValid = await provider.submit();
+
+                  if (isValid && context.mounted) {
                     context.pushNamed(RouteNames.selfieForm);
+                  } else if (!isValid) {
+                    // Show error message
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Pilih minimal 1 keahlian!'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

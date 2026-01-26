@@ -57,9 +57,7 @@ class EducationFormProvider extends ChangeNotifier {
     's3': 'S3',
   };
 
-  final List<String> educationBachelorValidate = [
-    'd i', 'd ii', 'd iii', 's1',
-  ];
+  final List<String> educationBachelorValidate = ['d i', 'd ii', 'd iii', 's1'];
 
   void setLastEducation(String? value) {
     lastEducationOption = value;
@@ -76,7 +74,7 @@ class EducationFormProvider extends ChangeNotifier {
     controller.text = value;
     notifyListeners();
   }
-  
+
   @override
   void dispose() {
     namePrimarySchoolController.dispose();
@@ -109,10 +107,16 @@ class EducationFormProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> submit() async {
-    if (formKey.currentState?.validate() ?? false) {
-       print("Submitting Education Form...");
-       // Implement submit logic
+  Future<bool> submit() async {
+    final isFormValid = formKey.currentState?.validate() ?? false;
+
+    if (!isFormValid) {
+      return false;
     }
+
+    formKey.currentState?.save();
+    debugPrint("Submitting Education Form...");
+    // Implement submit logic
+    return true;
   }
 }

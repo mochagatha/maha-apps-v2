@@ -9,7 +9,7 @@ class SkillModel {
 
 class SkillProvider extends ChangeNotifier {
   bool isLoadingSkill = false;
-  
+
   // Available skills (Mocked or loaded from API)
   List<SkillModel> availableSkills = [
     SkillModel(id: 1, name: 'Memasak'),
@@ -24,15 +24,15 @@ class SkillProvider extends ChangeNotifier {
 
   // User's selected skills
   List<SkillModel> selectedSkills = [];
-  
-  // Skills to be added (User inputs manual string?) 
-  // v1 had 'addSkillList' as List<String>. 
+
+  // Skills to be added (User inputs manual string?)
+  // v1 had 'addSkillList' as List<String>.
   // v1 dialog seems to allow searching and selecting existing skills.
   List<String> newSkills = [];
 
   // Skills marked for deletion (if updating existing data)
   List<int> deleteSkillList = [];
-  
+
   Future<void> fetchSkills(String query) async {
     // Simulate API call or filtering
     // In real app, this would call UseCase
@@ -51,12 +51,12 @@ class SkillProvider extends ChangeNotifier {
     deleteSkillList.add(skill.id);
     notifyListeners();
   }
-  
+
   void addNewSkill(String skillName) {
-     if (!newSkills.contains(skillName) && !selectedSkills.any((s) => s.name == skillName)) {
-       newSkills.add(skillName);
-       notifyListeners();
-     }
+    if (!newSkills.contains(skillName) && !selectedSkills.any((s) => s.name == skillName)) {
+      newSkills.add(skillName);
+      notifyListeners();
+    }
   }
 
   void removeNewSkill(String skillName) {
@@ -64,14 +64,23 @@ class SkillProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submit() async {
-     isLoadingSkill = true;
-     notifyListeners();
-     
-     // Simulate submit
-     await Future.delayed(const Duration(seconds: 1));
-     
-     isLoadingSkill = false;
-     notifyListeners();
+  Future<bool> submit() async {
+    // Validate at least one skill is selected
+    if (selectedSkills.isEmpty) {
+      debugPrint("Validation Error: At least one skill must be selected");
+      return false;
+    }
+
+    isLoadingSkill = true;
+    notifyListeners();
+
+    // Simulate submit
+    await Future.delayed(const Duration(seconds: 1));
+
+    isLoadingSkill = false;
+    notifyListeners();
+
+    debugPrint("Submitting Skills: ${selectedSkills.map((s) => s.name).toList()}");
+    return true;
   }
 }

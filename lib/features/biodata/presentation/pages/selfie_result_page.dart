@@ -48,6 +48,16 @@ class SelfieResultPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  // Validate selfie image exists
+                  if (provider.selfieImage == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Foto selfie belum diambil!'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
                   // Proceed to Selfie KTP
                   context.pushNamed(RouteNames.selfieKtpForm);
                 },

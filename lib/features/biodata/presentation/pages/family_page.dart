@@ -329,8 +329,10 @@ class _FamilyPageState extends State<FamilyPage> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () async {
-                  await context.read<FamilyProvider>().submit();
-                  if (context.mounted) {
+                  final provider = context.read<FamilyProvider>();
+                  final isValid = await provider.submit();
+
+                  if (isValid && context.mounted) {
                     context.pushNamed(RouteNames.documentForm);
                   }
                 },
