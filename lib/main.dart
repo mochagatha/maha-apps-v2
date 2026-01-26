@@ -14,13 +14,13 @@ import 'shared/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Load environment variables
   await dotenv.load(fileName: '.env');
-  
+
   // Initialize dependency injection
   await di.init();
-  
+
   runApp(const MyApp());
 }
 
@@ -32,25 +32,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // Auth Provider from GetIt
-        ChangeNotifierProvider(
-          create: (_) => di.sl<AuthProvider>(),
-        ),
+        ChangeNotifierProvider(create: (_) => di.sl<AuthProvider>()),
         // Home Provider from GetIt
-        ChangeNotifierProvider(
-          create: (_) => di.sl<HomeProvider>(),
-        ),
+        ChangeNotifierProvider(create: (_) => di.sl<HomeProvider>()),
         // Profile Provider from GetIt
-        ChangeNotifierProvider(
-          create: (_) => di.sl<ProfileProvider>(),
-        ),
+        ChangeNotifierProvider(create: (_) => di.sl<ProfileProvider>()),
         // Forgot Password Provider from GetIt
-        ChangeNotifierProvider(
-          create: (_) => di.sl<ForgotPasswordProvider>(),
-        ),
+        ChangeNotifierProvider(create: (_) => di.sl<ForgotPasswordProvider>()),
         // Selfie Provider (global for biodata flow)
-        ChangeNotifierProvider(
-          create: (_) => SelfieProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => SelfieProvider()),
       ],
       child: MaterialApp.router(
         title: 'MAHA Apps',

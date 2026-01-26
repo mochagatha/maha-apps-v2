@@ -163,10 +163,8 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.familyForm,
           name: RouteNames.familyForm,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => FamilyProvider(),
-            child: const FamilyPage(),
-          ),
+          builder: (context, state) =>
+              ChangeNotifierProvider(create: (_) => FamilyProvider(), child: const FamilyPage()),
         ),
         GoRoute(
           path: RoutePaths.documentForm,
@@ -179,10 +177,8 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.skillForm,
           name: RouteNames.skillForm,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => SkillProvider(),
-            child: const SkillPage(),
-          ),
+          builder: (context, state) =>
+              ChangeNotifierProvider(create: (_) => SkillProvider(), child: const SkillPage()),
         ),
         GoRoute(
           path: RoutePaths.selfieForm,
