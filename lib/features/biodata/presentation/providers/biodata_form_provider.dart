@@ -51,6 +51,9 @@ class BiodataFormProvider extends ChangeNotifier {
 
   bool isSwitchOn = false; // "Alamat saat ini sama dengan KTP"
 
+  // Error message for gender field (others use form validators)
+  String? genderError;
+
   // Loading States
   bool isLoadingRegency = false;
   bool isLoadingDistrict = false;
@@ -96,6 +99,7 @@ class BiodataFormProvider extends ChangeNotifier {
 
   void setGender(String value) {
     selectedGender = value;
+    genderError = null; // Clear error when user selects
     notifyListeners();
   }
 
@@ -287,13 +291,31 @@ class BiodataFormProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> submit() async {
-    if (formKey.currentState?.validate() ?? false) {
-      formKey.currentState?.save();
-      // Logic from _submitForm in v1
-      // final currentProvince = isSwitchOn ? selectedProvince! : selectedProvinceDom!;
-      // ... construct model and send to API
-      print("Submitting Form...");
+  Future<bool> submit() async {
+    // Clear previous errors
+    genderError = null;
+
+    // Validate form fields (includes all TextFormField and DropdownButtonFormField validators)
+    final isFormValid = formKey.currentState?.validate() ?? false;
+
+    bool hasErrors = false;
+
+    // Additional validation for gender radio button (not covered by form validators)
+    if (selectedGender == null || selectedGender!.isEmpty) {
+      genderError = "Jenis kelamin harus dipilih";
+      hasErrors = true;
+      notifyListeners(); // Notify to show error message
     }
+
+    if (!isFormValid || hasErrors) {
+      return false;
+    }
+
+    formKey.currentState?.save();
+    // Logic from _submitForm in v1
+    // final currentProvince = isSwitchOn ? selectedProvince! : selectedProvinceDom!;
+    // ... construct model and send to API
+    debugPrint("Submitting Form...");
+    return true;
   }
 }

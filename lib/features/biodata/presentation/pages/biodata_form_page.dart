@@ -323,6 +323,14 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   ),
                                 ],
                               ),
+                              if (provider.genderError != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4, left: 12),
+                                  child: Text(
+                                    provider.genderError!,
+                                    style: const TextStyle(color: Colors.red, fontSize: 12),
+                                  ),
+                                ),
 
                               const CustomLabelBiodata(text: 'Tempat Lahir'),
                               CustomTextFormField(
@@ -394,10 +402,14 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  context.read<BiodataFormProvider>().submit();
-                  // If success logic handles navigation
-                  context.pushNamed(RouteNames.educationForm);
+                onPressed: () async {
+                  final provider = context.read<BiodataFormProvider>();
+                  final isValid = await provider.submit();
+
+                  // Only navigate if form validation passes
+                  if (isValid && context.mounted) {
+                    context.pushNamed(RouteNames.educationForm);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
