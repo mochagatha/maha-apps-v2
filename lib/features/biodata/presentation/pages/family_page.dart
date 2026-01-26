@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/family_provider.dart';
@@ -24,8 +25,7 @@ class _FamilyPageState extends State<FamilyPage> {
       body: Consumer<FamilyProvider>(
         builder: (context, provider, child) {
           if (provider.isLoadingData) {
-            return const Center(
-                child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
           }
           return Stack(
             children: [
@@ -38,30 +38,30 @@ class _FamilyPageState extends State<FamilyPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Divider(
-                            color: AppColors.third, height: 20, thickness: 10),
+                        const Divider(color: AppColors.third, height: 20, thickness: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const CustomTextBiodata(text: 'Data Orang Tua'),
-                              
+
                               // --- FATHER SECTION ---
                               const CustomLabelBiodata(text: 'Nama Ayah'),
                               CustomTextFormField(
                                 controller: provider.fatherNameController,
                                 hintText: 'Masukkan nama ayah..',
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
-                                        ? 'Nama tidak boleh kosong !'
-                                        : null,
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Nama tidak boleh kosong !'
+                                    : null,
                               ),
                               const CustomLabelBiodata(text: 'Status'),
                               _buildDropdown(
                                 context,
                                 value: provider.lifeFatherOption,
-                                items: provider.itemsMapLife.map((k, v) => MapEntry(k.toString(), v)),
+                                items: provider.itemsMapLife.map(
+                                  (k, v) => MapEntry(k.toString(), v),
+                                ),
                                 label: 'Pilih Status..',
                                 onChanged: (val) => provider.setLifeFatherOption(val),
                                 errorText: 'Status tidak boleh kosong !',
@@ -71,33 +71,26 @@ class _FamilyPageState extends State<FamilyPage> {
                                 controller: provider.fatherAgeController,
                                 hintText: 'Masukkan usia ayah..',
                                 keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
-                                        ? 'Usia tidak boleh kosong !'
-                                        : null,
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Usia tidak boleh kosong !'
+                                    : null,
                               ),
-                              const CustomLabelBiodata(
-                                  text: 'Pendidikan Terakhir'),
+                              const CustomLabelBiodata(text: 'Pendidikan Terakhir'),
                               _buildDropdown(
                                 context,
                                 value: provider.lastEducationFatherOption,
                                 items: provider.itemsEducation,
                                 label: 'Pilih pendidikan..',
-                                onChanged: (val) =>
-                                    provider.setLastEducationFatherOption(val),
+                                onChanged: (val) => provider.setLastEducationFatherOption(val),
                                 errorText: 'Pendidikan tidak boleh kosong !',
                               ),
-                              const CustomLabelBiodata(
-                                  text: 'Pekerjaan Terakhir (Opsional)'),
+                              const CustomLabelBiodata(text: 'Pekerjaan Terakhir (Opsional)'),
                               CustomTextFormField(
                                 controller: provider.fatherJobController,
                                 hintText: 'Masukkan pekerjaan..',
                               ),
-                              const CustomLabelBiodata(
-                                  text: 'Nama Perusahaan (Opsional)'),
+                              const CustomLabelBiodata(text: 'Nama Perusahaan (Opsional)'),
                               CustomTextFormField(
                                 controller: provider.fatherCompanyController,
                                 hintText: 'Masukkan nama perusahaan..',
@@ -110,16 +103,17 @@ class _FamilyPageState extends State<FamilyPage> {
                               CustomTextFormField(
                                 controller: provider.motherNameController,
                                 hintText: 'Masukkan nama ibu..',
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
-                                        ? 'Nama tidak boleh kosong !'
-                                        : null,
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Nama tidak boleh kosong !'
+                                    : null,
                               ),
                               const CustomLabelBiodata(text: 'Status'),
                               _buildDropdown(
                                 context,
                                 value: provider.lifeMotherOption,
-                                items: provider.itemsMapLife.map((k, v) => MapEntry(k.toString(), v)),
+                                items: provider.itemsMapLife.map(
+                                  (k, v) => MapEntry(k.toString(), v),
+                                ),
                                 label: 'Pilih Status..',
                                 onChanged: (val) => provider.setLifeMotherOption(val),
                                 errorText: 'Status tidak boleh kosong !',
@@ -129,33 +123,26 @@ class _FamilyPageState extends State<FamilyPage> {
                                 controller: provider.motherAgeController,
                                 hintText: 'Masukkan usia ibu..',
                                 keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
-                                        ? 'Usia tidak boleh kosong !'
-                                        : null,
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                validator: (value) => (value == null || value.isEmpty)
+                                    ? 'Usia tidak boleh kosong !'
+                                    : null,
                               ),
-                              const CustomLabelBiodata(
-                                  text: 'Pendidikan Terakhir'),
+                              const CustomLabelBiodata(text: 'Pendidikan Terakhir'),
                               _buildDropdown(
                                 context,
                                 value: provider.lastEducationMotherOption,
                                 items: provider.itemsEducation,
                                 label: 'Pilih pendidikan..',
-                                onChanged: (val) =>
-                                    provider.setLastEducationMotherOption(val),
+                                onChanged: (val) => provider.setLastEducationMotherOption(val),
                                 errorText: 'Pendidikan tidak boleh kosong !',
                               ),
-                              const CustomLabelBiodata(
-                                  text: 'Pekerjaan Terakhir (Opsional)'),
+                              const CustomLabelBiodata(text: 'Pekerjaan Terakhir (Opsional)'),
                               CustomTextFormField(
                                 controller: provider.motherJobController,
                                 hintText: 'Masukkan pekerjaan..',
                               ),
-                              const CustomLabelBiodata(
-                                  text: 'Nama Perusahaan (Opsional)'),
+                              const CustomLabelBiodata(text: 'Nama Perusahaan (Opsional)'),
                               CustomTextFormField(
                                 controller: provider.motherCompanyController,
                                 hintText: 'Masukkan nama perusahaan..',
@@ -166,22 +153,23 @@ class _FamilyPageState extends State<FamilyPage> {
                               // --- SIBLINGS SECTION ---
                               Divider(color: Colors.grey[200]),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const CustomTextBiodata(text: 'Data Saudara'),
                                   TextButton.icon(
                                     onPressed: provider.addSibling,
-                                    icon: const Icon(Icons.add,
-                                        size: 16, color: AppColors.primary),
-                                    label: const Text('Tambah',
-                                        style: TextStyle(
-                                            color: AppColors.primary,
-                                            fontWeight: FontWeight.bold)),
+                                    icon: const Icon(Icons.add, size: 16, color: AppColors.primary),
+                                    label: const Text(
+                                      'Tambah',
+                                      style: TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                              
+
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -201,8 +189,7 @@ class _FamilyPageState extends State<FamilyPage> {
                                 value: provider.statusMarriedOption,
                                 items: provider.statusMarriedMap,
                                 label: 'Pilih Status Pernikahan',
-                                onChanged: (val) =>
-                                    provider.setStatusMarriedOption(val),
+                                onChanged: (val) => provider.setStatusMarriedOption(val),
                                 errorText: 'Status pernikahan wajib diisi',
                               ),
 
@@ -212,43 +199,35 @@ class _FamilyPageState extends State<FamilyPage> {
                                 CustomTextFormField(
                                   controller: provider.coupleNameController,
                                   hintText: 'Masukkan nama lengkap..',
-                                  validator: (value) =>
-                                      (value == null || value.isEmpty)
-                                          ? 'Nama tidak boleh kosong !'
-                                          : null,
+                                  validator: (value) => (value == null || value.isEmpty)
+                                      ? 'Nama tidak boleh kosong !'
+                                      : null,
                                 ),
                                 const CustomLabelBiodata(text: 'Usia'),
                                 CustomTextFormField(
                                   controller: provider.coupleAgeController,
                                   hintText: 'Masukkan usia..',
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  validator: (value) =>
-                                      (value == null || value.isEmpty)
-                                          ? 'Usia tidak boleh kosong !'
-                                          : null,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                  validator: (value) => (value == null || value.isEmpty)
+                                      ? 'Usia tidak boleh kosong !'
+                                      : null,
                                 ),
-                                const CustomLabelBiodata(
-                                    text: 'Pendidikan Terakhir'),
+                                const CustomLabelBiodata(text: 'Pendidikan Terakhir'),
                                 _buildDropdown(
                                   context,
                                   value: provider.coupleEducationOption,
                                   items: provider.itemsEducation,
                                   label: 'Pilih pendidikan..',
-                                  onChanged: (val) =>
-                                      provider.setCoupleEducationOption(val),
+                                  onChanged: (val) => provider.setCoupleEducationOption(val),
                                   errorText: 'Pendidikan tidak boleh kosong !',
                                 ),
-                                const CustomLabelBiodata(
-                                    text: 'Pekerjaan Terakhir (Opsional)'),
+                                const CustomLabelBiodata(text: 'Pekerjaan Terakhir (Opsional)'),
                                 CustomTextFormField(
                                   controller: provider.coupleJobController,
                                   hintText: 'Masukkan pekerjaan..',
                                 ),
-                                const CustomLabelBiodata(
-                                    text: 'Nama Perusahaan (Opsional)'),
+                                const CustomLabelBiodata(text: 'Nama Perusahaan (Opsional)'),
                                 CustomTextFormField(
                                   controller: provider.coupleCompanyController,
                                   hintText: 'Masukkan nama perusahaan..',
@@ -256,32 +235,35 @@ class _FamilyPageState extends State<FamilyPage> {
 
                                 // --- CHILDREN SECTION ---
                                 const SizedBox(height: 10),
-                                const CustomLabelBiodata(
-                                    text: 'Apakah Memiliki Anak?'),
+                                const CustomLabelBiodata(text: 'Apakah Memiliki Anak?'),
                                 _buildDropdown(
                                   context,
                                   value: provider.statusChildOption,
                                   items: provider.statusChildMap,
                                   label: 'Pilih..',
-                                  onChanged: (val) =>
-                                      provider.setStatusChildOption(val),
+                                  onChanged: (val) => provider.setStatusChildOption(val),
                                   errorText: 'Pilih salah satu!',
                                 ),
-                                
+
                                 if (provider.statusChildOption == '2') ...[
-                                    Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       const CustomTextBiodata(text: 'Data Anak'),
                                       TextButton.icon(
                                         onPressed: provider.addChildren,
-                                        icon: const Icon(Icons.add,
-                                            size: 16, color: AppColors.primary),
-                                        label: const Text('Tambah',
-                                            style: TextStyle(
-                                                color: AppColors.primary,
-                                                fontWeight: FontWeight.bold)),
+                                        icon: const Icon(
+                                          Icons.add,
+                                          size: 16,
+                                          color: AppColors.primary,
+                                        ),
+                                        label: const Text(
+                                          'Tambah',
+                                          style: TextStyle(
+                                            color: AppColors.primary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -294,7 +276,6 @@ class _FamilyPageState extends State<FamilyPage> {
                                     },
                                   ),
                                 ],
-                              
                               ],
 
                               const SizedBox(height: 40),
@@ -320,25 +301,26 @@ class _FamilyPageState extends State<FamilyPage> {
             Expanded(
               child: OutlinedButton(
                 onPressed: () {
-                  context.pop(); 
+                  context.pop();
                 },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.primary),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.arrow_back_ios_new_rounded,
-                        size: 16, color: AppColors.primary),
+                    Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: AppColors.primary),
                     SizedBox(width: 8),
-                    Text('Kembali',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary)),
+                    Text(
+                      'Kembali',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -346,27 +328,30 @@ class _FamilyPageState extends State<FamilyPage> {
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  context.read<FamilyProvider>().submit();
-                   // TODO: Navigate to next page when implemented
+                onPressed: () async {
+                  await context.read<FamilyProvider>().submit();
+                  if (context.mounted) {
+                    context.pushNamed(RouteNames.documentForm);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Selanjutnya',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
+                    Text(
+                      'Selanjutnya',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                     SizedBox(width: 8),
-                    Icon(Icons.arrow_forward_ios_rounded,
-                        size: 16, color: Colors.white),
+                    Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
                   ],
                 ),
               ),
@@ -376,7 +361,7 @@ class _FamilyPageState extends State<FamilyPage> {
       ),
     );
   }
-  
+
   // --- Helper Widgets ---
 
   Widget _buildDropdown(
@@ -393,195 +378,210 @@ class _FamilyPageState extends State<FamilyPage> {
         value: value,
         style: const TextStyle(color: Colors.black, fontSize: 14),
         items: items.entries.map((entry) {
-          return DropdownMenuItem<String>(
-              value: entry.key, child: Text(entry.value));
+          return DropdownMenuItem<String>(value: entry.key, child: Text(entry.value));
         }).toList(),
         onChanged: onChanged,
         validator: (val) => (val == null || val.isEmpty) ? errorText : null,
         decoration: InputDecoration(
           labelText: label,
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
         menuMaxHeight: 200.0,
       ),
     );
   }
-  
+
   Widget _buildSiblingForm(BuildContext context, FamilyProvider provider, int index) {
-      return Card(
-        margin: const EdgeInsets.only(bottom: 16),
-        elevation: 0,
-        color: Colors.grey[50],
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: Colors.grey.shade300)),
-        child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                            Text('Saudara ke-${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                            IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => provider.removeSibling(index),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                            ),
-                        ],
-                    ),
-                    const CustomLabelBiodata(text: 'Nama Lengkap'),
-                    CustomTextFormField(
-                        controller: provider.nameSiblingControllers[index],
-                        hintText: 'Nama saudara..',
-                         validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
-                    ),
-                    const CustomLabelBiodata(text: 'Jenis Kelamin'),
-                    Row(
-                        children: [
-                            Expanded(child: ListTile(
-                                title: const Text('Laki-laki', style: TextStyle(fontSize: 14)),
-                                contentPadding: EdgeInsets.zero,
-                                leading: Radio<String>(
-                                    value: 'L',
-                                    groupValue: provider.genderSiblingControllers[index],
-                                    onChanged: (val) => provider.setSiblingGender(index, val!),
-                                    activeColor: AppColors.primary,
-                                ),
-                            )),
-                             Expanded(child: ListTile(
-                                title: const Text('Perempuan', style: TextStyle(fontSize: 14)),
-                                contentPadding: EdgeInsets.zero,
-                                leading: Radio<String>(
-                                    value: 'P',
-                                    groupValue: provider.genderSiblingControllers[index],
-                                    onChanged: (val) => provider.setSiblingGender(index, val!),
-                                     activeColor: AppColors.primary,
-                                ),
-                            )),
-                        ],
-                    ),
-                    const CustomLabelBiodata(text: 'Usia'),
-                    CustomTextFormField(
-                        controller: provider.ageSiblingControllers[index],
-                        hintText: 'Usia..',
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
-                    ),
-                    const CustomLabelBiodata(text: 'Pendidikan'),
-                    _buildDropdown(
-                        context,
-                        value: provider.educationSiblingOptions[index],
-                        items: provider.itemsEducation,
-                        label: 'Pilih Pendidikan',
-                        onChanged: (val) => provider.setSiblingEducation(index, val),
-                        errorText: 'Wajib diisi',
-                    ),
-                     const CustomLabelBiodata(text: 'Pekerjaan (Opsional)'),
-                     CustomTextFormField(
-                         controller: provider.jobSiblingControllers[index],
-                         hintText: 'Pekerjaan..',
-                     ),
-                      const CustomLabelBiodata(text: 'Perusahaan (Opsional)'),
-                     CustomTextFormField(
-                         controller: provider.companySiblingControllers[index],
-                         hintText: 'Perusahaan..',
-                     ),
-                ],
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      elevation: 0,
+      color: Colors.grey[50],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Saudara ke-${index + 1}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => provider.removeSibling(index),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
             ),
+            const CustomLabelBiodata(text: 'Nama Lengkap'),
+            CustomTextFormField(
+              controller: provider.nameSiblingControllers[index],
+              hintText: 'Nama saudara..',
+              validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+            ),
+            const CustomLabelBiodata(text: 'Jenis Kelamin'),
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    title: const Text('Laki-laki', style: TextStyle(fontSize: 14)),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<String>(
+                      value: 'L',
+                      groupValue: provider.genderSiblingControllers[index],
+                      onChanged: (val) => provider.setSiblingGender(index, val!),
+                      activeColor: AppColors.primary,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: const Text('Perempuan', style: TextStyle(fontSize: 14)),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<String>(
+                      value: 'P',
+                      groupValue: provider.genderSiblingControllers[index],
+                      onChanged: (val) => provider.setSiblingGender(index, val!),
+                      activeColor: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const CustomLabelBiodata(text: 'Usia'),
+            CustomTextFormField(
+              controller: provider.ageSiblingControllers[index],
+              hintText: 'Usia..',
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+            ),
+            const CustomLabelBiodata(text: 'Pendidikan'),
+            _buildDropdown(
+              context,
+              value: provider.educationSiblingOptions[index],
+              items: provider.itemsEducation,
+              label: 'Pilih Pendidikan',
+              onChanged: (val) => provider.setSiblingEducation(index, val),
+              errorText: 'Wajib diisi',
+            ),
+            const CustomLabelBiodata(text: 'Pekerjaan (Opsional)'),
+            CustomTextFormField(
+              controller: provider.jobSiblingControllers[index],
+              hintText: 'Pekerjaan..',
+            ),
+            const CustomLabelBiodata(text: 'Perusahaan (Opsional)'),
+            CustomTextFormField(
+              controller: provider.companySiblingControllers[index],
+              hintText: 'Perusahaan..',
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Widget _buildChildrenForm(BuildContext context, FamilyProvider provider, int index) {
-      return Card(
-        margin: const EdgeInsets.only(bottom: 16),
-        elevation: 0,
-        color: Colors.grey[50],
-         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: Colors.grey.shade300)),
-        child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                            Text('Anak ke-${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                            IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => provider.removeChildren(index),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                            ),
-                        ],
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      elevation: 0,
+      color: Colors.grey[50],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Anak ke-${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => provider.removeChildren(index),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+            const CustomLabelBiodata(text: 'Nama Lengkap'),
+            CustomTextFormField(
+              controller: provider.nameChildrenControllers[index],
+              hintText: 'Nama anak..',
+              validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+            ),
+            const CustomLabelBiodata(text: 'Jenis Kelamin'),
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    title: const Text('Laki-laki', style: TextStyle(fontSize: 14)),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<String>(
+                      value: 'L',
+                      groupValue: provider.genderChildrenControllers[index],
+                      onChanged: (val) => provider.setChildGender(index, val!),
+                      activeColor: AppColors.primary,
                     ),
-                    const CustomLabelBiodata(text: 'Nama Lengkap'),
-                    CustomTextFormField(
-                        controller: provider.nameChildrenControllers[index],
-                        hintText: 'Nama anak..',
-                         validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: const Text('Perempuan', style: TextStyle(fontSize: 14)),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<String>(
+                      value: 'P',
+                      groupValue: provider.genderChildrenControllers[index],
+                      onChanged: (val) => provider.setChildGender(index, val!),
+                      activeColor: AppColors.primary,
                     ),
-                    const CustomLabelBiodata(text: 'Jenis Kelamin'),
-                    Row(
-                        children: [
-                            Expanded(child: ListTile(
-                                title: const Text('Laki-laki', style: TextStyle(fontSize: 14)),
-                                contentPadding: EdgeInsets.zero,
-                                leading: Radio<String>(
-                                    value: 'L',
-                                    groupValue: provider.genderChildrenControllers[index],
-                                    onChanged: (val) => provider.setChildGender(index, val!),
-                                    activeColor: AppColors.primary,
-                                ),
-                            )),
-                             Expanded(child: ListTile(
-                                title: const Text('Perempuan', style: TextStyle(fontSize: 14)),
-                                contentPadding: EdgeInsets.zero,
-                                leading: Radio<String>(
-                                    value: 'P',
-                                    groupValue: provider.genderChildrenControllers[index],
-                                    onChanged: (val) => provider.setChildGender(index, val!),
-                                     activeColor: AppColors.primary,
-                                ),
-                            )),
-                        ],
-                    ),
-                     const CustomLabelBiodata(text: 'Usia'),
-                    CustomTextFormField(
-                        controller: provider.ageChildrenControllers[index],
-                        hintText: 'Usia..',
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
-                    ),
-                     const CustomLabelBiodata(text: 'Pendidikan Terakhir'),
-                    _buildDropdown(
-                        context,
-                        value: provider.educationChildrenOptions[index],
-                        items: provider.itemsLastEducation,
-                        label: 'Pilih Pendidikan',
-                        onChanged: (val) => provider.setChildEducation(index, val),
-                        errorText: 'Wajib diisi',
-                    ),
-                     const CustomLabelBiodata(text: 'Pekerjaan (Opsional)'),
-                     CustomTextFormField(
-                         controller: provider.jobChildrenControllers[index],
-                         hintText: 'Pekerjaan..',
-                     ),
-                      const CustomLabelBiodata(text: 'Perusahaan (Opsional)'),
-                     CustomTextFormField(
-                         controller: provider.companyChildrenControllers[index],
-                         hintText: 'Perusahaan..',
-                     ),
-                ]
-            )
-        )
-      );
+                  ),
+                ),
+              ],
+            ),
+            const CustomLabelBiodata(text: 'Usia'),
+            CustomTextFormField(
+              controller: provider.ageChildrenControllers[index],
+              hintText: 'Usia..',
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+            ),
+            const CustomLabelBiodata(text: 'Pendidikan Terakhir'),
+            _buildDropdown(
+              context,
+              value: provider.educationChildrenOptions[index],
+              items: provider.itemsLastEducation,
+              label: 'Pilih Pendidikan',
+              onChanged: (val) => provider.setChildEducation(index, val),
+              errorText: 'Wajib diisi',
+            ),
+            const CustomLabelBiodata(text: 'Pekerjaan (Opsional)'),
+            CustomTextFormField(
+              controller: provider.jobChildrenControllers[index],
+              hintText: 'Pekerjaan..',
+            ),
+            const CustomLabelBiodata(text: 'Perusahaan (Opsional)'),
+            CustomTextFormField(
+              controller: provider.companyChildrenControllers[index],
+              hintText: 'Perusahaan..',
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -603,13 +603,13 @@ class HeaderScrollFamily extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                 _checkContract(isActive: true, number: 1, title: "Biodata"),
-                 _checkContract(isActive: true, number: 2, title: "Riwayat Pendidikan"),
-                 _checkContract(isActive: true, number: 3, title: "Data Keluarga"),
-                 _checkContract(number: 4, title: "Kelengkapan Dokumen"),
-                 _checkContract(number: 5, title: "Keahlian"),
-                 _checkContract(number: 6, title: "Ambil Foto Selfie"),
-                 _checkContract(number: 7, title: "Ambil Foto Selfie dengan KTP"),
+                _checkContract(isActive: true, number: 1, title: "Biodata"),
+                _checkContract(isActive: true, number: 2, title: "Riwayat Pendidikan"),
+                _checkContract(isActive: true, number: 3, title: "Data Keluarga"),
+                _checkContract(number: 4, title: "Kelengkapan Dokumen"),
+                _checkContract(number: 5, title: "Keahlian"),
+                _checkContract(number: 6, title: "Ambil Foto Selfie"),
+                _checkContract(number: 7, title: "Ambil Foto Selfie dengan KTP"),
               ],
             ),
           ),
@@ -617,48 +617,48 @@ class HeaderScrollFamily extends StatelessWidget {
       ),
     );
   }
-  
-    Widget _checkContract({required int number, required String title, bool isActive = false}) {
-      return Row( 
-        children: [
-            if (number != 1)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    width: 40,
-                    height: 3,
-                    color: isActive ? const Color(0xffFDE0D1) : AppColors.secondary,
-                  ),
-                ),
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isActive ? AppColors.primary : Colors.white,
-                border: Border.all(color: isActive ? AppColors.primary : AppColors.secondary),
-              ),
-              child: Center(
-                child: Text(
-                  number.toString(),
-                  style: TextStyle(
-                    color: isActive ? Colors.white : AppColors.secondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+
+  Widget _checkContract({required int number, required String title, bool isActive = false}) {
+    return Row(
+      children: [
+        if (number != 1)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Container(
+              width: 40,
+              height: 3,
+              color: isActive ? const Color(0xffFDE0D1) : AppColors.secondary,
             ),
-            const SizedBox(width: 8),
-            Text(
-              title,
+          ),
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isActive ? AppColors.primary : Colors.white,
+            border: Border.all(color: isActive ? AppColors.primary : AppColors.secondary),
+          ),
+          child: Center(
+            child: Text(
+              number.toString(),
               style: TextStyle(
-                fontSize: 16,
-                color: isActive ? AppColors.primary : AppColors.secondary,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                color: isActive ? Colors.white : AppColors.secondary,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
               ),
             ),
-        ],
-      );
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            color: isActive ? AppColors.primary : AppColors.secondary,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ],
+    );
   }
 }
