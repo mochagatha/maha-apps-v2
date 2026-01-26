@@ -43,4 +43,5 @@ class RouteNames {
   static const String educationForm = 'education-form';
   static const String familyForm = 'family-form';
   static const String documentForm = 'document-form';
+  static const String skillForm = 'skill-form';
 }

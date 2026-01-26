@@ -27,6 +27,8 @@ import '../../features/biodata/presentation/pages/family_page.dart';
 import '../../features/biodata/presentation/providers/family_provider.dart';
 import '../../features/biodata/presentation/pages/document_page.dart';
 import '../../features/biodata/presentation/providers/document_provider.dart';
+import '../../features/biodata/presentation/pages/skill_page.dart';
+import '../../features/biodata/presentation/providers/skill_provider.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 
 class AppRouter {
@@ -165,6 +167,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => DocumentProvider(),
             child: const DocumentPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.skillForm,
+          name: RouteNames.skillForm,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => SkillProvider(),
+            child: const SkillPage(),
           ),
         ),
       ],

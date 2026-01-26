@@ -44,4 +44,5 @@ class RoutePaths {
   static const String educationForm = '/biodata/education';
   static const String familyForm = '/biodata/family';
   static const String documentForm = '/biodata/document';
+  static const String skillForm = '/biodata/skill';
 }
