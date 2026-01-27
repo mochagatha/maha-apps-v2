@@ -31,7 +31,7 @@ class RecruitmentMenuMapper {
         };
       case kodePerusahaan:
         return {
-          'icon': 'assets/images/icon/icon_verifikasi_data.svg',
+          'icon': 'assets/images/icon/icon_verifikasi_kode.svg',
           'route': RoutePaths.companyCode,
           'isAsset': true,
         };

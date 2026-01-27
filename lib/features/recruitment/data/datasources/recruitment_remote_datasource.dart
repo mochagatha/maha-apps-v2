@@ -40,7 +40,7 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
     {
       'id': 'REKRUTMENT/KODE_PERUSAHAAN',
       'label': 'Kode Perusahaan',
-      'icon': 'assets/images/icon/icon_verifikasi_data.svg',
+      'icon': 'assets/images/icon/icon_verifikasi_kode.svg',
       'route': '/recruitment/company-code',
       'count': 0,
     },
