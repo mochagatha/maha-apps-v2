@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     "Manajer TI": "setia@mahasejahtera.com",
     "Komisaris": "kris@mahasejahtera.com",
     "Direktur": "hazri@mahasejahtera.com",
+    "System Admin": "admin@mahasejahtera.com",
   };
   String? _selectedRole;
 
