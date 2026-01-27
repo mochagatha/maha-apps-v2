@@ -43,6 +43,7 @@ import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 import '../../features/recruitment/presentation/pages/verification_data_page.dart';
 import '../../features/recruitment/presentation/pages/employee_verification_page.dart';
+import '../../features/recruitment/presentation/pages/company_code_page.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -241,6 +242,11 @@ class AppRouter {
           path: RoutePaths.employeeVerification,
           name: RouteNames.employeeVerification,
           builder: (context, state) => const EmployeeVerificationPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.companyCode,
+          name: RouteNames.companyCode,
+          builder: (context, state) => const CompanyCodePage(),
         ),
       ],
 

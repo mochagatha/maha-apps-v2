@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/recruitment_provider.dart';
 import '../widgets/recruitment_menu_card.dart';
+import '../../utils/recruitment_menu_mapper.dart';
 
 class RecruitmentPage extends StatefulWidget {
   const RecruitmentPage({super.key});
@@ -33,10 +34,7 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
       appBar: AppBar(
         title: const Text(
           'Rekrutmen',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.primary,
         elevation: 0,
@@ -46,12 +44,7 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
         builder: (context, provider, child) {
           // Loading state
           if (provider.isLoading && provider.menuItems.isEmpty) {
-            return const Center(
-              child: SpinKitThreeBounce(
-                color: AppColors.primary,
-                size: 50.0,
-              ),
-            );
+            return const Center(child: SpinKitThreeBounce(color: AppColors.primary, size: 50.0));
           }
 
           // Error state
@@ -60,11 +53,7 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: AppColors.error,
-                  ),
+                  const Icon(Icons.error_outline, size: 64, color: AppColors.error),
                   const SizedBox(height: 16),
                   Text(
                     provider.errorMessage ?? 'Terjadi kesalahan',
@@ -88,10 +77,7 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
           // Empty state
           if (provider.menuItems.isEmpty) {
             return const Center(
-              child: Text(
-                'Tidak ada menu rekrutmen tersedia',
-                style: TextStyle(fontSize: 16),
-              ),
+              child: Text('Tidak ada menu rekrutmen tersedia', style: TextStyle(fontSize: 16)),
             );
           }
 
@@ -103,20 +89,20 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
               itemCount: provider.menuItems.length,
               itemBuilder: (context, index) {
                 final menuItem = provider.menuItems[index];
+
+                // Get route from mapper
+                final route = RecruitmentMenuMapper.getRoute(menuItem.id);
+
                 return RecruitmentMenuCard(
                   menuItem: menuItem,
                   onTap: () {
-                    if (menuItem.route != null) {
+                    if (route != null) {
                       // Navigate using go_router
-                      context.push(menuItem.route!);
+                      context.push(route);
                     } else {
                       // Show coming soon message
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Fitur ${menuItem.label} akan segera hadir!',
-                          ),
-                        ),
+                        SnackBar(content: Text('Fitur ${menuItem.label} akan segera hadir!')),
                       );
                     }
                   },

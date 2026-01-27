@@ -54,4 +54,53 @@ class RoutePaths {
   static const String selfieResultKtp = '/biodata/selfie-ktp/result';
   static const String verificationData = '/recruitment/verification-data';
   static const String employeeVerification = '/recruitment/employee-verification';
+  static const String companyCode = '/recruitment/company-code';
+  
+  // Recruitment Submenus
+  static const String recruitmentAgreement = '/recruitment/agreement';
+  static const String recruitmentBpjsActivation = '/recruitment/bpjs-activation';
+  
+  // Approval Submenus (Persetujuan)
+  static const String approvalSupervision = '/approval/supervision';
+  static const String approvalWorkPlan = '/approval/work-plan';
+  static const String approvalAssignmentLetter = '/approval/assignment-letter';
+  static const String approvalWarning = '/approval/warning';
+  static const String approvalHandover = '/approval/handover';
+  static const String approvalDeduction = '/approval/deduction';
+  static const String approvalIncome = '/approval/income';
+  static const String approvalCostControl = '/approval/cost-control';
+  static const String approvalDataVerification = '/approval/data-verification';
+  static const String approvalContractChange = '/approval/contract-change';
+  static const String approvalPromotion = '/approval/promotion';
+  static const String approvalDemotion = '/approval/demotion';
+  static const String approvalTransfer = '/approval/transfer';
+  static const String approvalAttendanceAnywhere = '/approval/attendance-anywhere';
+  static const String approvalSalaryIncrease = '/approval/salary-increase';
+  static const String approvalSalaryDecrease = '/approval/salary-decrease';
+  static const String approvalOvertimeDirector = '/approval/overtime-director';
+  static const String approvalPermitDirector = '/approval/permit-director';
+  static const String approvalSickDirector = '/approval/sick-director';
+  static const String approvalLeaveDirector = '/approval/leave-director';
+  static const String approvalAgreementDirector = '/approval/agreement-director';
+  static const String approvalSalaryDirector = '/approval/salary-director';
+  static const String approvalLoanDirector = '/approval/loan-director';
+  
+  // Monitoring Submenus (Mengamati)
+  static const String monitoringActivityLog = '/monitoring/activity-log';
+  static const String monitoringKpi = '/monitoring/kpi';
+  static const String monitoringSalary = '/monitoring/salary';
+  static const String monitoringAttendance = '/monitoring/attendance';
+  static const String monitoringWorkPlan = '/monitoring/work-plan';
+  static const String monitoringTask = '/monitoring/task';
+  
+  // Attendance Submenus (Absensi)
+  static const String attendancePresent = '/attendance/present';
+  static const String attendanceOvertime = '/attendance/overtime';
+  static const String attendancePermit = '/attendance/permit';
+  static const String attendanceSick = '/attendance/sick';
+  static const String attendanceLeave = '/attendance/leave';
+  static const String attendanceSupervision = '/attendance/supervision';
+  static const String attendanceSupervision2 = '/attendance/supervision-2';
+  static const String attendanceAnywhere = '/attendance/anywhere';
 }
+

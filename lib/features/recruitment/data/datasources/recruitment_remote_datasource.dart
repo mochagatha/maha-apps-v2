@@ -37,6 +37,13 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
       'route': null, // Will be implemented later
       'count': 0,
     },
+    {
+      'id': 'REKRUTMENT/KODE_PERUSAHAAN',
+      'label': 'Kode Perusahaan',
+      'icon': 'assets/images/icon/icon_verifikasi_data.svg',
+      'route': '/recruitment/company-code',
+      'count': 0,
+    },
   ];
 
   @override
@@ -48,29 +55,25 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
 
       if (jobTitleId == null) {
         // If no job title, return default menus
-        return _allRecruitmentMenus
-            .map((json) => RecruitmentMenuItemModel.fromJson(json))
-            .toList();
+        return _allRecruitmentMenus.map((json) => RecruitmentMenuItemModel.fromJson(json)).toList();
       }
 
       // Fetch menu permissions from API
       // V1 uses: /employee/job-title-menu-application?parent_menu_application_id=X&job_title_id=Y
       // First, we need to get the parent menu ID for REKRUTMENT
       // For now, we'll use a hardcoded approach similar to v1's defaultGridItemIDs
-      
+
       try {
         // Get parent menu ID for REKRUTMENT (this would typically be fetched from menu API)
         // For simplicity, we'll fetch all job title menus and filter
         final response = await client.dioGolang.get(
           AppConstants.endpointJobTitleMenu,
-          queryParameters: {
-            'job_title_id': jobTitleId,
-          },
+          queryParameters: {'job_title_id': jobTitleId},
         );
 
         if (response.statusCode == 200) {
           final List<dynamic> menusJson = response.data['data'] ?? [];
-          
+
           // Extract menu names that belong to REKRUTMENT
           final allowedMenuNames = menusJson
               .map((item) => item['menu_application']?['name'] as String?)
@@ -98,9 +101,7 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
         }
       } catch (e) {
         // If API call fails, return default menus
-        return _allRecruitmentMenus
-            .map((json) => RecruitmentMenuItemModel.fromJson(json))
-            .toList();
+        return _allRecruitmentMenus.map((json) => RecruitmentMenuItemModel.fromJson(json)).toList();
       }
     } catch (e) {
       if (e is ServerException) {

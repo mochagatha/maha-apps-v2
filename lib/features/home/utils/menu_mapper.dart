@@ -1,204 +1,143 @@
 import 'package:flutter/material.dart';
-import 'package:maha_apps_v2/core/router/route_paths.dart';
+import 'package:maha_apps_v2/core/config/menu_config.dart';
 import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 
+/// Enhanced Menu Mapper using centralized MenuConfig
+/// Provides icon, route, and label mapping for all menu items
 class MenuMapper {
-  static const String absensi = 'ABSENSI';
-  static const String mengamati = 'MENGAMATI';
-  static const String persetujuan = 'PERSETUJUAN';
-  static const String rencanaKerja = 'RENCANA_KERJA';
-  static const String permintaan = 'PERMINTAAN';
-  static const String tugas = 'TUGAS';
-  static const String pengajuan = 'PENGAJUAN';
-  static const String administrasi = 'ADMINISTRASI';
-  static const String arsip = 'ARSIP';
-  static const String dataAbsensi = 'DATA_ABSENSI';
-  static const String dataKaryawan = 'DATA_KARYAWAN';
-  static const String proyek = 'PROYEK';
-  static const String aduan = 'ADUAN';
-  static const String dataPayroll = 'DATA_PAYROLL';
-  static const String kasir = 'KASIR';
-  static const String akuntansi = 'AKUNTANSI';
-  static const String rekrutment = 'REKRUTMENT';
-  static const String kpi = 'KPI';
-  static const String pengaturan = 'PENGATURAN';
-  static const String updateKontrak = 'UPDATE_KONTRAK';
+  // Menu codes are now centralized in MenuConfig
+  // For backward compatibility, expose them here as well
+  static const String absensi = MenuConfig.absensi;
+  static const String mengamati = MenuConfig.mengamati;
+  static const String persetujuan = MenuConfig.persetujuan;
+  static const String rencanaKerja = MenuConfig.rencanaKerja;
+  static const String permintaan = MenuConfig.permintaan;
+  static const String tugas = MenuConfig.tugas;
+  static const String pengajuan = MenuConfig.pengajuan;
+  static const String administrasi = MenuConfig.administrasi;
+  static const String arsip = MenuConfig.arsip;
+  static const String dataAbsensi = MenuConfig.dataAbsensi;
+  static const String dataKaryawan = MenuConfig.dataKaryawan;
+  static const String proyek = MenuConfig.proyek;
+  static const String aduan = MenuConfig.aduan;
+  static const String dataPayroll = MenuConfig.dataPayroll;
+  static const String kasir = MenuConfig.kasir;
+  static const String akuntansi = MenuConfig.akuntansi;
+  static const String rekrutment = MenuConfig.rekrutment;
+  static const String kpi = MenuConfig.kpi;
+  static const String pengaturan = MenuConfig.pengaturan;
+  static const String updateKontrak = MenuConfig.updateKontrak;
 
-  static Map<String, dynamic> getMenuDetails(String id) {
-    switch (id) {
-      case absensi:
-        return {
-          'icon': 'assets/images/icon/absensi.png',
-          'route': RoutePaths.absensi, // Make sure this exists in RoutePaths
-          'isAsset': true,
-        };
-      case mengamati:
-        return {
-          'icon': 'assets/images/icon/monitoring_payroll.png',
-          'route': RoutePaths.monitoringList, // Make sure this exists
-          'isAsset': true,
-        };
-      case persetujuan:
-        return {
-          'icon': 'assets/images/icon/approval.png',
-          'route': RoutePaths.approvalList,
-          'isAsset': true,
-        };
-      case rencanaKerja:
-        return {
-          'icon': 'assets/images/icon/rencanakerja.png',
-          'route': RoutePaths.workerPlanManager,
-          'isAsset': true,
-        };
-      case permintaan:
-        return {
-          'icon': 'assets/images/icon/permintaan.png',
-          'route': RoutePaths.permintaan,
-          'isAsset': true,
-        };
-      case tugas:
-        return {
-          'icon': 'assets/images/icon/tugas.png',
-          'route': RoutePaths.listFeature,
-          'isAsset': true,
-        };
-      case pengajuan:
-        return {
-          'icon': 'assets/images/icon/pengajuan.png',
-          'route': RoutePaths.requestHomeScreen,
-          'isAsset': true,
-        };
-      case administrasi:
-        return {
-          'icon': 'assets/images/icon/administrasi.png',
-          'route': RoutePaths.administration,
-          'isAsset': true,
-        };
-      case arsip:
-        return {
-          'icon': 'assets/images/icon/arsip.png',
-          'route': RoutePaths.arsipMenu,
-          'isAsset': true,
-        };
-      case dataAbsensi:
-        return {
-          'icon': 'assets/images/icon/data_absensi.png',
-          'route': RoutePaths.dataAbsensi,
-          'isAsset': true,
-        };
-      case dataKaryawan:
-        return {
-          'icon': 'assets/images/icon/data_karyawan.png',
-          'route': RoutePaths.dataKaryawanList,
-          'isAsset': true,
-        };
-      case proyek:
-        return {
-          'icon': 'assets/images/icon/proyek.png',
-          'route': RoutePaths.listProyek,
-          'isAsset': true,
-        };
-      case aduan:
-        return {
-          'icon': 'assets/images/icon/assistant.png',
-          'route': RoutePaths.reportList,
-          'isAsset': true,
-        };
-      case dataPayroll:
-        return {
-          'icon': 'assets/images/icon/data_payroll.png',
-          'route': RoutePaths.dataListPayroll,
-          'isAsset': true,
-        };
-      case kasir:
-        return {
-          'icon': 'assets/images/icon/cashier-png.png',
-          'route': RoutePaths.approvalNew,
-          'isAsset': true,
-        };
-      case akuntansi:
-        return {
-          'icon': 'assets/images/icon/akuntansi-png.png',
-          'route': RoutePaths.approvalNew,
-          'isAsset': true,
-        };
-      case rekrutment:
-        return {
-          'icon': 'assets/images/icon/rekrutmen.png',
-          'route': RoutePaths.recruitment,
-          'isAsset': true,
-        };
-      case kpi:
-        return {
-          'icon': 'assets/images/icon/KPI.png',
-          'route': RoutePaths.kpi,
-          'isAsset': true,
-        };
-      case pengaturan:
-        return {
-          'icon': 'assets/images/icon/setting_icon.png',
-          'route': RoutePaths.setting,
-          'isAsset': true,
-        };
-      case updateKontrak:
-        return {
-          'icon': 'assets/images/icon/update_kontrak.png',
-          'route': RoutePaths.contractUpdates,
-          'isAsset': true,
-        };
-      default:
-        return {
-          'icon': 'assets/images/icon/logo.png', // Default icon
-          'route': null,
-          'isAsset': true,
-        };
-    }
+  /// Get menu details (icon, route, isAsset) for a menu code
+  /// Uses centralized MenuConfig for mapping
+  static Map<String, dynamic> getMenuDetails(String menuCode) {
+    final icon = MenuConfig.getIconPath(menuCode);
+    final route = MenuConfig.getRoute(menuCode);
+    
+    return {
+      'icon': icon,
+      'route': route,
+      'isAsset': true,
+    };
   }
-  static String getMenuLabel(BuildContext context, String id) {
-    switch (id) {
-      case absensi:
+
+  /// Get localized menu label
+  /// Falls back to formatted menu code if no localization available
+  static String getMenuLabel(BuildContext context, String menuCode) {
+    // Try to get localized label
+    final label = _getLocalizedLabel(context, menuCode);
+    if (label != null) {
+      return label;
+    }
+
+    // Fallback: format menu code to human-readable string
+    return _formatMenuCode(menuCode);
+  }
+
+  /// Get localized label for menu code
+  static String? _getLocalizedLabel(BuildContext context, String menuCode) {
+    switch (menuCode) {
+      // Main Menus
+      case MenuConfig.absensi:
         return context.l10n.menuAbsensi;
-      case mengamati:
+      case MenuConfig.mengamati:
         return context.l10n.menuMengamati;
-      case persetujuan:
+      case MenuConfig.persetujuan:
         return context.l10n.menuPersetujuan;
-      case rencanaKerja:
+      case MenuConfig.rencanaKerja:
         return context.l10n.menuRencanaKerja;
-      case permintaan:
+      case MenuConfig.permintaan:
         return context.l10n.menuPermintaan;
-      case tugas:
+      case MenuConfig.tugas:
         return context.l10n.menuTugas;
-      case pengajuan:
+      case MenuConfig.pengajuan:
         return context.l10n.menuPengajuan;
-      case administrasi:
+      case MenuConfig.administrasi:
         return context.l10n.menuAdministrasi;
-      case arsip:
+      case MenuConfig.arsip:
         return context.l10n.menuArsip;
-      case dataAbsensi:
+      case MenuConfig.dataAbsensi:
         return context.l10n.menuDataAbsensi;
-      case dataKaryawan:
+      case MenuConfig.dataKaryawan:
         return context.l10n.menuDataKaryawan;
-      case proyek:
+      case MenuConfig.proyek:
         return context.l10n.menuProyek;
-      case aduan:
+      case MenuConfig.aduan:
         return context.l10n.menuAduan;
-      case dataPayroll:
+      case MenuConfig.dataPayroll:
         return context.l10n.menuDataPayroll;
-      case kasir:
+      case MenuConfig.kasir:
         return context.l10n.menuKasir;
-      case akuntansi:
+      case MenuConfig.akuntansi:
         return context.l10n.menuAkuntansi;
-      case rekrutment:
+      case MenuConfig.rekrutment:
         return context.l10n.menuRekrutmen;
-      case kpi:
+      case MenuConfig.kpi:
         return context.l10n.menuKpi;
-      case pengaturan:
+      case MenuConfig.pengaturan:
         return context.l10n.menuPengaturan;
-      case updateKontrak:
+      case MenuConfig.updateKontrak:
         return context.l10n.menuUpdateKontrak;
       default:
-        // Attempt to return a human-readable fallback if possible, or just the ID
-        return id.replaceAll('_', ' ').toLowerCase().split(' ').map((word) => word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1)}' : '').join(' ');
+        return null;
     }
   }
+
+  /// Format menu code to human-readable string
+  /// Example: "RENCANA_KERJA" -> "Rencana Kerja"
+  static String _formatMenuCode(String menuCode) {
+    // Handle nested menu codes (e.g., "PERSETUJUAN/PENGAWASAN")
+    final parts = menuCode.split('/');
+    final lastPart = parts.last;
+    
+    return lastPart
+        .replaceAll('_', ' ')
+        .toLowerCase()
+        .split(' ')
+        .map((word) => word.isNotEmpty 
+            ? '${word[0].toUpperCase()}${word.substring(1)}' 
+            : '')
+        .join(' ');
+  }
+
+  /// Check if menu has a configured route
+  static bool hasRoute(String menuCode) {
+    return MenuConfig.hasRoute(menuCode);
+  }
+
+  /// Check if menu has a configured icon
+  static bool hasIcon(String menuCode) {
+    return MenuConfig.hasIcon(menuCode);
+  }
+
+  /// Get icon path for menu code
+  static String getIconPath(String menuCode) {
+    return MenuConfig.getIconPath(menuCode);
+  }
+
+  /// Get route for menu code
+  static String? getRoute(String menuCode) {
+    return MenuConfig.getRoute(menuCode);
+  }
 }
+
