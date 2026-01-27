@@ -3,10 +3,14 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/constants.dart';
 import '../models/recruitment_menu_item_model.dart';
+import '../models/company_code_model.dart';
 
 abstract class RecruitmentRemoteDataSource {
   /// Get recruitment menus based on job title permissions
   Future<List<RecruitmentMenuItemModel>> getRecruitmentMenus();
+
+  /// Get company code from API
+  Future<CompanyCodeModel> getCompanyCode();
 }
 
 class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
@@ -108,6 +112,26 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
         rethrow;
       }
       throw ServerException('Failed to get recruitment menus: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<CompanyCodeModel> getCompanyCode() async {
+    try {
+      // Use dioGolang for company code endpoint
+      // Endpoint: /letter/code-company
+      final response = await client.dioGolang.get('/letter/code-company');
+
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        return CompanyCodeModel.fromJson(response.data['data']);
+      } else {
+        throw ServerException(response.data['message'] ?? 'Failed to get company code');
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to get company code: ${e.toString()}');
     }
   }
 }
