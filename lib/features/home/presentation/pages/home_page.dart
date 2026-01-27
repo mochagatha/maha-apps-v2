@@ -244,8 +244,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: 200, // Adjust height as needed for coverage
-                child: Container(color: AppColors.primary),
+                height: 160, // Adjust height as needed for coverage
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                  ),
+                ),
               ),
 
               // 2. Scrollable Content

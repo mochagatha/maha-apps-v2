@@ -32,9 +32,7 @@ class ProfileCard extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           content: SizedBox(
             width: MediaQuery.of(context).size.width - 120,
             child: Column(
@@ -42,11 +40,8 @@ class ProfileCard extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/images/icon/logout.png',
-                  errorBuilder: (context, error, stackTrace) => const Icon(
-                    Icons.logout,
-                    size: 64,
-                    color: AppColors.primary,
-                  ),
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.logout, size: 64, color: AppColors.primary),
                 ),
                 const SizedBox(height: 20),
                 Text.rich(
@@ -90,10 +85,7 @@ class ProfileCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
-                            side: const BorderSide(
-                              color: AppColors.primary,
-                              width: 1.5,
-                            ),
+                            side: const BorderSide(color: AppColors.primary, width: 1.5),
                           ),
                         ),
                         child: Text(context.l10n.yes),
@@ -110,9 +102,7 @@ class ProfileCard extends StatelessWidget {
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         ),
                         child: Text(context.l10n.cancel),
                       ),
@@ -139,29 +129,14 @@ class ProfileCard extends StatelessWidget {
       bottom: false,
       child: Stack(
         children: [
-          // Background Blur Image (V1 decoration)
-          // We can put it here, or in the parent. Let's keep it here but make sure it aligns.
           Container(
             alignment: Alignment.topCenter,
-            child: Opacity(
-              opacity: 0.3, // Subtle effect
-              child: Image.asset(
-                'assets/images/maha-blur.png',
-                width: double.infinity,
-                fit: BoxFit.cover,
-                height: 150,
-                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-              ),
-            ),
+            margin: const EdgeInsets.only(top: 10),
+            child: Image.asset('assets/images/maha-blur.png', width: 250, height: 120,),
           ),
 
           Padding(
-            padding: const EdgeInsets.only(
-              left: 20.0,
-              right: 20.0,
-              top: 20.0,
-              bottom: 40.0,
-            ), // Extra bottom padding for overlap space
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,9 +155,7 @@ class ProfileCard extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 28, // Slightly larger
                           backgroundColor: Colors.grey[200],
-                          backgroundImage: photoUrl != null
-                              ? NetworkImage(photoUrl)
-                              : null,
+                          backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
                           child: photoUrl == null
                               ? Text(
                                   _getInitials(fullName),
@@ -218,10 +191,7 @@ class ProfileCard extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.2),
                                   borderRadius: BorderRadius.circular(4),
@@ -270,10 +240,7 @@ class ProfileCard extends StatelessWidget {
                                 height: 12,
                                 decoration: BoxDecoration(
                                   color: Colors.red,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 1,
-                                  ),
+                                  border: Border.all(color: Colors.white, width: 1),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -285,11 +252,7 @@ class ProfileCard extends StatelessWidget {
                     // Logout Icon
                     GestureDetector(
                       onTap: () => _showLogoutDialog(context),
-                      child: const FaIcon(
-                        FontAwesomeIcons.doorOpen,
-                        color: Colors.white,
-                        size: 18,
-                      ),
+                      child: const FaIcon(FontAwesomeIcons.doorOpen, color: Colors.white, size: 18),
                     ),
                   ],
                 ),
