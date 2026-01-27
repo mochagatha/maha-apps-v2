@@ -42,6 +42,7 @@ import '../../features/biodata/domain/repositories/biodata_repository.dart'; // 
 import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 import '../../features/recruitment/presentation/pages/verification_data_page.dart';
+import '../../features/recruitment/presentation/pages/employee_verification_page.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -235,6 +236,11 @@ class AppRouter {
           path: RoutePaths.verificationData,
           name: RouteNames.verificationData,
           builder: (context, state) => const VerificationDataPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.employeeVerification,
+          name: RouteNames.employeeVerification,
+          builder: (context, state) => const EmployeeVerificationPage(),
         ),
       ],
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 
 class VerificationDataPage extends StatelessWidget {
@@ -12,14 +13,7 @@ class VerificationDataPage extends StatelessWidget {
         'icon': 'assets/images/icon/karyawan_icon.svg',
         'text': 'Karyawan',
         'count': 0,
-        'action': () {
-          // TODO: Navigate to employee verification list
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Fitur Verifikasi Data Karyawan akan segera hadir!'),
-            ),
-          );
-        },
+        'route': '/recruitment/employee-verification',
       },
       {
         'icon': 'assets/images/icon/pekerja_harian_icon.svg',
@@ -62,7 +56,13 @@ class VerificationDataPage extends StatelessWidget {
             return Stack(
               children: [
                 GestureDetector(
-                  onTap: item['action'] as VoidCallback,
+                  onTap: () {
+                    if (item['route'] != null) {
+                      context.push(item['route'] as String);
+                    } else if (item['action'] != null) {
+                      (item['action'] as VoidCallback)();
+                    }
+                  },
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                     padding: const EdgeInsets.all(10),
