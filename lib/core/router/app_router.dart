@@ -37,13 +37,15 @@ import '../../features/biodata/presentation/pages/selfie_result_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_camera_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_result_page.dart';
-import '../../features/biodata/presentation/providers/selfie_provider.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 import '../../features/recruitment/presentation/pages/verification_data_page.dart';
 import '../../features/recruitment/presentation/pages/employee_verification_page.dart';
 import '../../features/recruitment/presentation/pages/company_code_page.dart';
+import '../../features/authentication/presentation/pages/admin_face_verification_page.dart';
+import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
+import '../../features/authentication/presentation/pages/admin_face_result_page.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -98,6 +100,26 @@ class AppRouter {
             create: (_) => sl<AdminHomeProvider>(),
             child: const AdminHomePage(),
           ),
+        ),
+        GoRoute(
+          path: RoutePaths.adminFaceVerification,
+          name: RouteNames.adminFaceVerification,
+          builder: (context, state) => const AdminFaceVerificationPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.adminFaceCamera,
+          name: RouteNames.adminFaceCamera,
+          builder: (context, state) => const AdminFaceCameraPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.adminFaceResult,
+          name: RouteNames.adminFaceResult,
+          builder: (context, state) {
+            final imagePath = state.extra as String;
+            return AdminFaceResultPage(
+              imagePath: imagePath,
+            );
+          },
         ),
 
         // StatefulShellRoute for Bottom Navigation with persisted state

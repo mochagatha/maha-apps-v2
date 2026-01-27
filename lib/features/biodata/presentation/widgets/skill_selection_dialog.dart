@@ -5,11 +5,8 @@ import '../providers/skill_provider.dart';
 
 class SkillSelectionDialog extends StatefulWidget {
   final List<SkillModel> initialSelectedSkills;
-  
-  const SkillSelectionDialog({
-    super.key,
-    required this.initialSelectedSkills,
-  });
+
+  const SkillSelectionDialog({super.key, required this.initialSelectedSkills});
 
   @override
   State<SkillSelectionDialog> createState() => _SkillSelectionDialogState();
@@ -54,16 +51,13 @@ class _SkillSelectionDialogState extends State<SkillSelectionDialog> {
             children: [
               const Text(
                 'Pilih Keahlian yang Dimiliki',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               GestureDetector(
                 onTap: () {
-                   setState(() {
-                     _tempSelectedSkills.clear();
-                   });
+                  setState(() {
+                    _tempSelectedSkills.clear();
+                  });
                 },
                 child: const Text(
                   'Reset',
@@ -74,23 +68,21 @@ class _SkillSelectionDialogState extends State<SkillSelectionDialog> {
           ),
         ],
       ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SizedBox(
         width: MediaQuery.of(context).size.width - 32,
         height: 480,
         child: Column(
           children: [
-             TextFormField(
+            TextFormField(
               controller: _searchController,
               cursorColor: AppColors.primary,
               decoration: InputDecoration(
                 labelText: 'Ketik disini..',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 focusedBorder: const OutlineInputBorder(
-                   borderSide: BorderSide(color: AppColors.primary)
-                )
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
               ),
               onChanged: (val) {
                 setState(() {
@@ -136,29 +128,23 @@ class _SkillSelectionDialogState extends State<SkillSelectionDialog> {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           child: const Text(
             'Simpan',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
           ),
           onPressed: () {
             // Update the provider with the temp selection
-            // We need a way to sync back. 
+            // We need a way to sync back.
             // In v1, it called submitIDSkills directly.
             // Here, we'll update the selected list in provider.
-            
+
             // Clear current selection and add new ones (inefficient but safe)
-            provider.selectedSkills.clear(); 
+            provider.selectedSkills.clear();
             provider.selectedSkills.addAll(_tempSelectedSkills);
-            provider.notifyListeners(); // Force update
-            
+            // Provider will automatically notify listeners when skills are updated
+
             Navigator.of(context).pop();
           },
         ),

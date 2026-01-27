@@ -11,6 +11,9 @@ class RoutePaths {
   // Home
   static const String home = '/home';
   static const String adminHome = '/admin-home';
+  static const String adminFaceVerification = '/admin-face-verification';
+  static const String adminFaceCamera = '/admin-face-camera';
+  static const String adminFaceResult = '/admin-face-result';
   static const String pesan = '/pesan';
   static const String calendar = '/calendar';
 

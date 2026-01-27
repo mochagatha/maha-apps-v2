@@ -8,7 +8,7 @@ class AppColors {
   static const Color border = Color(0xfe000000);
   static const Color secondary = Color(0xff858585);
   static const Color third = Color.fromRGBO(248, 248, 248, 1);
-  
+
   // Neutral
   static const Color neutral1 = Color(0xffF4F4F4);
   static const Color neutral2 = Color(0xffEDEDED);
@@ -19,12 +19,15 @@ class AppColors {
   static const Color neutral7 = Color(0xff5F5F5F);
   static const Color neutral8 = Color(0xff404040);
   static const Color neutral9 = Color(0xff202020);
-  
+
   // Text colors
   static const Color textPrimary = Color(0xff202020);
-  
+
   // Error
   static const Color error = Color(0xffE91E21);
+
+  // Success
+  static const Color success = Color(0xff4CAF50);
 }
 
 class AppTheme {
@@ -45,25 +48,20 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       fontFamily: GoogleFonts.poppins().fontFamily,
       textTheme: GoogleFonts.poppinsTextTheme(),
-      
+
       // ElevatedButton Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(vertical: 16),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           disabledBackgroundColor: AppColors.secondary,
         ),
       ),
-      
+
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -87,7 +85,7 @@ class AppTheme {
         ),
         hintStyle: const TextStyle(color: AppColors.neutral5),
       ),
-      
+
       // Card Theme
       cardTheme: const CardThemeData(
         color: Colors.white,
@@ -98,7 +96,7 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
-      
+
       // AppBar Theme
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,

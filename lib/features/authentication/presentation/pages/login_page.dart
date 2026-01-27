@@ -74,8 +74,8 @@ class _LoginPageState extends State<LoginPage> {
       // Check if the user is admin
       final email = _emailController.text.trim().toLowerCase();
       if (email == 'admin@mahasejahtera.com') {
-        // Navigate to admin home
-        context.go(RoutePaths.adminHome);
+        // Navigate to admin face verification
+        context.go(RoutePaths.adminFaceVerification);
       } else if (authProvider.user?.status == 1) {
         context.go(RoutePaths.welcomeBiodata);
       } else {

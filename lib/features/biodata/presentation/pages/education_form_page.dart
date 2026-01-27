@@ -8,8 +8,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/education_form_provider.dart';
-import 'biodata_form_page.dart'
-    show CustomLabelBiodata, CustomTextBiodata, CustomTextFormField, HeaderScroll;
+import 'biodata_form_page.dart' show CustomTextFormField;
 
 // Note: Reusing CustomLabelBiodata, CustomTextBiodata, CustomTextFormField from biodata_form_page.dart
 // But we need to update HeaderScroll to make step 2 active.

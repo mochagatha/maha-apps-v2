@@ -7,8 +7,6 @@ import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/document_provider.dart';
 import '../widgets/upload_document.dart'; // Using our new widget
-import 'biodata_form_page.dart'
-    show HeaderScroll; // You might need a specific HeaderScroll for this step
 
 class DocumentPage extends StatelessWidget {
   const DocumentPage({super.key});
