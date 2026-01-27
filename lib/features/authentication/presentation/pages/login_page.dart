@@ -198,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Text(
                             context.l10n.forgotPassword,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ],
@@ -226,6 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextSpan(
                               text: context.l10n.register,
                               style: const TextStyle(
+                                fontSize: 14,
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                               ),

@@ -141,7 +141,7 @@ class ProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Left side: Avatar and Info
+                
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
