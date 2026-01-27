@@ -52,4 +52,5 @@ class RoutePaths {
   static const String selfieKtpForm = '/biodata/selfie-ktp';
   static const String selfieCameraKtp = '/biodata/selfie-ktp/camera';
   static const String selfieResultKtp = '/biodata/selfie-ktp/result';
+  static const String verificationData = '/recruitment/verification-data';
 }

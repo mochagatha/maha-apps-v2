@@ -20,7 +20,7 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
       'id': 'REKRUTMENT/VERIFIKASI_DATA',
       'label': 'Verifikasi Data',
       'icon': 'assets/images/icon/icon_verifikasi_data.svg',
-      'route': null, // Will be implemented later
+      'route': '/recruitment/verification-data',
       'count': 0,
     },
     {

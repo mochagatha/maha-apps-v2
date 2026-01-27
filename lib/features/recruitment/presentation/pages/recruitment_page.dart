@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/recruitment_provider.dart';
 import '../widgets/recruitment_menu_card.dart';
@@ -106,8 +107,8 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
                   menuItem: menuItem,
                   onTap: () {
                     if (menuItem.route != null) {
-                      // Navigate to the route
-                      Navigator.pushNamed(context, menuItem.route!);
+                      // Navigate using go_router
+                      context.push(menuItem.route!);
                     } else {
                       // Show coming soon message
                       ScaffoldMessenger.of(context).showSnackBar(
