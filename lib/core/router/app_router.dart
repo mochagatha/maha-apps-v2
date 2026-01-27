@@ -39,6 +39,8 @@ import '../../features/biodata/presentation/pages/selfie_ktp_camera_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_result_page.dart';
 import '../../features/biodata/presentation/providers/selfie_provider.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
+import '../../features/recruitment/presentation/pages/recruitment_page.dart';
+import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -219,6 +221,14 @@ class AppRouter {
           path: RoutePaths.selfieResultKtp,
           name: RouteNames.selfieResultKtp,
           builder: (context, state) => const SelfieKtpResultPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.recruitment,
+          name: RouteNames.recruitment,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<RecruitmentProvider>(),
+            child: const RecruitmentPage(),
+          ),
         ),
       ],
 

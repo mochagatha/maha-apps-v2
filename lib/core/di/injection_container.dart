@@ -68,6 +68,13 @@ import '../../features/biodata/domain/repositories/biodata_repository.dart';
 import '../../features/biodata/domain/usecases/get_biodata.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 
+// Recruitment feature imports
+import '../../features/recruitment/data/datasources/recruitment_remote_datasource.dart';
+import '../../features/recruitment/data/repositories/recruitment_repository_impl.dart';
+import '../../features/recruitment/domain/repositories/recruitment_repository.dart';
+import '../../features/recruitment/domain/usecases/get_recruitment_menus.dart';
+import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -227,6 +234,23 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<BiodataRemoteDataSource>(
     () => BiodataRemoteDataSourceImpl(client: sl(), sharedPreferences: sl()),
+  );
+
+  //! Features - Recruitment
+  // Provider
+  sl.registerFactory(() => RecruitmentProvider(getRecruitmentMenus: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetRecruitmentMenus(sl()));
+
+  // Repository
+  sl.registerLazySingleton<RecruitmentRepository>(
+    () => RecruitmentRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<RecruitmentRemoteDataSource>(
+    () => RecruitmentRemoteDataSourceImpl(client: sl()),
   );
 
   //! Core
