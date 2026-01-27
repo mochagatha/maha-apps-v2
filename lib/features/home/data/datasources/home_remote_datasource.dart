@@ -14,6 +14,9 @@ abstract class HomeRemoteDataSource {
   /// Get employee menus from API
   Future<List<MenuItemModel>> getEmployeeMenus();
 
+  /// Get admin menus from API with user_type parameter
+  Future<List<MenuItemModel>> getAdminMenus();
+
   /// Get notification count from API
   Future<NotificationCountModel> getNotificationCount();
 
@@ -44,9 +47,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (response.statusCode == 200) {
         return EmployeeModel.fromJson(response.data['data']);
       } else {
-        throw ServerException(
-          response.data['message'] ?? 'Failed to get employee profile',
-        );
+        throw ServerException(response.data['message'] ?? 'Failed to get employee profile');
       }
     } catch (e) {
       if (e is ServerException) {
@@ -77,20 +78,49 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (response.statusCode == 200) {
         print('DEBUG: Menu Response Data: ${response.data}'); // Debugging line
         final List<dynamic> menusJson = response.data['data'] ?? [];
-        print(
-          'DEBUG: Parsed Menus Count: ${menusJson.length}',
-        ); // Debugging line
+        print('DEBUG: Parsed Menus Count: ${menusJson.length}'); // Debugging line
         return menusJson.map((json) => MenuItemModel.fromJson(json)).toList();
       } else {
-        throw ServerException(
-          response.data['message'] ?? 'Failed to get employee menus',
-        );
+        throw ServerException(response.data['message'] ?? 'Failed to get employee menus');
       }
     } catch (e) {
       if (e is ServerException) {
         rethrow;
       }
       throw ServerException('Failed to get employee menus: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<List<MenuItemModel>> getAdminMenus() async {
+    try {
+      // Get employee_id from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id');
+
+      if (employeeId == null) {
+        throw ServerException('Employee ID not found. Please login again.');
+      }
+
+      // Use dioGolang for menu endpoint with user_type parameter for admin
+      final response = await client.dioGolang.get(
+        AppConstants.endpointEmployeeMenus,
+        queryParameters: {'employee_id': employeeId, 'user_type': 'admin'},
+      );
+
+      if (response.statusCode == 200) {
+        print('DEBUG: Admin Menu Response Data: ${response.data}'); // Debugging line
+        final List<dynamic> menusJson = response.data['data'] ?? [];
+        print('DEBUG: Parsed Admin Menus Count: ${menusJson.length}'); // Debugging line
+        return menusJson.map((json) => MenuItemModel.fromJson(json)).toList();
+      } else {
+        throw ServerException(response.data['message'] ?? 'Failed to get admin menus');
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to get admin menus: ${e.toString()}');
     }
   }
 
@@ -117,25 +147,18 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (response.statusCode == 200) {
         return NotificationCountModel.fromJson(response.data['data']);
       } else {
-        throw ServerException(
-          response.data['message'] ?? 'Failed to get notification count',
-        );
+        throw ServerException(response.data['message'] ?? 'Failed to get notification count');
       }
     } catch (e) {
       if (e is ServerException) {
         rethrow;
       }
-      throw ServerException(
-        'Failed to get notification count: ${e.toString()}',
-      );
+      throw ServerException('Failed to get notification count: ${e.toString()}');
     }
   }
 
   @override
-  Future<KpiModel> getKpiSummary({
-    required int month,
-    required int year,
-  }) async {
+  Future<KpiModel> getKpiSummary({required int month, required int year}) async {
     try {
       final response = await client.dioGolang.post(
         '/employee/employee-monitoring-kpi/get-by-month',
@@ -145,9 +168,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (response.statusCode == 200) {
         return KpiModel.fromJson(response.data);
       } else {
-        throw ServerException(
-          response.data['message'] ?? 'Failed to get KPI summary',
-        );
+        throw ServerException(response.data['message'] ?? 'Failed to get KPI summary');
       }
     } catch (e) {
       if (e is ServerException) {

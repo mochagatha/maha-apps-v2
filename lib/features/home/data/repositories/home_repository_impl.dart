@@ -86,6 +86,38 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
+  Future<Either<Failure, List<MenuItem>>> getAdminMenus() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final menuModels = await remoteDataSource.getAdminMenus();
+
+        // Cache the admin menus
+        await localDataSource.cacheMenus(menuModels);
+
+        return Right(menuModels.map((model) => model.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      // Try to get from cache when offline
+      try {
+        final cachedMenus = await localDataSource.getCachedMenus();
+        if (cachedMenus != null) {
+          return Right(cachedMenus.map((model) => model.toEntity()).toList());
+        } else {
+          return Left(CacheFailure('No cached menu data available'));
+        }
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      } on Exception catch (e) {
+        return Left(CacheFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
   Future<Either<Failure, NotificationCount>> getNotificationCount() async {
     if (await networkInfo.isConnected) {
       try {
@@ -102,16 +134,10 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, Kpi>> getKpiSummary({
-    required int month,
-    required int year,
-  }) async {
+  Future<Either<Failure, Kpi>> getKpiSummary({required int month, required int year}) async {
     if (await networkInfo.isConnected) {
       try {
-        final kpiModel = await remoteDataSource.getKpiSummary(
-          month: month,
-          year: year,
-        );
+        final kpiModel = await remoteDataSource.getKpiSummary(month: month, year: year);
         return Right(kpiModel.toEntity());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));

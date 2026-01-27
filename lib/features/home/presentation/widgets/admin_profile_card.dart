@@ -6,25 +6,12 @@ import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
-import '../../domain/entities/employee.dart';
 import '../../domain/entities/notification_count.dart';
 
-class ProfileCard extends StatelessWidget {
-  final Employee? employee;
+class AdminProfileCard extends StatelessWidget {
   final NotificationCount? notificationCount;
 
-  const ProfileCard({super.key, this.employee, this.notificationCount});
-
-  String _getInitials(String fullname) {
-    if (fullname.isEmpty) return 'U';
-    final names = fullname.trim().split(' ');
-    if (names.length >= 2) {
-      return '${names[0][0]}${names[1][0]}'.toUpperCase();
-    } else if (names.isNotEmpty) {
-      return names[0][0].toUpperCase();
-    }
-    return 'U';
-  }
+  const AdminProfileCard({super.key, this.notificationCount});
 
   void _showLogoutDialog(BuildContext context) {
     showDialog(
@@ -49,10 +36,9 @@ class ProfileCard extends StatelessWidget {
                     text: context.l10n.logoutConfirmation1,
                     children: <TextSpan>[
                       TextSpan(
-                        text: context.l10n.logoutConfirmation2,
+                        text: ' ${context.l10n.logoutConfirmation2}',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      TextSpan(text: context.l10n.logoutConfirmation3),
                     ],
                   ),
                   textAlign: TextAlign.center,
@@ -60,51 +46,38 @@ class ProfileCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
-                      flex: 1,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // Perform logout first
-                          await context.read<AuthProvider>().logoutUser();
-
-                          // Navigate to login after current frame completes
-                          // This ensures all dialogs are properly cleaned up
-                          if (context.mounted) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (context.mounted) {
-                                context.go(RoutePaths.login);
-                              }
-                            });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: const BorderSide(color: AppColors.primary, width: 1.5),
-                          ),
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(dialogContext),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.primary),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: Text(context.l10n.yes),
+                        child: Text(context.l10n.cancel, style: const TextStyle(fontSize: 16)),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 12),
                     Expanded(
-                      flex: 1,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pop(dialogContext);
+                          await context.read<AuthProvider>().logoutUser();
+                          if (context.mounted) {
+                            context.go(RoutePaths.login);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: Text(context.l10n.cancel),
+                        child: Text(
+                          context.l10n.logout,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ],
@@ -119,22 +92,30 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasNotifications = (notificationCount?.notificationCount ?? 0) > 0;
-    // Fallback image if null
-    final photoUrl = employee?.biodata?.photoUrl;
-    final fullName = employee?.fullname ?? 'Visitor';
-    final jobTitle = employee?.jobTitleName ?? 'Guest';
+    final hasNotifications =
+        notificationCount != null &&
+        (notificationCount!.notificationCount +
+                notificationCount!.approvalCount +
+                notificationCount!.approvalRequest) >
+            0;
 
     return SafeArea(
       bottom: false,
       child: Stack(
         children: [
+          // Background image (MAHA logo blur)
           Container(
             alignment: Alignment.topCenter,
             margin: const EdgeInsets.only(top: 10),
-            child: Image.asset('assets/images/maha-blur.png', width: 250, height: 120),
+            child: Image.asset(
+              'assets/images/maha-blur.png',
+              width: 250,
+              height: 120,
+              errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+            ),
           ),
 
+          // Profile Card Content
           Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
             child: Row(
@@ -146,69 +127,61 @@ class ProfileCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Avatar
+                      // Avatar with border
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         child: CircleAvatar(
-                          radius: 28, // Slightly larger
-                          backgroundColor: Colors.grey[200],
-                          backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-                          child: photoUrl == null
-                              ? Text(
-                                  _getInitials(fullName),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
-                                  ),
-                                )
-                              : null,
+                          radius: 28,
+                          backgroundColor: Colors.white,
+                          child: const Text(
+                            'SA',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       // Info
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            context.push(RoutePaths.profile);
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                fullName,
-                                style: const TextStyle(
-                                  fontSize: 16, // Larger font
-                                  fontWeight: FontWeight.bold,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'System Admin',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text(
+                                'Administrator',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
                                   color: Colors.white,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 4),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  jobTitle,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -221,7 +194,7 @@ class ProfileCard extends StatelessWidget {
                     // Notification Icon
                     GestureDetector(
                       onTap: () {
-                        // TODO: Notification Screen
+                        context.push(RoutePaths.pesan);
                       },
                       child: Stack(
                         clipBehavior: Clip.none,

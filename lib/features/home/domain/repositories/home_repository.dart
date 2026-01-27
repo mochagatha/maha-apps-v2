@@ -12,12 +12,12 @@ abstract class HomeRepository {
   /// Get menu items for current employee based on role
   Future<Either<Failure, List<MenuItem>>> getEmployeeMenus();
 
+  /// Get menu items for admin with user_type parameter
+  Future<Either<Failure, List<MenuItem>>> getAdminMenus();
+
   /// Get notification counts
   Future<Either<Failure, NotificationCount>> getNotificationCount();
 
   /// Get KPI summary
-  Future<Either<Failure, Kpi>> getKpiSummary({
-    required int month,
-    required int year,
-  });
+  Future<Either<Failure, Kpi>> getKpiSummary({required int month, required int year});
 }

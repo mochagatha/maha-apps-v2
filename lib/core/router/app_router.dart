@@ -7,6 +7,8 @@ import '../../features/authentication/presentation/pages/forgot_password_page.da
 import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/home/presentation/pages/admin_home.dart';
+import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'route_names.dart';
@@ -83,6 +85,14 @@ class AppRouter {
           path: RoutePaths.privacyNotice,
           name: RouteNames.privacyNotice,
           builder: (context, state) => const PrivacyNoticePage(),
+        ),
+        GoRoute(
+          path: RoutePaths.adminHome,
+          name: RouteNames.adminHome,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<AdminHomeProvider>(),
+            child: const AdminHomePage(),
+          ),
         ),
 
         // StatefulShellRoute for Bottom Navigation with persisted state

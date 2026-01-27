@@ -10,6 +10,7 @@ class RoutePaths {
 
   // Home
   static const String home = '/home';
+  static const String adminHome = '/admin-home';
   static const String pesan = '/pesan';
   static const String calendar = '/calendar';
 

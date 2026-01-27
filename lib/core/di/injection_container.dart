@@ -39,6 +39,8 @@ import '../../features/home/domain/usecases/get_employee_profile.dart';
 import '../../features/home/domain/usecases/get_kpi_summary.dart';
 import '../../features/home/domain/usecases/get_notification_count.dart';
 import '../../features/home/presentation/providers/home_provider.dart';
+import '../../features/home/presentation/providers/admin_home_provider.dart';
+import '../../features/home/presentation/usecases/get_admin_menus.dart';
 
 // Profile feature imports
 import '../../features/profile/data/datasources/profile_local_datasource.dart';
@@ -104,7 +106,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SendOtp(sl()));
   sl.registerLazySingleton(() => VerifyOtp(sl()));
   sl.registerLazySingleton(() => ResetPassword(sl()));
-  
+
   sl.registerLazySingleton(() => GetProfile(sl()));
 
   // Repository
@@ -138,9 +140,12 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerFactory(() => AdminHomeProvider(getAdminMenus: sl(), getNotificationCount: sl()));
+
   // Use cases
   sl.registerLazySingleton(() => GetEmployeeProfile(sl()));
   sl.registerLazySingleton(() => GetEmployeeMenus(sl()));
+  sl.registerLazySingleton(() => GetAdminMenus(sl()));
   sl.registerLazySingleton(() => GetNotificationCount(sl()));
   sl.registerLazySingleton(() => GetKpiSummary(sl()));
 
@@ -211,19 +216,13 @@ Future<void> init() async {
   );
 
   //! Features - Biodata
-  sl.registerFactory(
-    () => BiodataProvider(
-      getBiodata: sl(),
-    ),
-  );
+  sl.registerFactory(() => BiodataProvider(getBiodata: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetBiodata(sl()));
 
   // Repository
-  sl.registerLazySingleton<BiodataRepository>(
-    () => BiodataRepositoryImpl(remoteDataSource: sl()),
-  );
+  sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));
 
   // Data sources
   sl.registerLazySingleton<BiodataRemoteDataSource>(
