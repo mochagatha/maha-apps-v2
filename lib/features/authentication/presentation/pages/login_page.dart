@@ -222,28 +222,30 @@ class _LoginPageState extends State<LoginPage> {
 
                     // Register Link
                     Center(
-                      child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
-                          children: [
-                            TextSpan(text: '${context.l10n.dontHaveAccount} '),
-                            TextSpan(
-                              text: context.l10n.register,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${context.l10n.dontHaveAccount} ',
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => const PinVerificationDialog(),
+                              );
+                            },
+                            child: Text(
+                              context.l10n.register,
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => const PinVerificationDialog(),
-                                  );
-                                },
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
 
