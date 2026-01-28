@@ -192,13 +192,17 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       children: [
                         const Spacer(),
-                        TextButton(
-                          onPressed: () {
+                        InkWell(
+                          onTap: () {
                             context.push(RoutePaths.forgotPassword);
                           },
                           child: Text(
                             context.l10n.forgotPassword,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       ],
