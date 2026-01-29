@@ -67,103 +67,103 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : _errorMessage != null
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.error_outline, color: Colors.red, size: 60),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Gagal Memuat Kode Perusahaan',
+                        style: AppTextStyles.headingTwoSemiBold(context),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _errorMessage!,
+                        style: AppTextStyles.bodyStyle(context),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: _loadCompanyCode,
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Coba Lagi'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      // Title Section
+                      Text(
+                        'Gunakan Kode Perusahaan yang dikelola oleh sistem dan akan berganti secara otomatis',
+                        style: AppTextStyles.bodyStyle(
+                          context,
+                        ).copyWith(color: Colors.black87, fontSize: 12),
+                      ),
+                      const SizedBox(height: 24),
+                      // Code Display Section
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 60,
+                          // Timer Icon
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Icon(
+                              Icons.access_time_rounded,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Gagal Memuat Kode Perusahaan',
-                            style: AppTextStyles.headingTwoSemiBold(context),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _errorMessage!,
-                            style: AppTextStyles.bodyStyle(context),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton.icon(
-                            onPressed: _loadCompanyCode,
-                            icon: const Icon(Icons.refresh),
-                            label: const Text('Coba Lagi'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
+                          const SizedBox(width: 12),
+                          // Code Display
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: _companyCode.split('').map((digit) {
+                                return Container(
+                                  margin: const EdgeInsets.only(right: 12),
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: const Color(0xFF404040), width: 1),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      digit,
+                                      style: const TextStyle(
+                                        color: Color(0xFF404040),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  )
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          // Title Section
-                          Text(
-                            'Gunakan Kode Perusahdikelola oleh sistem dan akan berganti secara otomatis',
-                            style: AppTextStyles.bodyStyle(
-                              context,
-                            ).copyWith(color: Colors.black87, fontSize: 12),
-                          ),
-                          const SizedBox(height: 24),
-                          // Code Display Section
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Timer Icon
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Icon(Icons.access_time_rounded, color: AppColors.primary, size: 20),
-                              ),
-                              const SizedBox(width: 12),
-                              // Code Display
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: _companyCode.split('').map((digit) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 12),
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(color: const Color(0xFF404040), width: 1),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          digit,
-                                          style: const TextStyle(
-                                            color: Color(0xFF404040),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    ],
                   ),
+                ),
+              ),
       ),
     );
   }

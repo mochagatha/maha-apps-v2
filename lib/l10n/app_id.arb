@@ -414,5 +414,15 @@
   
   "pageNotFoundTitle": "Halaman Tidak Ditemukan",
   "pageNotFoundMessage": "Halaman yang Anda cari tidak ditemukan atau fitur ini belum diimplementasikan.",
-  "back": "Kembali"
+  "back": "Kembali",
+  
+  "changeLanguage": "Ubah Bahasa",
+  "@changeLanguage": {
+    "description": "Change language menu"
+  },
+  
+  "selectLanguage": "Pilih Bahasa",
+  "@selectLanguage": {
+    "description": "Select language dialog title"
+  }
 }

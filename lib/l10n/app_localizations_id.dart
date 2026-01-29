@@ -360,4 +360,10 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get back => 'Kembali';
+
+  @override
+  String get changeLanguage => 'Ubah Bahasa';
+
+  @override
+  String get selectLanguage => 'Pilih Bahasa';
 }

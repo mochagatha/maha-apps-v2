@@ -9,6 +9,7 @@ import 'features/authentication/presentation/providers/forgot_password_provider.
 import 'features/home/presentation/providers/home_provider.dart';
 import 'features/profile/presentation/providers/profile_provider.dart';
 import 'features/biodata/presentation/providers/selfie_provider.dart';
+import 'core/providers/language_provider.dart';
 import 'l10n/app_localizations.dart';
 import 'shared/theme/app_theme.dart';
 
@@ -41,23 +42,29 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => di.sl<ForgotPasswordProvider>()),
         // Selfie Provider (global for biodata flow)
         ChangeNotifierProvider(create: (_) => SelfieProvider()),
+        // Language Provider
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
-      child: MaterialApp.router(
-        title: 'MAHA Apps',
-        theme: AppTheme.lightTheme,
-        debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter.router(),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('id', ''), // Indonesian
-          Locale('en', ''), // English
-        ],
-        locale: const Locale('id', ''), // Default to Indonesian
+      child: Consumer<LanguageProvider>(
+        builder: (context, languageProvider, child) {
+          return MaterialApp.router(
+            title: 'MAHA Apps',
+            theme: AppTheme.lightTheme,
+            debugShowCheckedModeBanner: false,
+            routerConfig: AppRouter.router(),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('id', ''), // Indonesian
+              Locale('en', ''), // English
+            ],
+            locale: languageProvider.currentLocale,
+          );
+        },
       ),
     );
   }

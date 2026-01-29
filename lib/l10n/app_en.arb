@@ -125,5 +125,8 @@
   
   "pageNotFoundTitle": "Page Not Found",
   "pageNotFoundMessage": "The page you are looking for was not found or this feature has not been implemented yet.",
-  "back": "Back"
+  "back": "Back",
+  
+  "changeLanguage": "Change Language",
+  "selectLanguage": "Select Language"
 }

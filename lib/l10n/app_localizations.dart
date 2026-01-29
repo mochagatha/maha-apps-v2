@@ -757,6 +757,18 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Kembali'**
   String get back;
+
+  /// Change language menu
+  ///
+  /// In id, this message translates to:
+  /// **'Ubah Bahasa'**
+  String get changeLanguage;
+
+  /// Select language dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih Bahasa'**
+  String get selectLanguage;
 }
 
 class _AppLocalizationsDelegate

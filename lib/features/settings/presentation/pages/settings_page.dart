@@ -3,6 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/settings/domain/entities/settings_menu_item.dart';
 import 'package:maha_apps_v2/features/settings/presentation/models/settings_menu_model.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/config/menu_config.dart';
+import '../../../../core/providers/language_provider.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 import '../../../../shared/widgets/custom_app_bar.dart';
 
@@ -73,7 +77,9 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         GestureDetector(
           onTap: () {
-            if (menuItem.route != null) {
+            if (menuItem.id == MenuConfig.pengaturanBahasa) {
+              _showLanguageDialog(context);
+            } else if (menuItem.route != null) {
               context.push(menuItem.route!);
             }
           },
@@ -119,6 +125,66 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
       ],
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(context.l10n.selectLanguage),
+          content: Consumer<LanguageProvider>(
+            builder: (context, languageProvider, child) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('Bahasa Indonesia'),
+                    leading: Radio<Locale>(
+                      value: const Locale('id'),
+                      groupValue: languageProvider.currentLocale,
+                      onChanged: (Locale? value) {
+                        if (value != null) {
+                          languageProvider.changeLanguage(value);
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                    onTap: () {
+                      languageProvider.changeLanguage(const Locale('id'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('English'),
+                    leading: Radio<Locale>(
+                      value: const Locale('en'),
+                      groupValue: languageProvider.currentLocale,
+                      onChanged: (Locale? value) {
+                        if (value != null) {
+                          languageProvider.changeLanguage(value);
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                    onTap: () {
+                      languageProvider.changeLanguage(const Locale('en'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(context.l10n.cancel),
+            ),
+          ],
+        );
+      },
     );
   }
 }
