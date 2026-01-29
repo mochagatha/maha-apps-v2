@@ -77,6 +77,16 @@ import '../../features/recruitment/domain/repositories/recruitment_repository.da
 import '../../features/recruitment/domain/usecases/get_recruitment_menus.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 
+// Organizational Structure feature imports
+import '../../features/organizational_structure/data/datasources/organizational_structure_remote_data_source.dart';
+import '../../features/organizational_structure/data/repositories/organizational_structure_repository_impl.dart';
+import '../../features/organizational_structure/domain/repositories/organizational_structure_repository.dart';
+import '../../features/organizational_structure/domain/usecases/get_company_structure.dart';
+import '../../features/organizational_structure/domain/usecases/manage_structure_role.dart';
+import '../../features/organizational_structure/domain/usecases/manage_superior_employee.dart';
+import '../../features/organizational_structure/domain/usecases/get_organizational_data.dart';
+import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -256,6 +266,33 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<RecruitmentRemoteDataSource>(
     () => RecruitmentRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Organizational Structure
+  // Provider
+  sl.registerFactory(
+    () => OrganizationalStructureProvider(
+      getCompanyStructure: sl(),
+      manageStructureRole: sl(),
+      manageSuperiorEmployee: sl(),
+      getOrganizationalData: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetCompanyStructure(sl()));
+  sl.registerLazySingleton(() => ManageStructureRole(sl()));
+  sl.registerLazySingleton(() => ManageSuperiorEmployee(sl()));
+  sl.registerLazySingleton(() => GetOrganizationalData(sl()));
+
+  // Repository
+  sl.registerLazySingleton<OrganizationalStructureRepository>(
+    () => OrganizationalStructureRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<OrganizationalStructureRemoteDataSource>(
+    () => OrganizationalStructureRemoteDataSourceImpl(client: sl()),
   );
 
   //! Core

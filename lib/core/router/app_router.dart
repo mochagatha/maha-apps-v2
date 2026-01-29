@@ -47,6 +47,13 @@ import '../../features/authentication/presentation/pages/admin_face_verification
 import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_result_page.dart';
 import '../../features/authentication/presentation/providers/admin_face_provider.dart';
+import '../../features/organizational_structure/presentation/pages/organizational_structure_list_page.dart';
+import '../../features/organizational_structure/presentation/pages/structure_main_page.dart';
+import '../../features/organizational_structure/presentation/pages/employment_level_list_page.dart';
+import '../../features/organizational_structure/presentation/pages/department_list_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_list_page.dart';
+import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
+
 
 class AppRouter {
   static GoRouter router() {
@@ -274,6 +281,36 @@ class AppRouter {
           path: RoutePaths.companyCode,
           name: RouteNames.companyCode,
           builder: (context, state) => const CompanyCodePage(),
+        ),
+        
+        // Organizational Structure Routes
+        GoRoute(
+          path: RoutePaths.organizationalStructure,
+          name: RouteNames.organizationalStructure,
+          builder: (context, state) => const OrganizationalStructureListPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.structureMain,
+          name: RouteNames.structureMain,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const StructureMainPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.employmentLevel,
+          name: RouteNames.employmentLevel,
+          builder: (context, state) => const EmploymentLevelListPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.departmentList,
+          name: RouteNames.departmentList,
+          builder: (context, state) => const DepartmentListPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleList,
+          name: RouteNames.jobTitleList,
+          builder: (context, state) => const JobTitleListPage(),
         ),
       ],
 

@@ -1,0 +1,235 @@
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/department_entity.dart';
+import '../../domain/entities/employment_level_entity.dart';
+import '../../domain/entities/job_title_entity.dart';
+import '../../domain/entities/organizational_structure_entity.dart';
+import '../../domain/repositories/organizational_structure_repository.dart';
+import '../datasources/organizational_structure_remote_data_source.dart';
+
+class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRepository {
+  final OrganizationalStructureRemoteDataSource remoteDataSource;
+
+  OrganizationalStructureRepositoryImpl({required this.remoteDataSource});
+
+  @override
+  Future<Either<Failure, List<OrganizationalStructureEntity>>> getCompanyStructure(
+    String typeStructure,
+  ) async {
+    try {
+      final result = await remoteDataSource.getCompanyStructure(typeStructure);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Terjadi kesalahan server'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> createCompanyStructureRole({
+    required int companyStructureId,
+    required List<int> userRoleIds,
+  }) async {
+    try {
+      await remoteDataSource.createCompanyStructureRole(
+        companyStructureId: companyStructureId,
+        userRoleIds: userRoleIds,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan role'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteCompanyStructureRole(int id) async {
+    try {
+      await remoteDataSource.deleteCompanyStructureRole(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus role'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addSuperiorEmployee({
+    required int companyStructureId,
+    required int roleStructureId,
+    required int employeeId,
+    required int jobTitleId,
+  }) async {
+    try {
+      await remoteDataSource.addSuperiorEmployee(
+        companyStructureId: companyStructureId,
+        roleStructureId: roleStructureId,
+        employeeId: employeeId,
+        jobTitleId: jobTitleId,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan superior employee'),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editSuperiorEmployee({
+    required int superiorEmployeeId,
+    required int employeeId,
+    required int jobTitleId,
+  }) async {
+    try {
+      await remoteDataSource.editSuperiorEmployee(
+        superiorEmployeeId: superiorEmployeeId,
+        employeeId: employeeId,
+        jobTitleId: jobTitleId,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah superior employee'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteSuperiorEmployee(int superiorEmployeeId) async {
+    try {
+      await remoteDataSource.deleteSuperiorEmployee(superiorEmployeeId);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus superior employee'),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addSuperiorEmployeeDepartment({
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+    required List<int> workerIds,
+  }) async {
+    try {
+      await remoteDataSource.addSuperiorEmployeeDepartment(
+        superiorEmployeeStructureId: superiorEmployeeStructureId,
+        departmentId: departmentId,
+        employeeIds: employeeIds,
+        workerIds: workerIds,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editSuperiorEmployeeDepartment({
+    required int id,
+    required List<int> employeeIds,
+    required List<int> deleteEmployeeIds,
+  }) async {
+    try {
+      await remoteDataSource.editSuperiorEmployeeDepartment(
+        id: id,
+        employeeIds: employeeIds,
+        deleteEmployeeIds: deleteEmployeeIds,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah employee departemen'),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editSuperiorWorkerDepartment({
+    required int id,
+    required List<int> workerIds,
+    required List<int> deleteWorkerIds,
+  }) async {
+    try {
+      await remoteDataSource.editSuperiorWorkerDepartment(
+        id: id,
+        workerIds: workerIds,
+        deleteWorkerIds: deleteWorkerIds,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah worker departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, OrganizationalStructureEntity>> getStructureDetail(int id) async {
+    try {
+      final result = await remoteDataSource.getStructureDetail(id);
+      return Right(result.toEntity());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil detail struktur'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getUserRoles(String typeBranch) async {
+    try {
+      final result = await remoteDataSource.getUserRoles(typeBranch);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil user roles'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<JobTitleEntity>>> getJobTitles({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      final result = await remoteDataSource.getJobTitles(
+        typeRole: typeRole,
+        typeBranch: typeBranch,
+      );
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil job titles'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DepartmentEntity>>> getDepartments() async {
+    try {
+      final result = await remoteDataSource.getDepartments();
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil departments'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+}

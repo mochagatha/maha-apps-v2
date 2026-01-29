@@ -152,6 +152,15 @@ class MenuConfig {
   static const String pengaturanKpi = 'PENGATURAN/KPI';
   static const String pengaturanBahasa = 'PENGATURAN/BAHASA';
   static const String pengaturanHakAksesMenu = 'PENGATURAN/HAK_AKSES_MENU';
+  
+  // Arsip Submenus
+  static const String arsipStrukturOrganisasi = 'ARSIP/STRUKTUR_ORGANISASI';
+  
+  // Organizational Structure Submenus
+  static const String strukturOrganisasiUtama = 'STRUKTUR_ORGANISASI/UTAMA';
+  static const String strukturOrganisasiTingkatanPekerjaan = 'STRUKTUR_ORGANISASI/TINGKATAN_PEKERJAAN';
+  static const String strukturOrganisasiDepartemen = 'STRUKTUR_ORGANISASI/DEPARTEMEN';
+  static const String strukturOrganisasiJabatan = 'STRUKTUR_ORGANISASI/JABATAN';
 
   // ==================== ICON MAPPING ====================
   
@@ -251,6 +260,14 @@ class MenuConfig {
     rekrutmentVerifikasiData: RoutePaths.verificationData,
     rekrutmentPerjanjianKerja: RoutePaths.recruitmentAgreement,
     rekrutmentAktivasiBpjs: RoutePaths.recruitmentBpjsActivation,
+    
+    // Organizational Structure
+    arsipStrukturOrganisasi: RoutePaths.organizationalStructure,
+    pengaturanStrukturOrganisasi: RoutePaths.organizationalStructure,
+    strukturOrganisasiUtama: RoutePaths.structureMain,
+    strukturOrganisasiTingkatanPekerjaan: RoutePaths.employmentLevel,
+    strukturOrganisasiDepartemen: RoutePaths.departmentList,
+    strukturOrganisasiJabatan: RoutePaths.jobTitleList,
   };
 
 

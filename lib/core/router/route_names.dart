@@ -57,4 +57,12 @@ class RouteNames {
   static const String verificationData = 'verification-data';
   static const String employeeVerification = 'employee-verification';
   static const String companyCode = 'company-code';
+  
+  // Organizational Structure
+  static const String organizationalStructure = 'organizational-structure';
+  static const String structureMain = 'structure-main';
+  static const String organizationalChart = 'organizational-chart';
+  static const String employmentLevel = 'employment-level';
+  static const String departmentList = 'department-list';
+  static const String jobTitleList = 'job-title-list';
 }
