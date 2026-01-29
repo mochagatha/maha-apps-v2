@@ -36,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
     // TODO: Fetch menu access from API based on user permissions
     // For now, use all menu items
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     if (!mounted) return;
 
     final allMenus = SettingsMenuModel.getAllSettingsMenu(context);
@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Pengaturan'),
+      appBar: CustomAppBar(title: context.l10n.menuPengaturan),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.red))
           : RefreshIndicator(
@@ -131,62 +131,116 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showLanguageDialog(BuildContext context) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
-        return AlertDialog(
-          title: Text(context.l10n.selectLanguage),
-          content: Consumer<LanguageProvider>(
-            builder: (context, languageProvider, child) {
-              return Column(
+        return Consumer<LanguageProvider>(
+          builder: (context, languageProvider, child) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ListTile(
-                    title: Text(context.l10n.languageIndonesian),
-                    leading: Radio<Locale>(
-                      value: const Locale('id'),
-                      groupValue: languageProvider.currentLocale,
-                      onChanged: (Locale? value) {
-                        if (value != null) {
-                          languageProvider.changeLanguage(value);
-                          Navigator.pop(context);
-                        }
-                      },
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    context.l10n.selectLanguage, // "Pilih Bahasa"
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildLanguageOption(
+                    context,
+                    title: context.l10n.languageIndonesian,
+                    flag: '🇮🇩',
+                    isSelected: languageProvider.currentLocale.languageCode == 'id',
                     onTap: () {
                       languageProvider.changeLanguage(const Locale('id'));
                       Navigator.pop(context);
                     },
                   ),
-                  ListTile(
-                    title: Text(context.l10n.languageEnglish),
-                    leading: Radio<Locale>(
-                      value: const Locale('en'),
-                      groupValue: languageProvider.currentLocale,
-                      onChanged: (Locale? value) {
-                        if (value != null) {
-                          languageProvider.changeLanguage(value);
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
+                  const SizedBox(height: 12),
+                  _buildLanguageOption(
+                    context,
+                    title: context.l10n.languageEnglish,
+                    flag: '🇺🇸',
+                    isSelected: languageProvider.currentLocale.languageCode == 'en',
                     onTap: () {
                       languageProvider.changeLanguage(const Locale('en'));
                       Navigator.pop(context);
                     },
                   ),
+                  const SizedBox(height: 20),
                 ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(context.l10n.cancel),
-            ),
-          ],
+              ),
+            );
+          },
         );
       },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context, {
+    required String title,
+    required String flag,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFFF0F0) : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Colors.red : Colors.grey.shade300,
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(
+              flag,
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: isSelected ? Colors.red : Colors.black,
+                ),
+              ),
+            ),
+            if (isSelected)
+              const Icon(
+                Icons.check_circle_rounded,
+                color: Colors.red,
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -107,120 +107,117 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
             children: [
               !provider.isCameraInitialized
                   ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
-                  : Column(
+                  : Stack(
                       children: [
-                        // Camera preview with face detection overlay
-                        Stack(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height / 1.5,
-                              child: provider.cameraController != null
-                                  ? CameraPreview(
-                                      provider.cameraController!,
-                                      child: provider.customPaint,
-                                    )
-                                  : const Center(child: CircularProgressIndicator()),
-                            ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: provider.cameraController != null
+                              ? CameraPreview(
+                                  provider.cameraController!,
+                                  child: provider.customPaint,
+                                )
+                              : const Center(child: CircularProgressIndicator()),
+                        ),
 
-                            // Info overlay at bottom of camera
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(16.0),
-                                color: Colors.black.withOpacity(0.5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        // Info overlay at bottom of camera
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                // Date and time
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    // Date and time
-                                    Row(
-                                      children: [
-                                        Text(
-                                          DateFormat(
-                                            'EEEE, dd/MM/yyyy',
-                                            'id_ID',
-                                          ).format(DateTime.now()),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: StreamBuilder<DateTime>(
-                                            stream: _timeStream,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                final time = snapshot.data!;
-                                                final formattedTime =
-                                                    '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} WIB';
-                                                return Text(
-                                                  formattedTime,
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                );
-                                              } else {
-                                                return const Text(
-                                                  'Loading...',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14,
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
+                                    Expanded(child: SizedBox()),
+                                    Text(
+                                      DateFormat(
+                                        'EEEE, dd/MM/yyyy',
+                                        'id_ID',
+                                      ).format(DateTime.now()),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
 
-                                    // Location
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            provider.locationName ?? 'Loading...',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    StreamBuilder<DateTime>(
+                                      stream: _timeStream,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          final time = snapshot.data!;
+                                          final formattedTime =
+                                              '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} WIB';
+                                          return Text(
+                                            formattedTime,
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            maxLines: 3,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-
-                                    // Blink instruction
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.circle, color: Colors.red, size: 10),
-                                        const SizedBox(width: 4),
-                                        Expanded(
-                                          child: Text(
-                                            'Kedipkan mata untuk menangkap gambar wajah',
-                                            style: const TextStyle(
-                                              color: Color(0xffE91E21),
-                                              fontSize: 12,
-                                            ),
-                                            maxLines: 2,
-                                          ),
-                                        ),
-                                      ],
+                                          );
+                                        } else {
+                                          return const Text(
+                                            'Loading...',
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          );
+                                        }
+                                      },
                                     ),
                                   ],
                                 ),
-                              ),
+                                const SizedBox(height: 8),
+
+                                // Location
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * .2),
+                                    Expanded(
+                                      child: Text(
+                                        provider.locationName ?? 'Loading...',
+                                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                                        maxLines: 3,
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+
+                                // Blink instruction
+                                Container(
+                                  padding: const EdgeInsets.all(16.0),
+                                  color: Colors.black.withOpacity(0.5),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.circle, color: Colors.red, size: 10),
+                                      const SizedBox(width: 4),
+                                      Expanded(
+                                        child: Text(
+                                          'Kedipkan mata untuk menangkap gambar wajah',
+                                          style: const TextStyle(
+                                            color: Color(0xffE91E21),
+                                            fontSize: 12,
+                                          ),
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
