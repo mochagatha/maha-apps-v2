@@ -14,10 +14,7 @@ class AdminFaceCameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AdminFaceProvider(),
-      child: const _AdminFaceCameraView(),
-    );
+    return const _AdminFaceCameraView();
   }
 }
 

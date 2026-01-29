@@ -180,4 +180,30 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(NetworkFailure('No internet connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> uploadAdminPhoto({
+    required int adminId,
+    required String imagePath,
+    required String locationName,
+    required String location,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.uploadAdminPhoto(
+          adminId: adminId,
+          imagePath: imagePath,
+          locationName: locationName,
+          location: location,
+        );
+        return const Right(null);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure('No internet connection'));
+    }
+  }
 }

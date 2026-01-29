@@ -18,7 +18,9 @@ import '../../features/authentication/domain/usecases/register.dart';
 import '../../features/authentication/domain/usecases/save_login_status.dart';
 import '../../features/authentication/domain/usecases/verify_company_code.dart';
 import '../../features/authentication/domain/usecases/get_profile.dart';
+import '../../features/authentication/domain/usecases/upload_admin_photo.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
+import '../../features/authentication/presentation/providers/admin_face_provider.dart';
 
 // Forgot Password
 import '../../features/authentication/data/datasources/forgot_password_remote_datasource.dart';
@@ -101,6 +103,8 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerFactory(() => AdminFaceProvider(uploadAdminPhoto: sl()));
+
   // Use cases
   sl.registerLazySingleton(() => Login(sl()));
   sl.registerLazySingleton(() => Logout(sl()));
@@ -115,6 +119,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ResetPassword(sl()));
 
   sl.registerLazySingleton(() => GetProfile(sl()));
+  sl.registerLazySingleton(() => UploadAdminPhoto(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(

@@ -27,6 +27,14 @@ abstract class AuthRemoteDataSource {
 
   /// Get user profile
   Future<UserModel> getProfile(String token);
+
+  /// Upload admin photo with location data
+  Future<void> uploadAdminPhoto({
+    required int adminId,
+    required String imagePath,
+    required String locationName,
+    required String location,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -185,6 +193,54 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       if (e is ServerException) rethrow;
       throw ServerException('Failed to fetch profile: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<void> uploadAdminPhoto({
+    required int adminId,
+    required String imagePath,
+    required String locationName,
+    required String location,
+  }) async {
+    try {
+      // Create multipart file from image path
+      final multipartFile = await MultipartFile.fromFile(
+        imagePath,
+        filename: imagePath.split('/').last,
+      );
+
+      // Create form data
+      final formData = FormData.fromMap({
+        'admin_id': adminId,
+        'location_name': locationName,
+        'location': location,
+        'photos': multipartFile,
+      });
+
+      // Send to Golang API
+      final response = await client.dioGolang.post(
+        '/admin/upload-photo',
+        data: formData,
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException('Failed to upload photo');
+      }
+    } on DioException catch (e) {
+      final errorData = e.response?.data;
+      String message = 'Failed to upload photo';
+
+      if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
+        message = errorData['message'];
+      }
+
+      throw ServerException(message);
+    } catch (e) {
+      if (e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to upload photo: ${e.toString()}');
     }
   }
 }

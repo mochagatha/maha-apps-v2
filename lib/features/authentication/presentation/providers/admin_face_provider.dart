@@ -3,13 +3,20 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../../../core/widgets/face_detector_painter.dart';
+import '../../domain/usecases/upload_admin_photo.dart';
 
 enum FaceState { detecting, eyesClosed, waitingOpen, captured }
 
+enum UploadStatus { idle, uploading, success, error }
+
 class AdminFaceProvider extends ChangeNotifier {
+  final UploadAdminPhoto uploadAdminPhoto;
+
   CameraController? _cameraController;
   List<CameraDescription> _cameras = [];
   int _cameraIndex = -1;
@@ -34,14 +41,28 @@ class AdminFaceProvider extends ChangeNotifier {
 
   DateTime _lastProcess = DateTime.now();
 
+  // Upload state
+  UploadStatus _uploadStatus = UploadStatus.idle;
+  String? _uploadErrorMessage;
+
+  // Disposal flag to prevent notifyListeners after dispose
+  bool _disposed = false;
+
+  // Location data
+  Position? _currentPosition;
+  String? _locationName;
+
   CameraController? get cameraController => _cameraController;
   bool get isCameraInitialized => _isCameraInitialized;
   CustomPaint? get customPaint => _customPaint;
   bool get isImageSaved => _isImageSaved;
   String? get imagePath => _imagePath;
   String? get errorMessage => _errorMessage;
+  UploadStatus get uploadStatus => _uploadStatus;
+  String? get uploadErrorMessage => _uploadErrorMessage;
+  String? get locationName => _locationName;
 
-  AdminFaceProvider() {
+  AdminFaceProvider({required this.uploadAdminPhoto}) {
     _initializeCamera();
   }
 
@@ -63,7 +84,7 @@ class AdminFaceProvider extends ChangeNotifier {
       await _startLiveFeed();
     } catch (e) {
       _errorMessage = 'Camera init error: $e';
-      notifyListeners();
+      if (!_disposed) notifyListeners();
     }
   }
 
@@ -81,7 +102,7 @@ class AdminFaceProvider extends ChangeNotifier {
     _isCameraInitialized = true;
 
     await _cameraController!.startImageStream(_processCameraImage);
-    notifyListeners();
+    if (!_disposed) notifyListeners();
   }
 
   void _processCameraImage(CameraImage image) async {
@@ -111,7 +132,10 @@ class AdminFaceProvider extends ChangeNotifier {
       await _processBlink(faces.first);
     }
 
-    notifyListeners();
+    // Only notify listeners if not disposed
+    if (!_disposed) {
+      notifyListeners();
+    }
   }
 
   Future<void> _processBlink(Face face) async {
@@ -162,7 +186,7 @@ class AdminFaceProvider extends ChangeNotifier {
       final XFile file = await _cameraController!.takePicture();
       _imagePath = file.path;
 
-      notifyListeners();
+      if (!_disposed) notifyListeners();
     } catch (e) {
       _errorMessage = 'Capture error: $e';
       resetVerification();
@@ -252,16 +276,131 @@ class AdminFaceProvider extends ChangeNotifier {
     _isImageSaved = false;
     _imagePath = null;
     _errorMessage = null;
-    notifyListeners();
+    _uploadStatus = UploadStatus.idle;
+    _uploadErrorMessage = null;
+    if (!_disposed) notifyListeners();
+  }
+
+  /// Set image path (used when receiving from route parameter)
+  void setImagePath(String path) {
+    _imagePath = path;
+    _isImageSaved = true;
+    if (!_disposed) notifyListeners();
+  }
+
+  /// Get current location and reverse geocode to location name
+  Future<void> _getLocationData() async {
+    try {
+      // Check location permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permission denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permission permanently denied');
+      }
+
+      // Get current position
+      _currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Reverse geocode to get location name
+      final placemarks = await placemarkFromCoordinates(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        final placemark = placemarks.first;
+        _locationName = [
+          placemark.street,
+          placemark.subLocality,
+          placemark.locality,
+          placemark.subAdministrativeArea,
+        ].where((e) => e != null && e.isNotEmpty).join(', ');
+      } else {
+        _locationName = 'Unknown location';
+      }
+    } catch (e) {
+      _locationName = 'Unknown location';
+      _currentPosition = null;
+      rethrow;
+    }
+  }
+
+  /// Upload photo with location data
+  Future<void> uploadPhoto(int adminId) async {
+    if (_imagePath == null) {
+      _uploadStatus = UploadStatus.error;
+      _uploadErrorMessage = 'No image to upload';
+      if (!_disposed) notifyListeners();
+      return;
+    }
+
+    _uploadStatus = UploadStatus.uploading;
+    _uploadErrorMessage = null;
+    if (!_disposed) notifyListeners();
+
+    try {
+      // Get location data first
+      await _getLocationData();
+
+      // Prepare location string (lng,lat format)
+      final location = _currentPosition != null
+          ? '${_currentPosition!.longitude},${_currentPosition!.latitude}'
+          : '0,0';
+
+      // Upload photo
+      final result = await uploadAdminPhoto(
+        UploadAdminPhotoParams(
+          adminId: adminId,
+          imagePath: _imagePath!,
+          locationName: _locationName ?? 'Unknown location',
+          location: location,
+        ),
+      );
+
+      result.fold(
+        (failure) {
+          _uploadStatus = UploadStatus.error;
+          _uploadErrorMessage = failure.message;
+          if (!_disposed) notifyListeners();
+        },
+        (_) {
+          _uploadStatus = UploadStatus.success;
+          if (!_disposed) notifyListeners();
+        },
+      );
+    } catch (e) {
+      _uploadStatus = UploadStatus.error;
+      _uploadErrorMessage = e.toString();
+      if (!_disposed) notifyListeners();
+    }
   }
 
   @override
   void dispose() {
-    if (_cameraController?.value.isStreamingImages == true) {
-      _cameraController?.stopImageStream();
-    }
-    _cameraController?.dispose();
-    _faceDetector.close();
+    _disposed = true;
+
+    // Stop image stream and dispose camera synchronously
+    _cameraController?.stopImageStream().catchError((e) {
+      debugPrint('Error stopping image stream: $e');
+    });
+
+    _cameraController?.dispose().catchError((e) {
+      debugPrint('Error disposing camera: $e');
+    });
+
+    // Close face detector
+    _faceDetector.close().catchError((e) {
+      debugPrint('Error closing face detector: $e');
+    });
+
     super.dispose();
   }
 }

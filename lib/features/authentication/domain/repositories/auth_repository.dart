@@ -39,4 +39,12 @@ abstract class AuthRepository {
 
   /// Get user profile
   Future<Either<Failure, User>> getProfile();
+
+  /// Upload admin photo with location data
+  Future<Either<Failure, void>> uploadAdminPhoto({
+    required int adminId,
+    required String imagePath,
+    required String locationName,
+    required String location,
+  });
 }

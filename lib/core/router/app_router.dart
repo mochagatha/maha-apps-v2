@@ -46,6 +46,7 @@ import '../../features/recruitment/presentation/pages/company_code_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_verification_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_result_page.dart';
+import '../../features/authentication/presentation/providers/admin_face_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -109,15 +110,19 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.adminFaceCamera,
           name: RouteNames.adminFaceCamera,
-          builder: (context, state) => const AdminFaceCameraPage(),
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<AdminFaceProvider>(),
+            child: const AdminFaceCameraPage(),
+          ),
         ),
         GoRoute(
           path: RoutePaths.adminFaceResult,
           name: RouteNames.adminFaceResult,
           builder: (context, state) {
             final imagePath = state.extra as String;
-            return AdminFaceResultPage(
-              imagePath: imagePath,
+            return ChangeNotifierProvider(
+              create: (_) => sl<AdminFaceProvider>(),
+              child: AdminFaceResultPage(imagePath: imagePath),
             );
           },
         ),
