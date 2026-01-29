@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 
 class WelcomeDialogs {
@@ -24,20 +25,20 @@ class WelcomeDialogs {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
-                    'Selamat Bergabung !',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Text(
+                    context.l10n.welcomeGreetingTitle,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
                   SvgPicture.asset("assets/images/icon/selamat_bergabung.svg", height: 200),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Semoga Anda dapat memberikan kontribusi terbaik bagi perusahaan PT. Maha Akbar Sejahtera.',
+                  Text(
+                    context.l10n.welcomeGreetingMessage,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  const Text('Direktur', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(context.l10n.director, style: const TextStyle(fontWeight: FontWeight.bold)),
                   const Text('Hazri Fadillah Harahap, SE', style: TextStyle(fontSize: 12)),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -52,9 +53,9 @@ class WelcomeDialogs {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                       ),
-                      child: const Text(
-                        'Selanjutnya',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      child: Text(
+                        context.l10n.next,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                     ),
                   ),
@@ -90,26 +91,14 @@ class WelcomeDialogs {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
-                    'Peraturan Perusahaan !',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  Text(
+                    context.l10n.companyRegulationsTitle,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   Image.asset('assets/images/icon/Peraturan Perusahaan.png', height: 200),
-                  const Text.rich(
-                    TextSpan(
-                      text: 'Sebelum Anda melanjutkan ke tahap ',
-                      children: [
-                        TextSpan(
-                          text: 'pengisian data',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              '. Harap baca terlebih dahulu peraturan PT. Maha Akbar Sejahtera...!',
-                        ),
-                      ],
-                    ),
+                  Text(
+                    context.l10n.regulationPromptMessage,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
@@ -139,9 +128,9 @@ class WelcomeDialogs {
                             onTap: () {
                               isAgree.value = !isAgree.value;
                             },
-                            child: const Text(
-                              'Dengan ini saya menyatakan bahwa saya menyetujui seluruh peraturan perusahaan',
-                              style: TextStyle(fontSize: 10, color: Colors.black54),
+                            child: Text(
+                              context.l10n.agreeToRegulations,
+                              style: const TextStyle(fontSize: 10, color: Colors.black54),
                             ),
                           ),
                         ),
@@ -170,7 +159,7 @@ class WelcomeDialogs {
                               const Icon(Icons.print, size: 14, color: Colors.white),
                               const SizedBox(width: 2.5),
                               Text(
-                                'Unduh',
+                                context.l10n.download,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: screenWidth < 360 ? 12 : 14,
@@ -200,7 +189,7 @@ class WelcomeDialogs {
                                 ),
                               ),
                               child: Text(
-                                'Lanjutkan',
+                                context.l10n.continueAction,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: screenWidth < 360 ? 12 : 14,
@@ -240,30 +229,21 @@ class WelcomeDialogs {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
-                    'Lengkapi Data diri Anda !',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  Text(
+                    context.l10n.completePersonalDataTitle,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
                   Image.asset('assets/images/icon/fill-biodata.png', height: 200),
                   const SizedBox(height: 20),
-                  const Text.rich(
-                    TextSpan(
-                      text: 'Dalam pengisian formulir ini, Anda membutuhkan waktu ',
-                      children: [
-                        TextSpan(
-                          text: '10 Menit',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: '. Harap diisi dengan sejujurnya yah !'),
-                      ],
-                    ),
+                  Text(
+                    context.l10n.dataCompletionTimeMessage,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  const Text('Semangat', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const Text('Be Great, Be Integrated', style: TextStyle(fontSize: 12)),
+                  Text(context.l10n.spirit, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(context.l10n.companySlogan, style: const TextStyle(fontSize: 12)),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
@@ -277,9 +257,9 @@ class WelcomeDialogs {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                       ),
-                      child: const Text(
-                        'Oke',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      child: Text(
+                        context.l10n.ok,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection_container.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
@@ -42,11 +43,13 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString().replaceAll('ServerException: ', '');
-        _companyCode = "------"; // Show placeholder on error
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString().replaceAll('ServerException: ', '');
+          _companyCode = "------"; // Show placeholder on error
+        });
+      }
     }
   }
 
@@ -54,12 +57,12 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Kode Perusahaan',
+        title: context.l10n.companyCodeTitle,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: _isLoading ? null : _loadCompanyCode,
-            tooltip: 'Refresh Kode',
+            tooltip: context.l10n.refreshCodeTooltip,
           ),
         ],
       ),
@@ -76,7 +79,7 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
                       const Icon(Icons.error_outline, color: Colors.red, size: 60),
                       const SizedBox(height: 16),
                       Text(
-                        'Gagal Memuat Kode Perusahaan',
+                        context.l10n.failedToLoadCompanyCode,
                         style: AppTextStyles.headingTwoSemiBold(context),
                         textAlign: TextAlign.center,
                       ),
@@ -90,7 +93,7 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
                       ElevatedButton.icon(
                         onPressed: _loadCompanyCode,
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Coba Lagi'),
+                        label: Text(context.l10n.retry),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -109,7 +112,7 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
                       const SizedBox(height: 20),
                       // Title Section
                       Text(
-                        'Gunakan Kode Perusahaan yang dikelola oleh sistem dan akan berganti secara otomatis',
+                        context.l10n.companyCodeInstruction,
                         style: AppTextStyles.bodyStyle(
                           context,
                         ).copyWith(color: Colors.black87, fontSize: 12),

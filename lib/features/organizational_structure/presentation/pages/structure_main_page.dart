@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../providers/organizational_structure_provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 
@@ -27,7 +28,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Struktur Utama'),
+      appBar: CustomAppBar(title: context.l10n.mainStructure),
       body: Consumer<OrganizationalStructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
@@ -53,7 +54,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('Coba Lagi'),
+                    child: Text(context.l10n.retry),
                   ),
                 ],
               ),
@@ -94,9 +95,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
                   },
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Anda belum memiliki Struktur Utama',
-                  style: TextStyle(
+                Text(
+                  context.l10n.emptyStructureTitle,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -105,7 +106,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Anda harus menambahkan struktur anda terlebih\ndahulu.',
+                  context.l10n.emptyStructureMessage,
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                   textAlign: TextAlign.center,
                 ),
@@ -129,7 +130,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Fitur bagan organisasi akan segera hadir')),
+                      SnackBar(content: Text(context.l10n.featureComingSoon)),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -137,9 +138,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text(
-                    'Tampilkan Bagan',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  child: Text(
+                    context.l10n.showChart,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -149,16 +150,16 @@ class _StructureMainPageState extends State<StructureMainPage> {
                   onPressed: () {
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(const SnackBar(content: Text('Fitur arsip akan segera hadir')));
+                    ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text(
-                    'Arsip',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  child: Text(
+                    context.l10n.archive,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -276,9 +277,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 disabledBackgroundColor: Colors.grey,
               ),
-              child: const Text(
-                '+ Tingkatan Struktur Utama',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: Text(
+                context.l10n.addMainStructureLevel,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -296,7 +297,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
           children: [
             ListTile(
               leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: const Text('Hapus Role'),
+              title: Text(context.l10n.deleteRole),
               onTap: () {
                 Navigator.pop(context);
                 _confirmDeleteRole(roleId);
@@ -321,7 +322,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
     if (availableRoles.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Tidak ada role yang tersedia')));
+      ).showSnackBar(SnackBar(content: Text(context.l10n.noRolesAvailable)));
       return;
     }
 
@@ -337,7 +338,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
     if (selectableRoles.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Semua role sudah ditambahkan')));
+      ).showSnackBar(SnackBar(content: Text(context.l10n.allRolesAdded)));
       return;
     }
 
@@ -353,9 +354,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Daftar Tingkatan Pekerjaan',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text(
+                  context.l10n.jobLevelList,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 ...selectableRoles.map((role) {
@@ -411,9 +412,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       disabledBackgroundColor: Colors.grey,
                     ),
-                    child: const Text(
-                      'Pilih',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    child: Text(
+                      context.l10n.select,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -439,9 +440,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Maaf, Sebelumnya...',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                context.l10n.sorryBeforehand,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
               Image.asset(
@@ -453,10 +454,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 },
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Apakah anda yakin ingin menambahkan Daftar Tingkatan Pekerjaan ke struktur utama ?',
+              Text(
+                context.l10n.confirmAddJobLevelStructure,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
               ),
               const SizedBox(height: 20),
               Row(
@@ -469,7 +470,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                         side: const BorderSide(color: Colors.red),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text('Batal'),
+                      child: Text(context.l10n.cancel),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -484,7 +485,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text('Oke'),
+                      child: Text(context.l10n.ok),
                     ),
                   ),
                 ],
@@ -503,7 +504,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
     if (structure == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Struktur tidak ditemukan')));
+      ).showSnackBar(SnackBar(content: Text(context.l10n.structureNotFound)));
       return;
     }
 
@@ -520,7 +521,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(provider.errorMessage ?? 'Gagal menambahkan role'),
+          content: Text(provider.errorMessage ?? context.l10n.failedToAddRole),
           backgroundColor: Colors.red,
         ),
       );
@@ -538,7 +539,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Berhasil!!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(context.l10n.successExclamation, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 20),
               Container(
                 width: 100,
@@ -547,10 +548,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 child: const Icon(Icons.check, size: 60, color: Colors.white),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Daftar tingkatan pekerjaan berhasil di Tambahkan',
+              Text(
+                context.l10n.jobLevelAddedSuccess,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -562,9 +563,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: const Text(
-                    'Oke',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  child: Text(
+                    context.l10n.ok,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -579,10 +580,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Hapus Role Struktur'),
-        content: const Text('Apakah Anda yakin ingin menghapus role ini?'),
+        title: Text(context.l10n.deleteStructureRoleTitle),
+        content: Text(context.l10n.deleteStructureRoleMessage),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.cancel)),
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
@@ -591,7 +592,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
               if (success && mounted) {
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(const SnackBar(content: Text('Role berhasil dihapus')));
+                ).showSnackBar(SnackBar(content: Text(context.l10n.roleDeletedSuccess)));
                 _loadData();
               }
             },

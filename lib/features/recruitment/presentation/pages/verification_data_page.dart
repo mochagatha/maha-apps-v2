@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 
@@ -9,22 +10,23 @@ class VerificationDataPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Moved inside build to access context
     final List<Map<String, dynamic>> menuItems = [
       {
         'icon': 'assets/images/icon/karyawan_icon.svg',
-        'text': 'Karyawan',
+        'text': context.l10n.employee, // "Karyawan"
         'count': 0,
         'route': '/recruitment/employee-verification',
       },
       {
         'icon': 'assets/images/icon/pekerja_harian_icon.svg',
-        'text': 'Pekerja Harian',
+        'text': context.l10n.dailyWorker, // "Pekerja Harian"
         'count': 0,
         'action': () {
           // TODO: Navigate to worker verification list
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Fitur Verifikasi Data Pekerja Harian akan segera hadir!'),
+            SnackBar(
+              content: Text(context.l10n.dailyWorkerVerificationComingSoon),
             ),
           );
         },
@@ -32,8 +34,8 @@ class VerificationDataPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Data Tingkatan Pekerjaan',
+      appBar: CustomAppBar(
+        title: context.l10n.verificationJobLevelTitle,
       ),
       body: RefreshIndicator(
         color: AppColors.primary,

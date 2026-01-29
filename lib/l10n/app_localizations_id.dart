@@ -414,4 +414,191 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get menuStrukturOrganisasi => 'Struktur Organisasi';
+
+  @override
+  String get redeemPoints => 'Tukar Poin';
+
+  @override
+  String get performance => 'Performa';
+
+  @override
+  String get salarySlip => 'Slip Gaji';
+
+  @override
+  String get debtSlip => 'Slip Hutang';
+
+  @override
+  String get resignation => 'Pengunduran Diri';
+
+  @override
+  String get ok => 'Oke';
+
+  @override
+  String get verificationJobLevelTitle => 'Data Tingkatan Pekerjaan';
+
+  @override
+  String get dailyWorker => 'Pekerja Harian';
+
+  @override
+  String get dailyWorkerVerificationComingSoon =>
+      'Fitur Verifikasi Data Pekerja Harian akan segera hadir!';
+
+  @override
+  String get companyCodeTitle => 'Kode Perusahaan';
+
+  @override
+  String get failedToLoadCompanyCode => 'Gagal Memuat Kode Perusahaan';
+
+  @override
+  String get companyCodeInstruction =>
+      'Gunakan Kode Perusahaan yang dikelola oleh sistem dan akan berganti secara otomatis';
+
+  @override
+  String get refreshCodeTooltip => 'Refresh Kode';
+
+  @override
+  String get employeeVerificationTitle => 'Verifikasi Data Karyawan';
+
+  @override
+  String get featureUnderDevelopment => 'Fitur Dalam Pengembangan';
+
+  @override
+  String get employeeVerificationDevMessage =>
+      'Halaman Verifikasi Data Karyawan sedang dalam tahap pengembangan. Fitur ini akan menampilkan daftar karyawan yang perlu diverifikasi dengan tab filter status.';
+
+  @override
+  String get menuVerifikasiData => 'Verifikasi Data';
+
+  @override
+  String get menuPerjanjianKerja => 'Perjanjian Kerja';
+
+  @override
+  String get menuAktivasiBpjs => 'Aktivasi BPJS';
+
+  @override
+  String get menuKodePerusahaan => 'Kode Perusahaan';
+
+  @override
+  String get recruitmentTitle => 'Rekrutmen';
+
+  @override
+  String get recruitmentEmpty => 'Tidak ada menu rekrutmen tersedia';
+
+  @override
+  String get errorOccurred => 'Terjadi kesalahan';
+
+  @override
+  String featureComingSoonDynamic(String label) {
+    return 'Fitur $label akan segera hadir!';
+  }
+
+  @override
+  String get underMonitoring => 'Kamu sedang dalam\npemantauan nih!';
+
+  @override
+  String get showChart => 'Tampilkan Bagan';
+
+  @override
+  String get archive => 'Arsip';
+
+  @override
+  String get deleteRole => 'Hapus Role';
+
+  @override
+  String get deleteStructureRoleTitle => 'Hapus Role Struktur';
+
+  @override
+  String get deleteStructureRoleMessage =>
+      'Apakah Anda yakin ingin menghapus role ini?';
+
+  @override
+  String get jobLevelList => 'Daftar Tingkatan Pekerjaan';
+
+  @override
+  String get select => 'Pilih';
+
+  @override
+  String get sorryBeforehand => 'Maaf, Sebelumnya...';
+
+  @override
+  String get confirmAddJobLevelStructure =>
+      'Apakah anda yakin ingin menambahkan Daftar Tingkatan Pekerjaan ke struktur utama ?';
+
+  @override
+  String get successExclamation => 'Berhasil!!';
+
+  @override
+  String get jobLevelAddedSuccess =>
+      'Daftar tingkatan pekerjaan berhasil di Tambahkan';
+
+  @override
+  String get structureNotFound => 'Struktur tidak ditemukan';
+
+  @override
+  String get failedToAddRole => 'Gagal menambahkan role';
+
+  @override
+  String get roleDeletedSuccess => 'Role berhasil dihapus';
+
+  @override
+  String get noRolesAvailable => 'Tidak ada role yang tersedia';
+
+  @override
+  String get allRolesAdded => 'Semua role sudah ditambahkan';
+
+  @override
+  String get addMainStructureLevel => '+ Tingkatan Struktur Utama';
+
+  @override
+  String get mainStructure => 'Struktur Utama';
+
+  @override
+  String get emptyStructureTitle => 'Anda belum memiliki Struktur Utama';
+
+  @override
+  String get emptyStructureMessage =>
+      'Anda harus menambahkan struktur anda terlebih\ndahulu.';
+
+  @override
+  String get welcomeGreetingTitle => 'Selamat Bergabung !';
+
+  @override
+  String get welcomeGreetingMessage =>
+      'Semoga Anda dapat memberikan kontribusi terbaik bagi perusahaan PT. Maha Akbar Sejahtera.';
+
+  @override
+  String get director => 'Direktur';
+
+  @override
+  String get next => 'Selanjutnya';
+
+  @override
+  String get companyRegulationsTitle => 'Peraturan Perusahaan !';
+
+  @override
+  String get regulationPromptMessage =>
+      'Sebelum Anda melanjutkan ke tahap pengisian data. Harap baca terlebih dahulu peraturan PT. Maha Akbar Sejahtera...!';
+
+  @override
+  String get agreeToRegulations =>
+      'Dengan ini saya menyatakan bahwa saya menyetujui seluruh peraturan perusahaan';
+
+  @override
+  String get download => 'Unduh';
+
+  @override
+  String get continueAction => 'Lanjutkan';
+
+  @override
+  String get completePersonalDataTitle => 'Lengkapi Data diri Anda !';
+
+  @override
+  String get dataCompletionTimeMessage =>
+      'Dalam pengisian formulir ini, Anda membutuhkan waktu 10 Menit. Harap diisi dengan sejujurnya yah !';
+
+  @override
+  String get spirit => 'Semangat';
+
+  @override
+  String get companySlogan => 'Be Great, Be Integrated';
 }

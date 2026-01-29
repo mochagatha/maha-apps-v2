@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/router/route_paths.dart';
+import '../../../core/utils/localization_extension.dart';
 
 class RecruitmentMenuMapper {
   // Menu IDs
@@ -48,13 +49,13 @@ class RecruitmentMenuMapper {
   static String getMenuLabel(BuildContext context, String id) {
     switch (id) {
       case verifikasiData:
-        return 'Verifikasi Data';
+        return context.l10n.menuVerifikasiData;
       case perjanjianKerja:
-        return 'Perjanjian Kerja';
+        return context.l10n.menuPerjanjianKerja;
       case aktivasiBpjs:
-        return 'Aktivasi BPJS';
+        return context.l10n.menuAktivasiBpjs;
       case kodePerusahaan:
-        return 'Kode Perusahaan';
+        return context.l10n.menuKodePerusahaan;
       default:
         // Fallback to a readable name from ID
         return id

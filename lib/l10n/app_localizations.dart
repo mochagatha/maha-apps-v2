@@ -865,6 +865,354 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Struktur Organisasi'**
   String get menuStrukturOrganisasi;
+
+  /// No description provided for @redeemPoints.
+  ///
+  /// In id, this message translates to:
+  /// **'Tukar Poin'**
+  String get redeemPoints;
+
+  /// No description provided for @performance.
+  ///
+  /// In id, this message translates to:
+  /// **'Performa'**
+  String get performance;
+
+  /// No description provided for @salarySlip.
+  ///
+  /// In id, this message translates to:
+  /// **'Slip Gaji'**
+  String get salarySlip;
+
+  /// No description provided for @debtSlip.
+  ///
+  /// In id, this message translates to:
+  /// **'Slip Hutang'**
+  String get debtSlip;
+
+  /// No description provided for @resignation.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengunduran Diri'**
+  String get resignation;
+
+  /// No description provided for @ok.
+  ///
+  /// In id, this message translates to:
+  /// **'Oke'**
+  String get ok;
+
+  /// No description provided for @verificationJobLevelTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Data Tingkatan Pekerjaan'**
+  String get verificationJobLevelTitle;
+
+  /// No description provided for @dailyWorker.
+  ///
+  /// In id, this message translates to:
+  /// **'Pekerja Harian'**
+  String get dailyWorker;
+
+  /// No description provided for @dailyWorkerVerificationComingSoon.
+  ///
+  /// In id, this message translates to:
+  /// **'Fitur Verifikasi Data Pekerja Harian akan segera hadir!'**
+  String get dailyWorkerVerificationComingSoon;
+
+  /// No description provided for @companyCodeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode Perusahaan'**
+  String get companyCodeTitle;
+
+  /// No description provided for @failedToLoadCompanyCode.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal Memuat Kode Perusahaan'**
+  String get failedToLoadCompanyCode;
+
+  /// No description provided for @companyCodeInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Gunakan Kode Perusahaan yang dikelola oleh sistem dan akan berganti secara otomatis'**
+  String get companyCodeInstruction;
+
+  /// No description provided for @refreshCodeTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Refresh Kode'**
+  String get refreshCodeTooltip;
+
+  /// No description provided for @employeeVerificationTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi Data Karyawan'**
+  String get employeeVerificationTitle;
+
+  /// No description provided for @featureUnderDevelopment.
+  ///
+  /// In id, this message translates to:
+  /// **'Fitur Dalam Pengembangan'**
+  String get featureUnderDevelopment;
+
+  /// No description provided for @employeeVerificationDevMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Halaman Verifikasi Data Karyawan sedang dalam tahap pengembangan. Fitur ini akan menampilkan daftar karyawan yang perlu diverifikasi dengan tab filter status.'**
+  String get employeeVerificationDevMessage;
+
+  /// No description provided for @menuVerifikasiData.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi Data'**
+  String get menuVerifikasiData;
+
+  /// No description provided for @menuPerjanjianKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Perjanjian Kerja'**
+  String get menuPerjanjianKerja;
+
+  /// No description provided for @menuAktivasiBpjs.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktivasi BPJS'**
+  String get menuAktivasiBpjs;
+
+  /// No description provided for @menuKodePerusahaan.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode Perusahaan'**
+  String get menuKodePerusahaan;
+
+  /// No description provided for @recruitmentTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Rekrutmen'**
+  String get recruitmentTitle;
+
+  /// No description provided for @recruitmentEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada menu rekrutmen tersedia'**
+  String get recruitmentEmpty;
+
+  /// No description provided for @errorOccurred.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjadi kesalahan'**
+  String get errorOccurred;
+
+  /// Feature coming soon with dynamic label
+  ///
+  /// In id, this message translates to:
+  /// **'Fitur {label} akan segera hadir!'**
+  String featureComingSoonDynamic(String label);
+
+  /// No description provided for @underMonitoring.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu sedang dalam\npemantauan nih!'**
+  String get underMonitoring;
+
+  /// No description provided for @showChart.
+  ///
+  /// In id, this message translates to:
+  /// **'Tampilkan Bagan'**
+  String get showChart;
+
+  /// No description provided for @archive.
+  ///
+  /// In id, this message translates to:
+  /// **'Arsip'**
+  String get archive;
+
+  /// No description provided for @deleteRole.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus Role'**
+  String get deleteRole;
+
+  /// No description provided for @deleteStructureRoleTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus Role Struktur'**
+  String get deleteStructureRoleTitle;
+
+  /// No description provided for @deleteStructureRoleMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah Anda yakin ingin menghapus role ini?'**
+  String get deleteStructureRoleMessage;
+
+  /// No description provided for @jobLevelList.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar Tingkatan Pekerjaan'**
+  String get jobLevelList;
+
+  /// No description provided for @select.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih'**
+  String get select;
+
+  /// No description provided for @sorryBeforehand.
+  ///
+  /// In id, this message translates to:
+  /// **'Maaf, Sebelumnya...'**
+  String get sorryBeforehand;
+
+  /// No description provided for @confirmAddJobLevelStructure.
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah anda yakin ingin menambahkan Daftar Tingkatan Pekerjaan ke struktur utama ?'**
+  String get confirmAddJobLevelStructure;
+
+  /// No description provided for @successExclamation.
+  ///
+  /// In id, this message translates to:
+  /// **'Berhasil!!'**
+  String get successExclamation;
+
+  /// No description provided for @jobLevelAddedSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar tingkatan pekerjaan berhasil di Tambahkan'**
+  String get jobLevelAddedSuccess;
+
+  /// No description provided for @structureNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Struktur tidak ditemukan'**
+  String get structureNotFound;
+
+  /// No description provided for @failedToAddRole.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal menambahkan role'**
+  String get failedToAddRole;
+
+  /// No description provided for @roleDeletedSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Role berhasil dihapus'**
+  String get roleDeletedSuccess;
+
+  /// No description provided for @noRolesAvailable.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada role yang tersedia'**
+  String get noRolesAvailable;
+
+  /// No description provided for @allRolesAdded.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua role sudah ditambahkan'**
+  String get allRolesAdded;
+
+  /// No description provided for @addMainStructureLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'+ Tingkatan Struktur Utama'**
+  String get addMainStructureLevel;
+
+  /// No description provided for @mainStructure.
+  ///
+  /// In id, this message translates to:
+  /// **'Struktur Utama'**
+  String get mainStructure;
+
+  /// No description provided for @emptyStructureTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Anda belum memiliki Struktur Utama'**
+  String get emptyStructureTitle;
+
+  /// No description provided for @emptyStructureMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Anda harus menambahkan struktur anda terlebih\ndahulu.'**
+  String get emptyStructureMessage;
+
+  /// No description provided for @welcomeGreetingTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Selamat Bergabung !'**
+  String get welcomeGreetingTitle;
+
+  /// No description provided for @welcomeGreetingMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Semoga Anda dapat memberikan kontribusi terbaik bagi perusahaan PT. Maha Akbar Sejahtera.'**
+  String get welcomeGreetingMessage;
+
+  /// No description provided for @director.
+  ///
+  /// In id, this message translates to:
+  /// **'Direktur'**
+  String get director;
+
+  /// No description provided for @next.
+  ///
+  /// In id, this message translates to:
+  /// **'Selanjutnya'**
+  String get next;
+
+  /// No description provided for @companyRegulationsTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Peraturan Perusahaan !'**
+  String get companyRegulationsTitle;
+
+  /// No description provided for @regulationPromptMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Sebelum Anda melanjutkan ke tahap pengisian data. Harap baca terlebih dahulu peraturan PT. Maha Akbar Sejahtera...!'**
+  String get regulationPromptMessage;
+
+  /// No description provided for @agreeToRegulations.
+  ///
+  /// In id, this message translates to:
+  /// **'Dengan ini saya menyatakan bahwa saya menyetujui seluruh peraturan perusahaan'**
+  String get agreeToRegulations;
+
+  /// No description provided for @download.
+  ///
+  /// In id, this message translates to:
+  /// **'Unduh'**
+  String get download;
+
+  /// No description provided for @continueAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjutkan'**
+  String get continueAction;
+
+  /// No description provided for @completePersonalDataTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Lengkapi Data diri Anda !'**
+  String get completePersonalDataTitle;
+
+  /// No description provided for @dataCompletionTimeMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Dalam pengisian formulir ini, Anda membutuhkan waktu 10 Menit. Harap diisi dengan sejujurnya yah !'**
+  String get dataCompletionTimeMessage;
+
+  /// No description provided for @spirit.
+  ///
+  /// In id, this message translates to:
+  /// **'Semangat'**
+  String get spirit;
+
+  /// No description provided for @companySlogan.
+  ///
+  /// In id, this message translates to:
+  /// **'Be Great, Be Integrated'**
+  String get companySlogan;
 }
 
 class _AppLocalizationsDelegate

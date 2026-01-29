@@ -60,9 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => context.go('/home'),
           ),
-          title: const Text(
-            'Profil',
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          title: Text(
+            context.l10n.profile,
+            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -81,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     const Icon(Icons.error_outline, size: 64, color: AppColors.error),
                     const SizedBox(height: 16),
                     Text(
-                      provider.errorMessage ?? 'An error occurred',
+                      provider.errorMessage ?? context.l10n.errorOccurred,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16),
                     ),
@@ -133,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     backgroundImage: employee?.photoUrl != null
                                         ? NetworkImage(employee!.photoUrl!)
                                         : const AssetImage('assets/images/user_placeholder.png')
-                                              as ImageProvider,
+                                            as ImageProvider,
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -217,9 +217,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'Poin saat ini',
-                                          style: TextStyle(
+                                        Text(
+                                          context.l10n.profilePoints,
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xffB78805),
                                             fontSize: 12,
@@ -227,8 +227,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         Text(
                                           isWorker
-                                              ? '0 poin'
-                                              : '${employee?.totalPoint.toStringAsFixed(0) ?? 0} poin',
+                                              ? '0 ${context.l10n.points}'
+                                              : '${employee?.totalPoint.toStringAsFixed(0) ?? 0} ${context.l10n.points}',
                                           style: const TextStyle(
                                             color: Color(0xffB78805),
                                             fontSize: 12,
@@ -242,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 GestureDetector(
                                   onTap: () {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Feature coming soon!')),
+                                      SnackBar(content: Text(context.l10n.featureComingSoon)),
                                     );
                                   },
                                   child: Container(
@@ -255,12 +255,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Row(
-                                      children: const [
-                                        Icon(Icons.receipt_long, color: Colors.white, size: 16),
-                                        SizedBox(width: 4),
+                                      children: [
+                                        const Icon(Icons.receipt_long, color: Colors.white, size: 16),
+                                        const SizedBox(width: 4),
                                         Text(
-                                          'Tukar Poin',
-                                          style: TextStyle(
+                                          context.l10n.redeemPoints,
+                                          style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
@@ -311,9 +311,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Kamu sedang dalam\npemantauan nih!',
-                                  style: TextStyle(color: Colors.white, fontSize: 12),
+                                Text(
+                                  context.l10n.underMonitoring,
+                                  style: const TextStyle(color: Colors.white, fontSize: 12),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -368,11 +368,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     // Fitur Section
                     ProfileMenuList(
-                      title: 'FITUR',
+                      title: context.l10n.profileFeatures,
                       items: [
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/data_diri_profile.svg',
-                          label: 'Data Diri',
+                          label: context.l10n.dataDiri,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -381,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/performa.svg',
-                          label: 'Performa',
+                          label: context.l10n.performance,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -390,7 +390,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/administrasi.svg',
-                          label: 'Administrasi',
+                          label: context.l10n.menuAdministrasi,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -399,7 +399,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/entypo_wallet.svg',
-                          label: 'Slip Gaji',
+                          label: context.l10n.salarySlip,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -408,7 +408,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/slip_hutang_icon.svg',
-                          label: 'Slip Hutang',
+                          label: context.l10n.debtSlip,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -422,12 +422,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     // Preferensi Section
                     ProfileMenuList(
-                      title: 'PREFERENSI',
+                      title: context.l10n.profilePreferences,
                       items: [
                         // Placeholder for Pengunduran Diri since icon might be missing
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/log_out.svg',
-                          label: 'Pengunduran Diri',
+                          label: context.l10n.resignation,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -436,7 +436,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/keamanan_akun.svg',
-                          label: 'Ubah Kata Sandi',
+                          label: context.l10n.changePassword,
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
@@ -445,7 +445,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ProfileMenuItem(
                           assetPath: 'assets/images/icon/log_out.svg',
-                          label: 'Keluar',
+                          label: context.l10n.logout,
                           textColor: Colors.red,
                           onTap: () {
                             _showLogoutDialog(context);
@@ -460,9 +460,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Center(
                       child: Column(
                         children: [
-                          const Text(
-                            'Application Version : 1.0.0',
-                            style: TextStyle(
+                          Text(
+                            context.l10n.appVersion('1.0.0'),
+                            style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
                               fontWeight: FontWeight.w300,
@@ -470,7 +470,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '©opyright IT MAHA  ${DateTime.now().year}',
+                            context.l10n.copyright(DateTime.now().year.toString()),
                             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
                           ),
                         ],

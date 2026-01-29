@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 
@@ -8,8 +9,8 @@ class EmployeeVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Verifikasi Data Karyawan',
+      appBar: CustomAppBar(
+        title: context.l10n.employeeVerificationTitle,
       ),
       body: Center(
         child: Padding(
@@ -24,7 +25,7 @@ class EmployeeVerificationPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'Fitur Dalam Pengembangan',
+                context.l10n.featureUnderDevelopment,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -34,7 +35,7 @@ class EmployeeVerificationPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Halaman Verifikasi Data Karyawan sedang dalam tahap pengembangan. Fitur ini akan menampilkan daftar karyawan yang perlu diverifikasi dengan tab filter status.',
+                context.l10n.employeeVerificationDevMessage,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],

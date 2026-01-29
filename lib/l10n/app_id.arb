@@ -443,5 +443,80 @@
   "menuHakAksesMenu": "Hak Akses Menu",
   "menuPelacakanJamKerja": "Pelacakan Jam Kerja",
   "menuStrukturOrganisasi": "Struktur Organisasi",
-  "menuKpi": "Indikator Kinerja Utama (KPI)"
+  "menuKpi": "Indikator Kinerja Utama (KPI)",
+
+  "redeemPoints": "Tukar Poin",
+  "performance": "Performa",
+  "salarySlip": "Slip Gaji",
+  "debtSlip": "Slip Hutang",
+  "resignation": "Pengunduran Diri",
+  "ok": "Oke",
+  
+  "verificationJobLevelTitle": "Data Tingkatan Pekerjaan",
+  "dailyWorker": "Pekerja Harian",
+  "dailyWorkerVerificationComingSoon": "Fitur Verifikasi Data Pekerja Harian akan segera hadir!",
+  
+  "companyCodeTitle": "Kode Perusahaan",
+  "failedToLoadCompanyCode": "Gagal Memuat Kode Perusahaan",
+  "companyCodeInstruction": "Gunakan Kode Perusahaan yang dikelola oleh sistem dan akan berganti secara otomatis",
+  "refreshCodeTooltip": "Refresh Kode",
+  
+  "employeeVerificationTitle": "Verifikasi Data Karyawan",
+  "featureUnderDevelopment": "Fitur Dalam Pengembangan",
+  "employeeVerificationDevMessage": "Halaman Verifikasi Data Karyawan sedang dalam tahap pengembangan. Fitur ini akan menampilkan daftar karyawan yang perlu diverifikasi dengan tab filter status.",
+
+  "menuVerifikasiData": "Verifikasi Data",
+  "menuPerjanjianKerja": "Perjanjian Kerja",
+  "menuAktivasiBpjs": "Aktivasi BPJS",
+  "menuKodePerusahaan": "Kode Perusahaan",
+
+  "recruitmentTitle": "Rekrutmen",
+  "recruitmentEmpty": "Tidak ada menu rekrutmen tersedia",
+  "errorOccurred": "Terjadi kesalahan",
+  "featureComingSoonDynamic": "Fitur {label} akan segera hadir!",
+  "@featureComingSoonDynamic": {
+    "description": "Feature coming soon with dynamic label",
+    "placeholders": {
+        "label": {
+            "type": "String",
+            "example": "Rekrutmen"
+        }
+    }
+  },
+  
+  "underMonitoring": "Kamu sedang dalam\npemantauan nih!",
+  "showChart": "Tampilkan Bagan",
+  "archive": "Arsip",
+  "deleteRole": "Hapus Role",
+  "deleteStructureRoleTitle": "Hapus Role Struktur",
+  "deleteStructureRoleMessage": "Apakah Anda yakin ingin menghapus role ini?",
+  "jobLevelList": "Daftar Tingkatan Pekerjaan",
+  "select": "Pilih",
+  "sorryBeforehand": "Maaf, Sebelumnya...",
+  "confirmAddJobLevelStructure": "Apakah anda yakin ingin menambahkan Daftar Tingkatan Pekerjaan ke struktur utama ?",
+  "successExclamation": "Berhasil!!",
+  "jobLevelAddedSuccess": "Daftar tingkatan pekerjaan berhasil di Tambahkan",
+  "structureNotFound": "Struktur tidak ditemukan",
+  "failedToAddRole": "Gagal menambahkan role",
+  "roleDeletedSuccess": "Role berhasil dihapus",
+  "noRolesAvailable": "Tidak ada role yang tersedia",
+  "allRolesAdded": "Semua role sudah ditambahkan",
+  "addMainStructureLevel": "+ Tingkatan Struktur Utama",
+  "mainStructure": "Struktur Utama",
+  "emptyStructureTitle": "Anda belum memiliki Struktur Utama",
+  "emptyStructureMessage": "Anda harus menambahkan struktur anda terlebih\ndahulu.",
+
+  "welcomeGreetingTitle": "Selamat Bergabung !",
+  "welcomeGreetingMessage": "Semoga Anda dapat memberikan kontribusi terbaik bagi perusahaan PT. Maha Akbar Sejahtera.",
+  "director": "Direktur",
+  "next": "Selanjutnya",
+  "companyRegulationsTitle": "Peraturan Perusahaan !",
+  "regulationPromptMessage": "Sebelum Anda melanjutkan ke tahap pengisian data. Harap baca terlebih dahulu peraturan PT. Maha Akbar Sejahtera...!",
+  "agreeToRegulations": "Dengan ini saya menyatakan bahwa saya menyetujui seluruh peraturan perusahaan",
+  "download": "Unduh",
+  "continueAction": "Lanjutkan",
+  "completePersonalDataTitle": "Lengkapi Data diri Anda !",
+  "dataCompletionTimeMessage": "Dalam pengisian formulir ini, Anda membutuhkan waktu 10 Menit. Harap diisi dengan sejujurnya yah !",
+  "spirit": "Semangat",
+  "companySlogan": "Be Great, Be Integrated"
 }

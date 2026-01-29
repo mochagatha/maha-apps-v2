@@ -413,4 +413,189 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuStrukturOrganisasi => 'Organizational Structure';
+
+  @override
+  String get redeemPoints => 'Redeem Points';
+
+  @override
+  String get performance => 'Performance';
+
+  @override
+  String get salarySlip => 'Salary Slip';
+
+  @override
+  String get debtSlip => 'Debt Slip';
+
+  @override
+  String get resignation => 'Resignation';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get verificationJobLevelTitle => 'Job Level Data';
+
+  @override
+  String get dailyWorker => 'Daily Worker';
+
+  @override
+  String get dailyWorkerVerificationComingSoon =>
+      'Daily Worker Data Verification feature coming soon!';
+
+  @override
+  String get companyCodeTitle => 'Company Code';
+
+  @override
+  String get failedToLoadCompanyCode => 'Failed to Load Company Code';
+
+  @override
+  String get companyCodeInstruction =>
+      'Use the Company Code managed by the system which will change automatically';
+
+  @override
+  String get refreshCodeTooltip => 'Refresh Code';
+
+  @override
+  String get employeeVerificationTitle => 'Employee Data Verification';
+
+  @override
+  String get featureUnderDevelopment => 'Feature Under Development';
+
+  @override
+  String get employeeVerificationDevMessage =>
+      'Employee Data Verification page is under development. This feature will display a list of employees to verify with status filter tabs.';
+
+  @override
+  String get menuVerifikasiData => 'Data Verification';
+
+  @override
+  String get menuPerjanjianKerja => 'Employment Agreement';
+
+  @override
+  String get menuAktivasiBpjs => 'BPJS Activation';
+
+  @override
+  String get menuKodePerusahaan => 'Company Code';
+
+  @override
+  String get recruitmentTitle => 'Recruitment';
+
+  @override
+  String get recruitmentEmpty => 'No recruitment menu available';
+
+  @override
+  String get errorOccurred => 'An error occurred';
+
+  @override
+  String featureComingSoonDynamic(String label) {
+    return 'Feature $label coming soon!';
+  }
+
+  @override
+  String get underMonitoring => 'You are under\nmonitoring!';
+
+  @override
+  String get showChart => 'Show Chart';
+
+  @override
+  String get archive => 'Archive';
+
+  @override
+  String get deleteRole => 'Delete Role';
+
+  @override
+  String get deleteStructureRoleTitle => 'Delete Role Structure';
+
+  @override
+  String get deleteStructureRoleMessage =>
+      'Are you sure you want to delete this role?';
+
+  @override
+  String get jobLevelList => 'Job Level List';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get sorryBeforehand => 'Sorry...';
+
+  @override
+  String get confirmAddJobLevelStructure =>
+      'Are you sure you want to add the Job Level List to the main structure?';
+
+  @override
+  String get successExclamation => 'Success!!';
+
+  @override
+  String get jobLevelAddedSuccess => 'Job level list successfully added';
+
+  @override
+  String get structureNotFound => 'Structure not found';
+
+  @override
+  String get failedToAddRole => 'Failed to add role';
+
+  @override
+  String get roleDeletedSuccess => 'Role successfully deleted';
+
+  @override
+  String get noRolesAvailable => 'No roles available';
+
+  @override
+  String get allRolesAdded => 'All roles have been added';
+
+  @override
+  String get addMainStructureLevel => '+ Main Structure Level';
+
+  @override
+  String get mainStructure => 'Main Structure';
+
+  @override
+  String get emptyStructureTitle => 'You do not have a Main Structure yet';
+
+  @override
+  String get emptyStructureMessage => 'You must add your structure first.';
+
+  @override
+  String get welcomeGreetingTitle => 'Welcome Aboard!';
+
+  @override
+  String get welcomeGreetingMessage =>
+      'We hope you can give your best contribution to PT. Maha Akbar Sejahtera.';
+
+  @override
+  String get director => 'Director';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get companyRegulationsTitle => 'Company Regulations!';
+
+  @override
+  String get regulationPromptMessage =>
+      'Before you proceed to data entry. Please read PT. Maha Akbar Sejahtera regulations first...!';
+
+  @override
+  String get agreeToRegulations =>
+      'I hereby declare that I agree to all company regulations';
+
+  @override
+  String get download => 'Download';
+
+  @override
+  String get continueAction => 'Continue';
+
+  @override
+  String get completePersonalDataTitle => 'Complete your Personal Data!';
+
+  @override
+  String get dataCompletionTimeMessage =>
+      'Filling out this form will take about 10 Minutes. Please fill it out truthfully!';
+
+  @override
+  String get spirit => 'Cheer up';
+
+  @override
+  String get companySlogan => 'Be Great, Be Integrated';
 }
