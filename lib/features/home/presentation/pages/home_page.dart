@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => homeProvider.loadHomeData(),
-                    child: const Text('Retry'),
+                    child: Text(context.l10n.retry),
                   ),
                 ],
               ),

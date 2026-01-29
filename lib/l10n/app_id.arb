@@ -424,5 +424,24 @@
   "selectLanguage": "Pilih Bahasa",
   "@selectLanguage": {
     "description": "Select language dialog title"
-  }
+  },
+  
+  "languageIndonesian": "Bahasa Indonesia",
+  "languageEnglish": "Inggris",
+  "featureComingSoon": "Fitur segera hadir!",
+  
+  "menuPenempatanKerja": "Penempatan kerja",
+  "menuHariLibur": "Hari Libur & Cuti Bersama",
+  "menuHirarkiOffice": "Hirarki Office",
+  "menuLembur": "Lembur",
+  "menuTindakanKaryawan": "Tindakan Karyawan",
+  "menuBpjs": "BPJS",
+  "menuPph21": "PPH 21",
+  "menuJamKerja": "Jam Kerja",
+  "menuFormatDanDraf": "Format dan Draf",
+  "menuAksesLayar": "Akses Layar",
+  "menuHakAksesMenu": "Hak Akses Menu",
+  "menuPelacakanJamKerja": "Pelacakan Jam Kerja",
+  "menuStrukturOrganisasi": "Struktur Organisasi",
+  "menuKpi": "Indikator Kinerja Utama (KPI)"
 }

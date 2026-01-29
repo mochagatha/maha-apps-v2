@@ -128,5 +128,24 @@
   "back": "Back",
   
   "changeLanguage": "Change Language",
-  "selectLanguage": "Select Language"
+  "selectLanguage": "Select Language",
+  
+  "languageIndonesian": "Indonesian",
+  "languageEnglish": "English",
+  "featureComingSoon": "Feature coming soon!",
+  
+  "menuPenempatanKerja": "Job Placement",
+  "menuHariLibur": "Holidays & Joint Leave",
+  "menuHirarkiOffice": "Office Hierarchy",
+  "menuLembur": "Overtime",
+  "menuTindakanKaryawan": "Employee Action",
+  "menuBpjs": "BPJS",
+  "menuPph21": "PPH 21",
+  "menuJamKerja": "Working Hours",
+  "menuFormatDanDraf": "Format and Draft",
+  "menuAksesLayar": "Screen Access",
+  "menuHakAksesMenu": "Menu Access Rights",
+  "menuPelacakanJamKerja": "Working Hours Tracking",
+  "menuStrukturOrganisasi": "Organizational Structure",
+  "menuKpi": "Key Performance Indicator (KPI)"
 }

@@ -320,7 +320,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get menuUpdateKontrak => 'Update Kontrak';
 
   @override
-  String get menuKpi => 'Monitoring KPI';
+  String get menuKpi => 'Indikator Kinerja Utama (KPI)';
 
   @override
   String get verificationErrorTitle => 'Maaf Sebelumnya!';
@@ -366,4 +366,52 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get selectLanguage => 'Pilih Bahasa';
+
+  @override
+  String get languageIndonesian => 'Bahasa Indonesia';
+
+  @override
+  String get languageEnglish => 'Inggris';
+
+  @override
+  String get featureComingSoon => 'Fitur segera hadir!';
+
+  @override
+  String get menuPenempatanKerja => 'Penempatan kerja';
+
+  @override
+  String get menuHariLibur => 'Hari Libur & Cuti Bersama';
+
+  @override
+  String get menuHirarkiOffice => 'Hirarki Office';
+
+  @override
+  String get menuLembur => 'Lembur';
+
+  @override
+  String get menuTindakanKaryawan => 'Tindakan Karyawan';
+
+  @override
+  String get menuBpjs => 'BPJS';
+
+  @override
+  String get menuPph21 => 'PPH 21';
+
+  @override
+  String get menuJamKerja => 'Jam Kerja';
+
+  @override
+  String get menuFormatDanDraf => 'Format dan Draf';
+
+  @override
+  String get menuAksesLayar => 'Akses Layar';
+
+  @override
+  String get menuHakAksesMenu => 'Hak Akses Menu';
+
+  @override
+  String get menuPelacakanJamKerja => 'Pelacakan Jam Kerja';
+
+  @override
+  String get menuStrukturOrganisasi => 'Struktur Organisasi';
 }

@@ -683,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuKpi.
   ///
   /// In id, this message translates to:
-  /// **'Monitoring KPI'**
+  /// **'Indikator Kinerja Utama (KPI)'**
   String get menuKpi;
 
   /// No description provided for @verificationErrorTitle.
@@ -769,6 +769,102 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Pilih Bahasa'**
   String get selectLanguage;
+
+  /// No description provided for @languageIndonesian.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa Indonesia'**
+  String get languageIndonesian;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In id, this message translates to:
+  /// **'Inggris'**
+  String get languageEnglish;
+
+  /// No description provided for @featureComingSoon.
+  ///
+  /// In id, this message translates to:
+  /// **'Fitur segera hadir!'**
+  String get featureComingSoon;
+
+  /// No description provided for @menuPenempatanKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Penempatan kerja'**
+  String get menuPenempatanKerja;
+
+  /// No description provided for @menuHariLibur.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Libur & Cuti Bersama'**
+  String get menuHariLibur;
+
+  /// No description provided for @menuHirarkiOffice.
+  ///
+  /// In id, this message translates to:
+  /// **'Hirarki Office'**
+  String get menuHirarkiOffice;
+
+  /// No description provided for @menuLembur.
+  ///
+  /// In id, this message translates to:
+  /// **'Lembur'**
+  String get menuLembur;
+
+  /// No description provided for @menuTindakanKaryawan.
+  ///
+  /// In id, this message translates to:
+  /// **'Tindakan Karyawan'**
+  String get menuTindakanKaryawan;
+
+  /// No description provided for @menuBpjs.
+  ///
+  /// In id, this message translates to:
+  /// **'BPJS'**
+  String get menuBpjs;
+
+  /// No description provided for @menuPph21.
+  ///
+  /// In id, this message translates to:
+  /// **'PPH 21'**
+  String get menuPph21;
+
+  /// No description provided for @menuJamKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Jam Kerja'**
+  String get menuJamKerja;
+
+  /// No description provided for @menuFormatDanDraf.
+  ///
+  /// In id, this message translates to:
+  /// **'Format dan Draf'**
+  String get menuFormatDanDraf;
+
+  /// No description provided for @menuAksesLayar.
+  ///
+  /// In id, this message translates to:
+  /// **'Akses Layar'**
+  String get menuAksesLayar;
+
+  /// No description provided for @menuHakAksesMenu.
+  ///
+  /// In id, this message translates to:
+  /// **'Hak Akses Menu'**
+  String get menuHakAksesMenu;
+
+  /// No description provided for @menuPelacakanJamKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Pelacakan Jam Kerja'**
+  String get menuPelacakanJamKerja;
+
+  /// No description provided for @menuStrukturOrganisasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Struktur Organisasi'**
+  String get menuStrukturOrganisasi;
 }
 
 class _AppLocalizationsDelegate

@@ -36,8 +36,10 @@ class _SettingsPageState extends State<SettingsPage> {
     // TODO: Fetch menu access from API based on user permissions
     // For now, use all menu items
     await Future.delayed(const Duration(milliseconds: 500));
+    
+    if (!mounted) return;
 
-    final allMenus = SettingsMenuModel.getAllSettingsMenu();
+    final allMenus = SettingsMenuModel.getAllSettingsMenu(context);
     final defaultMenuIds = SettingsMenuModel.getDefaultMenuIds();
 
     // TODO: Filter based on actual user permissions from API
@@ -140,7 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
-                    title: const Text('Bahasa Indonesia'),
+                    title: Text(context.l10n.languageIndonesian),
                     leading: Radio<Locale>(
                       value: const Locale('id'),
                       groupValue: languageProvider.currentLocale,
@@ -157,7 +159,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   ListTile(
-                    title: const Text('English'),
+                    title: Text(context.l10n.languageEnglish),
                     leading: Radio<Locale>(
                       value: const Locale('en'),
                       groupValue: languageProvider.currentLocale,

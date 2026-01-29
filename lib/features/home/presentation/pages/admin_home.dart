@@ -72,7 +72,7 @@ class _AdminHomePageState extends State<AdminHomePage> with WidgetsBindingObserv
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => adminHomeProvider.loadHomeData(),
-                    child: const Text('Retry'),
+                    child: Text(context.l10n.retry),
                   ),
                 ],
               ),

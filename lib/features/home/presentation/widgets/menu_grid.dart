@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../utils/menu_mapper.dart';
 import '../../domain/entities/menu_item.dart';
@@ -74,16 +75,14 @@ class MenuGrid extends StatelessWidget {
             if (route != null) {
               context.push(route);
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Feature ${menu.label} coming soon!')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
             }
           },
           child: Container(
             decoration: BoxDecoration(
-              color: MediaQuery.of(context).size.width > 600
-                  ? Colors.white
-                  : Colors.transparent,
+              color: MediaQuery.of(context).size.width > 600 ? Colors.white : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               boxShadow: MediaQuery.of(context).size.width > 600
                   ? [
@@ -105,20 +104,13 @@ class MenuGrid extends StatelessWidget {
                     isAsset
                         ? Image.asset(
                             iconAsset,
-                            width: MediaQuery.of(context).size.width > 600
-                                ? 60
-                                : 50,
-                            height: MediaQuery.of(context).size.width > 600
-                                ? 60
-                                : 50,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error),
+                            width: MediaQuery.of(context).size.width > 600 ? 60 : 50,
+                            height: MediaQuery.of(context).size.width > 600 ? 60 : 50,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                           )
                         : Icon(
                             Icons.apps,
-                            size: MediaQuery.of(context).size.width > 600
-                                ? 50
-                                : 40,
+                            size: MediaQuery.of(context).size.width > 600 ? 50 : 40,
                             color: AppColors.primary,
                           ),
                     if (badgeCount > 0)

@@ -376,7 +376,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                         ProfileMenuItem(
@@ -385,7 +385,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                         ProfileMenuItem(
@@ -394,7 +394,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                         ProfileMenuItem(
@@ -403,7 +403,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                         ProfileMenuItem(
@@ -412,7 +412,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                       ],
@@ -431,7 +431,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                         ProfileMenuItem(
@@ -440,7 +440,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             ScaffoldMessenger.of(
                               context,
-                            ).showSnackBar(const SnackBar(content: Text('Feature coming soon!')));
+                            ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                           },
                         ),
                         ProfileMenuItem(
@@ -498,7 +498,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //       onTap: () {
   //         ScaffoldMessenger.of(
   //           context,
-  //         ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
+  //         ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
   //       },
   //     ),
   //     ProfileMenuItem(
@@ -507,7 +507,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //       onTap: () {
   //         ScaffoldMessenger.of(
   //           context,
-  //         ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
+  //         ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
   //       },
   //     ),
   //     ProfileMenuItem(
@@ -517,7 +517,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //         // alertSoon(context); in V1
   //         ScaffoldMessenger.of(
   //           context,
-  //         ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
+  //         ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
   //       },
   //     ),
   //     ProfileMenuItem(
@@ -526,7 +526,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //       onTap: () {
   //         ScaffoldMessenger.of(
   //           context,
-  //         ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
+  //         ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
   //       },
   //     ),
   //     ProfileMenuItem(
@@ -535,7 +535,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //       onTap: () {
   //         ScaffoldMessenger.of(
   //           context,
-  //         ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
+  //         ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
   //       },
   //     ),
   //   ];
@@ -549,7 +549,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //       onTap: () {
   //         ScaffoldMessenger.of(
   //           context,
-  //         ).showSnackBar(const SnackBar(content: Text('Feature coming soon')));
+  //         ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
   //       },
   //     ),
   //     ProfileMenuItem(
