@@ -8,8 +8,9 @@ import '../../../../core/router/route_paths.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/admin_face_provider.dart';
+import '../providers/auth_provider.dart';
 
-/// Admin face camera page with face detection
+/// Admin face camera page with face detection and auto-upload
 class AdminFaceCameraPage extends StatelessWidget {
   const AdminFaceCameraPage({super.key});
 
@@ -38,15 +39,64 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
     ).asBroadcastStream();
   }
 
+  void _handleUploadStatus(BuildContext context, AdminFaceProvider provider) {
+    if (provider.uploadStatus == UploadStatus.success) {
+      // Navigate to admin home on success
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go(RoutePaths.adminHome);
+      });
+    } else if (provider.uploadStatus == UploadStatus.error) {
+      // Show error dialog
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showErrorDialog(context, provider.uploadErrorMessage ?? 'Upload failed', provider);
+      });
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message, AdminFaceProvider provider) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Verifikasi Gagal'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              provider.resetVerification();
+            },
+            child: const Text('Coba Lagi'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<AdminFaceProvider>(
-      builder: (context, provider, child) {
-        // Navigate to result page when image is captured
-        if (provider.isImageSaved && provider.imagePath != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.go(RoutePaths.adminFaceResult, extra: provider.imagePath);
-          });
+    return Consumer2<AdminFaceProvider, AuthProvider>(
+      builder: (context, provider, authProvider, child) {
+        // Auto-upload when image is saved
+        if (provider.isImageSaved && 
+            provider.imagePath != null && 
+            provider.uploadStatus == UploadStatus.idle) {
+            
+            final user = authProvider.user;
+            if (user?.employeeId != null) {
+               // Use a microtask to avoid setState during build
+               Future.microtask(() => provider.uploadPhoto(user!.employeeId!));
+            } else {
+               Future.microtask(() {
+                 _showErrorDialog(context, "Data admin tidak ditemukan.", provider);
+               });
+            }
+        }
+
+        // Listen to upload status changes
+        if (provider.uploadStatus != UploadStatus.idle && 
+            provider.uploadStatus != UploadStatus.uploading) {
+             _handleUploadStatus(context, provider);
         }
 
         return Scaffold(
@@ -54,95 +104,124 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
             title: 'Verifikasi Wajah',
             leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.pop()),
           ),
-          body: !provider.isCameraInitialized
-              ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
-              : Column(
-                  children: [
-                    // Camera preview with face detection overlay
-                    Stack(
+          body: Stack(
+            children: [
+              !provider.isCameraInitialized
+                  ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                  : Column(
                       children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height / 1.5,
-                          child: provider.cameraController != null
-                              ? CameraPreview(
-                                  provider.cameraController!,
-                                  child: provider.customPaint,
-                                )
-                              : const Center(child: CircularProgressIndicator()),
-                        ),
+                        // Camera preview with face detection overlay
+                        Stack(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height / 1.5,
+                              child: provider.cameraController != null
+                                  ? CameraPreview(
+                                      provider.cameraController!,
+                                      child: provider.customPaint,
+                                    )
+                                  : const Center(child: CircularProgressIndicator()),
+                            ),
 
-                        // Info overlay at bottom of camera
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            color: Colors.black.withOpacity(0.5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Date and time
-                                Row(
+                            // Info overlay at bottom of camera
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(16.0),
+                                color: Colors.black.withOpacity(0.5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      DateFormat(
-                                        'EEEE, dd/MM/yyyy',
-                                        'id_ID',
-                                      ).format(DateTime.now()),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    // Date and time
+                                    Row(
+                                      children: [
+                                        Text(
+                                          DateFormat(
+                                            'EEEE, dd/MM/yyyy',
+                                            'id_ID',
+                                          ).format(DateTime.now()),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: StreamBuilder<DateTime>(
+                                            stream: _timeStream,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final time = snapshot.data!;
+                                                final formattedTime =
+                                                    '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} WIB';
+                                                return Text(
+                                                  formattedTime,
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                );
+                                              } else {
+                                                return const Text(
+                                                  'Loading...',
+                                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: StreamBuilder<DateTime>(
-                                        stream: _timeStream,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            final time = snapshot.data!;
-                                            final formattedTime =
-                                                '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} WIB';
-                                            return Text(
-                                              formattedTime,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            );
-                                          } else {
-                                            return const Text(
-                                              'Loading...',
-                                              style: TextStyle(color: Colors.white, fontSize: 14),
-                                            );
-                                          }
-                                        },
-                                      ),
+                                    const SizedBox(height: 8),
+
+                                    // Blink instruction
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.circle, color: Colors.red, size: 10),
+                                        const SizedBox(width: 4),
+                                        Expanded(
+                                          child: Text(
+                                            'Kedipkan mata untuk menangkap gambar wajah',
+                                            style: const TextStyle(
+                                              color: Color(0xffE91E21),
+                                              fontSize: 12,
+                                            ),
+                                            maxLines: 2,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 8),
+                              ),
+                            ),
+                          ],
+                        ),
 
-                                // Blink instruction
-                                Row(
-                                  children: [
-                                    const Icon(Icons.circle, color: Colors.red, size: 10),
-                                    const SizedBox(width: 4),
-                                    Expanded(
-                                      child: Text(
-                                        'Kedipkan mata untuk menangkap gambar wajah',
-                                        style: const TextStyle(
-                                          color: Color(0xffE91E21),
-                                          fontSize: 12,
-                                        ),
-                                        maxLines: 2,
-                                      ),
-                                    ),
-                                  ],
+                        // Instructions below camera
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.face, size: 48, color: AppColors.primary),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'Posisikan wajah Anda di dalam kotak',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Kedipkan mata untuk mengambil foto',
+                                  style: TextStyle(fontSize: 14, color: AppColors.neutral6),
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -150,33 +229,27 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                         ),
                       ],
                     ),
-
-                    // Instructions below camera
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.face, size: 48, color: AppColors.primary),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'Posisikan wajah Anda di dalam kotak',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Kedipkan mata untuk mengambil foto',
-                              style: TextStyle(fontSize: 14, color: AppColors.neutral6),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+              
+              // Loading overlay when uploading
+              if (provider.uploadStatus == UploadStatus.uploading)
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator(color: Colors.white),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Mengirim data...',
+                          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+            ],
+          ),
         );
       },
     );
