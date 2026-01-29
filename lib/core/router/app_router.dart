@@ -45,7 +45,6 @@ import '../../features/recruitment/presentation/pages/employee_verification_page
 import '../../features/recruitment/presentation/pages/company_code_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_verification_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
-import '../../features/authentication/presentation/pages/admin_face_result_page.dart';
 import '../../features/authentication/presentation/providers/admin_face_provider.dart';
 import '../../features/organizational_structure/presentation/pages/organizational_structure_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/structure_main_page.dart';
@@ -61,7 +60,6 @@ import '../../features/organizational_structure/presentation/pages/job_title/job
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
-
 
 class AppRouter {
   static GoRouter router() {
@@ -129,17 +127,6 @@ class AppRouter {
             create: (_) => sl<AdminFaceProvider>(),
             child: const AdminFaceCameraPage(),
           ),
-        ),
-        GoRoute(
-          path: RoutePaths.adminFaceResult,
-          name: RouteNames.adminFaceResult,
-          builder: (context, state) {
-            final imagePath = state.extra as String;
-            return ChangeNotifierProvider(
-              create: (_) => sl<AdminFaceProvider>(),
-              child: AdminFaceResultPage(imagePath: imagePath),
-            );
-          },
         ),
 
         // StatefulShellRoute for Bottom Navigation with persisted state
@@ -290,7 +277,7 @@ class AppRouter {
           name: RouteNames.companyCode,
           builder: (context, state) => const CompanyCodePage(),
         ),
-        
+
         // Organizational Structure Routes
         GoRoute(
           path: RoutePaths.organizationalStructure,
@@ -363,7 +350,6 @@ class AppRouter {
           ),
         ),
 
-        
         // Settings Routes
         GoRoute(
           path: RoutePaths.setting,
@@ -376,7 +362,8 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsLibur,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hari Libur & Cuti Bersama'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Hari Libur & Cuti Bersama'),
         ),
         GoRoute(
           path: RoutePaths.settingsHirarkiOffice,
@@ -420,7 +407,8 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsKpi,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Indikator Kinerja Utama (KPI)'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Indikator Kinerja Utama (KPI)'),
         ),
         GoRoute(
           path: RoutePaths.settingsBahasa,

@@ -78,25 +78,24 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
     return Consumer2<AdminFaceProvider, AuthProvider>(
       builder: (context, provider, authProvider, child) {
         // Auto-upload when image is saved
-        if (provider.isImageSaved && 
-            provider.imagePath != null && 
+        if (provider.isImageSaved &&
+            provider.imagePath != null &&
             provider.uploadStatus == UploadStatus.idle) {
-            
-            final user = authProvider.user;
-            if (user?.employeeId != null) {
-               // Use a microtask to avoid setState during build
-               Future.microtask(() => provider.uploadPhoto(user!.employeeId!));
-            } else {
-               Future.microtask(() {
-                 _showErrorDialog(context, "Data admin tidak ditemukan.", provider);
-               });
-            }
+          final user = authProvider.user;
+          if (user?.employeeId != null) {
+            // Use a microtask to avoid setState during build
+            Future.microtask(() => provider.uploadPhoto(user!.employeeId!));
+          } else {
+            Future.microtask(() {
+              _showErrorDialog(context, "Data admin tidak ditemukan.", provider);
+            });
+          }
         }
 
         // Listen to upload status changes
-        if (provider.uploadStatus != UploadStatus.idle && 
+        if (provider.uploadStatus != UploadStatus.idle &&
             provider.uploadStatus != UploadStatus.uploading) {
-             _handleUploadStatus(context, provider);
+          _handleUploadStatus(context, provider);
         }
 
         return Scaffold(
@@ -169,7 +168,10 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                                               } else {
                                                 return const Text(
                                                   'Loading...',
-                                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                  ),
                                                 );
                                               }
                                             },
@@ -202,34 +204,9 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                             ),
                           ],
                         ),
-
-                        // Instructions below camera
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.face, size: 48, color: AppColors.primary),
-                                const SizedBox(height: 16),
-                                const Text(
-                                  'Posisikan wajah Anda di dalam kotak',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Kedipkan mata untuk mengambil foto',
-                                  style: TextStyle(fontSize: 14, color: AppColors.neutral6),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
-              
+
               // Loading overlay when uploading
               if (provider.uploadStatus == UploadStatus.uploading)
                 Container(
@@ -242,7 +219,11 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                         const SizedBox(height: 16),
                         Text(
                           'Mengirim data...',
-                          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
