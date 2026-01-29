@@ -181,6 +181,24 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                                     ),
                                     const SizedBox(height: 8),
 
+                                    // Location
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            provider.locationName ?? 'Loading...',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+
                                     // Blink instruction
                                     Row(
                                       children: [

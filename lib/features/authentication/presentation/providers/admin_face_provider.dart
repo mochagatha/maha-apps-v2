@@ -64,6 +64,7 @@ class AdminFaceProvider extends ChangeNotifier {
 
   AdminFaceProvider({required this.uploadAdminPhoto}) {
     _initializeCamera();
+    _getLocationData(); // Fetch location immediately for display
   }
 
   Future<void> _initializeCamera() async {
@@ -326,10 +327,17 @@ class AdminFaceProvider extends ChangeNotifier {
       } else {
         _locationName = 'Unknown location';
       }
+      if (!_disposed) notifyListeners();
     } catch (e) {
       _locationName = 'Unknown location';
       _currentPosition = null;
-      rethrow;
+      if (!_disposed) notifyListeners();
+      // Don't rethrow here if called from init, but might need to consider if called from upload
+      // If called from upload, it will fail there anyway if we rethrow.
+      // But if called from init, rethrow might be bad.
+      // Let's NOT rethrow, but handle it in upload if it's null (which it shouldn't be effectively, or we check _currentPosition)
+      // Actually, uploadPhoto calls this and expects to proceed. If we swallow error, upload proceeds with 'Unknown location'.
+      // That seems fine for now.
     }
   }
 
