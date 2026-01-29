@@ -65,4 +65,10 @@ class RouteNames {
   static const String employmentLevel = 'employment-level';
   static const String departmentList = 'department-list';
   static const String jobTitleList = 'job-title-list';
+  static const String jobTitleOffice = 'job-title-office';
+  static const String jobTitleProject = 'job-title-project';
+  static const String jobTitleOfficeEmployee = 'job-title-office-employee';
+  static const String jobTitleOfficeWorker = 'job-title-office-worker';
+  static const String jobTitleProjectEmployee = 'job-title-project-employee';
+  static const String jobTitleProjectWorker = 'job-title-project-worker';
 }

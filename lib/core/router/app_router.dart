@@ -52,6 +52,12 @@ import '../../features/organizational_structure/presentation/pages/structure_mai
 import '../../features/organizational_structure/presentation/pages/employment_level_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/department_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_list_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title/job_title_office_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title/job_title_project_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title/job_title_office_employee_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title/job_title_office_worker_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title/job_title_project_employee_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title/job_title_project_worker_page.dart';
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
@@ -314,6 +320,49 @@ class AppRouter {
           name: RouteNames.jobTitleList,
           builder: (context, state) => const JobTitleListPage(),
         ),
+        GoRoute(
+          path: RoutePaths.jobTitleOffice,
+          name: RouteNames.jobTitleOffice,
+          builder: (context, state) => const JobTitleOfficePage(),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleProject,
+          name: RouteNames.jobTitleProject,
+          builder: (context, state) => const JobTitleProjectPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleOfficeEmployee,
+          name: RouteNames.jobTitleOfficeEmployee,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const JobTitleOfficeEmployeePage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleOfficeWorker,
+          name: RouteNames.jobTitleOfficeWorker,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const JobTitleOfficeWorkerPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleProjectEmployee,
+          name: RouteNames.jobTitleProjectEmployee,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const JobTitleProjectEmployeePage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleProjectWorker,
+          name: RouteNames.jobTitleProjectWorker,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const JobTitleProjectWorkerPage(),
+          ),
+        ),
+
         
         // Settings Routes
         GoRoute(

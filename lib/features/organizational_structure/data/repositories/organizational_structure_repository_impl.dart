@@ -222,6 +222,56 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
   }
 
   @override
+  Future<Either<Failure, void>> addJobTitle({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      await remoteDataSource.addJobTitle(
+        name: name,
+        typeRole: typeRole,
+        typeBranch: typeBranch,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan jabatan'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateJobTitle({
+    required int id,
+    required String name,
+  }) async {
+    try {
+      await remoteDataSource.updateJobTitle(
+        id: id,
+        name: name,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah jabatan'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteJobTitle(int id) async {
+    try {
+      await remoteDataSource.deleteJobTitle(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus jabatan'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<DepartmentEntity>>> getDepartments() async {
     try {
       final result = await remoteDataSource.getDepartments();
@@ -233,3 +283,4 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
     }
   }
 }
+

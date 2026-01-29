@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/router/route_paths.dart';
-import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../../core/router/route_paths.dart';
+import '../../../../../shared/widgets/custom_app_bar.dart';
 
-class JobTitleListPage extends StatelessWidget {
-  const JobTitleListPage({super.key});
+class JobTitleProjectPage extends StatelessWidget {
+  const JobTitleProjectPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,16 +83,16 @@ class JobTitleListPage extends StatelessWidget {
     return [
       {
         'icon': 'assets/images/icon/jam_kerja.svg',
-        'text': 'Kantor',
+        'text': 'Karyawan',
         'action': () {
-          context.push(RoutePaths.jobTitleOffice);
+          context.push(RoutePaths.jobTitleProjectEmployee);
         },
       },
       {
         'icon': 'assets/images/icon/pengaturan_lembur.svg',
-        'text': 'Proyek',
+        'text': 'Pekerja Harian',
         'action': () {
-          context.push(RoutePaths.jobTitleProject);
+          context.push(RoutePaths.jobTitleProjectWorker);
         },
       },
     ];

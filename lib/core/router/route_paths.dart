@@ -113,6 +113,13 @@ class RoutePaths {
   static const String employmentLevel = '/organizational-structure/employment-level';
   static const String departmentList = '/organizational-structure/department';
   static const String jobTitleList = '/organizational-structure/job-title';
+  static const String jobTitleOffice = '/organizational-structure/job-title/office';
+  static const String jobTitleProject = '/organizational-structure/job-title/project';
+  static const String jobTitleOfficeEmployee = '/organizational-structure/job-title/office/employee';
+  static const String jobTitleOfficeWorker = '/organizational-structure/job-title/office/worker';
+  static const String jobTitleProjectEmployee = '/organizational-structure/job-title/project/employee';
+  static const String jobTitleProjectWorker = '/organizational-structure/job-title/project/worker';
+  
   
   // Settings Submenus
   static const String settingsPenempatanKerja = '/settings/penempatan-kerja';

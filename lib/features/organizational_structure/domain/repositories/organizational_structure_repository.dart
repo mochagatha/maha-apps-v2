@@ -72,6 +72,23 @@ abstract class OrganizationalStructureRepository {
     required String typeBranch,
   });
 
+  /// Add job title
+  Future<Either<Failure, void>> addJobTitle({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  });
+
+  /// Update job title
+  Future<Either<Failure, void>> updateJobTitle({
+    required int id,
+    required String name,
+  });
+
+  /// Delete job title
+  Future<Either<Failure, void>> deleteJobTitle(int id);
+
   /// Get all departments
   Future<Either<Failure, List<DepartmentEntity>>> getDepartments();
 }
+

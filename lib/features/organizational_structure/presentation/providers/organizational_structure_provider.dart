@@ -7,18 +7,21 @@ import '../../domain/usecases/get_company_structure.dart';
 import '../../domain/usecases/get_organizational_data.dart';
 import '../../domain/usecases/manage_structure_role.dart';
 import '../../domain/usecases/manage_superior_employee.dart';
+import '../../domain/usecases/manage_job_title.dart';
 
 class OrganizationalStructureProvider with ChangeNotifier {
   final GetCompanyStructure getCompanyStructure;
   final ManageStructureRole manageStructureRole;
   final ManageSuperiorEmployee manageSuperiorEmployee;
   final GetOrganizationalData getOrganizationalData;
+  final ManageJobTitle manageJobTitle;
 
   OrganizationalStructureProvider({
     required this.getCompanyStructure,
     required this.manageStructureRole,
     required this.manageSuperiorEmployee,
     required this.getOrganizationalData,
+    required this.manageJobTitle,
   });
 
   bool _isLoading = false;
@@ -263,8 +266,74 @@ class OrganizationalStructureProvider with ChangeNotifier {
     _setLoading(false);
   }
 
+  Future<bool> addJobTitle({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageJobTitle.addJobTitle(
+      name: name,
+      typeRole: typeRole,
+      typeBranch: typeBranch,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<bool> updateJobTitle({
+    required int id,
+    required String name,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageJobTitle.updateJobTitle(
+      id: id,
+      name: name,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<bool> deleteJobTitle(int id) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageJobTitle.deleteJobTitle(id);
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
   void clearError() {
     _errorMessage = null;
     notifyListeners();
   }
 }
+
