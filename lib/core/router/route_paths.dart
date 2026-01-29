@@ -113,5 +113,21 @@ class RoutePaths {
   static const String employmentLevel = '/organizational-structure/employment-level';
   static const String departmentList = '/organizational-structure/department';
   static const String jobTitleList = '/organizational-structure/job-title';
+  
+  // Settings Submenus
+  static const String settingsPenempatanKerja = '/settings/penempatan-kerja';
+  static const String settingsLibur = '/settings/libur';
+  static const String settingsHirarkiOffice = '/settings/hirarki-office';
+  static const String settingsLembur = '/settings/lembur';
+  static const String settingsTindakanKaryawan = '/settings/tindakan-karyawan';
+  static const String settingsBpjs = '/settings/bpjs';
+  static const String settingsPph21 = '/settings/pph21';
+  static const String settingsJamKerja = '/settings/jam-kerja';
+  static const String settingsFormatDanDraf = '/settings/format-dan-draf';
+  static const String settingsAksesLayar = '/settings/akses-layar';
+  static const String settingsHakAksesMenu = '/settings/hak-akses-menu';
+  static const String settingsPelacakanJamKerja = '/settings/pelacakan-jam-kerja';
+  static const String settingsKpi = '/settings/kpi';
+  static const String settingsBahasa = '/settings/bahasa';
 }
 

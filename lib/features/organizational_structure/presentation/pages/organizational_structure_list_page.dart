@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/route_paths.dart';
 
@@ -81,7 +82,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Struktur Utama',
         'enabled': true,
         'action': () {
-          Navigator.pushNamed(context, RoutePaths.structureMain);
+          context.push(RoutePaths.structureMain);
         },
       },
       {
@@ -101,7 +102,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Data Tingkatan Pekerjaan',
         'enabled': true,
         'action': () {
-          Navigator.pushNamed(context, RoutePaths.employmentLevel);
+          context.push(RoutePaths.employmentLevel);
         },
       },
       {
@@ -109,7 +110,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Data Departemen',
         'enabled': true,
         'action': () {
-          Navigator.pushNamed(context, RoutePaths.departmentList);
+          context.push(RoutePaths.departmentList);
         },
       },
       {
@@ -117,7 +118,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Data Jabatan',
         'enabled': true,
         'action': () {
-          Navigator.pushNamed(context, RoutePaths.jobTitleList);
+          context.push(RoutePaths.jobTitleList);
         },
       },
     ];

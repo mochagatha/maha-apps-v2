@@ -186,6 +186,22 @@ class MenuConfig {
     kpi: 'assets/images/icon/KPI.png',
     pengaturan: 'assets/images/icon/setting_icon.png',
     updateKontrak: 'assets/images/icon/update_kontrak.png',
+    
+    // Pengaturan Submenus Icons
+    pengaturanPenempatanKerja: 'assets/images/icon/penempatan_kerja_icon.svg',
+    pengaturanLibur: 'assets/images/icon/hari_libur.svg',
+    pengaturanHirarkiOffice: 'assets/images/icon/penempatan_kerja_icon.svg',
+    pengaturanPengaturanLembur: 'assets/images/icon/lembur.svg',
+    pengaturanTindakanKaryawan: 'assets/images/icon/tindakan_karyawan.svg',
+    pengaturanBpjs: 'assets/images/icon/pengaturan_lembur.svg',
+    pengaturanPph21: 'assets/images/icon/pengaturan_lembur.svg',
+    pengaturanJamKerja: 'assets/images/icon/jam_kerja.svg',
+    pengaturanFormatDanDraf: 'assets/images/icon/format_and_draf.svg',
+    pengaturanAksesLayar: 'assets/images/icon/akses_layar.svg',
+    pengaturanHakAksesMenu: 'assets/images/icon/hak_akses_menu.svg',
+    pengaturanPelcakanJamKerja: 'assets/images/icon/jam_kerja.svg',
+    pengaturanKpi: 'assets/images/icon/setting_kpi.svg',
+    pengaturanBahasa: 'assets/images/icon/setting_language.svg',
   };
 
   // ==================== ROUTE MAPPING ====================
@@ -268,6 +284,22 @@ class MenuConfig {
     strukturOrganisasiTingkatanPekerjaan: RoutePaths.employmentLevel,
     strukturOrganisasiDepartemen: RoutePaths.departmentList,
     strukturOrganisasiJabatan: RoutePaths.jobTitleList,
+    
+    // Pengaturan Submenus Routes
+    pengaturanPenempatanKerja: RoutePaths.settingsPenempatanKerja,
+    pengaturanLibur: RoutePaths.settingsLibur,
+    pengaturanHirarkiOffice: RoutePaths.settingsHirarkiOffice,
+    pengaturanPengaturanLembur: RoutePaths.settingsLembur,
+    pengaturanTindakanKaryawan: RoutePaths.settingsTindakanKaryawan,
+    pengaturanBpjs: RoutePaths.settingsBpjs,
+    pengaturanPph21: RoutePaths.settingsPph21,
+    pengaturanJamKerja: RoutePaths.settingsJamKerja,
+    pengaturanFormatDanDraf: RoutePaths.settingsFormatDanDraf,
+    pengaturanAksesLayar: RoutePaths.settingsAksesLayar,
+    pengaturanHakAksesMenu: RoutePaths.settingsHakAksesMenu,
+    pengaturanPelcakanJamKerja: RoutePaths.settingsPelacakanJamKerja,
+    pengaturanKpi: RoutePaths.settingsKpi,
+    pengaturanBahasa: RoutePaths.settingsBahasa,
   };
 
 

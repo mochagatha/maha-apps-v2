@@ -53,6 +53,8 @@ import '../../features/organizational_structure/presentation/pages/employment_le
 import '../../features/organizational_structure/presentation/pages/department_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_list_page.dart';
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
+import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
 
 
 class AppRouter {
@@ -311,6 +313,69 @@ class AppRouter {
           path: RoutePaths.jobTitleList,
           name: RouteNames.jobTitleList,
           builder: (context, state) => const JobTitleListPage(),
+        ),
+        
+        // Settings Routes
+        GoRoute(
+          path: RoutePaths.setting,
+          name: RouteNames.setting,
+          builder: (context, state) => const SettingsPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsPenempatanKerja,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsLibur,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hari Libur & Cuti Bersama'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsHirarkiOffice,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hirarki Office'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsLembur,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Lembur'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsTindakanKaryawan,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsBpjs,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'BPJS'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsPph21,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'PPH 21'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsJamKerja,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Jam Kerja'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsFormatDanDraf,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Format dan Draf'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAksesLayar,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Akses Layar'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsHakAksesMenu,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsPelacakanJamKerja,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsKpi,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Indikator Kinerja Utama (KPI)'),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsBahasa,
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
         ),
       ],
 
