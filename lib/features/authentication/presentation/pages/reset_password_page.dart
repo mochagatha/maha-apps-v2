@@ -3,13 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/widgets/loading_dialog.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../../../shared/widgets/error_dialog.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/forgot_password_provider.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
@@ -20,8 +20,7 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _isButtonEnabled = false;
   bool _isNewPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
@@ -41,8 +40,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         print('❌ Reset Password Page: No verification data found');
         ErrorDialog.show(
           context,
-          title: 'Data Verifikasi Tidak Ditemukan',
-          message: 'Silakan lakukan verifikasi OTP terlebih dahulu.',
+          title: context.l10n.verificationDataNotFound,
+          message: context.l10n.pleaseVerifyOtpFirst,
         );
         // Navigate back after showing error
         Future.delayed(const Duration(seconds: 2), () {
@@ -76,9 +75,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Ubah Kata Sandi',
-      ),
+      appBar: CustomAppBar(title: context.l10n.changePassword),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -90,23 +87,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 // v1 doesn't seem to have the big illustration here, but the design image might.
                 // Assuming simple form like v1 screenshot or design.
                 Text(
-                  'Ubah Kata Sandi Anda',
-                  style: AppTextStyles.headingTwoSemiBold(
-                    context,
-                  ).copyWith(color: Colors.black),
+                  context.l10n.changeYourPassword,
+                  style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Silahkan ubah kata sandi lama Anda untuk keamanan Akun',
-                  style: AppTextStyles.bodyStyle(
-                    context,
-                  ).copyWith(color: Colors.black),
+                  context.l10n.changePasswordInstruction,
+                  style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 20),
 
                 _buildTextField(
                   controller: _newPasswordController,
-                  label: 'Masukkan Kata Sandi Baru',
+                  label: context.l10n.enterNewPassword,
                   hint: '******',
                   isPasswordVisible: _isNewPasswordVisible,
                   onToggleVisibility: () {
@@ -118,7 +111,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 const SizedBox(height: 16),
                 _buildTextField(
                   controller: _confirmPasswordController,
-                  label: 'Konfirmasi Kata Sandi Baru',
+                  label: context.l10n.confirmNewPassword,
                   hint: '******',
                   isPasswordVisible: _isConfirmPasswordVisible,
                   onToggleVisibility: () {
@@ -144,17 +137,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ? () async {
                     print('🔘 Reset Password Button: Clicked');
 
-                    LoadingDialog.show(
-                      context,
-                      message: 'Mengubah kata sandi...',
-                    );
+                    LoadingDialog.show(context, message: context.l10n.changingPassword);
 
                     try {
                       final provider = context.read<ForgotPasswordProvider>();
 
-                      print(
-                        '🔘 Reset Password Button: Calling provider.resetPassword',
-                      );
+                      print('🔘 Reset Password Button: Calling provider.resetPassword');
                       await provider.resetPassword(
                         _newPasswordController.text,
                         _confirmPasswordController.text,
@@ -168,23 +156,20 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         print('✅ Reset Password Button: Success');
                         SuccessDialog.show(
                           context,
-                          title: 'Berhasil',
-                          message: 'Kata sandi Anda telah berhasil diubah!',
+                          title: context.l10n.success,
+                          message: context.l10n.passwordChangedSuccess,
                           onConfirm: () {
                             context.go('/login');
                             provider.resetState();
                           },
                         );
                       } else if (provider.state == ForgotPasswordState.error) {
-                        print(
-                          '❌ Reset Password Button: Error - ${provider.errorMessage}',
-                        );
+                        print('❌ Reset Password Button: Error - ${provider.errorMessage}');
                         ErrorDialog.show(
                           context,
-                          title: 'Gagal Mengubah Kata Sandi',
+                          title: context.l10n.passwordChangeFailed,
                           message:
-                              provider.errorMessage ??
-                              'Gagal mengubah kata sandi. Silakan coba lagi.',
+                              provider.errorMessage ?? context.l10n.passwordChangeFailedMessage,
                         );
                       }
                     } catch (e) {
@@ -193,29 +178,22 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       LoadingDialog.hide(context);
                       ErrorDialog.show(
                         context,
-                        title: 'Terjadi Kesalahan',
+                        title: context.l10n.errorOccurred,
                         message:
-                            'Terjadi kesalahan yang tidak terduga: ${e.toString()}',
+                            //context.l10n.unexpectedErrorRetry + ' : ${e.toString()}',
+                            '${context.l10n.unexpectedErrorRetry} : ${e.toString()}',
                       );
                     }
                   }
                 : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _isButtonEnabled
-                  ? Colors.red
-                  : Colors.grey.shade300,
+              backgroundColor: _isButtonEnabled ? Colors.red : Colors.grey.shade300,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            child: const Text(
-              'Simpan',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+            child: Text(
+              context.l10n.save,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
@@ -241,15 +219,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           decoration: InputDecoration(
             hintText: hint,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             suffixIcon: IconButton(
               icon: FaIcon(
-                isPasswordVisible
-                    ? FontAwesomeIcons.eye
-                    : FontAwesomeIcons.eyeSlash,
+                isPasswordVisible ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
                 size: 20,
                 color: Colors.grey,
               ),

@@ -601,4 +601,143 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get companySlogan => 'Be Great, Be Integrated';
+
+  @override
+  String get verificationFailed => 'Verifikasi Gagal';
+
+  @override
+  String get tryAgain => 'Coba Lagi';
+
+  @override
+  String get adminDataNotFound => 'Data admin tidak ditemukan.';
+
+  @override
+  String get faceVerification => 'Verifikasi Wajah';
+
+  @override
+  String get blinkInstruction => 'Kedipkan mata untuk menangkap gambar wajah';
+
+  @override
+  String get sendingData => 'Mengirim data...';
+
+  @override
+  String get resetYourPassword => 'Reset Kata Sandi Anda';
+
+  @override
+  String get enterEmailToResetPassword =>
+      'Masukkan E-mail yang pernah terdaftar untuk melanjutkan reset password';
+
+  @override
+  String get emailHintExample => 'contoh : user@mahasejahtera.com';
+
+  @override
+  String get enterValidVerificationCode =>
+      'Mohon masukkan kode verifikasi yang valid';
+
+  @override
+  String get verifyingOtp => 'Memverifikasi kode OTP...';
+
+  @override
+  String get otpIncorrect => 'Kode OTP Salah';
+
+  @override
+  String get otpIncorrectMessage =>
+      'Kode OTP yang Anda masukkan tidak sesuai. Silakan coba lagi.';
+
+  @override
+  String get unexpectedErrorRetry =>
+      'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.';
+
+  @override
+  String get enterVerificationCode => 'Masukkan Kode Verifikasi';
+
+  @override
+  String get verificationCodeSentToEmail =>
+      'Kode verifikasi telah dikirim melalui e-mail ke ';
+
+  @override
+  String get verify => 'Verifikasi';
+
+  @override
+  String get didNotReceiveCode => 'Tidak menerima kode verifikasi? ';
+
+  @override
+  String get resend => 'Kirim Ulang';
+
+  @override
+  String resendIn(Object time) {
+    return 'Kirim Ulang dalam $time';
+  }
+
+  @override
+  String get resendingOtp => 'Mengirim ulang OTP...';
+
+  @override
+  String get otpResentSuccess => 'Kode OTP berhasil dikirim ulang!';
+
+  @override
+  String get otpResendFailed => 'Gagal Mengirim OTP';
+
+  @override
+  String get otpResendFailedMessage =>
+      'Gagal mengirim ulang kode OTP. Silakan coba lagi.';
+
+  @override
+  String get verificationDataNotFound => 'Data Verifikasi Tidak Ditemukan';
+
+  @override
+  String get pleaseVerifyOtpFirst =>
+      'Silakan lakukan verifikasi OTP terlebih dahulu.';
+
+  @override
+  String get changeYourPassword => 'Ubah Kata Sandi Anda';
+
+  @override
+  String get changePasswordInstruction =>
+      'Silahkan ubah kata sandi lama Anda untuk keamanan Akun';
+
+  @override
+  String get enterNewPassword => 'Masukkan Kata Sandi Baru';
+
+  @override
+  String get confirmNewPassword => 'Konfirmasi Kata Sandi Baru';
+
+  @override
+  String get changingPassword => 'Mengubah kata sandi...';
+
+  @override
+  String get success => 'Berhasil';
+
+  @override
+  String get passwordChangedSuccess => 'Kata sandi Anda telah berhasil diubah!';
+
+  @override
+  String get passwordChangeFailed => 'Gagal Mengubah Kata Sandi';
+
+  @override
+  String get passwordChangeFailedMessage =>
+      'Gagal mengubah kata sandi. Silakan coba lagi.';
+
+  @override
+  String get save => 'Simpan';
+
+  @override
+  String get adminFaceVerificationTitle => 'Verifikasi Wajah Admin';
+
+  @override
+  String get faceVerificationDesc =>
+      'Untuk keamanan tambahan, silakan verifikasi wajah Anda sebelum mengakses dashboard admin.';
+
+  @override
+  String get faceVisibleInstruction => 'Pastikan wajah Anda terlihat jelas';
+
+  @override
+  String get sufficientLightingInstruction => 'Gunakan pencahayaan yang cukup';
+
+  @override
+  String get blinkToCaptureInstruction =>
+      'Kedipkan mata untuk menangkap gambar';
+
+  @override
+  String get startVerification => 'Mulai Verifikasi';
 }

@@ -9,6 +9,7 @@ import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/admin_face_provider.dart';
 import '../providers/auth_provider.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 /// Admin face camera page with face detection and auto-upload
 class AdminFaceCameraPage extends StatelessWidget {
@@ -58,7 +59,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Verifikasi Gagal'),
+        title: Text(context.l10n.verificationFailed),
         content: Text(message),
         actions: [
           TextButton(
@@ -66,7 +67,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
               Navigator.of(context).pop();
               provider.resetVerification();
             },
-            child: const Text('Coba Lagi'),
+            child: Text(context.l10n.tryAgain),
           ),
         ],
       ),
@@ -87,7 +88,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
             Future.microtask(() => provider.uploadPhoto(user!.employeeId!));
           } else {
             Future.microtask(() {
-              _showErrorDialog(context, "Data admin tidak ditemukan.", provider);
+              _showErrorDialog(context, context.l10n.adminDataNotFound, provider);
             });
           }
         }
@@ -100,7 +101,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
 
         return Scaffold(
           appBar: CustomAppBar(
-            title: 'Verifikasi Wajah',
+            title: context.l10n.faceVerification,
             leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.pop()),
           ),
           body: Stack(
@@ -138,7 +139,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                                     Text(
                                       DateFormat(
                                         'EEEE, dd/MM/yyyy',
-                                        'id_ID',
+                                        Localizations.localeOf(context).toString(),
                                       ).format(DateTime.now()),
                                       style: const TextStyle(
                                         color: Colors.white,
@@ -164,8 +165,8 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                                             ),
                                           );
                                         } else {
-                                          return const Text(
-                                            'Loading...',
+                                          return Text(
+                                            context.l10n.loading,
                                             style: TextStyle(color: Colors.white, fontSize: 12),
                                           );
                                         }
@@ -204,7 +205,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                                       const SizedBox(width: 4),
                                       Expanded(
                                         child: Text(
-                                          'Kedipkan mata untuk menangkap gambar wajah',
+                                          context.l10n.blinkInstruction,
                                           style: const TextStyle(
                                             color: Color(0xffE91E21),
                                             fontSize: 12,
@@ -233,7 +234,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                         const CircularProgressIndicator(color: Colors.white),
                         const SizedBox(height: 16),
                         Text(
-                          'Mengirim data...',
+                          context.l10n.sendingData,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,

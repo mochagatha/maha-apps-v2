@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../shared/theme/app_theme.dart';
@@ -13,6 +11,7 @@ import '../../../../shared/widgets/error_dialog.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/forgot_password_provider.dart';
 import 'reset_password_page.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 class VerificationCodePage extends StatefulWidget {
   final String email;
@@ -85,15 +84,15 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
 
     if (code.isEmpty || code.length < 4) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Mohon masukkan kode verifikasi yang valid'),
+        SnackBar(
+          content: Text(context.l10n.enterValidVerificationCode),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    LoadingDialog.show(context, message: 'Memverifikasi kode OTP...');
+    LoadingDialog.show(context, message: context.l10n.verifyingOtp);
 
     try {
       final provider = context.read<ForgotPasswordProvider>();
@@ -104,17 +103,12 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       LoadingDialog.hide(context); // Close loading dialog
 
       if (provider.state == ForgotPasswordState.success) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ResetPasswordPage()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ResetPasswordPage()));
       } else if (provider.state == ForgotPasswordState.error) {
         ErrorDialog.show(
           context,
-          title: 'Kode OTP Salah',
-          message:
-              provider.errorMessage ??
-              'Kode OTP yang Anda masukkan tidak sesuai. Silakan coba lagi.',
+          title: context.l10n.otpIncorrect,
+          message: provider.errorMessage ?? context.l10n.otpIncorrectMessage,
         );
       }
     } catch (e) {
@@ -122,8 +116,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       LoadingDialog.hide(context);
       ErrorDialog.show(
         context,
-        title: 'Terjadi Kesalahan',
-        message: 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+        title: context.l10n.errorOccurred,
+        message: context.l10n.unexpectedErrorRetry,
       );
     }
   }
@@ -149,9 +143,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Reset Kata Sandi',
-      ),
+      appBar: CustomAppBar(title: context.l10n.resetYourPassword),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -168,26 +160,21 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Masukkan Kode Verifikasi',
-                  style: AppTextStyles.headingTwoSemiBold(
-                    context,
-                  ).copyWith(color: Colors.black),
+                  context.l10n.enterVerificationCode,
+                  style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 10),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    text: 'Kode verifikasi telah dikirim melalui e-mail ke ',
-                    style: AppTextStyles.bodyStyle(
-                      context,
-                    ).copyWith(color: Colors.black),
+                    text: context.l10n.verificationCodeSentToEmail,
+                    style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
                     children: [
                       TextSpan(
                         text: widget.email,
-                        style: AppTextStyles.bodyStyle(context).copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: AppTextStyles.bodyStyle(
+                          context,
+                        ).copyWith(color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -220,10 +207,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                              color: AppColors.primary,
-                              width: 2,
-                            ),
+                            borderSide: const BorderSide(color: AppColors.primary, width: 2),
                           ),
                         ),
                         onChanged: (value) => _onFieldChanged(value, index),
@@ -239,12 +223,10 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text(
-                      'Verifikasi',
+                    child: Text(
+                      context.l10n.verify,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -257,47 +239,34 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    text: 'Tidak menerima kode verifikasi? ',
-                    style: AppTextStyles.bodyStyle(
-                      context,
-                    ).copyWith(color: Colors.black),
+                    text: context.l10n.didNotReceiveCode,
+                    style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
                     children: [
                       TextSpan(
                         text: isResendEnabled
-                            ? 'Kirim Ulang'
-                            : 'Kirim Ulang dalam $timerText',
+                            ? context.l10n.resend
+                            : context.l10n.resendIn(timerText),
                         style: AppTextStyles.bodyStyle(context).copyWith(
-                          color: isResendEnabled
-                              ? AppColors.primary
-                              : Colors.grey,
+                          color: isResendEnabled ? AppColors.primary : Colors.grey,
                           fontWeight: FontWeight.bold,
                         ),
                         recognizer: isResendEnabled
                             ? (TapGestureRecognizer()
                                 ..onTap = () async {
-                                  LoadingDialog.show(
-                                    context,
-                                    message: 'Mengirim ulang OTP...',
-                                  );
+                                  LoadingDialog.show(context, message: context.l10n.resendingOtp);
 
                                   try {
-                                    final provider = context
-                                        .read<ForgotPasswordProvider>();
+                                    final provider = context.read<ForgotPasswordProvider>();
                                     await provider.sendOtp(widget.email);
 
                                     if (!mounted) return;
 
                                     LoadingDialog.hide(context);
 
-                                    if (provider.state ==
-                                        ForgotPasswordState.success) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Kode OTP berhasil dikirim ulang!',
-                                          ),
+                                    if (provider.state == ForgotPasswordState.success) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(context.l10n.otpResentSuccess),
                                           backgroundColor: Colors.green,
                                         ),
                                       );
@@ -305,10 +274,10 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                                     } else {
                                       ErrorDialog.show(
                                         context,
-                                        title: 'Gagal Mengirim OTP',
+                                        title: context.l10n.otpResendFailed,
                                         message:
                                             provider.errorMessage ??
-                                            'Gagal mengirim ulang kode OTP. Silakan coba lagi.',
+                                            context.l10n.otpResendFailedMessage,
                                       );
                                     }
                                   } catch (e) {
@@ -316,9 +285,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                                     LoadingDialog.hide(context);
                                     ErrorDialog.show(
                                       context,
-                                      title: 'Terjadi Kesalahan',
-                                      message:
-                                          'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.',
+                                      title: context.l10n.errorOccurred,
+                                      message: context.l10n.unexpectedErrorRetry,
                                     );
                                   }
                                 })

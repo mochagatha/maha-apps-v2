@@ -1213,6 +1213,258 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Be Great, Be Integrated'**
   String get companySlogan;
+
+  /// No description provided for @verificationFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi Gagal'**
+  String get verificationFailed;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba Lagi'**
+  String get tryAgain;
+
+  /// No description provided for @adminDataNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Data admin tidak ditemukan.'**
+  String get adminDataNotFound;
+
+  /// No description provided for @faceVerification.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi Wajah'**
+  String get faceVerification;
+
+  /// No description provided for @blinkInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Kedipkan mata untuk menangkap gambar wajah'**
+  String get blinkInstruction;
+
+  /// No description provided for @sendingData.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengirim data...'**
+  String get sendingData;
+
+  /// No description provided for @resetYourPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Reset Kata Sandi Anda'**
+  String get resetYourPassword;
+
+  /// No description provided for @enterEmailToResetPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Masukkan E-mail yang pernah terdaftar untuk melanjutkan reset password'**
+  String get enterEmailToResetPassword;
+
+  /// No description provided for @emailHintExample.
+  ///
+  /// In id, this message translates to:
+  /// **'contoh : user@mahasejahtera.com'**
+  String get emailHintExample;
+
+  /// No description provided for @enterValidVerificationCode.
+  ///
+  /// In id, this message translates to:
+  /// **'Mohon masukkan kode verifikasi yang valid'**
+  String get enterValidVerificationCode;
+
+  /// No description provided for @verifyingOtp.
+  ///
+  /// In id, this message translates to:
+  /// **'Memverifikasi kode OTP...'**
+  String get verifyingOtp;
+
+  /// No description provided for @otpIncorrect.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode OTP Salah'**
+  String get otpIncorrect;
+
+  /// No description provided for @otpIncorrectMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode OTP yang Anda masukkan tidak sesuai. Silakan coba lagi.'**
+  String get otpIncorrectMessage;
+
+  /// No description provided for @unexpectedErrorRetry.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.'**
+  String get unexpectedErrorRetry;
+
+  /// No description provided for @enterVerificationCode.
+  ///
+  /// In id, this message translates to:
+  /// **'Masukkan Kode Verifikasi'**
+  String get enterVerificationCode;
+
+  /// No description provided for @verificationCodeSentToEmail.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode verifikasi telah dikirim melalui e-mail ke '**
+  String get verificationCodeSentToEmail;
+
+  /// No description provided for @verify.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi'**
+  String get verify;
+
+  /// No description provided for @didNotReceiveCode.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak menerima kode verifikasi? '**
+  String get didNotReceiveCode;
+
+  /// No description provided for @resend.
+  ///
+  /// In id, this message translates to:
+  /// **'Kirim Ulang'**
+  String get resend;
+
+  /// No description provided for @resendIn.
+  ///
+  /// In id, this message translates to:
+  /// **'Kirim Ulang dalam {time}'**
+  String resendIn(Object time);
+
+  /// No description provided for @resendingOtp.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengirim ulang OTP...'**
+  String get resendingOtp;
+
+  /// No description provided for @otpResentSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode OTP berhasil dikirim ulang!'**
+  String get otpResentSuccess;
+
+  /// No description provided for @otpResendFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal Mengirim OTP'**
+  String get otpResendFailed;
+
+  /// No description provided for @otpResendFailedMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengirim ulang kode OTP. Silakan coba lagi.'**
+  String get otpResendFailedMessage;
+
+  /// No description provided for @verificationDataNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Data Verifikasi Tidak Ditemukan'**
+  String get verificationDataNotFound;
+
+  /// No description provided for @pleaseVerifyOtpFirst.
+  ///
+  /// In id, this message translates to:
+  /// **'Silakan lakukan verifikasi OTP terlebih dahulu.'**
+  String get pleaseVerifyOtpFirst;
+
+  /// No description provided for @changeYourPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Ubah Kata Sandi Anda'**
+  String get changeYourPassword;
+
+  /// No description provided for @changePasswordInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Silahkan ubah kata sandi lama Anda untuk keamanan Akun'**
+  String get changePasswordInstruction;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Masukkan Kata Sandi Baru'**
+  String get enterNewPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Konfirmasi Kata Sandi Baru'**
+  String get confirmNewPassword;
+
+  /// No description provided for @changingPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengubah kata sandi...'**
+  String get changingPassword;
+
+  /// No description provided for @success.
+  ///
+  /// In id, this message translates to:
+  /// **'Berhasil'**
+  String get success;
+
+  /// No description provided for @passwordChangedSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Kata sandi Anda telah berhasil diubah!'**
+  String get passwordChangedSuccess;
+
+  /// No description provided for @passwordChangeFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal Mengubah Kata Sandi'**
+  String get passwordChangeFailed;
+
+  /// No description provided for @passwordChangeFailedMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengubah kata sandi. Silakan coba lagi.'**
+  String get passwordChangeFailedMessage;
+
+  /// No description provided for @save.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan'**
+  String get save;
+
+  /// No description provided for @adminFaceVerificationTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi Wajah Admin'**
+  String get adminFaceVerificationTitle;
+
+  /// No description provided for @faceVerificationDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Untuk keamanan tambahan, silakan verifikasi wajah Anda sebelum mengakses dashboard admin.'**
+  String get faceVerificationDesc;
+
+  /// No description provided for @faceVisibleInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Pastikan wajah Anda terlihat jelas'**
+  String get faceVisibleInstruction;
+
+  /// No description provided for @sufficientLightingInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Gunakan pencahayaan yang cukup'**
+  String get sufficientLightingInstruction;
+
+  /// No description provided for @blinkToCaptureInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Kedipkan mata untuk menangkap gambar'**
+  String get blinkToCaptureInstruction;
+
+  /// No description provided for @startVerification.
+  ///
+  /// In id, this message translates to:
+  /// **'Mulai Verifikasi'**
+  String get startVerification;
 }
 
 class _AppLocalizationsDelegate

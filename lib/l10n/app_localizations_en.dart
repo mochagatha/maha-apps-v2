@@ -598,4 +598,142 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get companySlogan => 'Be Great, Be Integrated';
+
+  @override
+  String get verificationFailed => 'Verification Failed';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get adminDataNotFound => 'Admin data not found.';
+
+  @override
+  String get faceVerification => 'Face Verification';
+
+  @override
+  String get blinkInstruction => 'Blink your eyes to capture face image';
+
+  @override
+  String get sendingData => 'Sending data...';
+
+  @override
+  String get resetYourPassword => 'Reset Your Password';
+
+  @override
+  String get enterEmailToResetPassword =>
+      'Enter your registered email to proceed with password reset';
+
+  @override
+  String get emailHintExample => 'example: user@mahasejahtera.com';
+
+  @override
+  String get enterValidVerificationCode =>
+      'Please enter a valid verification code';
+
+  @override
+  String get verifyingOtp => 'Verifying OTP code...';
+
+  @override
+  String get otpIncorrect => 'Incorrect OTP Code';
+
+  @override
+  String get otpIncorrectMessage =>
+      'The OTP code you entered is incorrect. Please try again.';
+
+  @override
+  String get unexpectedErrorRetry =>
+      'An unexpected error occurred. Please try again.';
+
+  @override
+  String get enterVerificationCode => 'Enter Verification Code';
+
+  @override
+  String get verificationCodeSentToEmail =>
+      'Verification code has been sent via email to ';
+
+  @override
+  String get verify => 'Verify';
+
+  @override
+  String get didNotReceiveCode => 'Didn\'t receive verification code? ';
+
+  @override
+  String get resend => 'Resend';
+
+  @override
+  String resendIn(Object time) {
+    return 'Resend in $time';
+  }
+
+  @override
+  String get resendingOtp => 'Resending OTP...';
+
+  @override
+  String get otpResentSuccess => 'OTP code resent successfully!';
+
+  @override
+  String get otpResendFailed => 'Failed to Send OTP';
+
+  @override
+  String get otpResendFailedMessage =>
+      'Failed to resend OTP code. Please try again.';
+
+  @override
+  String get verificationDataNotFound => 'Verification Data Not Found';
+
+  @override
+  String get pleaseVerifyOtpFirst => 'Please verify OTP first.';
+
+  @override
+  String get changeYourPassword => 'Change Your Password';
+
+  @override
+  String get changePasswordInstruction =>
+      'Please change your old password for account security';
+
+  @override
+  String get enterNewPassword => 'Enter New Password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get changingPassword => 'Changing password...';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get passwordChangedSuccess =>
+      'Your password has been successfully changed!';
+
+  @override
+  String get passwordChangeFailed => 'Failed to Change Password';
+
+  @override
+  String get passwordChangeFailedMessage =>
+      'Failed to change password. Please try again.';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get adminFaceVerificationTitle => 'Admin Face Verification';
+
+  @override
+  String get faceVerificationDesc =>
+      'For additional security, please verify your face before accessing the admin dashboard.';
+
+  @override
+  String get faceVisibleInstruction => 'Ensure your face is clearly visible';
+
+  @override
+  String get sufficientLightingInstruction => 'Use sufficient lighting';
+
+  @override
+  String get blinkToCaptureInstruction => 'Blink to capture image';
+
+  @override
+  String get startVerification => 'Start Verification';
 }

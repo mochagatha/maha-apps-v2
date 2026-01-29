@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../shared/theme/app_theme.dart';
@@ -9,6 +7,7 @@ import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/forgot_password_provider.dart';
 import '../widgets/select_method_verification_dialog.dart';
+import '../../../../core/utils/localization_extension.dart';
 
 class InputEmailForgetPasswordPage extends StatefulWidget {
   const InputEmailForgetPasswordPage({super.key});
@@ -40,9 +39,7 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Reset Kata Sandi',
-      ),
+      appBar: CustomAppBar(title: context.l10n.resetYourPassword),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -60,12 +57,12 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
                   ),
                 ),
                 Text(
-                  'Reset Kata Sandi Anda',
+                  context.l10n.resetYourPassword,
                   style: AppTextStyles.headingTwoSemiBold(context).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Masukkan E-mail yang pernah terdaftar untuk melanjutkan reset password',
+                  context.l10n.enterEmailToResetPassword,
                   style: AppTextStyles.bodyStyle(context).copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 20),
@@ -79,7 +76,7 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
-                    hintText: 'contoh : ulil.ambri@mahasejahtera.com',
+                    hintText: context.l10n.emailHintExample,
                     hintStyle: TextStyle(color: Colors.grey[400]),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -137,8 +134,8 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
                   ),
                 ),
               ),
-              child: const Text(
-                'Lanjut',
+              child: Text(
+                context.l10n.next,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             );
