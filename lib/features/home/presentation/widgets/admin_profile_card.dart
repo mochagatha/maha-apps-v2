@@ -194,7 +194,7 @@ class AdminProfileCard extends StatelessWidget {
                     // Notification Icon
                     GestureDetector(
                       onTap: () {
-                        context.push(RoutePaths.pesan);
+                        // context.push(RoutePaths.pesan);
                       },
                       child: Stack(
                         clipBehavior: Clip.none,
