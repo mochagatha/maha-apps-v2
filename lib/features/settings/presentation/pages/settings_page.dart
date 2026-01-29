@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/settings/domain/entities/settings_menu_item.dart';
 import 'package:maha_apps_v2/features/settings/presentation/models/settings_menu_model.dart';
 
+import '../../../../shared/widgets/custom_app_bar.dart';
+
 /// Settings page displaying all available settings menu items
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -49,18 +51,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pengaturan'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
+      appBar: CustomAppBar(title: 'Pengaturan'),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: Colors.red,
-              ),
-            )
+          ? const Center(child: CircularProgressIndicator(color: Colors.red))
           : RefreshIndicator(
               color: Colors.red,
               onRefresh: _fetchData,
@@ -91,27 +84,15 @@ class _SettingsPageState extends State<SettingsPage> {
               borderRadius: BorderRadius.circular(5),
               color: Colors.white,
               boxShadow: [
-                BoxShadow(
-                  blurRadius: 8,
-                  color: Colors.grey.shade300,
-                  offset: const Offset(3, 3),
-                ),
+                BoxShadow(blurRadius: 8, color: Colors.grey.shade300, offset: const Offset(3, 3)),
               ],
             ),
             child: Row(
               children: [
-                SvgPicture.asset(
-                  menuItem.icon,
-                  height: 40,
-                ),
+                SvgPicture.asset(menuItem.icon, height: 40),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    menuItem.text,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  child: Text(menuItem.text, style: const TextStyle(fontWeight: FontWeight.w600)),
                 ),
                 const Icon(Icons.keyboard_arrow_right),
               ],
@@ -125,10 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Container(
               width: 25,
               height: 25,
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
+              decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
               alignment: Alignment.center,
               child: Text(
                 '${menuItem.count}',

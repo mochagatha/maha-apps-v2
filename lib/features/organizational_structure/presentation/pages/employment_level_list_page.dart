@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 class EmploymentLevelListPage extends StatelessWidget {
   const EmploymentLevelListPage({super.key});
@@ -6,10 +7,8 @@ class EmploymentLevelListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Data Tingkatan Pekerjaan'),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'Data Tingkatan Pekerjaan',
       ),
       body: Center(
         child: Column(

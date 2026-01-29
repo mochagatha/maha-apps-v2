@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../data/datasources/recruitment_remote_datasource.dart';
 
 class CompanyCodePage extends StatefulWidget {
@@ -52,22 +53,8 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Center(
-          child: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: const FaIcon(FontAwesomeIcons.circleChevronLeft, color: Colors.white, size: 24),
-          ),
-        ),
-        title: const Text(
-          'Kode Perusahaan',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: 'Kode Perusahaan',
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),

@@ -8,6 +8,7 @@ import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/widgets/loading_dialog.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../../../shared/widgets/error_dialog.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/forgot_password_provider.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -75,26 +76,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Center(
-          child: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: const FaIcon(
-              FontAwesomeIcons.circleChevronLeft,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Ubah Kata Sandi',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        title: 'Ubah Kata Sandi',
       ),
       body: SafeArea(
         child: SingleChildScrollView(

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/forgot_password_provider.dart';
 import '../widgets/select_method_verification_dialog.dart';
 
@@ -39,22 +40,8 @@ class _InputEmailForgetPasswordPageState extends State<InputEmailForgetPasswordP
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Center(
-          child: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: const FaIcon(FontAwesomeIcons.circleChevronLeft, color: Colors.white, size: 24),
-          ),
-        ),
-        title: const Text(
-          'Reset Kata Sandi',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        title: 'Reset Kata Sandi',
       ),
       body: SafeArea(
         child: SingleChildScrollView(

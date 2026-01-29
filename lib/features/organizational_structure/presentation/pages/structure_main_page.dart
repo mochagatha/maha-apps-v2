@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/organizational_structure_provider.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 class StructureMainPage extends StatefulWidget {
   const StructureMainPage({super.key});
@@ -26,10 +27,8 @@ class _StructureMainPageState extends State<StructureMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Struktur Utama'),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'Struktur Utama',
       ),
       body: Consumer<OrganizationalStructureProvider>(
         builder: (context, provider, child) {

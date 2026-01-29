@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 class EmployeeVerificationPage extends StatelessWidget {
   const EmployeeVerificationPage({super.key});
@@ -7,17 +8,8 @@ class EmployeeVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Verifikasi Data Karyawan',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+      appBar: const CustomAppBar(
+        title: 'Verifikasi Data Karyawan',
       ),
       body: Center(
         child: Padding(

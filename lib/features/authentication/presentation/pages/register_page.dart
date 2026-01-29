@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/auth_provider.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -136,18 +137,8 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.l10n.createAccountTitle,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.primary, // Red background
-        elevation: 0,
+      appBar: CustomAppBar(
+        title: context.l10n.createAccountTitle,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => context.go(RoutePaths.login),

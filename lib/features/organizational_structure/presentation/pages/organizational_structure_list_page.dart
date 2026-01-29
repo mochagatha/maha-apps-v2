@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/route_paths.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 class OrganizationalStructureListPage extends StatelessWidget {
   const OrganizationalStructureListPage({super.key});
@@ -12,10 +13,8 @@ class OrganizationalStructureListPage extends StatelessWidget {
     final menuItems = _buildMenuItems(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Struktur Organisasi'),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'Struktur Organisasi',
       ),
       body: RefreshIndicator(
         color: Colors.red,

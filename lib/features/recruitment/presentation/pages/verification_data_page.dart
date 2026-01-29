@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 class VerificationDataPage extends StatelessWidget {
   const VerificationDataPage({super.key});
@@ -31,17 +32,8 @@ class VerificationDataPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Data Tingkatan Pekerjaan',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+      appBar: const CustomAppBar(
+        title: 'Data Tingkatan Pekerjaan',
       ),
       body: RefreshIndicator(
         color: AppColors.primary,

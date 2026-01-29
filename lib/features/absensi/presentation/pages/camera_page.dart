@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 class CameraPage extends StatefulWidget {
   final int status; // 1: clock-in, 2: clock-out, 3: break
@@ -188,9 +189,8 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_getTitle()),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: _getTitle(),
         actions: [
           if (_cameras != null && _cameras!.length > 1)
             IconButton(

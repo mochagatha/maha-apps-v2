@@ -10,6 +10,7 @@ import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/widgets/loading_dialog.dart';
 import '../../../../shared/widgets/error_dialog.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/forgot_password_provider.dart';
 import 'reset_password_page.dart';
 
@@ -148,26 +149,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Center(
-          child: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: const FaIcon(
-              FontAwesomeIcons.circleChevronLeft,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Reset Kata Sandi',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        title: 'Reset Kata Sandi',
       ),
       body: SafeArea(
         child: SingleChildScrollView(

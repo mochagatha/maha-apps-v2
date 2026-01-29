@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/recruitment_provider.dart';
 import '../widgets/recruitment_menu_card.dart';
 import '../../utils/recruitment_menu_mapper.dart';
@@ -31,14 +32,8 @@ class _RecruitmentPageState extends State<RecruitmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Rekrutmen',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+      appBar: const CustomAppBar(
+        title: 'Rekrutmen',
       ),
       body: Consumer<RecruitmentProvider>(
         builder: (context, provider, child) {

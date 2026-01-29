@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 
 /// Admin face verification instruction page
 class AdminFaceVerificationPage extends StatelessWidget {
@@ -10,8 +11,8 @@ class AdminFaceVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verifikasi Wajah Admin'),
+      appBar: CustomAppBar(
+        title: 'Verifikasi Wajah Admin',
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go(RoutePaths.login),

@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 
 import '../../../../core/router/route_paths.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/admin_face_provider.dart';
 
 /// Admin face camera page with face detection
@@ -49,8 +50,8 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
         }
 
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Verifikasi Wajah'),
+          appBar: CustomAppBar(
+            title: 'Verifikasi Wajah',
             leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.pop()),
           ),
           body: !provider.isCameraInitialized
