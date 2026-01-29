@@ -21,7 +21,7 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
       final result = await remoteDataSource.getCompanyStructure(typeStructure);
       return Right(result.map((model) => model.toEntity()).toList());
     } on DioException catch (e) {
-      return Left(ServerFailure(e.response?.data['message'] ?? 'Terjadi kesalahan server'));
+      return Left(ServerFailure(e.response?.data?['message'] ?? 'Terjadi kesalahan server'));
     } catch (e) {
       return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
     }
@@ -228,11 +228,7 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
     required String typeBranch,
   }) async {
     try {
-      await remoteDataSource.addJobTitle(
-        name: name,
-        typeRole: typeRole,
-        typeBranch: typeBranch,
-      );
+      await remoteDataSource.addJobTitle(name: name, typeRole: typeRole, typeBranch: typeBranch);
       return const Right(null);
     } on DioException catch (e) {
       return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan jabatan'));
@@ -242,15 +238,9 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
   }
 
   @override
-  Future<Either<Failure, void>> updateJobTitle({
-    required int id,
-    required String name,
-  }) async {
+  Future<Either<Failure, void>> updateJobTitle({required int id, required String name}) async {
     try {
-      await remoteDataSource.updateJobTitle(
-        id: id,
-        name: name,
-      );
+      await remoteDataSource.updateJobTitle(id: id, name: name);
       return const Right(null);
     } on DioException catch (e) {
       return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah jabatan'));
@@ -283,4 +273,3 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
     }
   }
 }
-

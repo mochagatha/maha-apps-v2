@@ -27,15 +27,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Struktur Utama',
-      ),
+      appBar: const CustomAppBar(title: 'Struktur Utama'),
       body: Consumer<OrganizationalStructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.red),
-            );
+            return const Center(child: CircularProgressIndicator(color: Colors.red));
           }
 
           if (provider.errorMessage != null) {
@@ -67,142 +63,125 @@ class _StructureMainPageState extends State<StructureMainPage> {
           final structure = provider.currentStructure;
 
           if (structure == null || structure.roleStructure.isEmpty) {
-            return RefreshIndicator(
-              color: Colors.red,
-              onRefresh: _loadData,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.account_tree_outlined,
-                          size: 120,
-                          color: Colors.grey.shade400,
-                        ),
-                        const SizedBox(height: 24),
-                        const Text(
-                          'Anda belum memiliki Struktur Utama',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Anda harus menambahkan struktur anda terlebih dahulu.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
+            return _buildEmptyState();
           }
 
-          return Column(
+          return _buildDataDisplay(structure);
+        },
+      ),
+      // bottomNavigationBar: _buildBottomButton(),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return RefreshIndicator(
+      color: Colors.red,
+      onRefresh: _loadData,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/empty_structure.png',
+                  width: 200,
+                  height: 200,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.assignment_outlined, size: 120, color: Colors.grey.shade400);
+                  },
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Anda belum memiliki Struktur Utama',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Anda harus menambahkan struktur anda terlebih\ndahulu.',
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDataDisplay(dynamic structure) {
+    return Column(
+      children: [
+        // Action buttons
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              // Action buttons
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Navigate to organizational chart
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Fitur bagan organisasi akan segera hadir'),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        child: const Text(
-                          'Tampilkan Bagan',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Fitur bagan organisasi akan segera hadir')),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text(
+                    'Tampilkan Bagan',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-
-              // Role structure list
+              const SizedBox(width: 12),
               Expanded(
-                child: RefreshIndicator(
-                  color: Colors.red,
-                  onRefresh: _loadData,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: structure.roleStructure.length,
-                    itemBuilder: (context, index) {
-                      final role = structure.roleStructure[index];
-                      return _buildRoleStructureCard(role);
-                    },
+                child: ElevatedButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(const SnackBar(content: Text('Fitur arsip akan segera hadir')));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text(
+                    'Arsip',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ],
-          );
-        },
-      ),
-      bottomNavigationBar: Consumer<OrganizationalStructureProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading || provider.currentStructure == null) {
-            return const SizedBox.shrink();
-          }
+          ),
+        ),
 
-          return Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade300,
-                  blurRadius: 8,
-                  offset: const Offset(0, -2),
-                ),
-              ],
+        // Role structure list
+        Expanded(
+          child: RefreshIndicator(
+            color: Colors.red,
+            onRefresh: _loadData,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: structure.roleStructure.length,
+              itemBuilder: (context, index) {
+                final role = structure.roleStructure[index];
+                return _buildRoleStructureCard(role);
+              },
             ),
-            child: SafeArea(
-              child: ElevatedButton(
-                onPressed: () {
-                  _showAddRoleDialog();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  '+ Tingkatan Struktur Utama',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -214,11 +193,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
         borderRadius: BorderRadius.circular(8),
         color: Colors.white,
         boxShadow: [
-          BoxShadow(
-            blurRadius: 8,
-            color: Colors.grey.shade300,
-            offset: const Offset(3, 3),
-          ),
+          BoxShadow(blurRadius: 8, color: Colors.grey.shade300, offset: const Offset(3, 3)),
         ],
       ),
       child: Column(
@@ -232,17 +207,20 @@ class _StructureMainPageState extends State<StructureMainPage> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: Colors.blue,
                   ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
-                onPressed: () => _confirmDeleteRole(role.id),
+                icon: const Icon(Icons.more_vert, color: Colors.grey),
+                onPressed: () => _showRoleMenu(role.id),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
             ],
           ),
           if (role.superiorEmployeeStructure.isNotEmpty) ...[
-            const Divider(),
+            Divider(color: Colors.grey.shade300),
             ...role.superiorEmployeeStructure.map((superior) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -262,11 +240,8 @@ class _StructureMainPageState extends State<StructureMainPage> {
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            superior.jobTitle.name ?? '-',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
-                            ),
+                            superior.employee.nik ?? '-',
+                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                           ),
                         ],
                       ),
@@ -281,10 +256,321 @@ class _StructureMainPageState extends State<StructureMainPage> {
     );
   }
 
-  void _showAddRoleDialog() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Fitur tambah role akan segera hadir'),
+  Widget _buildBottomButton() {
+    return Consumer<OrganizationalStructureProvider>(
+      builder: (context, provider, child) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(color: Colors.grey.shade300, blurRadius: 8, offset: const Offset(0, -2)),
+            ],
+          ),
+          child: SafeArea(
+            child: ElevatedButton(
+              onPressed: provider.isLoading ? null : _showAddRoleDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                disabledBackgroundColor: Colors.grey,
+              ),
+              child: const Text(
+                '+ Tingkatan Struktur Utama',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showRoleMenu(int roleId) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: const Text('Hapus Role'),
+              onTap: () {
+                Navigator.pop(context);
+                _confirmDeleteRole(roleId);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAddRoleDialog() async {
+    final provider = context.read<OrganizationalStructureProvider>();
+
+    // Load available user roles
+    await provider.loadUserRoles('utama');
+
+    if (!mounted) return;
+
+    final availableRoles = provider.userRoles;
+
+    if (availableRoles.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Tidak ada role yang tersedia')));
+      return;
+    }
+
+    // Get already added role IDs
+    final structure = provider.currentStructure;
+    final addedRoleIds = structure?.roleStructure.map((r) => r.userRole.id).toSet() ?? <int>{};
+
+    // Filter out already added roles
+    final selectableRoles = availableRoles
+        .where((role) => !addedRoleIds.contains(role.id))
+        .toList();
+
+    if (selectableRoles.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Semua role sudah ditambahkan')));
+      return;
+    }
+
+    final selectedRoleIds = <int>{};
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Daftar Tingkatan Pekerjaan',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                ...selectableRoles.map((role) {
+                  final isSelected = selectedRoleIds.contains(role.id);
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (isSelected) {
+                              selectedRoleIds.remove(role.id);
+                            } else {
+                              selectedRoleIds.add(role.id);
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(role.name, style: const TextStyle(fontSize: 16)),
+                              ),
+                              Checkbox(
+                                value: isSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedRoleIds.add(role.id);
+                                    } else {
+                                      selectedRoleIds.remove(role.id);
+                                    }
+                                  });
+                                },
+                                activeColor: Colors.red,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (role != selectableRoles.last) const Divider(height: 1),
+                    ],
+                  );
+                }).toList(),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: selectedRoleIds.isEmpty ? null : () => Navigator.pop(context, true),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      disabledBackgroundColor: Colors.grey,
+                    ),
+                    child: const Text(
+                      'Pilih',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    if (result == true && selectedRoleIds.isNotEmpty) {
+      _showConfirmationDialog(selectedRoleIds.toList());
+    }
+  }
+
+  void _showConfirmationDialog(List<int> selectedRoleIds) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Maaf, Sebelumnya...',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Image.asset(
+                'assets/images/confirmation_icon.png',
+                width: 100,
+                height: 100,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.help_outline, size: 80, color: Colors.orange);
+                },
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Apakah anda yakin ingin menambahkan Daftar Tingkatan Pekerjaan ke struktur utama ?',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.red,
+                        side: const BorderSide(color: Colors.red),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: const Text('Batal'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _addRoles(selectedRoleIds);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: const Text('Oke'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _addRoles(List<int> selectedRoleIds) async {
+    final provider = context.read<OrganizationalStructureProvider>();
+    final structure = provider.currentStructure;
+
+    if (structure == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Struktur tidak ditemukan')));
+      return;
+    }
+
+    final success = await provider.createStructureRole(
+      companyStructureId: structure.id,
+      userRoleIds: selectedRoleIds,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      _showSuccessDialog();
+      await _loadData();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(provider.errorMessage ?? 'Gagal menambahkan role'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Berhasil!!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                child: const Icon(Icons.check, size: 60, color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Daftar tingkatan pekerjaan berhasil di Tambahkan',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: const Text(
+                    'Oke',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -296,19 +582,16 @@ class _StructureMainPageState extends State<StructureMainPage> {
         title: const Text('Hapus Role Struktur'),
         content: const Text('Apakah Anda yakin ingin menghapus role ini?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
               final provider = context.read<OrganizationalStructureProvider>();
               final success = await provider.deleteStructureRole(roleId);
               if (success && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Role berhasil dihapus')),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Role berhasil dihapus')));
                 _loadData();
               }
             },
