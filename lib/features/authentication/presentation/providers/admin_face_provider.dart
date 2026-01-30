@@ -94,7 +94,7 @@ class AdminFaceProvider extends ChangeNotifier {
 
     _cameraController = CameraController(
       camera,
-      ResolutionPreset.low,
+      ResolutionPreset.high,
       enableAudio: false,
       imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
     );
