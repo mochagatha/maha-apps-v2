@@ -88,6 +88,7 @@ import '../../features/organizational_structure/domain/usecases/get_organization
 import '../../features/organizational_structure/domain/usecases/manage_job_title.dart';
 import '../../features/organizational_structure/domain/usecases/manage_department.dart';
 import '../../features/organizational_structure/domain/usecases/manage_employment_level.dart';
+import '../../features/organizational_structure/domain/usecases/manage_user_role.dart';
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 
 final sl = GetIt.instance;
@@ -272,6 +273,16 @@ Future<void> init() async {
   );
 
   //! Features - Organizational Structure
+  // Use cases
+  sl.registerLazySingleton(() => GetCompanyStructure(sl()));
+  sl.registerLazySingleton(() => ManageStructureRole(sl()));
+  sl.registerLazySingleton(() => ManageSuperiorEmployee(sl()));
+  sl.registerLazySingleton(() => GetOrganizationalData(sl()));
+  sl.registerLazySingleton(() => ManageJobTitle(sl()));
+  sl.registerLazySingleton(() => ManageDepartment(sl()));
+  sl.registerLazySingleton(() => ManageEmploymentLevel(sl()));
+  sl.registerLazySingleton(() => ManageUserRole(sl()));
+
   // Provider
   sl.registerFactory(
     () => OrganizationalStructureProvider(
@@ -282,17 +293,9 @@ Future<void> init() async {
       manageJobTitle: sl(),
       manageDepartment: sl(),
       manageEmploymentLevel: sl(),
+      manageUserRole: sl(),
     ),
   );
-
-  // Use cases
-  sl.registerLazySingleton(() => GetCompanyStructure(sl()));
-  sl.registerLazySingleton(() => ManageStructureRole(sl()));
-  sl.registerLazySingleton(() => ManageSuperiorEmployee(sl()));
-  sl.registerLazySingleton(() => GetOrganizationalData(sl()));
-  sl.registerLazySingleton(() => ManageJobTitle(sl()));
-  sl.registerLazySingleton(() => ManageDepartment(sl()));
-  sl.registerLazySingleton(() => ManageEmploymentLevel(sl()));
 
   // Repository
   sl.registerLazySingleton<OrganizationalStructureRepository>(

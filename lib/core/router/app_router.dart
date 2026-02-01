@@ -62,6 +62,7 @@ import '../../features/organizational_structure/presentation/pages/department_of
 import '../../features/organizational_structure/presentation/pages/department_project_page.dart';
 import '../../features/organizational_structure/presentation/pages/employment_level_employee_page.dart';
 import '../../features/organizational_structure/presentation/pages/employment_level_worker_page.dart';
+import '../../features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
 
@@ -315,6 +316,28 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<OrganizationalStructureProvider>(),
             child: const EmploymentLevelWorkerPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.employmentLevelEmployeeDetail,
+          name: RouteNames.employmentLevelEmployeeDetail,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const EmploymentLevelDetailPage(
+              typeRole: 'employee',
+              title: 'Tingkatan Karyawan',
+            ),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.employmentLevelWorkerDetail,
+          name: RouteNames.employmentLevelWorkerDetail,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const EmploymentLevelDetailPage(
+              typeRole: 'worker',
+              title: 'Tingkatan Pekerja Harian',
+            ),
           ),
         ),
         GoRoute(

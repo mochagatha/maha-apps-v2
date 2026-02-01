@@ -5,6 +5,7 @@ import '../entities/employee_entity.dart';
 import '../entities/employment_level_entity.dart';
 import '../entities/job_title_entity.dart';
 import '../entities/organizational_structure_entity.dart';
+import '../entities/user_role_entity.dart';
 
 abstract class OrganizationalStructureRepository {
   /// Get company structure by type (utama, project, cabang)
@@ -67,6 +68,29 @@ abstract class OrganizationalStructureRepository {
   /// Get user roles by type branch
   Future<Either<Failure, List<EmploymentLevelEntity>>> getUserRoles(String typeBranch);
 
+  /// Get user roles hierarchy by type role (employee/worker)
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(String typeRole);
+
+  /// Add user role
+  Future<Either<Failure, void>> addUserRole({
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  });
+
+  /// Update user role
+  Future<Either<Failure, void>> updateUserRole({
+    required int id,
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  });
+
+  /// Delete user role
+  Future<Either<Failure, void>> deleteUserRole(int id);
+
   /// Get job titles by type role and type branch
   Future<Either<Failure, List<JobTitleEntity>>> getJobTitles({
     required String typeRole,
@@ -81,10 +105,7 @@ abstract class OrganizationalStructureRepository {
   });
 
   /// Update job title
-  Future<Either<Failure, void>> updateJobTitle({
-    required int id,
-    required String name,
-  });
+  Future<Either<Failure, void>> updateJobTitle({required int id, required String name});
 
   /// Delete job title
   Future<Either<Failure, void>> deleteJobTitle(int id);
@@ -106,10 +127,7 @@ abstract class OrganizationalStructureRepository {
   });
 
   /// Update department
-  Future<Either<Failure, void>> updateDepartment({
-    required int id,
-    required String name,
-  });
+  Future<Either<Failure, void>> updateDepartment({required int id, required String name});
 
   /// Delete department
   Future<Either<Failure, void>> deleteDepartment(int id);
@@ -129,10 +147,7 @@ abstract class OrganizationalStructureRepository {
   });
 
   /// Update employment level
-  Future<Either<Failure, void>> updateEmploymentLevel({
-    required int id,
-    required String name,
-  });
+  Future<Either<Failure, void>> updateEmploymentLevel({required int id, required String name});
 
   /// Delete employment level
   Future<Either<Failure, void>> deleteEmploymentLevel(int id);

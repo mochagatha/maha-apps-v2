@@ -6,6 +6,7 @@ import '../models/employee_model.dart';
 import '../models/employment_level_model.dart';
 import '../models/job_title_model.dart';
 import '../models/organizational_structure_model.dart';
+import '../models/user_role_model.dart';
 
 abstract class OrganizationalStructureRemoteDataSource {
   Future<List<OrganizationalStructureModel>> getCompanyStructure(String typeStructure);
@@ -44,6 +45,21 @@ abstract class OrganizationalStructureRemoteDataSource {
   });
   Future<OrganizationalStructureModel> getStructureDetail(int id);
   Future<List<EmploymentLevelModel>> getUserRoles(String typeBranch);
+  Future<List<UserRoleModel>> getUserRolesByType(String typeRole);
+  Future<void> addUserRole({
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  });
+  Future<void> updateUserRole({
+    required int id,
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  });
+  Future<void> deleteUserRole(int id);
   Future<List<JobTitleModel>> getJobTitles({required String typeRole, required String typeBranch});
   Future<void> addJobTitle({
     required String name,
@@ -247,6 +263,79 @@ class OrganizationalStructureRemoteDataSourceImpl
 
       final List<dynamic> data = response.data['data'];
       return data.map((json) => EmploymentLevelModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<UserRoleModel>> getUserRolesByType(String typeRole) async {
+    try {
+      final response = await client.dioGolang.get(
+        ApiEndpoints.userRole,
+        queryParameters: {'type_role': typeRole},
+      );
+
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => UserRoleModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addUserRole({
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      final Map<String, dynamic> data = {
+        'name': name,
+        'type_role': typeRole,
+        'type_branch': typeBranch,
+      };
+
+      if (supervisorRoleId != null) {
+        data['supervisor_role_id'] = supervisorRoleId;
+      }
+
+      await client.dioGolang.post(ApiEndpoints.userRole, data: data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateUserRole({
+    required int id,
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      final Map<String, dynamic> data = {
+        'name': name,
+        'type_role': typeRole,
+        'type_branch': typeBranch,
+      };
+
+      if (supervisorRoleId != null) {
+        data['supervisor_role_id'] = supervisorRoleId;
+      }
+
+      await client.dioGolang.put('${ApiEndpoints.userRoleUpdate}/$id', data: data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteUserRole(int id) async {
+    try {
+      await client.dioGolang.delete('${ApiEndpoints.userRoleDelete}/$id');
     } catch (e) {
       rethrow;
     }

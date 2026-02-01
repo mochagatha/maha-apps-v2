@@ -4,6 +4,7 @@ import '../entities/department_entity.dart';
 import '../entities/employee_entity.dart';
 import '../entities/employment_level_entity.dart';
 import '../entities/job_title_entity.dart';
+import '../entities/user_role_entity.dart';
 import '../repositories/organizational_structure_repository.dart';
 
 class GetOrganizationalData {
@@ -13,6 +14,10 @@ class GetOrganizationalData {
 
   Future<Either<Failure, List<EmploymentLevelEntity>>> getUserRoles(String typeBranch) async {
     return await repository.getUserRoles(typeBranch);
+  }
+
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(String typeRole) async {
+    return await repository.getUserRolesByType(typeRole);
   }
 
   Future<Either<Failure, List<JobTitleEntity>>> getJobTitles({

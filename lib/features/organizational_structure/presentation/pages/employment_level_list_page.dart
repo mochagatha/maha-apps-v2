@@ -11,20 +11,20 @@ class EmploymentLevelListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final menuItems = [
       {
-        'title': 'Tingkatan Karyawan',
+        'title': 'Karyawan',
         'icon': 'assets/images/icon/icon_karyawan.svg',
-        'route': RoutePaths.employmentLevelEmployee,
+        'route': RoutePaths.employmentLevelEmployeeDetail,
       },
       {
-        'title': 'Tingkatan Pekerja',
+        'title': 'Pekerja Harian',
         'icon': 'assets/images/icon/icon_pekerja.svg',
-        'route': RoutePaths.employmentLevelWorker,
+        'route': RoutePaths.employmentLevelWorkerDetail,
       },
     ];
 
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'Data Tingkatan Pekerjaan',
+        title: 'Data Tingkatan Pekerja',
       ),
       body: RefreshIndicator(
         color: Colors.red,
@@ -33,53 +33,60 @@ class EmploymentLevelListPage extends StatelessWidget {
         },
         child: ListView.builder(
           itemCount: menuItems.length,
+          padding: const EdgeInsets.all(16),
           itemBuilder: (context, index) {
             final item = menuItems[index];
-            return GestureDetector(
-              onTap: () {
-                context.push(item['route'] as String);
-              },
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      item['icon'] as String,
-                      width: 40,
-                      height: 40,
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: Text(
-                        item['title'] as String,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return _buildMenuItem(context, item, index);
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(BuildContext context, Map<String, dynamic> item, int index) {
+    return Container(
+      margin: EdgeInsets.only(bottom: index < 1 ? 16 : 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 8,
+            color: Colors.grey.shade300,
+            offset: const Offset(3, 3),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            context.push(item['route'] as String);
+          },
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  item['icon'] as String,
+                  height: 40,
+                  width: 40,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    item['title'] as String,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_right),
+              ],
+            ),
+          ),
         ),
       ),
     );

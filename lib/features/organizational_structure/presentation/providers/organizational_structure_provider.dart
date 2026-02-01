@@ -4,6 +4,7 @@ import '../../domain/entities/employee_entity.dart';
 import '../../domain/entities/employment_level_entity.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../../domain/entities/organizational_structure_entity.dart';
+import '../../domain/entities/user_role_entity.dart';
 import '../../domain/usecases/get_company_structure.dart';
 import '../../domain/usecases/get_organizational_data.dart';
 import '../../domain/usecases/manage_structure_role.dart';
@@ -11,6 +12,7 @@ import '../../domain/usecases/manage_superior_employee.dart';
 import '../../domain/usecases/manage_job_title.dart';
 import '../../domain/usecases/manage_department.dart';
 import '../../domain/usecases/manage_employment_level.dart';
+import '../../domain/usecases/manage_user_role.dart';
 
 class OrganizationalStructureProvider with ChangeNotifier {
   final GetCompanyStructure getCompanyStructure;
@@ -20,6 +22,7 @@ class OrganizationalStructureProvider with ChangeNotifier {
   final ManageJobTitle manageJobTitle;
   final ManageDepartment manageDepartment;
   final ManageEmploymentLevel manageEmploymentLevel;
+  final ManageUserRole manageUserRole;
 
   OrganizationalStructureProvider({
     required this.getCompanyStructure,
@@ -29,6 +32,7 @@ class OrganizationalStructureProvider with ChangeNotifier {
     required this.manageJobTitle,
     required this.manageDepartment,
     required this.manageEmploymentLevel,
+    required this.manageUserRole,
   });
 
   bool _isLoading = false;
@@ -52,6 +56,9 @@ class OrganizationalStructureProvider with ChangeNotifier {
   List<EmploymentLevelEntity> _employmentLevels = [];
   List<EmploymentLevelEntity> get employmentLevels => _employmentLevels;
 
+  List<UserRoleEntity> _userRoleHierarchy = [];
+  List<UserRoleEntity> get userRoleHierarchy => _userRoleHierarchy;
+
   List<EmployeeEntity> _employees = [];
   List<EmployeeEntity> get employees => _employees;
 
@@ -74,13 +81,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     final result = await getCompanyStructure(typeStructure);
 
-    result.fold(
-      (failure) => _setError(failure.message),
-      (structures) {
-        _structures = structures;
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => _setError(failure.message), (structures) {
+      _structures = structures;
+      notifyListeners();
+    });
 
     _setLoading(false);
   }
@@ -99,13 +103,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> deleteStructureRole(int id) async {
@@ -116,13 +117,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> addSuperiorEmployee({
@@ -143,13 +141,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> editSuperiorEmployee({
@@ -168,31 +163,24 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> deleteSuperiorEmployee(int superiorEmployeeId) async {
     _setLoading(true);
     _setError(null);
 
-    final result =
-        await manageSuperiorEmployee.deleteSuperiorEmployee(superiorEmployeeId);
+    final result = await manageSuperiorEmployee.deleteSuperiorEmployee(superiorEmployeeId);
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> addDepartment({
@@ -213,13 +201,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> editEmployeeDepartment({
@@ -238,13 +223,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> editWorkerDepartment({
@@ -263,13 +245,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<void> loadUserRoles(String typeBranch) async {
@@ -278,21 +257,15 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     final result = await getOrganizationalData.getUserRoles(typeBranch);
 
-    result.fold(
-      (failure) => _setError(failure.message),
-      (roles) {
-        _userRoles = roles;
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => _setError(failure.message), (roles) {
+      _userRoles = roles;
+      notifyListeners();
+    });
 
     _setLoading(false);
   }
 
-  Future<void> loadJobTitles({
-    required String typeRole,
-    required String typeBranch,
-  }) async {
+  Future<void> loadJobTitles({required String typeRole, required String typeBranch}) async {
     _setLoading(true);
     _setError(null);
 
@@ -301,13 +274,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
       typeBranch: typeBranch,
     );
 
-    result.fold(
-      (failure) => _setError(failure.message),
-      (titles) {
-        _jobTitles = titles;
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => _setError(failure.message), (titles) {
+      _jobTitles = titles;
+      notifyListeners();
+    });
 
     _setLoading(false);
   }
@@ -318,13 +288,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     final result = await getOrganizationalData.getDepartments();
 
-    result.fold(
-      (failure) => _setError(failure.message),
-      (depts) {
-        _departments = depts;
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => _setError(failure.message), (depts) {
+      _departments = depts;
+      notifyListeners();
+    });
 
     _setLoading(false);
   }
@@ -345,36 +312,24 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
-  Future<bool> updateJobTitle({
-    required int id,
-    required String name,
-  }) async {
+  Future<bool> updateJobTitle({required int id, required String name}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await manageJobTitle.updateJobTitle(
-      id: id,
-      name: name,
-    );
+    final result = await manageJobTitle.updateJobTitle(id: id, name: name);
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> deleteJobTitle(int id) async {
@@ -385,13 +340,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   void clearError() {
@@ -399,10 +351,7 @@ class OrganizationalStructureProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadDepartmentsByType({
-    required String typeRole,
-    required String typeBranch,
-  }) async {
+  Future<void> loadDepartmentsByType({required String typeRole, required String typeBranch}) async {
     _setLoading(true);
     _setError(null);
 
@@ -411,13 +360,10 @@ class OrganizationalStructureProvider with ChangeNotifier {
       typeBranch: typeBranch,
     );
 
-    result.fold(
-      (failure) => _setError(failure.message),
-      (depts) {
-        _departments = depts;
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => _setError(failure.message), (depts) {
+      _departments = depts;
+      notifyListeners();
+    });
 
     _setLoading(false);
   }
@@ -438,36 +384,24 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
-  Future<bool> updateDepartmentData({
-    required int id,
-    required String name,
-  }) async {
+  Future<bool> updateDepartmentData({required int id, required String name}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await manageDepartment.updateDepartment(
-      id: id,
-      name: name,
-    );
+    final result = await manageDepartment.updateDepartment(id: id, name: name);
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> deleteDepartmentData(int id) async {
@@ -478,25 +412,18 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   // Employment Level methods
-  Future<void> loadEmploymentLevelsByType({
-    required String typeRole,
-  }) async {
+  Future<void> loadEmploymentLevelsByType({required String typeRole}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await getOrganizationalData.getEmploymentLevelsByType(
-      typeRole: typeRole,
-    );
+    final result = await getOrganizationalData.getEmploymentLevelsByType(typeRole: typeRole);
 
     result.fold(
       (failure) {
@@ -511,50 +438,32 @@ class OrganizationalStructureProvider with ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<bool> addEmploymentLevelData({
-    required String name,
-    required String typeRole,
-  }) async {
+  Future<bool> addEmploymentLevelData({required String name, required String typeRole}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await manageEmploymentLevel.addEmploymentLevel(
-      name: name,
-      typeRole: typeRole,
-    );
+    final result = await manageEmploymentLevel.addEmploymentLevel(name: name, typeRole: typeRole);
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
-  Future<bool> updateEmploymentLevelData({
-    required int id,
-    required String name,
-  }) async {
+  Future<bool> updateEmploymentLevelData({required int id, required String name}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await manageEmploymentLevel.updateEmploymentLevel(
-      id: id,
-      name: name,
-    );
+    final result = await manageEmploymentLevel.updateEmploymentLevel(id: id, name: name);
 
     _setLoading(false);
 
-    return result.fold(
-      (failure) {
-        _setError(failure.message);
-        return false;
-      },
-      (_) => true,
-    );
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
   }
 
   Future<bool> deleteEmploymentLevelData(int id) async {
@@ -565,13 +474,30 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     _setLoading(false);
 
-    return result.fold(
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
+  }
+
+  // User Role Hierarchy methods
+  Future<void> loadUserRoleHierarchy(String typeRole) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await getOrganizationalData.getUserRolesByType(typeRole);
+
+    result.fold(
       (failure) {
         _setError(failure.message);
-        return false;
+        _userRoleHierarchy = [];
       },
-      (_) => true,
+      (roles) {
+        _userRoleHierarchy = roles;
+      },
     );
+
+    _setLoading(false);
   }
 
   Future<void> loadEmployees() async {
@@ -580,15 +506,76 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
     final result = await getOrganizationalData.getEmployees();
 
-    result.fold(
-      (failure) => _setError(failure.message),
-      (employees) {
-        _employees = employees;
-        notifyListeners();
-      },
-    );
+    result.fold((failure) => _setError(failure.message), (employees) {
+      _employees = employees;
+      notifyListeners();
+    });
 
     _setLoading(false);
   }
-}
 
+  // User Role Management methods
+  Future<bool> addUserRoleData({
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageUserRole.addUserRole(
+      name: name,
+      supervisorRoleId: supervisorRoleId,
+      typeRole: typeRole,
+      typeBranch: typeBranch,
+    );
+
+    _setLoading(false);
+
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
+  }
+
+  Future<bool> updateUserRoleData({
+    required int id,
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageUserRole.updateUserRole(
+      id: id,
+      name: name,
+      supervisorRoleId: supervisorRoleId,
+      typeRole: typeRole,
+      typeBranch: typeBranch,
+    );
+
+    _setLoading(false);
+
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
+  }
+
+  Future<bool> deleteUserRoleData(int id) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageUserRole.deleteUserRole(id);
+
+    _setLoading(false);
+
+    return result.fold((failure) {
+      _setError(failure.message);
+      return false;
+    }, (_) => true);
+  }
+}

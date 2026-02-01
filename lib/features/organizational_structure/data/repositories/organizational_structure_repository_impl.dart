@@ -6,6 +6,7 @@ import '../../domain/entities/employment_level_entity.dart';
 import '../../domain/entities/employee_entity.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../../domain/entities/organizational_structure_entity.dart';
+import '../../domain/entities/user_role_entity.dart';
 import '../../domain/repositories/organizational_structure_repository.dart';
 import '../datasources/organizational_structure_remote_data_source.dart';
 
@@ -199,6 +200,76 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
       return Right(result.map((model) => model.toEntity()).toList());
     } on DioException catch (e) {
       return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil user roles'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(String typeRole) async {
+    try {
+      final result = await remoteDataSource.getUserRolesByType(typeRole);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil user roles'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addUserRole({
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      await remoteDataSource.addUserRole(
+        name: name,
+        supervisorRoleId: supervisorRoleId,
+        typeRole: typeRole,
+        typeBranch: typeBranch,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan tingkatan'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserRole({
+    required int id,
+    required String name,
+    int? supervisorRoleId,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      await remoteDataSource.updateUserRole(
+        id: id,
+        name: name,
+        supervisorRoleId: supervisorRoleId,
+        typeRole: typeRole,
+        typeBranch: typeBranch,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengupdate tingkatan'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteUserRole(int id) async {
+    try {
+      await remoteDataSource.deleteUserRole(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus tingkatan'));
     } catch (e) {
       return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
     }

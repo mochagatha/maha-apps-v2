@@ -21,6 +21,8 @@ class ApiEndpoints {
       '/employee/company-structure/superior-employee/department/worker';
   static const String companyStructureDetail = '/employee/company-structure/get-by-id';
   static const String userRole = '/employee/user-role';
+  static const String userRoleUpdate = '/employee/user-role/update';
+  static const String userRoleDelete = '/employee/user-role/delete';
   static const String jobTitle = '/job-title';
   static const String getAllDepartment = '/department';
   static const String employmentLevel = '/employment-level';
