@@ -113,13 +113,10 @@ class DepartmentListWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(
+          color: Colors.grey.shade400,
+          width: 1,
+        ),
       ),
       child: Row(
         children: [
@@ -127,21 +124,34 @@ class DepartmentListWidget extends StatelessWidget {
             child: Text(
               department.departmentName,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.blue),
-            onPressed: () {
-              _showEditDialog(context, department);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: () {
-              _showDeleteConfirmation(context, department, provider);
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, size: 20),
+            padding: EdgeInsets.zero,
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'edit',
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                height: 30,
+                child: Text('Edit'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'delete',
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                height: 30,
+                child: Text('Hapus'),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 'edit') {
+                _showEditDialog(context, department);
+              } else if (value == 'delete') {
+                _showDeleteConfirmation(context, department, provider);
+              }
             },
           ),
         ],
