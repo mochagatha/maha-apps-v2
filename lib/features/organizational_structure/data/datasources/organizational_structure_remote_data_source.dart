@@ -48,6 +48,10 @@ abstract class OrganizationalStructureRemoteDataSource {
   Future<void> updateJobTitle({required int id, required String name});
   Future<void> deleteJobTitle(int id);
   Future<List<DepartmentModel>> getDepartments();
+  Future<List<DepartmentModel>> getDepartmentsByType({required String typeRole, required String typeBranch});
+  Future<void> addDepartment({required String name, required String typeRole, required String typeBranch});
+  Future<void> updateDepartment({required int id, required String name});
+  Future<void> deleteDepartment(int id);
 }
 
 class OrganizationalStructureRemoteDataSourceImpl
@@ -299,6 +303,68 @@ class OrganizationalStructureRemoteDataSourceImpl
 
       final List<dynamic> data = response.data['data'];
       return data.map((json) => DepartmentModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<DepartmentModel>> getDepartmentsByType({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      final response = await client.dioGolang.get(
+        ApiEndpoints.getAllDepartment,
+        queryParameters: {'type_role': typeRole, 'type_branch': typeBranch},
+      );
+
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => DepartmentModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addDepartment({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      await client.dioGolang.post(
+        ApiEndpoints.getAllDepartment,
+        data: {
+          'department_name': name,
+          'type_role': typeRole,
+          'type_branch': typeBranch,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateDepartment({
+    required int id,
+    required String name,
+  }) async {
+    try {
+      await client.dioGolang.put(
+        '${ApiEndpoints.getAllDepartment}/$id',
+        data: {'department_name': name},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteDepartment(int id) async {
+    try {
+      await client.dioGolang.delete('${ApiEndpoints.getAllDepartment}/$id');
     } catch (e) {
       rethrow;
     }

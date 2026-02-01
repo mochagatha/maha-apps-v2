@@ -239,33 +239,41 @@ class _JobTitleOfficeEmployeePageState extends State<JobTitleOfficeEmployeePage>
   }
 
   void _showAddJobTitleDialog() {
+    final provider = context.read<OrganizationalStructureProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
-      builder: (context) => const JobTitleFormBottomSheet(
-        isEdit: false,
-        typeRole: 'employee',
-        typeBranch: 'office',
+      builder: (context) => ChangeNotifierProvider.value(
+        value: provider,
+        child: const JobTitleFormBottomSheet(
+          isEdit: false,
+          typeRole: 'employee',
+          typeBranch: 'office',
+        ),
       ),
     );
   }
 
   void _showEditJobTitleDialog(dynamic jobTitle) {
+    final provider = context.read<OrganizationalStructureProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
-      builder: (context) => JobTitleFormBottomSheet(
-        isEdit: true,
-        typeRole: 'employee',
-        typeBranch: 'office',
-        id: jobTitle.id,
-        name: jobTitle.name,
+      builder: (context) => ChangeNotifierProvider.value(
+        value: provider,
+        child: JobTitleFormBottomSheet(
+          isEdit: true,
+          typeRole: 'employee',
+          typeBranch: 'office',
+          id: jobTitle.id,
+          name: jobTitle.name,
+        ),
       ),
     );
   }

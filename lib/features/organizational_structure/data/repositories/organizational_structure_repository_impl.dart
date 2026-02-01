@@ -272,4 +272,69 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
       return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
     }
   }
+
+  @override
+  Future<Either<Failure, List<DepartmentEntity>>> getDepartmentsByType({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      final result = await remoteDataSource.getDepartmentsByType(
+        typeRole: typeRole,
+        typeBranch: typeBranch,
+      );
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil departments'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addDepartment({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      await remoteDataSource.addDepartment(
+        name: name,
+        typeRole: typeRole,
+        typeBranch: typeBranch,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateDepartment({
+    required int id,
+    required String name,
+  }) async {
+    try {
+      await remoteDataSource.updateDepartment(id: id, name: name);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteDepartment(int id) async {
+    try {
+      await remoteDataSource.deleteDepartment(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
 }

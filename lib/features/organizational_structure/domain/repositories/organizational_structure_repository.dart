@@ -90,5 +90,27 @@ abstract class OrganizationalStructureRepository {
 
   /// Get all departments
   Future<Either<Failure, List<DepartmentEntity>>> getDepartments();
+
+  /// Get departments by type
+  Future<Either<Failure, List<DepartmentEntity>>> getDepartmentsByType({
+    required String typeRole,
+    required String typeBranch,
+  });
+
+  /// Add department
+  Future<Either<Failure, void>> addDepartment({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  });
+
+  /// Update department
+  Future<Either<Failure, void>> updateDepartment({
+    required int id,
+    required String name,
+  });
+
+  /// Delete department
+  Future<Either<Failure, void>> deleteDepartment(int id);
 }
 

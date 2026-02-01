@@ -24,4 +24,14 @@ class GetOrganizationalData {
   Future<Either<Failure, List<DepartmentEntity>>> getDepartments() async {
     return await repository.getDepartments();
   }
+
+  Future<Either<Failure, List<DepartmentEntity>>> getDepartmentsByType({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    return await repository.getDepartmentsByType(
+      typeRole: typeRole,
+      typeBranch: typeBranch,
+    );
+  }
 }

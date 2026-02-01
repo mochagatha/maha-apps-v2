@@ -112,6 +112,8 @@ class RoutePaths {
   static const String organizationalChart = '/organizational-structure/chart';
   static const String employmentLevel = '/organizational-structure/employment-level';
   static const String departmentList = '/organizational-structure/department';
+  static const String departmentOffice = '/organizational-structure/department/office';
+  static const String departmentProject = '/organizational-structure/department/project';
   static const String jobTitleList = '/organizational-structure/job-title';
   static const String jobTitleOffice = '/organizational-structure/job-title/office';
   static const String jobTitleProject = '/organizational-structure/job-title/project';
