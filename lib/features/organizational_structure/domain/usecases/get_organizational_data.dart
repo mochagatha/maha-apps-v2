@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/department_entity.dart';
+import '../entities/employee_entity.dart';
 import '../entities/employment_level_entity.dart';
 import '../entities/job_title_entity.dart';
 import '../repositories/organizational_structure_repository.dart';
@@ -33,5 +34,19 @@ class GetOrganizationalData {
       typeRole: typeRole,
       typeBranch: typeBranch,
     );
+  }
+
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevels() async {
+    return await repository.getEmploymentLevels();
+  }
+
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevelsByType({
+    required String typeRole,
+  }) async {
+    return await repository.getEmploymentLevelsByType(typeRole: typeRole);
+  }
+
+  Future<Either<Failure, List<EmployeeEntity>>> getEmployees() async {
+    return await repository.getEmployees();
   }
 }

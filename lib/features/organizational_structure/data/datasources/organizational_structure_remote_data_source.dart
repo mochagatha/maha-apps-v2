@@ -2,6 +2,7 @@ import '../../../../core/config/api_endpoints.dart';
 
 import '../../../../core/network/api_client.dart';
 import '../models/department_model.dart';
+import '../models/employee_model.dart';
 import '../models/employment_level_model.dart';
 import '../models/job_title_model.dart';
 import '../models/organizational_structure_model.dart';
@@ -44,14 +45,31 @@ abstract class OrganizationalStructureRemoteDataSource {
   Future<OrganizationalStructureModel> getStructureDetail(int id);
   Future<List<EmploymentLevelModel>> getUserRoles(String typeBranch);
   Future<List<JobTitleModel>> getJobTitles({required String typeRole, required String typeBranch});
-  Future<void> addJobTitle({required String name, required String typeRole, required String typeBranch});
+  Future<void> addJobTitle({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  });
   Future<void> updateJobTitle({required int id, required String name});
   Future<void> deleteJobTitle(int id);
   Future<List<DepartmentModel>> getDepartments();
-  Future<List<DepartmentModel>> getDepartmentsByType({required String typeRole, required String typeBranch});
-  Future<void> addDepartment({required String name, required String typeRole, required String typeBranch});
+  Future<List<DepartmentModel>> getDepartmentsByType({
+    required String typeRole,
+    required String typeBranch,
+  });
+  Future<void> addDepartment({
+    required String name,
+    required String typeRole,
+    required String typeBranch,
+  });
   Future<void> updateDepartment({required int id, required String name});
   Future<void> deleteDepartment(int id);
+  Future<List<EmploymentLevelModel>> getEmploymentLevels();
+  Future<List<EmploymentLevelModel>> getEmploymentLevelsByType({required String typeRole});
+  Future<void> addEmploymentLevel({required String name, required String typeRole});
+  Future<void> updateEmploymentLevel({required int id, required String name});
+  Future<void> deleteEmploymentLevel(int id);
+  Future<List<EmployeeModel>> getEmployees();
 }
 
 class OrganizationalStructureRemoteDataSourceImpl
@@ -261,11 +279,7 @@ class OrganizationalStructureRemoteDataSourceImpl
     try {
       await client.dioGolang.post(
         ApiEndpoints.jobTitle,
-        data: {
-          'name': name,
-          'type_role': typeRole,
-          'type_branch': typeBranch,
-        },
+        data: {'name': name, 'type_role': typeRole, 'type_branch': typeBranch},
       );
     } catch (e) {
       rethrow;
@@ -273,15 +287,9 @@ class OrganizationalStructureRemoteDataSourceImpl
   }
 
   @override
-  Future<void> updateJobTitle({
-    required int id,
-    required String name,
-  }) async {
+  Future<void> updateJobTitle({required int id, required String name}) async {
     try {
-      await client.dioGolang.put(
-        '${ApiEndpoints.jobTitle}/$id',
-        data: {'name': name},
-      );
+      await client.dioGolang.put('${ApiEndpoints.jobTitle}/$id', data: {'name': name});
     } catch (e) {
       rethrow;
     }
@@ -335,11 +343,7 @@ class OrganizationalStructureRemoteDataSourceImpl
     try {
       await client.dioGolang.post(
         ApiEndpoints.getAllDepartment,
-        data: {
-          'department_name': name,
-          'type_role': typeRole,
-          'type_branch': typeBranch,
-        },
+        data: {'department_name': name, 'type_role': typeRole, 'type_branch': typeBranch},
       );
     } catch (e) {
       rethrow;
@@ -347,10 +351,7 @@ class OrganizationalStructureRemoteDataSourceImpl
   }
 
   @override
-  Future<void> updateDepartment({
-    required int id,
-    required String name,
-  }) async {
+  Future<void> updateDepartment({required int id, required String name}) async {
     try {
       await client.dioGolang.put(
         '${ApiEndpoints.getAllDepartment}/$id',
@@ -369,5 +370,73 @@ class OrganizationalStructureRemoteDataSourceImpl
       rethrow;
     }
   }
-}
 
+  @override
+  Future<List<EmploymentLevelModel>> getEmploymentLevels() async {
+    try {
+      final response = await client.dioGolang.get(ApiEndpoints.userRole);
+
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => EmploymentLevelModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<EmploymentLevelModel>> getEmploymentLevelsByType({required String typeRole}) async {
+    try {
+      final response = await client.dioGolang.get(
+        ApiEndpoints.userRole,
+        queryParameters: {'type_role': typeRole},
+      );
+
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => EmploymentLevelModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addEmploymentLevel({required String name, required String typeRole}) async {
+    try {
+      await client.dioGolang.post(
+        ApiEndpoints.userRole,
+        data: {'name': name, 'type_role': typeRole},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateEmploymentLevel({required int id, required String name}) async {
+    try {
+      await client.dioGolang.put('${ApiEndpoints.userRole}/$id', data: {'name': name});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteEmploymentLevel(int id) async {
+    try {
+      await client.dioGolang.delete('${ApiEndpoints.userRole}/$id');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<EmployeeModel>> getEmployees() async {
+    try {
+      final response = await client.dioGolang.get(ApiEndpoints.getAllEmployees);
+
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => EmployeeModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+}

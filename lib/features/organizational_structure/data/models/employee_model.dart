@@ -11,10 +11,10 @@ class EmployeeModel extends EmployeeEntity {
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
     return EmployeeModel(
-      id: json['id'] as int,
-      nik: json['nik'] as String,
-      fullname: json['fullname'] as String,
-      photoUrl: json['photo_url'] as String,
+      id: json['id'] as int? ?? 0,
+      nik: json['nik'] as String? ?? '-',
+      fullname: json['fullname'] as String? ?? 'Unknown',
+      photoUrl: json['photo_url'] as String? ?? 'https://ui-avatars.com/api/?name=User',
       jobTitleName: json['job_title_name'] as String?,
     );
   }

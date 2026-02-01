@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../providers/organizational_structure_provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../domain/entities/role_structure_entity.dart';
+import '../../domain/entities/superior_employee_entity.dart';
+import '../widgets/superior_employee_form_bottom_sheet.dart';
+import 'structure_team_page.dart';
 
 class StructureMainPage extends StatefulWidget {
   const StructureMainPage({super.key});
@@ -70,7 +74,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
           return _buildDataDisplay(structure);
         },
       ),
-      // bottomNavigationBar: _buildBottomButton(),
+      bottomNavigationBar: _buildBottomButton(),
     );
   }
 
@@ -129,9 +133,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(context.l10n.featureComingSoon)),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -177,7 +181,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
               itemCount: structure.roleStructure.length,
               itemBuilder: (context, index) {
                 final role = structure.roleStructure[index];
-                return _buildRoleStructureCard(role);
+                return _buildRoleStructureCard(role, structure.id);
               },
             ),
           ),
@@ -186,7 +190,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
     );
   }
 
-  Widget _buildRoleStructureCard(dynamic role) {
+  Widget _buildRoleStructureCard(RoleStructureEntity role, int companyStructureId) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -220,38 +224,80 @@ class _StructureMainPageState extends State<StructureMainPage> {
               ),
             ],
           ),
+          Divider(color: Colors.grey.shade300),
           if (role.superiorEmployeeStructure.isNotEmpty) ...[
-            Divider(color: Colors.grey.shade300),
             ...role.superiorEmployeeStructure.map((superior) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(superior.employee.photoUrl),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: InkWell(
+                  onTap: () => _navigateToTeamManagement(superior.id),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(superior.employee.photoUrl),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              superior.employee.fullname,
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              superior.employee.nik,
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            ),
+                            Text(
+                              superior.jobTitle.name ?? "-",
+                              style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
                         children: [
-                          Text(
-                            superior.employee.fullname,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          IconButton(
+                            icon: const Icon(Icons.edit, size: 20, color: Colors.blue),
+                            onPressed: () =>
+                                _showEditSuperiorDialog(superior, companyStructureId, role.id),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minHeight: 24, minWidth: 24),
                           ),
-                          Text(
-                            superior.employee.nik ?? '-',
-                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                          const SizedBox(height: 8),
+                          IconButton(
+                            icon: const Icon(Icons.delete, size: 20, color: Colors.red),
+                            onPressed: () => _confirmDeleteSuperior(superior.id),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minHeight: 24, minWidth: 24),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
-            }).toList(),
+            }),
           ],
+
+          // Button Tambah Pejabat jika kosong atau allowed multiple (asumsi multiple allowed based on List)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _showAddSuperiorDialog(companyStructureId, role.id),
+                icon: const Icon(Icons.add, size: 18),
+                label: const Text("Tambah Pejabat"),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -285,6 +331,93 @@ class _StructureMainPageState extends State<StructureMainPage> {
           ),
         );
       },
+    );
+  }
+
+  // Action Methods
+  void _navigateToTeamManagement(int superiorId) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StructureTeamPage(superiorId: superiorId)),
+    );
+    _loadData();
+  }
+
+  void _showAddSuperiorDialog(int companyStructureId, int roleStructureId) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => ChangeNotifierProvider.value(
+        value: context.read<OrganizationalStructureProvider>(),
+        child: SuperiorEmployeeFormBottomSheet(
+          companyStructureId: companyStructureId,
+          roleStructureId: roleStructureId,
+          onSuccess: _loadData,
+        ),
+      ),
+    );
+  }
+
+  void _showEditSuperiorDialog(
+    SuperiorEmployeeEntity superior,
+    int companyStructureId,
+    int roleStructureId,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => ChangeNotifierProvider.value(
+        value: context.read<OrganizationalStructureProvider>(),
+        child: SuperiorEmployeeFormBottomSheet(
+          companyStructureId: companyStructureId,
+          roleStructureId: roleStructureId,
+          isEdit: true,
+          superiorEmployeeId: superior.id,
+          initialEmployeeId: superior.employee.id,
+          initialJobTitleId: superior.jobTitle.id,
+          onSuccess: _loadData,
+        ),
+      ),
+    );
+  }
+
+  void _confirmDeleteSuperior(int superiorId) {
+    final provider = context.read<OrganizationalStructureProvider>();
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Hapus Pejabat'),
+        content: const Text('Apakah Anda yakin ingin menghapus pejabat ini?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Batal')),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              final success = await provider.deleteSuperiorEmployee(superiorId);
+              if (success && mounted) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Pejabat berhasil dihapus')));
+                _loadData();
+              } else if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(provider.errorMessage ?? 'Gagal menghapus'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -539,7 +672,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(context.l10n.successExclamation, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(
+                context.l10n.successExclamation,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 20),
               Container(
                 width: 100,
@@ -577,17 +713,21 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   void _confirmDeleteRole(int roleId) {
+    // Capture provider before dialog
+    final provider = context.read<OrganizationalStructureProvider>();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(context.l10n.deleteStructureRoleTitle),
         content: Text(context.l10n.deleteStructureRoleMessage),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.cancel)),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(context.l10n.cancel),
+          ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context);
-              final provider = context.read<OrganizationalStructureProvider>();
+              Navigator.pop(dialogContext);
               final success = await provider.deleteStructureRole(roleId);
               if (success && mounted) {
                 ScaffoldMessenger.of(

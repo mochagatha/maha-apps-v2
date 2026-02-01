@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/department_entity.dart';
 import '../../domain/entities/employment_level_entity.dart';
+import '../../domain/entities/employee_entity.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../../domain/entities/organizational_structure_entity.dart';
 import '../../domain/repositories/organizational_structure_repository.dart';
@@ -298,11 +299,7 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
     required String typeBranch,
   }) async {
     try {
-      await remoteDataSource.addDepartment(
-        name: name,
-        typeRole: typeRole,
-        typeBranch: typeBranch,
-      );
+      await remoteDataSource.addDepartment(name: name, typeRole: typeRole, typeBranch: typeBranch);
       return const Right(null);
     } on DioException catch (e) {
       return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menambahkan departemen'));
@@ -312,10 +309,7 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
   }
 
   @override
-  Future<Either<Failure, void>> updateDepartment({
-    required int id,
-    required String name,
-  }) async {
+  Future<Either<Failure, void>> updateDepartment({required int id, required String name}) async {
     try {
       await remoteDataSource.updateDepartment(id: id, name: name);
       return const Right(null);
@@ -333,6 +327,104 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
       return const Right(null);
     } on DioException catch (e) {
       return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevels() async {
+    try {
+      final result = await remoteDataSource.getEmploymentLevels();
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data is Map
+          ? e.response?.data['message']
+          : e.response?.statusMessage;
+      return Left(ServerFailure(errorMessage ?? 'Gagal mengambil employment levels'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevelsByType({
+    required String typeRole,
+  }) async {
+    try {
+      final result = await remoteDataSource.getEmploymentLevelsByType(typeRole: typeRole);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data is Map
+          ? e.response?.data['message']
+          : e.response?.statusMessage;
+      return Left(ServerFailure(errorMessage ?? 'Gagal mengambil employment levels'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addEmploymentLevel({
+    required String name,
+    required String typeRole,
+  }) async {
+    try {
+      await remoteDataSource.addEmploymentLevel(name: name, typeRole: typeRole);
+      return const Right(null);
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data is Map
+          ? e.response?.data['message']
+          : e.response?.statusMessage;
+      return Left(ServerFailure(errorMessage ?? 'Gagal menambahkan employment level'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateEmploymentLevel({
+    required int id,
+    required String name,
+  }) async {
+    try {
+      await remoteDataSource.updateEmploymentLevel(id: id, name: name);
+      return const Right(null);
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data is Map
+          ? e.response?.data['message']
+          : e.response?.statusMessage;
+      return Left(ServerFailure(errorMessage ?? 'Gagal mengupdate employment level'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteEmploymentLevel(int id) async {
+    try {
+      await remoteDataSource.deleteEmploymentLevel(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data is Map
+          ? e.response?.data['message']
+          : e.response?.statusMessage;
+      return Left(ServerFailure(errorMessage ?? 'Gagal menghapus employment level'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<EmployeeEntity>>> getEmployees() async {
+    try {
+      final result = await remoteDataSource.getEmployees();
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data is Map
+          ? e.response?.data['message']
+          : e.response?.statusMessage;
+      return Left(ServerFailure(errorMessage ?? 'Gagal mengambil data karyawan'));
     } catch (e) {
       return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
     }

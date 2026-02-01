@@ -87,6 +87,7 @@ import '../../features/organizational_structure/domain/usecases/manage_superior_
 import '../../features/organizational_structure/domain/usecases/get_organizational_data.dart';
 import '../../features/organizational_structure/domain/usecases/manage_job_title.dart';
 import '../../features/organizational_structure/domain/usecases/manage_department.dart';
+import '../../features/organizational_structure/domain/usecases/manage_employment_level.dart';
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 
 final sl = GetIt.instance;
@@ -280,6 +281,7 @@ Future<void> init() async {
       getOrganizationalData: sl(),
       manageJobTitle: sl(),
       manageDepartment: sl(),
+      manageEmploymentLevel: sl(),
     ),
   );
 
@@ -290,6 +292,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOrganizationalData(sl()));
   sl.registerLazySingleton(() => ManageJobTitle(sl()));
   sl.registerLazySingleton(() => ManageDepartment(sl()));
+  sl.registerLazySingleton(() => ManageEmploymentLevel(sl()));
 
   // Repository
   sl.registerLazySingleton<OrganizationalStructureRepository>(

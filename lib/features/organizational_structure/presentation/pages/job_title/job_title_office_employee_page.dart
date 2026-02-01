@@ -279,20 +279,22 @@ class _JobTitleOfficeEmployeePageState extends State<JobTitleOfficeEmployeePage>
   }
 
   void _confirmDelete(dynamic jobTitle) {
+    // Capture provider from parent context
+    final provider = context.read<OrganizationalStructureProvider>();
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Hapus Data Jabatan'),
         content: const Text('Apakah Anda yakin ingin menghapus data jabatan ini?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Batal'),
           ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context);
-              final provider = context.read<OrganizationalStructureProvider>();
+              Navigator.pop(dialogContext);
               final success = await provider.deleteJobTitle(jobTitle.id);
               if (success && mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(

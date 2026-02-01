@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/department_entity.dart';
+import '../entities/employee_entity.dart';
 import '../entities/employment_level_entity.dart';
 import '../entities/job_title_entity.dart';
 import '../entities/organizational_structure_entity.dart';
@@ -112,5 +113,30 @@ abstract class OrganizationalStructureRepository {
 
   /// Delete department
   Future<Either<Failure, void>> deleteDepartment(int id);
-}
 
+  /// Get all employment levels
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevels();
+
+  /// Get employment levels by type
+  Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevelsByType({
+    required String typeRole,
+  });
+
+  /// Add employment level
+  Future<Either<Failure, void>> addEmploymentLevel({
+    required String name,
+    required String typeRole,
+  });
+
+  /// Update employment level
+  Future<Either<Failure, void>> updateEmploymentLevel({
+    required int id,
+    required String name,
+  });
+
+  /// Delete employment level
+  Future<Either<Failure, void>> deleteEmploymentLevel(int id);
+
+  /// Get all employees
+  Future<Either<Failure, List<EmployeeEntity>>> getEmployees();
+}

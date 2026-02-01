@@ -60,6 +60,8 @@ import '../../features/organizational_structure/presentation/pages/job_title/job
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 import '../../features/organizational_structure/presentation/pages/department_office_page.dart';
 import '../../features/organizational_structure/presentation/pages/department_project_page.dart';
+import '../../features/organizational_structure/presentation/pages/employment_level_employee_page.dart';
+import '../../features/organizational_structure/presentation/pages/employment_level_worker_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
 
@@ -298,6 +300,22 @@ class AppRouter {
           path: RoutePaths.employmentLevel,
           name: RouteNames.employmentLevel,
           builder: (context, state) => const EmploymentLevelListPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.employmentLevelEmployee,
+          name: RouteNames.employmentLevelEmployee,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const EmploymentLevelEmployeePage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.employmentLevelWorker,
+          name: RouteNames.employmentLevelWorker,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<OrganizationalStructureProvider>(),
+            child: const EmploymentLevelWorkerPage(),
+          ),
         ),
         GoRoute(
           path: RoutePaths.departmentList,

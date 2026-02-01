@@ -20,8 +20,10 @@ class ApiEndpoints {
   static const String superiorEmployeeDepartmentWorker =
       '/employee/company-structure/superior-employee/department/worker';
   static const String companyStructureDetail = '/employee/company-structure/get-by-id';
-  static const String userRole = '/user-role';
+  static const String userRole = '/employee/user-role';
   static const String jobTitle = '/job-title';
   static const String getAllDepartment = '/department';
+  static const String employmentLevel = '/employment-level';
   static const String filterDropdown = '/filter-dropdown';
+  static const String getAllEmployees = '/employee';
 }

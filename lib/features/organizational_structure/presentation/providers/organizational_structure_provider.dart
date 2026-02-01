@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/department_entity.dart';
+import '../../domain/entities/employee_entity.dart';
 import '../../domain/entities/employment_level_entity.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../../domain/entities/organizational_structure_entity.dart';
@@ -9,6 +10,7 @@ import '../../domain/usecases/manage_structure_role.dart';
 import '../../domain/usecases/manage_superior_employee.dart';
 import '../../domain/usecases/manage_job_title.dart';
 import '../../domain/usecases/manage_department.dart';
+import '../../domain/usecases/manage_employment_level.dart';
 
 class OrganizationalStructureProvider with ChangeNotifier {
   final GetCompanyStructure getCompanyStructure;
@@ -17,6 +19,7 @@ class OrganizationalStructureProvider with ChangeNotifier {
   final GetOrganizationalData getOrganizationalData;
   final ManageJobTitle manageJobTitle;
   final ManageDepartment manageDepartment;
+  final ManageEmploymentLevel manageEmploymentLevel;
 
   OrganizationalStructureProvider({
     required this.getCompanyStructure,
@@ -25,6 +28,7 @@ class OrganizationalStructureProvider with ChangeNotifier {
     required this.getOrganizationalData,
     required this.manageJobTitle,
     required this.manageDepartment,
+    required this.manageEmploymentLevel,
   });
 
   bool _isLoading = false;
@@ -44,6 +48,12 @@ class OrganizationalStructureProvider with ChangeNotifier {
 
   List<DepartmentEntity> _departments = [];
   List<DepartmentEntity> get departments => _departments;
+
+  List<EmploymentLevelEntity> _employmentLevels = [];
+  List<EmploymentLevelEntity> get employmentLevels => _employmentLevels;
+
+  List<EmployeeEntity> _employees = [];
+  List<EmployeeEntity> get employees => _employees;
 
   OrganizationalStructureEntity? get currentStructure =>
       _structures.isNotEmpty ? _structures.first : null;
@@ -199,6 +209,56 @@ class OrganizationalStructureProvider with ChangeNotifier {
       departmentId: departmentId,
       employeeIds: employeeIds,
       workerIds: workerIds,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<bool> editEmployeeDepartment({
+    required int id,
+    required List<int> employeeIds,
+    required List<int> deleteEmployeeIds,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageSuperiorEmployee.editEmployeeDepartment(
+      id: id,
+      employeeIds: employeeIds,
+      deleteEmployeeIds: deleteEmployeeIds,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<bool> editWorkerDepartment({
+    required int id,
+    required List<int> workerIds,
+    required List<int> deleteWorkerIds,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageSuperiorEmployee.editWorkerDepartment(
+      id: id,
+      workerIds: workerIds,
+      deleteWorkerIds: deleteWorkerIds,
     );
 
     _setLoading(false);
@@ -425,6 +485,110 @@ class OrganizationalStructureProvider with ChangeNotifier {
       },
       (_) => true,
     );
+  }
+
+  // Employment Level methods
+  Future<void> loadEmploymentLevelsByType({
+    required String typeRole,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await getOrganizationalData.getEmploymentLevelsByType(
+      typeRole: typeRole,
+    );
+
+    result.fold(
+      (failure) {
+        _setError(failure.message);
+        _employmentLevels = [];
+      },
+      (employmentLevels) {
+        _employmentLevels = employmentLevels;
+      },
+    );
+
+    _setLoading(false);
+  }
+
+  Future<bool> addEmploymentLevelData({
+    required String name,
+    required String typeRole,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageEmploymentLevel.addEmploymentLevel(
+      name: name,
+      typeRole: typeRole,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<bool> updateEmploymentLevelData({
+    required int id,
+    required String name,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageEmploymentLevel.updateEmploymentLevel(
+      id: id,
+      name: name,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<bool> deleteEmploymentLevelData(int id) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageEmploymentLevel.deleteEmploymentLevel(id);
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  Future<void> loadEmployees() async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await getOrganizationalData.getEmployees();
+
+    result.fold(
+      (failure) => _setError(failure.message),
+      (employees) {
+        _employees = employees;
+        notifyListeners();
+      },
+    );
+
+    _setLoading(false);
   }
 }
 
