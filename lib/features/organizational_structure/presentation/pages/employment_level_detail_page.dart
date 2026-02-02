@@ -6,7 +6,6 @@ import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/user_role_entity.dart';
-import '../providers/organizational_structure_provider.dart';
 import '../providers/user_role_provider.dart';
 import '../widgets/user_role_form_bottom_sheet.dart';
 
@@ -63,7 +62,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
           return _buildHierarchyView(roles);
         },
       ),
-      bottomNavigationBar: Consumer<OrganizationalStructureProvider>(
+      bottomNavigationBar: Consumer<UserRoleProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.userRoleHierarchy.isEmpty) {
             return const SizedBox.shrink();
@@ -243,7 +242,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
   }
 
   List<UserRoleEntity> _getAllRoles() {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<UserRoleProvider>();
     List<UserRoleEntity> allRoles = [];
 
     void collectRoles(List<UserRoleEntity> roles) {
@@ -261,7 +260,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
 
   void _showAddForm() {
     final allRoles = _getAllRoles();
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<UserRoleProvider>();
 
     showModalBottomSheet(
       context: context,
@@ -281,7 +280,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
 
   void _showEditForm(UserRoleEntity role) {
     final allRoles = _getAllRoles();
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<UserRoleProvider>();
 
     showModalBottomSheet(
       context: context,
@@ -307,7 +306,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
       message: 'Apakah Anda yakin ingin',
       messageActionText: 'menghapus tingkatan "${role.name}"',
       onConfirm: () async {
-        final provider = context.read<OrganizationalStructureProvider>();
+        final provider = context.read<UserRoleProvider>();
         final success = await provider.deleteUserRoleData(role.id);
 
         if (!mounted) return;

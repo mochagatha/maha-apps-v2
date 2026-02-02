@@ -89,7 +89,6 @@ import '../../features/organizational_structure/domain/usecases/manage_job_title
 import '../../features/organizational_structure/domain/usecases/manage_department.dart';
 import '../../features/organizational_structure/domain/usecases/manage_employment_level.dart';
 import '../../features/organizational_structure/domain/usecases/manage_user_role.dart';
-import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
 import '../../features/organizational_structure/presentation/providers/department_provider.dart';
 import '../../features/organizational_structure/presentation/providers/employment_level_provider.dart';
@@ -289,25 +288,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ManageUserRole(sl()));
 
   // Providers - Specialized
-  sl.registerFactory(
-    () => JobTitleProvider(
-      getOrganizationalData: sl(),
-      manageJobTitle: sl(),
-    ),
-  );
+  sl.registerFactory(() => JobTitleProvider(getOrganizationalData: sl(), manageJobTitle: sl()));
+
+  sl.registerFactory(() => DepartmentProvider(getOrganizationalData: sl(), manageDepartment: sl()));
 
   sl.registerFactory(
-    () => DepartmentProvider(
-      getOrganizationalData: sl(),
-      manageDepartment: sl(),
-    ),
-  );
-
-  sl.registerFactory(
-    () => EmploymentLevelProvider(
-      getOrganizationalData: sl(),
-      manageEmploymentLevel: sl(),
-    ),
+    () => EmploymentLevelProvider(getOrganizationalData: sl(), manageEmploymentLevel: sl()),
   );
 
   sl.registerFactory(
@@ -319,26 +305,7 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerFactory(
-    () => UserRoleProvider(
-      getOrganizationalData: sl(),
-      manageUserRole: sl(),
-    ),
-  );
-
-  // Provider - Legacy (for backward compatibility, will be removed later)
-  sl.registerFactory(
-    () => OrganizationalStructureProvider(
-      getCompanyStructure: sl(),
-      manageStructureRole: sl(),
-      manageSuperiorEmployee: sl(),
-      getOrganizationalData: sl(),
-      manageJobTitle: sl(),
-      manageDepartment: sl(),
-      manageEmploymentLevel: sl(),
-      manageUserRole: sl(),
-    ),
-  );
+  sl.registerFactory(() => UserRoleProvider(getOrganizationalData: sl(), manageUserRole: sl()));
 
   // Repository
   sl.registerLazySingleton<OrganizationalStructureRepository>(

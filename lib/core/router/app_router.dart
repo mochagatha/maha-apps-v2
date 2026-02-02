@@ -311,7 +311,7 @@ class AppRouter {
           path: RoutePaths.structureMain,
           name: RouteNames.structureMain,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
+            create: (_) => sl<StructureProvider>(),
             child: const StructureMainPage(),
           ),
         ),
@@ -334,7 +334,7 @@ class AppRouter {
           path: RoutePaths.employmentLevelOfficeEmployee,
           name: RouteNames.employmentLevelOfficeEmployee,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<EmploymentLevelProvider>(),
+            create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
               typeRole: 'employee',
               typeBranch: 'office',
@@ -346,7 +346,7 @@ class AppRouter {
           path: RoutePaths.employmentLevelOfficeWorker,
           name: RouteNames.employmentLevelOfficeWorker,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<EmploymentLevelProvider>(),
+            create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
               typeRole: 'worker',
               typeBranch: 'office',
@@ -358,7 +358,7 @@ class AppRouter {
           path: RoutePaths.employmentLevelProjectEmployee,
           name: RouteNames.employmentLevelProjectEmployee,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<EmploymentLevelProvider>(),
+            create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
               typeRole: 'employee',
               typeBranch: 'project',
@@ -370,7 +370,7 @@ class AppRouter {
           path: RoutePaths.employmentLevelProjectWorker,
           name: RouteNames.employmentLevelProjectWorker,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<EmploymentLevelProvider>(),
+            create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
               typeRole: 'worker',
               typeBranch: 'project',

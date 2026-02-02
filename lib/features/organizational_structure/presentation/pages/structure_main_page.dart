@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/localization_extension.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/structure_provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../domain/entities/role_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
@@ -26,7 +26,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     await provider.loadCompanyStructure('utama');
   }
 
@@ -34,7 +34,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.mainStructure),
-      body: Consumer<OrganizationalStructureProvider>(
+      body: Consumer<StructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(child: SpinKitThreeBounce(color: Colors.red));
@@ -305,7 +305,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   Widget _buildBottomButton() {
-    return Consumer<OrganizationalStructureProvider>(
+    return Consumer<StructureProvider>(
       builder: (context, provider, child) {
         return Container(
           padding: const EdgeInsets.all(16),
@@ -352,7 +352,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) => ChangeNotifierProvider.value(
-        value: context.read<OrganizationalStructureProvider>(),
+        value: context.read<StructureProvider>(),
         child: SuperiorEmployeeFormBottomSheet(
           companyStructureId: companyStructureId,
           roleStructureId: roleStructureId,
@@ -374,7 +374,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) => ChangeNotifierProvider.value(
-        value: context.read<OrganizationalStructureProvider>(),
+        value: context.read<StructureProvider>(),
         child: SuperiorEmployeeFormBottomSheet(
           companyStructureId: companyStructureId,
           roleStructureId: roleStructureId,
@@ -389,7 +389,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   void _confirmDeleteSuperior(int superiorId) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -444,7 +444,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   void _showAddRoleDialog() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
 
     // Load available user roles
     await provider.loadUserRoles('utama');
@@ -632,7 +632,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   void _addRoles(List<int> selectedRoleIds) async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     final structure = provider.currentStructure;
 
     if (structure == null) {
@@ -715,7 +715,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
   void _confirmDeleteRole(int roleId) {
     // Capture provider before dialog
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(

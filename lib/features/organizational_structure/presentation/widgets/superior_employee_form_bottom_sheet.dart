@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/structure_provider.dart';
+import '../providers/job_title_provider.dart';
 
 class SuperiorEmployeeFormBottomSheet extends StatefulWidget {
   final int companyStructureId;
@@ -45,14 +46,15 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
+    final jobTitleProvider = context.read<JobTitleProvider>();
     // Load employees dan job titles jika belum ada
     if (provider.employees.isEmpty) {
       provider.loadEmployees();
     }
     // Load job titles for 'utama' branch? or general?
     // Assuming 'utama' for now as this is Main Structure
-    provider.loadJobTitles(typeRole: 'employee', typeBranch: 'utama');
+    jobTitleProvider.loadJobTitles(typeRole: 'employee', typeBranch: 'utama');
   }
 
   Future<void> _submit() async {
@@ -68,7 +70,7 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
       _isSubmitting = true;
     });
 
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     bool success;
 
     if (widget.isEdit) {
@@ -143,8 +145,8 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<OrganizationalStructureProvider>(
-      builder: (context, provider, child) {
+    return Consumer2<StructureProvider, JobTitleProvider>(
+      builder: (context, provider, jobTitleProvider, child) {
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -200,7 +202,7 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
-                  items: provider.jobTitles.map((job) {
+                  items: jobTitleProvider.jobTitles.map((job) {
                     return DropdownMenuItem<int>(value: job.id, child: Text(job.name ?? "-"));
                   }).toList(),
                   onChanged: (value) {
@@ -228,7 +230,7 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
                         ? const SizedBox(
                             height: 20,
                             width: 20,
-                            child: SpinKitThreeBounce(color: Colors.white),
+                            child: SpinKitThreeBounce(color: Colors.white, size: 20),
                           )
                         : Text(
                             widget.isEdit ? 'Update' : 'Simpan',

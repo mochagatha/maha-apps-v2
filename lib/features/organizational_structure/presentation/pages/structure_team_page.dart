@@ -6,7 +6,7 @@ import '../../domain/entities/department_entity.dart';
 import '../../domain/entities/employee_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
 import '../../domain/entities/department_structure_entity.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/structure_provider.dart';
 import '../widgets/multi_select_employee_dialog.dart';
 
 class StructureTeamPage extends StatefulWidget {
@@ -28,14 +28,14 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
   }
 
   void _loadInitialData() {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     provider.loadDepartments();
     provider.loadEmployees();
     // Refresh main structure to ensure ups-to-date
     provider.loadCompanyStructure('utama');
   }
 
-  SuperiorEmployeeEntity? _getSuperior(OrganizationalStructureProvider provider) {
+  SuperiorEmployeeEntity? _getSuperior(StructureProvider provider) {
     final structure = provider.currentStructure;
     if (structure == null) return null;
 
@@ -57,7 +57,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Consumer<OrganizationalStructureProvider>(
+      body: Consumer<StructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.currentStructure == null) {
             return const Center(child: SpinKitThreeBounce(color: Colors.red));
@@ -135,7 +135,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
 
   Widget _buildDepartmentsList(
     SuperiorEmployeeEntity superior,
-    OrganizationalStructureProvider provider,
+    StructureProvider provider,
   ) {
     if (superior.departmentStructure.isEmpty) {
       return Center(
@@ -167,7 +167,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
 
   Widget _buildDepartmentCard(
     DepartmentStructureEntity deptStruct,
-    OrganizationalStructureProvider provider,
+    StructureProvider provider,
   ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -249,7 +249,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
   }
 
   void _showAddDepartmentDialog(BuildContext context) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     DepartmentEntity? selectedDept;
     List<int> selectedEmployees = [];
     List<int> selectedWorkers = [];
@@ -337,7 +337,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
   }
 
   void _editMembers(DepartmentStructureEntity deptStruct, bool isWorker) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     final currentMembers = isWorker
         ? deptStruct.workerStructure.map((w) => w.worker)
         : deptStruct.employeeStructure.map((e) => e.employee);
