@@ -95,7 +95,7 @@ class JobTitleListWidget extends StatelessWidget {
     OrganizationalStructureProvider provider,
   ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
