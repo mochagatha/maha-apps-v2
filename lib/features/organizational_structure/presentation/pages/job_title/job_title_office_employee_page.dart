@@ -189,32 +189,29 @@ class _JobTitleOfficeEmployeePageState extends State<JobTitleOfficeEmployeePage>
 
   Widget _buildJobTitleItem(dynamic jobTitle) {
     return Container(
-      height: 50,
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.only(left: 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(
-          color: Colors.grey.shade300,
-          width: 0.5,
+          color: Colors.grey.shade400,
+          width: 1,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Text(
               jobTitle.name,
               style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
           PopupMenuButton<String>(
-            color: Colors.white,
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert, size: 20),
             padding: EdgeInsets.zero,
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               PopupMenuItem<String>(
