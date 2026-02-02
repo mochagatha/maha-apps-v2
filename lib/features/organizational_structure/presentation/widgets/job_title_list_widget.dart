@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../providers/organizational_structure_provider.dart';
 import 'job_title_form_bottom_sheet.dart';
+import 'empty_state_widget.dart';
+import 'entity_card_widget.dart';
 
 class JobTitleListWidget extends StatelessWidget {
   final List<JobTitleEntity> jobTitles;
@@ -37,30 +38,11 @@ class JobTitleListWidget extends StatelessWidget {
           onRefresh();
         },
         child: ListView(
-          padding: EdgeInsets.all(16),
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/icon/data_aproval_kosong.svg', height: 175),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Belum Ada Daftar Data Jabatan!',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Jangan lupa untuk melihat Daftar Data Jabatan melalui aplikasi Maha!',
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+          padding: const EdgeInsets.all(16),
+          children: const [
+            EmptyStateWidget(
+              title: 'Belum Ada Daftar Data Jabatan!',
+              message: 'Jangan lupa untuk melihat Daftar Data Jabatan melalui aplikasi Maha!',
             ),
           ],
         ),
@@ -80,85 +62,16 @@ class JobTitleListWidget extends StatelessWidget {
             final jobTitle = jobTitles[index];
             return Column(
               children: [
-                _buildJobTitleCard(context, jobTitle, provider),
+                EntityCardWidget(
+                  title: jobTitle.name ?? '',
+                  onEdit: () => _showEditDialog(context, jobTitle),
+                  onDelete: () => _handleDelete(context, jobTitle, provider),
+                ),
                 const SizedBox(height: 16),
               ],
             );
           },
         ),
-      ),
-    );
-  }
-
-  Widget _buildJobTitleCard(
-    BuildContext context,
-    JobTitleEntity jobTitle,
-    OrganizationalStructureProvider provider,
-  ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade400, width: 1),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              jobTitle.name ?? '',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, size: 20),
-            padding: EdgeInsets.zero,
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'edit',
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                height: 30,
-                child: Text('Edit'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'delete',
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                height: 30,
-                child: Text('Hapus'),
-              ),
-            ],
-            onSelected: (value) {
-              if (value == 'edit') {
-                _showEditDialog(context, jobTitle);
-              } else if (value == 'delete') {
-                ConfirmDialog.show(
-                  context,
-                  child: Text('Apakah Anda yakin ingin menghapus jabatan "${jobTitle.name}"?'),
-                  onConfirm: () async {
-                    final success = await provider.deleteJobTitle(jobTitle.id ?? 0);
-
-                    if (context.mounted) {
-                      if (success) {
-                        SuccessDialog.show(
-                          context,
-                          message: 'Jabatan "${jobTitle.name}" berhasil dihapus',
-                          onConfirm: onRefresh,
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(provider.errorMessage ?? 'Gagal menghapus jabatan'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                );
-              }
-            },
-          ),
-        ],
       ),
     );
   }
@@ -182,6 +95,37 @@ class JobTitleListWidget extends StatelessWidget {
           onSuccess: onRefresh,
         ),
       ),
+    );
+  }
+
+  void _handleDelete(
+    BuildContext context,
+    JobTitleEntity jobTitle,
+    OrganizationalStructureProvider provider,
+  ) {
+    ConfirmDialog.show(
+      context,
+      child: Text('Apakah Anda yakin ingin menghapus jabatan "${jobTitle.name}"?'),
+      onConfirm: () async {
+        final success = await provider.deleteJobTitle(jobTitle.id ?? 0);
+
+        if (context.mounted) {
+          if (success) {
+            SuccessDialog.show(
+              context,
+              message: 'Jabatan "${jobTitle.name}" berhasil dihapus',
+              onConfirm: onRefresh,
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(provider.errorMessage ?? 'Gagal menghapus jabatan'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      },
     );
   }
 }

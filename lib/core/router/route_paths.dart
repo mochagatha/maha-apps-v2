@@ -21,8 +21,7 @@ class RoutePaths {
   static const String profile = '/profile';
 
   // Settings
-  static const String setting = '/settings';
-  static const String settings = '/settings'; // Legacy/Duplicate?
+  static const String settings = '/settings';
 
   // Features
   static const String absensi = '/absensi';
@@ -113,15 +112,6 @@ class RoutePaths {
   static const String employmentLevel = '/organizational-structure/employment-level';
   static const String employmentLevelOffice = '/organizational-structure/employment-level/office';
   static const String employmentLevelProject = '/organizational-structure/employment-level/project';
-  static const String employmentLevelSubMenu =
-      '/organizational-structure/employment-level/sub-menu';
-  static const String employmentLevelEmployee =
-      '/organizational-structure/employment-level/employee';
-  static const String employmentLevelWorker = '/organizational-structure/employment-level/worker';
-  static const String employmentLevelEmployeeDetail =
-      '/organizational-structure/employment-level/employee-detail';
-  static const String employmentLevelWorkerDetail =
-      '/organizational-structure/employment-level/worker-detail';
   static const String employmentLevelOfficeEmployee =
       '/organizational-structure/employment-level/office/employee';
   static const String employmentLevelOfficeWorker =

@@ -4,7 +4,7 @@ import 'package:maha_apps_v2/core/router/route_paths.dart';
 /// Contains all menu codes, icons, and routes mapping
 class MenuConfig {
   // ==================== MENU CODES ====================
-  
+
   // Main Menus
   static const String absensi = 'ABSENSI';
   static const String mengamati = 'MENGAMATI';
@@ -107,7 +107,8 @@ class MenuConfig {
   // Data Payroll Submenus
   static const String dataPayrollPengajuanGaji = 'DATA_PAYROLL/PENGAJUAN_GAJI';
   static const String dataPayrollLaporanGaji = 'DATA_PAYROLL/LAPORAN_GAJI';
-  static const String dataPayrollGajiPekerjaHarian = 'DATA_PAYROLL/PENGAJUAN_GAJI/GAJI_PEKERJA_HARIAN';
+  static const String dataPayrollGajiPekerjaHarian =
+      'DATA_PAYROLL/PENGAJUAN_GAJI/GAJI_PEKERJA_HARIAN';
   static const String dataPayrollGajiKaryawan = 'DATA_PAYROLL/PENGAJUAN_GAJI/GAJI_KARYAWAN';
 
   // Kasir Submenus
@@ -152,18 +153,19 @@ class MenuConfig {
   static const String pengaturanKpi = 'PENGATURAN/KPI';
   static const String pengaturanBahasa = 'PENGATURAN/BAHASA';
   static const String pengaturanHakAksesMenu = 'PENGATURAN/HAK_AKSES_MENU';
-  
+
   // Arsip Submenus
   static const String arsipStrukturOrganisasi = 'ARSIP/STRUKTUR_ORGANISASI';
-  
+
   // Organizational Structure Submenus
   static const String strukturOrganisasiUtama = 'STRUKTUR_ORGANISASI/UTAMA';
-  static const String strukturOrganisasiTingkatanPekerjaan = 'STRUKTUR_ORGANISASI/TINGKATAN_PEKERJAAN';
+  static const String strukturOrganisasiTingkatanPekerjaan =
+      'STRUKTUR_ORGANISASI/TINGKATAN_PEKERJAAN';
   static const String strukturOrganisasiDepartemen = 'STRUKTUR_ORGANISASI/DEPARTEMEN';
   static const String strukturOrganisasiJabatan = 'STRUKTUR_ORGANISASI/JABATAN';
 
   // ==================== ICON MAPPING ====================
-  
+
   static const Map<String, String> _iconMap = {
     // Main Menus
     absensi: 'assets/images/icon/absensi.png',
@@ -186,7 +188,7 @@ class MenuConfig {
     kpi: 'assets/images/icon/KPI.png',
     pengaturan: 'assets/images/icon/setting_icon.png',
     updateKontrak: 'assets/images/icon/update_kontrak.png',
-    
+
     // Pengaturan Submenus Icons
     pengaturanPenempatanKerja: 'assets/images/icon/penempatan_kerja_icon.svg',
     pengaturanLibur: 'assets/images/icon/hari_libur.svg',
@@ -205,7 +207,7 @@ class MenuConfig {
   };
 
   // ==================== ROUTE MAPPING ====================
-  
+
   static const Map<String, String> _routeMap = {
     // Main Menus
     absensi: RoutePaths.absensi,
@@ -226,9 +228,9 @@ class MenuConfig {
     akuntansi: RoutePaths.approvalNew,
     rekrutment: RoutePaths.recruitment,
     kpi: RoutePaths.kpi,
-    pengaturan: RoutePaths.setting,
+    pengaturan: RoutePaths.settings,
     updateKontrak: RoutePaths.contractUpdates,
-    
+
     // Absensi Submenus
     absensiHadir: RoutePaths.attendancePresent,
     absensiLembur: RoutePaths.attendanceOvertime,
@@ -238,7 +240,7 @@ class MenuConfig {
     absensiPengawasan: RoutePaths.attendanceSupervision,
     absensiPengawasan2: RoutePaths.attendanceSupervision2,
     absenDimanaSaja: RoutePaths.attendanceAnywhere,
-    
+
     // Persetujuan Submenus
     persetujuanPengawasan: RoutePaths.approvalSupervision,
     persetujuanRencanaKerja: RoutePaths.approvalWorkPlan,
@@ -263,7 +265,7 @@ class MenuConfig {
     persetujuanPerjanjianKerjaDirektur: RoutePaths.approvalAgreementDirector,
     persetujuanGajiDirektur: RoutePaths.approvalSalaryDirector,
     persetujuanPinjamanDirektur: RoutePaths.approvalLoanDirector,
-    
+
     // Mengamati Submenus
     mengamatiLogAktifitas: RoutePaths.monitoringActivityLog,
     mengamatiMonitoringKpi: RoutePaths.monitoringKpi,
@@ -271,12 +273,12 @@ class MenuConfig {
     mengamatiAbsen: RoutePaths.monitoringAttendance,
     mengamatiRencanaKerja: RoutePaths.monitoringWorkPlan,
     mengamatiTugas: RoutePaths.monitoringTask,
-    
+
     // Rekrutment Submenus
     rekrutmentVerifikasiData: RoutePaths.verificationData,
     rekrutmentPerjanjianKerja: RoutePaths.recruitmentAgreement,
     rekrutmentAktivasiBpjs: RoutePaths.recruitmentBpjsActivation,
-    
+
     // Organizational Structure
     arsipStrukturOrganisasi: RoutePaths.organizationalStructure,
     pengaturanStrukturOrganisasi: RoutePaths.organizationalStructure,
@@ -284,7 +286,7 @@ class MenuConfig {
     strukturOrganisasiTingkatanPekerjaan: RoutePaths.employmentLevel,
     strukturOrganisasiDepartemen: RoutePaths.departmentList,
     strukturOrganisasiJabatan: RoutePaths.jobTitleList,
-    
+
     // Pengaturan Submenus Routes
     pengaturanPenempatanKerja: RoutePaths.settingsPenempatanKerja,
     pengaturanLibur: RoutePaths.settingsLibur,
@@ -301,7 +303,6 @@ class MenuConfig {
     pengaturanKpi: RoutePaths.settingsKpi,
     pengaturanBahasa: RoutePaths.settingsBahasa,
   };
-
 
   // ==================== PUBLIC METHODS ====================
 
@@ -327,24 +328,24 @@ class MenuConfig {
 
   /// Get all main menu codes
   static List<String> get mainMenuCodes => [
-        absensi,
-        mengamati,
-        persetujuan,
-        rencanaKerja,
-        permintaan,
-        tugas,
-        pengajuan,
-        administrasi,
-        arsip,
-        dataAbsensi,
-        dataKaryawan,
-        proyek,
-        aduan,
-        dataPayroll,
-        kasir,
-        akuntansi,
-        rekrutment,
-        kpi,
-        pengaturan,
-      ];
+    absensi,
+    mengamati,
+    persetujuan,
+    rencanaKerja,
+    permintaan,
+    tugas,
+    pengajuan,
+    administrasi,
+    arsip,
+    dataAbsensi,
+    dataKaryawan,
+    proyek,
+    aduan,
+    dataPayroll,
+    kasir,
+    akuntansi,
+    rekrutment,
+    kpi,
+    pengaturan,
+  ];
 }

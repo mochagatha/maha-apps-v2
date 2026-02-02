@@ -21,7 +21,6 @@ class RouteNames {
   static const String profile = 'profile';
 
   // Settings
-  static const String setting = 'setting';
   static const String settings = 'settings';
 
   // Features
@@ -65,10 +64,6 @@ class RouteNames {
   static const String employmentLevel = 'employment-level';
   static const String employmentLevelOffice = 'employment-level-office';
   static const String employmentLevelProject = 'employment-level-project';
-  static const String employmentLevelEmployee = 'employment-level-employee';
-  static const String employmentLevelWorker = 'employment-level-worker';
-  static const String employmentLevelEmployeeDetail = 'employment-level-employee-detail';
-  static const String employmentLevelWorkerDetail = 'employment-level-worker-detail';
   static const String employmentLevelOfficeEmployee = 'employment-level-office-employee';
   static const String employmentLevelOfficeWorker = 'employment-level-office-worker';
   static const String employmentLevelProjectEmployee = 'employment-level-project-employee';
