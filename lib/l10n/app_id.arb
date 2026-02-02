@@ -1,0 +1,565 @@
+{
+  "@@locale": "id",
+  "appName": "MAHA Apps",
+  "@appName": {
+    "description": "Application name"
+  },
+  
+  "login": "Masuk",
+  "@login": {
+    "description": "Login button text"
+  },
+  
+  "register": "Daftar disini",
+  "@register": {
+    "description": "Register button text"
+  },
+  "confirm": "Konfirmasi",
+  "@confirm": {
+      "description": "Confirm button text"
+  },
+  "fieldRequired": "Semua kolom wajib diisi",
+  "@fieldRequired": {
+      "description": "Validation message when field is empty"
+  },
+  
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  
+  "password": "Kata Sandi",
+  "@password": {
+    "description": "Password field label"
+  },
+  
+  "confirmPassword": "Konfirmasi Kata Sandi",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  
+  "fullname": "Nama Lengkap",
+  "@fullname": {
+    "description": "Fullname field label"
+  },
+  
+  "forgotPassword": "Lupa kata sandi?",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+  
+  "rememberMe": "Tetap masuk",
+  "@rememberMe": {
+    "description": "Remember me checkbox"
+  },
+  
+  "dontHaveAccount": "Belum punya akun?",
+  "@dontHaveAccount": {
+    "description": "Don't have account text"
+  },
+  
+  "alreadyHaveAccount": "Sudah punya akun?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  
+  "enterEmail": "Masukkan email anda...",
+  "@enterEmail": {
+    "description": "Email field hint"
+  },
+  
+  "enterPassword": "Masukkan kata sandi anda...",
+  "@enterPassword": {
+    "description": "Password field hint"
+  },
+  
+  "enterFullname": "Masukkan nama lengkap anda...",
+  "@enterFullname": {
+    "description": "Fullname field hint"
+  },
+  
+  "emailRequired": "Email tidak boleh kosong",
+  "@emailRequired": {
+    "description": "Email required validation"
+  },
+  
+  "emailInvalid": "Format email tidak valid",
+  "@emailInvalid": {
+    "description": "Email invalid validation"
+  },
+  
+  "passwordRequired": "Password tidak boleh kosong",
+  "@passwordRequired": {
+    "description": "Password required validation"
+  },
+  
+  "passwordMinLength": "Password minimal 6 karakter",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
+  
+  "passwordNotMatch": "Password tidak sama",
+  "@passwordNotMatch": {
+    "description": "Password not match validation"
+  },
+  
+  "fullnameRequired": "Nama lengkap tidak boleh kosong",
+  "@fullnameRequired": {
+    "description": "Fullname required validation"
+  },
+  
+  "createAccount": "Buat Akun",
+  "@createAccount": {
+    "description": "Create account button"
+  },
+  "createAccountTitle": "Buat Akun Baru",
+  "@createAccountTitle": {
+      "description": "Create account page title"
+  },
+  "accountType": "Jenis Akun",
+  "@accountType": {
+      "description": "Account type label"
+  },
+  "employee": "Karyawan",
+  "@employee": {
+      "description": "Employee account type"
+  },
+  "worker": "Pekerja",
+  "@worker": {
+      "description": "Worker account type"
+  },
+  
+  "registrationSuccess": "Pendaftaran Berhasil!",
+  "@registrationSuccess": {
+    "description": "Registration success title"
+  },
+  
+  "registrationSuccessMessage": "Silahkan login dengan akun yang telah didaftarkan",
+  "@registrationSuccessMessage": {
+    "description": "Registration success message"
+  },
+  
+  "pinVerificationTitle": "Masukkan Kode Verifikasi Perusahaan",
+  "@pinVerificationTitle": {
+    "description": "PIN verification dialog title"
+  },
+  
+  "pinVerificationMessage": "Masukkan kode verifikasi perusahaan yang telah diberikan HRD",
+  "@pinVerificationMessage": {
+    "description": "PIN verification dialog message"
+  },
+  
+  "pinInvalid": "Kode verifikasi tidak valid",
+  "@pinInvalid": {
+    "description": "PIN invalid message"
+  },
+  
+  "termsAndConditionsTitle": "Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi MAHA Apps Mobile",
+  "@termsAndConditionsTitle": {
+    "description": "Terms and conditions title"
+  },
+  
+  "termsAndConditionsMessage": "Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi merupakan ketentuan yang harus dibaca, dipahami, dan disetujui oleh pengguna sebelum mengakses atau menggunakan aplikasi MAHA Apps Mobile. Lihat selengkapnya di sini:",
+  "@termsAndConditionsMessage": {
+    "description": "Terms and conditions message"
+  },
+  
+  "termsOfUse": "Syarat & Ketentuan Penggunaan",
+  "@termsOfUse": {
+    "description": "Terms of use link"
+  },
+  
+  "privacyNotice": "Pemberitahuan Privasi",
+  "@privacyNotice": {
+    "description": "Privacy notice link"
+  },
+  
+  "agreeTerms": "Dengan ini menyatakan Setuju, anda menerima segala isi Syarat & Ketentuan Penggunaan dan Pemberitahuan Privasi",
+  "@agreeTerms": {
+    "description": "Agree terms checkbox text"
+  },
+  
+  "iAgree": "Saya Setuju",
+  "@iAgree": {
+    "description": "I agree button"
+  },
+  
+  "copyright": "© Copyright IT Maha {year}",
+  "@copyright": {
+    "description": "Copyright text",
+    "placeholders": {
+      "year": {
+        "type": "String",
+        "example": "2024"
+      }
+    }
+  },
+  
+  "selectRole": "Pilih Role (Quick Fill)",
+  "@selectRole": {
+    "description": "Select role dropdown label"
+  },
+  
+  "loading": "Sedang memuat...",
+  "@loading": {
+    "description": "Loading text"
+  },
+  
+  "retry": "Coba Lagi",
+  "@retry": {
+    "description": "Retry button"
+  },
+  
+  "close": "Tutup",
+  "@close": {
+    "description": "Close button"
+  },
+  
+  "profile": "Profil",
+  "@profile": {
+    "description": "Profile page title"
+  },
+  
+  "profilePicture": "Foto Profil",
+  "@profilePicture": {
+    "description": "Profile picture label"
+  },
+  
+  "profilePoints": "Poin saat ini",
+  "@profilePoints": {
+    "description": "Profile points label"
+  },
+  
+  "profileFeatures": "FITUR",
+  "@profileFeatures": {
+    "description": "Profile features section title"
+  },
+  
+  "profilePreferences": "PREFERENSI",
+  "@profilePreferences": {
+    "description": "Profile preferences section title"
+  },
+  
+  "dataDiri": "Data Diri",
+  "@dataDiri": {
+    "description": "Personal data menu"
+  },
+  
+  "education": "Pendidikan",
+  "@education": {
+    "description": "Education menu"
+  },
+  
+  "skill": "Skill",
+  "@skill": {
+    "description": "Skill menu"
+  },
+  
+  "family": "Keluarga",
+  "@family": {
+    "description": "Family menu"
+  },
+  
+  "changePassword": "Ubah Password",
+  "@changePassword": {
+    "description": "Change password menu"
+  },
+  
+  "secureAccount": "Keamanan Akun",
+  "@secureAccount": {
+    "description": "Secure account menu"
+  },
+
+  
+  "logoutConfirmTitle": "Apakah Anda yakin ingin keluar dari aplikasi?",
+  "@logoutConfirmTitle": {
+    "description": "Logout confirmation dialog title"
+  },
+  
+  "logoutConfirmMessage": "Keluar dari aplikasi",
+  "@logoutConfirmMessage": {
+    "description": "Logout confirmation dialog message"
+  },
+  "logout": "Keluar",
+  "@logout": {
+    "description": "Logout button label"
+  },
+  "logoutConfirmation1": "Apakah Anda yakin ingin ",
+  "@logoutConfirmation1": {
+    "description": "Logout confirmation part 1"
+  },
+  "logoutConfirmation2": "keluar ",
+  "@logoutConfirmation2": {
+    "description": "Logout confirmation part 2 (bold)"
+  },
+  "logoutConfirmation3": "dari aplikasi?",
+  "@logoutConfirmation3": {
+    "description": "Logout confirmation part 3"
+  },
+  "yes": "Ya",
+  "@yes": {
+    "description": "Yes button"
+  },
+  "no": "Tidak",
+  "@no": {
+    "description": "No button"
+  },
+  
+  "cancel": "Batal",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  
+  "points": "Poin",
+  "@points": {
+    "description": "Points label"
+  },
+  
+  "targetReached": "Target tercapai 🎉",
+  "@targetReached": {
+    "description": "Target reached message"
+  },
+  
+  "appVersion": "Versi Aplikasi: {version}",
+  "@appVersion": {
+    "description": "App version text",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  
+  "statusRejectedTitle": "Data diri anda ditolak, Segera cek pemberitahuannya !",
+  "@statusRejectedTitle": {
+    "description": "Rejected status dialog title"
+  },
+  
+  "checkDetails": "Lihat Keterangan",
+  "@checkDetails": {
+    "description": "Check details button"
+  },
+  
+  "statusInactive": "Akun Anda Nonaktif. Silahkan hubungi HRD Maha segera !",
+  "@statusInactive": {
+    "description": "Inactive status message"
+  },
+  
+  "statusBlacklisted": "Akun masuk daftar hitam. Silahkan hubungi HRD Maha segera !",
+  "@statusBlacklisted": {
+    "description": "Blacklisted status message"
+  },
+  
+  "statusContractUnverified": "Data Kontrak Anda Belum Diverifikasi. Silahkan hubungi HRD Maha segera !",
+  "@statusContractUnverified": {
+    "description": "Contract unverified status message"
+  },
+  
+  "statusInaccessible": "Akun anda tidak dapat diakses. Silahkan hubungi HRD Maha segera !",
+  "@statusInaccessible": {
+    "description": "Inaccessible status message"
+  },
+  
+  "contactAdmin": "Hubungi Admin",
+  "@contactAdmin": {
+    "description": "Contact admin button"
+  },
+  
+  "contactAdminMessageInactive": "Halo admin, Kenapa akun saya nonaktif, Terima Kasih",
+  "contactAdminMessageBlacklisted": "Halo admin, Kenapa akun saya masuk daftar hitam, Terima Kasih",
+  "contactAdminMessageContract": "Halo admin, Kenapa data kontrak saya belum diverifikasi, Terima Kasih",
+  "contactAdminMessageInaccessible": "Halo admin, Kenapa akun saya tidak dapat diakses mohon dibantu, Terima Kasih",
+  "rejectStatusDetailsComingSoon": "Detail Status Penolakan Segera Hadir",
+  
+  "menuAbsensi": "Absensi",
+  "menuMengamati": "Mengamati",
+  "menuPersetujuan": "Persetujuan",
+  "menuRencanaKerja": "Rencana Kerja",
+  "menuPermintaan": "Permintaan",
+  "menuTugas": "Tugas",
+  "menuPengajuan": "Pengajuan",
+  "menuAdministrasi": "Administrasi",
+  "menuArsip": "Arsip",
+  "menuDataAbsensi": "Data Absensi",
+  "menuDataKaryawan": "Data Karyawan",
+  "menuProyek": "Proyek",
+  "menuAduan": "Aduan",
+  "menuDataPayroll": "Data Payroll",
+  "menuKasir": "Kasir",
+  "menuAkuntansi": "Akuntansi",
+  "menuRekrutmen": "Rekrutmen",
+  "menuPengaturan": "Pengaturan",
+  "menuUpdateKontrak": "Update Kontrak",
+  "menuKpi": "Monitoring KPI",
+  
+  "verificationErrorTitle": "Maaf Sebelumnya!",
+  "verificationErrorPart1": "Akun Anda belum ",
+  "verificationErrorPart2": "terverifikasi",
+  "verificationErrorPart3": ". Silahkan\nhubungi ",
+  "verificationErrorPart4": "HRD",
+  "verificationErrorPart5": " Maha segera !",
+  "targetReachedSimplified": "Target tercapai!",
+  "pointsNotReached": "{remaining} Poin belum tercapai",
+  "@pointsNotReached": {
+    "description": "Points not reached message",
+    "placeholders": {
+        "remaining": {
+            "type": "int",
+            "example": "100"
+        }
+    }
+  },
+  "ePresensi": "E-Presensi",
+  
+  "pageNotFoundTitle": "Halaman Tidak Ditemukan",
+  "pageNotFoundMessage": "Halaman yang Anda cari tidak ditemukan atau fitur ini belum diimplementasikan.",
+  "back": "Kembali",
+  
+  "changeLanguage": "Ubah Bahasa",
+  "@changeLanguage": {
+    "description": "Change language menu"
+  },
+  
+  "selectLanguage": "Pilih Bahasa",
+  "@selectLanguage": {
+    "description": "Select language dialog title"
+  },
+  
+  "languageIndonesian": "Bahasa Indonesia",
+  "languageEnglish": "Inggris",
+  "featureComingSoon": "Fitur segera hadir!",
+  
+  "menuPenempatanKerja": "Penempatan kerja",
+  "menuHariLibur": "Hari Libur & Cuti Bersama",
+  "menuHirarkiOffice": "Hirarki Office",
+  "menuLembur": "Lembur",
+  "menuTindakanKaryawan": "Tindakan Karyawan",
+  "menuBpjs": "BPJS",
+  "menuPph21": "PPH 21",
+  "menuJamKerja": "Jam Kerja",
+  "menuFormatDanDraf": "Format dan Draf",
+  "menuAksesLayar": "Akses Layar",
+  "menuHakAksesMenu": "Hak Akses Menu",
+  "menuPelacakanJamKerja": "Pelacakan Jam Kerja",
+  "menuStrukturOrganisasi": "Struktur Organisasi",
+  "menuKpi": "Indikator Kinerja Utama (KPI)",
+
+  "redeemPoints": "Tukar Poin",
+  "performance": "Performa",
+  "salarySlip": "Slip Gaji",
+  "debtSlip": "Slip Hutang",
+  "resignation": "Pengunduran Diri",
+  "ok": "Oke",
+  
+  "verificationJobLevelTitle": "Data Tingkatan Pekerjaan",
+  "dailyWorker": "Pekerja Harian",
+  "dailyWorkerVerificationComingSoon": "Fitur Verifikasi Data Pekerja Harian akan segera hadir!",
+  
+  "companyCodeTitle": "Kode Perusahaan",
+  "failedToLoadCompanyCode": "Gagal Memuat Kode Perusahaan",
+  "companyCodeInstruction": "Gunakan Kode Perusahaan yang dikelola oleh sistem dan akan berganti secara otomatis",
+  "refreshCodeTooltip": "Refresh Kode",
+  
+  "employeeVerificationTitle": "Verifikasi Data Karyawan",
+  "featureUnderDevelopment": "Fitur Dalam Pengembangan",
+  "employeeVerificationDevMessage": "Halaman Verifikasi Data Karyawan sedang dalam tahap pengembangan. Fitur ini akan menampilkan daftar karyawan yang perlu diverifikasi dengan tab filter status.",
+
+  "menuVerifikasiData": "Verifikasi Data",
+  "menuPerjanjianKerja": "Perjanjian Kerja",
+  "menuAktivasiBpjs": "Aktivasi BPJS",
+  "menuKodePerusahaan": "Kode Perusahaan",
+
+  "recruitmentTitle": "Rekrutmen",
+  "recruitmentEmpty": "Tidak ada menu rekrutmen tersedia",
+  "errorOccurred": "Terjadi kesalahan",
+  "featureComingSoonDynamic": "Fitur {label} akan segera hadir!",
+  "@featureComingSoonDynamic": {
+    "description": "Feature coming soon with dynamic label",
+    "placeholders": {
+        "label": {
+            "type": "String",
+            "example": "Rekrutmen"
+        }
+    }
+  },
+  
+  "underMonitoring": "Kamu sedang dalam\npemantauan nih!",
+  "showChart": "Tampilkan Bagan",
+  "archive": "Arsip",
+  "deleteRole": "Hapus Role",
+  "deleteStructureRoleTitle": "Hapus Role Struktur",
+  "deleteStructureRoleMessage": "Apakah Anda yakin ingin menghapus role ini?",
+  "jobLevelList": "Daftar Tingkatan Pekerjaan",
+  "select": "Pilih",
+  "sorryBeforehand": "Maaf, Sebelumnya...",
+  "confirmAddJobLevelStructure": "Apakah anda yakin ingin menambahkan Daftar Tingkatan Pekerjaan ke struktur utama ?",
+  "successExclamation": "Berhasil!!",
+  "jobLevelAddedSuccess": "Daftar tingkatan pekerjaan berhasil di Tambahkan",
+  "structureNotFound": "Struktur tidak ditemukan",
+  "failedToAddRole": "Gagal menambahkan role",
+  "roleDeletedSuccess": "Role berhasil dihapus",
+  "noRolesAvailable": "Tidak ada role yang tersedia",
+  "allRolesAdded": "Semua role sudah ditambahkan",
+  "addMainStructureLevel": "+ Tingkatan Struktur Utama",
+  "mainStructure": "Struktur Utama",
+  "emptyStructureTitle": "Anda belum memiliki Struktur Utama",
+  "emptyStructureMessage": "Anda harus menambahkan struktur anda terlebih\ndahulu.",
+
+  "welcomeGreetingTitle": "Selamat Bergabung !",
+  "welcomeGreetingMessage": "Semoga Anda dapat memberikan kontribusi terbaik bagi perusahaan PT. Maha Akbar Sejahtera.",
+  "director": "Direktur",
+  "next": "Selanjutnya",
+  "companyRegulationsTitle": "Peraturan Perusahaan !",
+  "regulationPromptMessage": "Sebelum Anda melanjutkan ke tahap pengisian data. Harap baca terlebih dahulu peraturan PT. Maha Akbar Sejahtera...!",
+  "agreeToRegulations": "Dengan ini saya menyatakan bahwa saya menyetujui seluruh peraturan perusahaan",
+  "download": "Unduh",
+  "continueAction": "Lanjutkan",
+  "completePersonalDataTitle": "Lengkapi Data diri Anda !",
+  "dataCompletionTimeMessage": "Dalam pengisian formulir ini, Anda membutuhkan waktu 10 Menit. Harap diisi dengan sejujurnya yah !",
+  "spirit": "Semangat",
+  "companySlogan": "Be Great, Be Integrated",
+  
+  "verificationFailed": "Verifikasi Gagal",
+  "tryAgain": "Coba Lagi",
+  "adminDataNotFound": "Data admin tidak ditemukan.",
+  "faceVerification": "Verifikasi Wajah",
+  "blinkInstruction": "Kedipkan mata untuk menangkap gambar wajah",
+  "sendingData": "Mengirim data...",
+  "resetYourPassword": "Reset Kata Sandi Anda",
+  "enterEmailToResetPassword": "Masukkan E-mail yang pernah terdaftar untuk melanjutkan reset password",
+  "emailHintExample": "contoh : user@mahasejahtera.com",
+  "enterValidVerificationCode": "Mohon masukkan kode verifikasi yang valid",
+  "verifyingOtp": "Memverifikasi kode OTP...",
+  "otpIncorrect": "Kode OTP Salah",
+  "otpIncorrectMessage": "Kode OTP yang Anda masukkan tidak sesuai. Silakan coba lagi.",
+  "unexpectedErrorRetry": "Terjadi kesalahan yang tidak terduga. Silakan coba lagi.",
+  "enterVerificationCode": "Masukkan Kode Verifikasi",
+  "verificationCodeSentToEmail": "Kode verifikasi telah dikirim melalui e-mail ke ",
+  "verify": "Verifikasi",
+  "didNotReceiveCode": "Tidak menerima kode verifikasi? ",
+  "resend": "Kirim Ulang",
+  "resendIn": "Kirim Ulang dalam {time}",
+  "resendingOtp": "Mengirim ulang OTP...",
+  "otpResentSuccess": "Kode OTP berhasil dikirim ulang!",
+  "otpResendFailed": "Gagal Mengirim OTP",
+  "otpResendFailedMessage": "Gagal mengirim ulang kode OTP. Silakan coba lagi.",
+  "verificationDataNotFound": "Data Verifikasi Tidak Ditemukan",
+  "pleaseVerifyOtpFirst": "Silakan lakukan verifikasi OTP terlebih dahulu.",
+  "changeYourPassword": "Ubah Kata Sandi Anda",
+  "changePasswordInstruction": "Silahkan ubah kata sandi lama Anda untuk keamanan Akun",
+  "enterNewPassword": "Masukkan Kata Sandi Baru",
+  "confirmNewPassword": "Konfirmasi Kata Sandi Baru",
+  "changingPassword": "Mengubah kata sandi...",
+  "success": "Berhasil",
+  "passwordChangedSuccess": "Kata sandi Anda telah berhasil diubah!",
+  "passwordChangeFailed": "Gagal Mengubah Kata Sandi",
+  "passwordChangeFailedMessage": "Gagal mengubah kata sandi. Silakan coba lagi.",
+  "save": "Simpan",
+  "adminFaceVerificationTitle": "Verifikasi Wajah Admin",
+  "faceVerificationDesc": "Untuk keamanan tambahan, silakan verifikasi wajah Anda sebelum mengakses dashboard admin.",
+  "faceVisibleInstruction": "Pastikan wajah Anda terlihat jelas",
+  "sufficientLightingInstruction": "Gunakan pencahayaan yang cukup",
+  "blinkToCaptureInstruction": "Kedipkan mata untuk menangkap gambar",
+  "startVerification": "Mulai Verifikasi"
+}
