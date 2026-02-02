@@ -90,6 +90,11 @@ import '../../features/organizational_structure/domain/usecases/manage_departmen
 import '../../features/organizational_structure/domain/usecases/manage_employment_level.dart';
 import '../../features/organizational_structure/domain/usecases/manage_user_role.dart';
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
+import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
+import '../../features/organizational_structure/presentation/providers/department_provider.dart';
+import '../../features/organizational_structure/presentation/providers/employment_level_provider.dart';
+import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
+import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -283,7 +288,45 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ManageEmploymentLevel(sl()));
   sl.registerLazySingleton(() => ManageUserRole(sl()));
 
-  // Provider
+  // Providers - Specialized
+  sl.registerFactory(
+    () => JobTitleProvider(
+      getOrganizationalData: sl(),
+      manageJobTitle: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => DepartmentProvider(
+      getOrganizationalData: sl(),
+      manageDepartment: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => EmploymentLevelProvider(
+      getOrganizationalData: sl(),
+      manageEmploymentLevel: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => StructureProvider(
+      getCompanyStructure: sl(),
+      manageStructureRole: sl(),
+      manageSuperiorEmployee: sl(),
+      getOrganizationalData: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UserRoleProvider(
+      getOrganizationalData: sl(),
+      manageUserRole: sl(),
+    ),
+  );
+
+  // Provider - Legacy (for backward compatibility, will be removed later)
   sl.registerFactory(
     () => OrganizationalStructureProvider(
       getCompanyStructure: sl(),

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/department_entity.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/department_provider.dart';
 import 'department_form_bottom_sheet.dart';
 import 'empty_state_widget.dart';
 import 'entity_card_widget.dart';
@@ -25,7 +25,7 @@ class DepartmentListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OrganizationalStructureProvider>();
+    final provider = context.watch<DepartmentProvider>();
 
     if (provider.isLoading && departments.isEmpty) {
       return const Center(child: SpinKitThreeBounce(color: Colors.red));
@@ -77,7 +77,7 @@ class DepartmentListWidget extends StatelessWidget {
   }
 
   void _showEditDialog(BuildContext context, DepartmentEntity department) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<DepartmentProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -101,7 +101,7 @@ class DepartmentListWidget extends StatelessWidget {
   void _handleDelete(
     BuildContext context,
     DepartmentEntity department,
-    OrganizationalStructureProvider provider,
+    DepartmentProvider provider,
   ) {
     ConfirmDialog.show(
       context,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/success_dialog.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/employment_level_provider.dart';
 
 class EmploymentLevelFormBottomSheet extends StatefulWidget {
   final bool isEdit;
@@ -48,7 +48,7 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
       _isSubmitting = true;
     });
 
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<EmploymentLevelProvider>();
     bool success;
 
     if (widget.isEdit) {

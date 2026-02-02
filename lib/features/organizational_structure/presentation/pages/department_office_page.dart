@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/department_provider.dart';
 import '../widgets/department_list_widget.dart';
 import '../widgets/department_form_bottom_sheet.dart';
 
@@ -23,12 +23,12 @@ class _DepartmentOfficePageState extends State<DepartmentOfficePage> {
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<DepartmentProvider>();
     await provider.loadDepartmentsByType(typeRole: 'employee', typeBranch: 'office');
   }
 
   void _showAddDepartmentSheet() {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<DepartmentProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -51,7 +51,7 @@ class _DepartmentOfficePageState extends State<DepartmentOfficePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Data Departemen'),
-      body: Consumer<OrganizationalStructureProvider>(
+      body: Consumer<DepartmentProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.departments.isEmpty) {
             return const Center(child: SpinKitThreeBounce(color: Colors.red));
@@ -65,7 +65,7 @@ class _DepartmentOfficePageState extends State<DepartmentOfficePage> {
           );
         },
       ),
-      bottomNavigationBar: Consumer<OrganizationalStructureProvider>(
+      bottomNavigationBar: Consumer<DepartmentProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.departments.isEmpty) {
             return const SizedBox.shrink();

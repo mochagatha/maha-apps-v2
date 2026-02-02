@@ -7,6 +7,7 @@ import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/user_role_entity.dart';
 import '../providers/organizational_structure_provider.dart';
+import '../providers/user_role_provider.dart';
 import '../widgets/user_role_form_bottom_sheet.dart';
 
 class EmploymentLevelDetailPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<UserRoleProvider>();
     await provider.loadUserRoleHierarchy(widget.typeRole);
   }
 
@@ -43,7 +44,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: widget.title),
-      body: Consumer<OrganizationalStructureProvider>(
+      body: Consumer<UserRoleProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.userRoleHierarchy.isEmpty) {
             return const Center(child: SpinKitThreeBounce(color: Colors.red));

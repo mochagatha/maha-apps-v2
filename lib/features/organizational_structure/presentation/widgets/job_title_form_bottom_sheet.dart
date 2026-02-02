@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/success_dialog.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/job_title_provider.dart';
 
 class JobTitleFormBottomSheet extends StatefulWidget {
   final bool isEdit;
@@ -52,7 +52,7 @@ class _JobTitleFormBottomSheetState extends State<JobTitleFormBottomSheet> {
       _isLoading = true;
     });
 
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<JobTitleProvider>();
     bool success;
 
     if (widget.isEdit) {

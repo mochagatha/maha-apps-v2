@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/job_title_entity.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/job_title_provider.dart';
 import 'job_title_form_bottom_sheet.dart';
 import 'empty_state_widget.dart';
 import 'entity_card_widget.dart';
@@ -25,7 +25,7 @@ class JobTitleListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OrganizationalStructureProvider>();
+    final provider = context.watch<JobTitleProvider>();
 
     if (provider.isLoading && jobTitles.isEmpty) {
       return const Center(child: SpinKitThreeBounce(color: Colors.red));
@@ -77,7 +77,7 @@ class JobTitleListWidget extends StatelessWidget {
   }
 
   void _showEditDialog(BuildContext context, JobTitleEntity jobTitle) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<JobTitleProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -101,7 +101,7 @@ class JobTitleListWidget extends StatelessWidget {
   void _handleDelete(
     BuildContext context,
     JobTitleEntity jobTitle,
-    OrganizationalStructureProvider provider,
+    JobTitleProvider provider,
   ) {
     ConfirmDialog.show(
       context,

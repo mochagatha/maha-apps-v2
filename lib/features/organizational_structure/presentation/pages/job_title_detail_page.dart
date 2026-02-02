@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/job_title_provider.dart';
 import '../widgets/job_title_list_widget.dart';
 import '../widgets/job_title_form_bottom_sheet.dart';
 
@@ -32,12 +32,12 @@ class _JobTitleDetailPageState extends State<JobTitleDetailPage> {
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<JobTitleProvider>();
     await provider.loadJobTitles(typeRole: widget.typeRole, typeBranch: widget.typeBranch);
   }
 
   void _showAddJobTitleSheet() {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<JobTitleProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -60,7 +60,7 @@ class _JobTitleDetailPageState extends State<JobTitleDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: widget.title),
-      body: Consumer<OrganizationalStructureProvider>(
+      body: Consumer<JobTitleProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.jobTitles.isEmpty) {
             return const Center(child: SpinKitThreeBounce(color: Colors.red));
@@ -74,7 +74,7 @@ class _JobTitleDetailPageState extends State<JobTitleDetailPage> {
           );
         },
       ),
-      bottomNavigationBar: Consumer<OrganizationalStructureProvider>(
+      bottomNavigationBar: Consumer<JobTitleProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.jobTitles.isEmpty) {
             return const SizedBox.shrink();
