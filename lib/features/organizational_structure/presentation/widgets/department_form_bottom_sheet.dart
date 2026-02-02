@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/organizational_structure_provider.dart';
 
 class DepartmentFormBottomSheet extends StatefulWidget {
@@ -74,7 +75,14 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
     if (mounted) {
       if (success) {
         Navigator.of(context).pop();
-        _showSuccessDialog();
+        SuccessDialog.show(
+          context,
+          message: 'Data departemen telah berhasil',
+          messageActionText: widget.isEdit ? 'diubah' : 'ditambahkan',
+          onConfirm: () {
+            widget.onSuccess();
+          },
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -87,32 +95,6 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
         );
       }
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Berhasil'),
-          content: Text(
-            widget.isEdit
-                ? 'Data departemen berhasil diubah'
-                : 'Data departemen berhasil ditambahkan',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                widget.onSuccess();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

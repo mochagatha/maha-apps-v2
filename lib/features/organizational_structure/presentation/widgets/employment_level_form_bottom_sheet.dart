@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/organizational_structure_provider.dart';
 
 class EmploymentLevelFormBottomSheet extends StatefulWidget {
@@ -69,7 +70,14 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
     if (mounted) {
       if (success) {
         Navigator.pop(context);
-        _showSuccessDialog();
+        SuccessDialog.show(
+          context,
+          message: 'Tingkatan telah berhasil',
+          messageActionText: widget.isEdit ? 'diupdate' : 'ditambahkan',
+          onConfirm: () {
+            widget.onSuccess();
+          },
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -82,39 +90,6 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
         );
       }
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.check_circle, color: Colors.green, size: 60),
-              const SizedBox(height: 16),
-              Text(
-                widget.isEdit ? 'Tingkatan Berhasil Diupdate!' : 'Tingkatan Berhasil Ditambahkan!',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                widget.onSuccess();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

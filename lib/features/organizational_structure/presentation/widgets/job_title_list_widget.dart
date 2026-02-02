@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/confirm_dialog.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../providers/organizational_structure_provider.dart';
 import 'job_title_form_bottom_sheet.dart';
@@ -138,13 +139,11 @@ class JobTitleListWidget extends StatelessWidget {
 
                     if (context.mounted) {
                       if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Jabatan berhasil dihapus'),
-                            backgroundColor: Colors.green,
-                          ),
+                        SuccessDialog.show(
+                          context,
+                          message: 'Jabatan "${jobTitle.name}" berhasil dihapus',
+                          onConfirm: onRefresh,
                         );
-                        onRefresh();
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

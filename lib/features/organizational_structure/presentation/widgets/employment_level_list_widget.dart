@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/employment_level_entity.dart';
 import '../providers/organizational_structure_provider.dart';
 import 'employment_level_form_bottom_sheet.dart';
@@ -150,46 +152,30 @@ class EmploymentLevelListWidget extends StatelessWidget {
     EmploymentLevelEntity employmentLevel,
     OrganizationalStructureProvider provider,
   ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Konfirmasi Hapus'),
-          content: Text('Apakah Anda yakin ingin menghapus tingkatan "${employmentLevel.name}"?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Batal'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(dialogContext).pop();
+    ConfirmDialog.show(
+      context,
+      title: 'Konfirmasi Hapus',
+      message: 'Apakah Anda yakin ingin',
+      messageActionText: 'menghapus tingkatan "${employmentLevel.name}"',
+      onConfirm: () async {
+        final success = await provider.deleteEmploymentLevelData(employmentLevel.id);
 
-                final success = await provider.deleteEmploymentLevelData(employmentLevel.id);
-
-                if (context.mounted) {
-                  if (success) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Tingkatan berhasil dihapus'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    onRefresh();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              },
-              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
+        if (context.mounted) {
+          if (success) {
+            SuccessDialog.show(
+              context,
+              message: 'Tingkatan "${employmentLevel.name}" berhasil dihapus',
+              onConfirm: onRefresh,
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
       },
     );
   }
