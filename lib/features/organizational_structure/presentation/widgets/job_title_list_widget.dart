@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/confirm_dialog.dart';
@@ -25,7 +26,7 @@ class JobTitleListWidget extends StatelessWidget {
     final provider = context.watch<OrganizationalStructureProvider>();
 
     if (provider.isLoading && jobTitles.isEmpty) {
-      return const Center(child: CircularProgressIndicator(color: Colors.red));
+      return const Center(child: SpinKitThreeBounce(color: Colors.red));
     }
 
     if (jobTitles.isEmpty) {

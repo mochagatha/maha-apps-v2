@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../providers/organizational_structure_provider.dart';
@@ -36,7 +37,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
       body: Consumer<OrganizationalStructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator(color: Colors.red));
+            return const Center(child: SpinKitThreeBounce(color: Colors.red));
           }
 
           if (provider.errorMessage != null) {

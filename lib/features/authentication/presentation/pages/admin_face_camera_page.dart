@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -107,7 +108,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
           body: Stack(
             children: [
               !provider.isCameraInitialized
-                  ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                  ? const Center(child: SpinKitThreeBounce(color: AppColors.primary))
                   : Stack(
                       children: [
                         SizedBox(
@@ -118,7 +119,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                                   provider.cameraController!,
                                   child: provider.customPaint,
                                 )
-                              : const Center(child: CircularProgressIndicator()),
+                              : Center(child: SpinKitThreeBounce()),
                         ),
 
                         // Info overlay at bottom of camera
@@ -231,7 +232,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CircularProgressIndicator(color: Colors.white),
+                        const SpinKitThreeBounce(color: Colors.white),
                         const SizedBox(height: 16),
                         Text(
                           context.l10n.sendingData,

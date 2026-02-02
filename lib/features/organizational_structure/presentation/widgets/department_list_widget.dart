@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../domain/entities/department_entity.dart';
@@ -24,11 +25,7 @@ class DepartmentListWidget extends StatelessWidget {
     final provider = context.watch<OrganizationalStructureProvider>();
 
     if (provider.isLoading && departments.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: Colors.red,
-        ),
-      );
+      return const Center(child: SpinKitThreeBounce(color: Colors.red));
     }
 
     if (departments.isEmpty) {
@@ -45,26 +42,17 @@ class DepartmentListWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/icon/data_aproval_kosong.svg',
-                      height: 175,
-                    ),
+                    SvgPicture.asset('assets/images/icon/data_aproval_kosong.svg', height: 175),
                     const SizedBox(height: 20),
                     const Text(
                       'Belum Ada List Data Departemen!',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     const Text(
                       'Jangan lupa untuk melihat List Data Departemen melalui aplikasi Maha!',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -89,11 +77,7 @@ class DepartmentListWidget extends StatelessWidget {
             final department = departments[index];
             return Column(
               children: [
-                _buildDepartmentCard(
-                  context,
-                  department,
-                  provider,
-                ),
+                _buildDepartmentCard(context, department, provider),
                 const SizedBox(height: 16),
               ],
             );
@@ -113,20 +97,14 @@ class DepartmentListWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.shade400,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey.shade400, width: 1),
       ),
       child: Row(
         children: [
           Expanded(
             child: Text(
               department.departmentName,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
           PopupMenuButton<String>(
@@ -202,9 +180,9 @@ class DepartmentListWidget extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 Navigator.of(dialogContext).pop();
-                
+
                 final success = await provider.deleteDepartmentData(department.id);
-                
+
                 if (context.mounted) {
                   if (success) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -217,19 +195,14 @@ class DepartmentListWidget extends StatelessWidget {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          provider.errorMessage ?? 'Gagal menghapus departemen',
-                        ),
+                        content: Text(provider.errorMessage ?? 'Gagal menghapus departemen'),
                         backgroundColor: Colors.red,
                       ),
                     );
                   }
                 }
               },
-              child: const Text(
-                'Hapus',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
             ),
           ],
         );

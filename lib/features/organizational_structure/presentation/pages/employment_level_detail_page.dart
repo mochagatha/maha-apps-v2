@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
@@ -37,7 +38,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
       body: Consumer<OrganizationalStructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.userRoleHierarchy.isEmpty) {
-            return const Center(child: CircularProgressIndicator(color: Colors.red));
+            return const Center(child: SpinKitThreeBounce(color: Colors.red));
           }
 
           if (provider.errorMessage != null) {

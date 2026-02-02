@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../providers/organizational_structure_provider.dart';
 
@@ -21,8 +22,7 @@ class DepartmentFormBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<DepartmentFormBottomSheet> createState() =>
-      _DepartmentFormBottomSheetState();
+  State<DepartmentFormBottomSheet> createState() => _DepartmentFormBottomSheetState();
 }
 
 class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
@@ -80,9 +80,7 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
           SnackBar(
             content: Text(
               provider.errorMessage ??
-                  (widget.isEdit
-                      ? 'Gagal mengubah departemen'
-                      : 'Gagal menambahkan departemen'),
+                  (widget.isEdit ? 'Gagal mengubah departemen' : 'Gagal menambahkan departemen'),
             ),
             backgroundColor: Colors.red,
           ),
@@ -134,10 +132,7 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
           children: [
             Text(
               widget.isEdit ? 'Edit Departemen' : 'Tambah Departemen',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -161,25 +156,13 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               ),
               child: _isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
+                  ? SizedBox(height: 20, width: 20, child: SpinKitThreeBounce(color: Colors.white))
                   : Text(
                       widget.isEdit ? 'Simpan' : 'Tambah',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
             ),
             const SizedBox(height: 16),

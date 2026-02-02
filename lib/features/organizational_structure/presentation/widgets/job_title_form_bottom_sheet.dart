@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/organizational_structure_provider.dart';
@@ -155,7 +156,7 @@ class _JobTitleFormBottomSheetState extends State<JobTitleFormBottomSheet> {
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        child: SpinKitThreeBounce(color: Colors.white),
                       )
                     : Text(
                         widget.isEdit ? 'Simpan Perubahan' : 'Tambah',

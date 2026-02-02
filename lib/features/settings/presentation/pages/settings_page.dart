@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/settings/domain/entities/settings_menu_item.dart';
@@ -59,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.menuPengaturan),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Colors.red))
+          ? const Center(child: SpinKitThreeBounce(color: Colors.red))
           : RefreshIndicator(
               color: Colors.red,
               onRefresh: _fetchData,
@@ -218,10 +219,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         child: Row(
           children: [
-            Text(
-              flag,
-              style: const TextStyle(fontSize: 24),
-            ),
+            Text(flag, style: const TextStyle(fontSize: 24)),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -233,11 +231,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
-            if (isSelected)
-              const Icon(
-                Icons.check_circle_rounded,
-                color: Colors.red,
-              ),
+            if (isSelected) const Icon(Icons.check_circle_rounded, color: Colors.red),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../providers/organizational_structure_provider.dart';
 
@@ -227,10 +228,7 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
                         ? const SizedBox(
                             height: 20,
                             width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
+                            child: SpinKitThreeBounce(color: Colors.white),
                           )
                         : Text(
                             widget.isEdit ? 'Update' : 'Simpan',

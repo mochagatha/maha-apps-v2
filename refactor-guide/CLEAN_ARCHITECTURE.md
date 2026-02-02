@@ -9,6 +9,7 @@ Clean Architecture is a software design philosophy that emphasizes **separation 
 ### 1. Independence
 
 The architecture should be independent of:
+
 - **Frameworks**: Not tied to Flutter, GetX, Provider, etc.
 - **UI**: Can change UI without changing business rules
 - **Database**: Can swap databases without affecting business logic
@@ -17,6 +18,7 @@ The architecture should be independent of:
 ### 2. Testability
 
 Business rules can be tested without:
+
 - UI
 - Database
 - Web server
@@ -41,11 +43,13 @@ Presentation → Domain ← Data
 **Purpose**: Contains business logic and business rules.
 
 **Components**:
+
 - **Entities**: Business objects (e.g., `User`, `Employee`)
 - **Use Cases**: Application-specific business rules
 - **Repository Interfaces**: Contracts for data access
 
 **Rules**:
+
 - ✅ Pure Dart (no Flutter imports)
 - ✅ No dependencies on other layers
 - ✅ Contains only business logic
@@ -54,19 +58,20 @@ Presentation → Domain ← Data
 - ❌ No network code
 
 **Example**:
+
 ```dart
 // domain/entities/employee.dart
 class Employee extends Equatable {
   final int id;
   final String fullname;
   final String email;
-  
+
   const Employee({
     required this.id,
     required this.fullname,
     required this.email,
   });
-  
+
   @override
   List<Object?> get props => [id, fullname, email];
 }
@@ -74,9 +79,9 @@ class Employee extends Equatable {
 // domain/usecases/get_employee_profile.dart
 class GetEmployeeProfile implements UseCase<Employee, NoParams> {
   final HomeRepository repository;
-  
+
   GetEmployeeProfile(this.repository);
-  
+
   @override
   Future<Either<Failure, Employee>> call(NoParams params) async {
     return await repository.getEmployeeProfile();
@@ -96,11 +101,13 @@ abstract class HomeRepository {
 **Purpose**: Implements data access and manages data sources.
 
 **Components**:
+
 - **Models**: Data transfer objects with JSON serialization
 - **Repository Implementations**: Concrete implementations of repository interfaces
 - **Data Sources**: Remote (API) and Local (Cache) data sources
 
 **Rules**:
+
 - ✅ Implements domain repository interfaces
 - ✅ Handles data serialization/deserialization
 - ✅ Manages caching strategies
@@ -109,6 +116,7 @@ abstract class HomeRepository {
 - ❌ No business logic
 
 **Example**:
+
 ```dart
 // data/models/employee_model.dart
 class EmployeeModel extends Employee {
@@ -117,7 +125,7 @@ class EmployeeModel extends Employee {
     required String fullname,
     required String email,
   }) : super(id: id, fullname: fullname, email: email);
-  
+
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
     return EmployeeModel(
       id: json['id'],
@@ -125,7 +133,7 @@ class EmployeeModel extends Employee {
       email: json['email'],
     );
   }
-  
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -142,13 +150,13 @@ abstract class HomeRemoteDataSource {
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final ApiClient client;
-  
+
   HomeRemoteDataSourceImpl({required this.client});
-  
+
   @override
   Future<EmployeeModel> getEmployeeProfile() async {
     final response = await client.get('/employee/profile');
-    
+
     if (response.statusCode == 200) {
       return EmployeeModel.fromJson(response.data['data']);
     } else {
@@ -162,13 +170,13 @@ class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSource remoteDataSource;
   final HomeLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
-  
+
   HomeRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
     required this.networkInfo,
   });
-  
+
   @override
   Future<Either<Failure, Employee>> getEmployeeProfile() async {
     if (await networkInfo.isConnected) {
@@ -202,11 +210,13 @@ class HomeRepositoryImpl implements HomeRepository {
 **Purpose**: Handles UI and user interactions.
 
 **Components**:
+
 - **Pages**: Full-screen UI components
 - **Widgets**: Reusable UI components
 - **Providers**: State management (using Provider pattern)
 
 **Rules**:
+
 - ✅ Depends on domain layer
 - ✅ Manages UI state
 - ✅ Handles user input
@@ -215,27 +225,28 @@ class HomeRepositoryImpl implements HomeRepository {
 - ❌ No direct data access
 
 **Example**:
+
 ```dart
 // presentation/providers/home_provider.dart
 class HomeProvider extends ChangeNotifier {
   final GetEmployeeProfile getEmployeeProfile;
-  
+
   HomeProvider({required this.getEmployeeProfile});
-  
+
   HomeStatus _status = HomeStatus.initial;
   Employee? _employee;
   String? _errorMessage;
-  
+
   HomeStatus get status => _status;
   Employee? get employee => _employee;
   bool get isLoading => _status == HomeStatus.loading;
-  
+
   Future<void> loadEmployeeProfile() async {
     _status = HomeStatus.loading;
     notifyListeners();
-    
+
     final result = await getEmployeeProfile(NoParams());
-    
+
     result.fold(
       (failure) {
         _status = HomeStatus.error;
@@ -246,7 +257,7 @@ class HomeProvider extends ChangeNotifier {
         _employee = employee;
       },
     );
-    
+
     notifyListeners();
   }
 }
@@ -254,7 +265,7 @@ class HomeProvider extends ChangeNotifier {
 // presentation/pages/home_page.dart
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -267,20 +278,20 @@ class _HomePageState extends State<HomePage> {
       context.read<HomeProvider>().loadEmployeeProfile();
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<HomeProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: SpinKitThreeBounce());
           }
-          
+
           if (provider.employee != null) {
             return ProfileWidget(employee: provider.employee!);
           }
-          
+
           return const Center(child: Text('No data'));
         },
       ),
@@ -355,10 +366,10 @@ test('should get employee from repository', () async {
   // Mock repository
   when(mockRepository.getEmployeeProfile())
       .thenAnswer((_) async => Right(tEmployee));
-  
+
   // Test use case
   final result = await useCase(NoParams());
-  
+
   // Verify
   expect(result, Right(tEmployee));
 });

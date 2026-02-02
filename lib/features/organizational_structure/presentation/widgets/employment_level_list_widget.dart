@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../domain/entities/employment_level_entity.dart';
@@ -22,11 +23,7 @@ class EmploymentLevelListWidget extends StatelessWidget {
     final provider = context.watch<OrganizationalStructureProvider>();
 
     if (provider.isLoading && employmentLevels.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: Colors.red,
-        ),
-      );
+      return const Center(child: SpinKitThreeBounce(color: Colors.red));
     }
 
     if (employmentLevels.isEmpty) {
@@ -43,26 +40,17 @@ class EmploymentLevelListWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/icon/data_aproval_kosong.svg',
-                      height: 175,
-                    ),
+                    SvgPicture.asset('assets/images/icon/data_aproval_kosong.svg', height: 175),
                     const SizedBox(height: 20),
                     const Text(
                       'Belum Ada List Data Tingkatan!',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     const Text(
                       'Jangan lupa untuk melihat List Data Tingkatan melalui aplikasi Maha!',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -87,11 +75,7 @@ class EmploymentLevelListWidget extends StatelessWidget {
             final employmentLevel = employmentLevels[index];
             return Column(
               children: [
-                _buildEmploymentLevelCard(
-                  context,
-                  employmentLevel,
-                  provider,
-                ),
+                _buildEmploymentLevelCard(context, employmentLevel, provider),
                 const SizedBox(height: 16),
               ],
             );
@@ -112,11 +96,7 @@ class EmploymentLevelListWidget extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.grey.shade300, blurRadius: 4, offset: const Offset(0, 2)),
         ],
       ),
       child: Row(
@@ -124,10 +104,7 @@ class EmploymentLevelListWidget extends StatelessWidget {
           Expanded(
             child: Text(
               employmentLevel.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
           IconButton(
@@ -178,9 +155,7 @@ class EmploymentLevelListWidget extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Konfirmasi Hapus'),
-          content: Text(
-            'Apakah Anda yakin ingin menghapus tingkatan "${employmentLevel.name}"?',
-          ),
+          content: Text('Apakah Anda yakin ingin menghapus tingkatan "${employmentLevel.name}"?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
@@ -189,9 +164,9 @@ class EmploymentLevelListWidget extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 Navigator.of(dialogContext).pop();
-                
+
                 final success = await provider.deleteEmploymentLevelData(employmentLevel.id);
-                
+
                 if (context.mounted) {
                   if (success) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -204,19 +179,14 @@ class EmploymentLevelListWidget extends StatelessWidget {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          provider.errorMessage ?? 'Gagal menghapus tingkatan',
-                        ),
+                        content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
                         backgroundColor: Colors.red,
                       ),
                     );
                   }
                 }
               },
-              child: const Text(
-                'Hapus',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
             ),
           ],
         );

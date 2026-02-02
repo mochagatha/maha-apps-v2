@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/utils/localization_extension.dart';
@@ -68,7 +67,7 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: SpinKitThreeBounce())
             : _errorMessage != null
             ? Center(
                 child: Padding(
