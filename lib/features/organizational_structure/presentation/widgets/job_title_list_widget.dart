@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../domain/entities/job_title_entity.dart';
 import '../providers/organizational_structure_provider.dart';
 import 'job_title_form_bottom_sheet.dart';
@@ -34,6 +35,7 @@ class JobTitleListWidget extends StatelessWidget {
           onRefresh();
         },
         child: ListView(
+          padding: EdgeInsets.all(16),
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.7,
@@ -127,7 +129,32 @@ class JobTitleListWidget extends StatelessWidget {
               if (value == 'edit') {
                 _showEditDialog(context, jobTitle);
               } else if (value == 'delete') {
-                _showDeleteConfirmation(context, jobTitle, provider);
+                ConfirmDialog.show(
+                  context,
+                  child: Text('Apakah Anda yakin ingin menghapus jabatan "${jobTitle.name}"?'),
+                  onConfirm: () async {
+                    final success = await provider.deleteJobTitle(jobTitle.id ?? 0);
+
+                    if (context.mounted) {
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Jabatan berhasil dihapus'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        onRefresh();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(provider.errorMessage ?? 'Gagal menghapus jabatan'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                );
               }
             },
           ),
@@ -155,55 +182,6 @@ class JobTitleListWidget extends StatelessWidget {
           onSuccess: onRefresh,
         ),
       ),
-    );
-  }
-
-  void _showDeleteConfirmation(
-    BuildContext context,
-    JobTitleEntity jobTitle,
-    OrganizationalStructureProvider provider,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Konfirmasi Hapus'),
-          content: Text('Apakah Anda yakin ingin menghapus jabatan "${jobTitle.name}"?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Batal'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(dialogContext).pop();
-
-                final success = await provider.deleteJobTitle(jobTitle.id ?? 0);
-
-                if (context.mounted) {
-                  if (success) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Jabatan berhasil dihapus'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    onRefresh();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(provider.errorMessage ?? 'Gagal menghapus jabatan'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              },
-              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
     );
   }
 }

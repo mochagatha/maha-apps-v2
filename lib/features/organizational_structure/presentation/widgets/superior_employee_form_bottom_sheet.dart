@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/organizational_structure_provider.dart';
-import '../../domain/entities/employee_entity.dart';
-import '../../domain/entities/job_title_entity.dart';
 
 class SuperiorEmployeeFormBottomSheet extends StatefulWidget {
   final int companyStructureId;
@@ -25,12 +23,10 @@ class SuperiorEmployeeFormBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<SuperiorEmployeeFormBottomSheet> createState() =>
-      _SuperiorEmployeeFormBottomSheetState();
+  State<SuperiorEmployeeFormBottomSheet> createState() => _SuperiorEmployeeFormBottomSheetState();
 }
 
-class _SuperiorEmployeeFormBottomSheetState
-    extends State<SuperiorEmployeeFormBottomSheet> {
+class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   int? _selectedEmployeeId;
   int? _selectedJobTitleId;
@@ -41,7 +37,7 @@ class _SuperiorEmployeeFormBottomSheetState
     super.initState();
     _selectedEmployeeId = widget.initialEmployeeId;
     _selectedJobTitleId = widget.initialJobTitleId;
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
     });
@@ -53,17 +49,17 @@ class _SuperiorEmployeeFormBottomSheetState
     if (provider.employees.isEmpty) {
       provider.loadEmployees();
     }
-    // Load job titles for 'utama' branch? or general? 
+    // Load job titles for 'utama' branch? or general?
     // Assuming 'utama' for now as this is Main Structure
-    provider.loadJobTitles(typeRole: 'employee', typeBranch: 'utama'); 
+    provider.loadJobTitles(typeRole: 'employee', typeBranch: 'utama');
   }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedEmployeeId == null || _selectedJobTitleId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Karyawan dan Jabatan harus dipilih')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Karyawan dan Jabatan harus dipilih')));
       return;
     }
 
@@ -102,9 +98,7 @@ class _SuperiorEmployeeFormBottomSheetState
           SnackBar(
             content: Text(
               provider.errorMessage ??
-                  (widget.isEdit
-                      ? 'Gagal mengupdate atasan'
-                      : 'Gagal menambahkan atasan'),
+                  (widget.isEdit ? 'Gagal mengupdate atasan' : 'Gagal menambahkan atasan'),
             ),
             backgroundColor: Colors.red,
           ),
@@ -119,26 +113,15 @@ class _SuperiorEmployeeFormBottomSheetState
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 60,
-              ),
+              const Icon(Icons.check_circle, color: Colors.green, size: 60),
               const SizedBox(height: 16),
               Text(
-                widget.isEdit
-                    ? 'Atasan Berhasil Diupdate!'
-                    : 'Atasan Berhasil Ditambahkan!',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                widget.isEdit ? 'Atasan Berhasil Diupdate!' : 'Atasan Berhasil Ditambahkan!',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -176,25 +159,17 @@ class _SuperiorEmployeeFormBottomSheetState
               children: [
                 Text(
                   widget.isEdit ? 'Edit Atasan' : 'Tambah Atasan',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // Dropdown Karyawan
                 DropdownButtonFormField<int>(
                   value: _selectedEmployeeId,
                   decoration: InputDecoration(
                     labelText: 'Nama Karyawan',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                   items: provider.employees.map((employee) {
                     return DropdownMenuItem<int>(
@@ -221,19 +196,11 @@ class _SuperiorEmployeeFormBottomSheetState
                   value: _selectedJobTitleId,
                   decoration: InputDecoration(
                     labelText: 'Jabatan',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                   items: provider.jobTitles.map((job) {
-                    return DropdownMenuItem<int>(
-                      value: job.id,
-                      child: Text(job.name??"-"),
-                    );
+                    return DropdownMenuItem<int>(value: job.id, child: Text(job.name ?? "-"));
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
@@ -254,9 +221,7 @@ class _SuperiorEmployeeFormBottomSheetState
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: _isSubmitting
                         ? const SizedBox(
@@ -269,10 +234,7 @@ class _SuperiorEmployeeFormBottomSheetState
                           )
                         : Text(
                             widget.isEdit ? 'Update' : 'Simpan',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                   ),
                 ),

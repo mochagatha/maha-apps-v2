@@ -6,6 +6,7 @@ import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
 import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
+import '../../features/authentication/presentation/providers/auth_provider.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
@@ -51,8 +52,8 @@ import '../../features/organizational_structure/presentation/pages/structure_mai
 import '../../features/organizational_structure/presentation/pages/employment_level_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/department_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_list_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title/job_title_office_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title/job_title_project_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_office_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_project_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_page.dart';
 import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 import '../../features/organizational_structure/presentation/pages/department_office_page.dart';
@@ -73,8 +74,23 @@ class AppRouter {
       initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
 
-      // Redirect logic
+      // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
+        final authProvider = context.read<AuthProvider>();
+        final currentPath = state.matchedLocation;
+
+        // If user is on splash and already authenticated, skip splash
+        // BUT: Admin users should NOT skip - they must login fresh each time
+        if (currentPath == RoutePaths.splash && authProvider.isAuthenticated) {
+          // Check user status to determine destination (matching v1 logic)
+          if (authProvider.user?.status == 1) {
+            return RoutePaths.welcomeBiodata;
+          } else {
+            return RoutePaths.home;
+          }
+        }
+
+        // Allow normal navigation for all other cases
         return null;
       },
 

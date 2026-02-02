@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/organizational_structure_provider.dart';
 
 class JobTitleFormBottomSheet extends StatefulWidget {
@@ -70,7 +71,14 @@ class _JobTitleFormBottomSheetState extends State<JobTitleFormBottomSheet> {
     if (mounted) {
       if (success) {
         Navigator.of(context).pop();
-        _showSuccessDialog();
+        SuccessDialog.show(
+          context,
+          message: 'Jabatan telah berhasil',
+          messageActionText: widget.isEdit ? 'diubah' : 'ditambahkan',
+          onConfirm: () {
+            widget.onSuccess();
+          },
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -83,30 +91,6 @@ class _JobTitleFormBottomSheetState extends State<JobTitleFormBottomSheet> {
         );
       }
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Berhasil'),
-          content: Text(
-            widget.isEdit ? 'Data jabatan berhasil diubah' : 'Data jabatan berhasil ditambahkan',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                widget.onSuccess();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

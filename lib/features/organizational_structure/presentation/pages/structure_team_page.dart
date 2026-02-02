@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../domain/entities/department_entity.dart';
 import '../../domain/entities/employee_entity.dart';
-import '../../domain/entities/organizational_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
 import '../../domain/entities/department_structure_entity.dart';
 import '../providers/organizational_structure_provider.dart';
