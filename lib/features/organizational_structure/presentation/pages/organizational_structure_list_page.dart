@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/route_paths.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../shared/widgets/menu_item_card.dart';
 
 class OrganizationalStructureListPage extends StatelessWidget {
   const OrganizationalStructureListPage({super.key});
@@ -26,49 +26,16 @@ class OrganizationalStructureListPage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           itemBuilder: (context, index) {
             final item = menuItems[index];
-            return _buildMenuItem(context, item);
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(BuildContext context, Map<String, dynamic> item) {
-    final bool isEnabled = item['enabled'] as bool;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(blurRadius: 8, color: Colors.grey.shade300, offset: const Offset(3, 3)),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isEnabled ? item['action'] as VoidCallback? : null,
-          borderRadius: BorderRadius.circular(8),
-          child: Opacity(
-            opacity: isEnabled ? 1.0 : 0.5,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  SvgPicture.asset(item['icon'] as String, height: 40, width: 40),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      item['text'] as String,
-                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    ),
-                  ),
-                  Icon(Icons.keyboard_arrow_right, color: isEnabled ? Colors.black : Colors.grey),
-                ],
+            final bool isEnabled = item['enabled'] as bool;
+            return Opacity(
+              opacity: isEnabled ? 1.0 : 0.5,
+              child: MenuItemCard(
+                asset: item['icon'] as String,
+                title: item['text'] as String,
+                onTap: isEnabled ? item['action'] as VoidCallback : () {},
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

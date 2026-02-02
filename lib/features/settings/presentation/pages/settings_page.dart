@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/settings/domain/entities/settings_menu_item.dart';
 import 'package:maha_apps_v2/features/settings/presentation/models/settings_menu_model.dart';
@@ -10,6 +9,7 @@ import '../../../../core/providers/language_provider.dart';
 import '../../../../core/utils/localization_extension.dart';
 
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../shared/widgets/menu_item_card.dart';
 
 /// Settings page displaying all available settings menu items
 class SettingsPage extends StatefulWidget {
@@ -66,68 +66,23 @@ class _SettingsPageState extends State<SettingsPage> {
               onRefresh: _fetchData,
               child: ListView.builder(
                 itemCount: _menuItems.length,
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 itemBuilder: (context, index) {
                   final menuItem = _menuItems[index];
-                  return _buildMenuItem(menuItem);
+                  return MenuItemCard(
+                    asset: menuItem.icon,
+                    title: menuItem.text,
+                    onTap: () {
+                      if (menuItem.id == MenuConfig.pengaturanBahasa) {
+                        _showLanguageDialog(context);
+                      } else if (menuItem.route != null) {
+                        context.push(menuItem.route!);
+                      }
+                    },
+                  );
                 },
               ),
             ),
-    );
-  }
-
-  Widget _buildMenuItem(SettingsMenuItem menuItem) {
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (menuItem.id == MenuConfig.pengaturanBahasa) {
-              _showLanguageDialog(context);
-            } else if (menuItem.route != null) {
-              context.push(menuItem.route!);
-            }
-          },
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(blurRadius: 8, color: Colors.grey.shade300, offset: const Offset(3, 3)),
-              ],
-            ),
-            child: Row(
-              children: [
-                SvgPicture.asset(menuItem.icon, height: 40),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(menuItem.text, style: const TextStyle(fontWeight: FontWeight.w600)),
-                ),
-                const Icon(Icons.keyboard_arrow_right),
-              ],
-            ),
-          ),
-        ),
-        if (menuItem.count > 0)
-          Positioned(
-            top: 5,
-            right: 5,
-            child: Container(
-              width: 25,
-              height: 25,
-              decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-              alignment: Alignment.center,
-              child: Text(
-                '${menuItem.count}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ),
-      ],
     );
   }
 
