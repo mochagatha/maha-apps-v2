@@ -109,16 +109,54 @@ class EmploymentLevelListWidget extends StatelessWidget {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.blue),
-            onPressed: () {
-              _showEditDialog(context, employmentLevel);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: () {
-              _showDeleteConfirmation(context, employmentLevel, provider);
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, size: 20),
+            padding: EdgeInsets.zero,
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'edit',
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                height: 30,
+                child: Text('Edit'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'delete',
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                height: 30,
+                child: Text('Hapus'),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 'edit') {
+                _showEditDialog(context, employmentLevel);
+              } else if (value == 'delete') {
+                ConfirmDialog.show(
+                  context,
+                  title: 'Konfirmasi Hapus',
+                  message: 'Apakah Anda yakin ingin',
+                  messageActionText: 'menghapus tingkatan "${employmentLevel.name}"',
+                  onConfirm: () async {
+                    final success = await provider.deleteEmploymentLevelData(employmentLevel.id);
+
+                    if (context.mounted) {
+                      if (success) {
+                        SuccessDialog.show(
+                          context,
+                          message: 'Tingkatan "${employmentLevel.name}" berhasil dihapus',
+                          onConfirm: onRefresh,
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                );
+              }
             },
           ),
         ],
@@ -144,39 +182,6 @@ class EmploymentLevelListWidget extends StatelessWidget {
           onSuccess: onRefresh,
         ),
       ),
-    );
-  }
-
-  void _showDeleteConfirmation(
-    BuildContext context,
-    EmploymentLevelEntity employmentLevel,
-    OrganizationalStructureProvider provider,
-  ) {
-    ConfirmDialog.show(
-      context,
-      title: 'Konfirmasi Hapus',
-      message: 'Apakah Anda yakin ingin',
-      messageActionText: 'menghapus tingkatan "${employmentLevel.name}"',
-      onConfirm: () async {
-        final success = await provider.deleteEmploymentLevelData(employmentLevel.id);
-
-        if (context.mounted) {
-          if (success) {
-            SuccessDialog.show(
-              context,
-              message: 'Tingkatan "${employmentLevel.name}" berhasil dihapus',
-              onConfirm: onRefresh,
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        }
-      },
     );
   }
 }

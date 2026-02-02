@@ -63,10 +63,16 @@ class RouteNames {
   static const String structureMain = 'structure-main';
   static const String organizationalChart = 'organizational-chart';
   static const String employmentLevel = 'employment-level';
+  static const String employmentLevelOffice = 'employment-level-office';
+  static const String employmentLevelProject = 'employment-level-project';
   static const String employmentLevelEmployee = 'employment-level-employee';
   static const String employmentLevelWorker = 'employment-level-worker';
   static const String employmentLevelEmployeeDetail = 'employment-level-employee-detail';
   static const String employmentLevelWorkerDetail = 'employment-level-worker-detail';
+  static const String employmentLevelOfficeEmployee = 'employment-level-office-employee';
+  static const String employmentLevelOfficeWorker = 'employment-level-office-worker';
+  static const String employmentLevelProjectEmployee = 'employment-level-project-employee';
+  static const String employmentLevelProjectWorker = 'employment-level-project-worker';
   static const String departmentList = 'department-list';
   static const String departmentOffice = 'department-office';
   static const String departmentProject = 'department-project';

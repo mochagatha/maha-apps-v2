@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/user_role_entity.dart';
 import '../providers/organizational_structure_provider.dart';
 import '../widgets/user_role_form_bottom_sheet.dart';
@@ -10,8 +12,14 @@ import '../widgets/user_role_form_bottom_sheet.dart';
 class EmploymentLevelDetailPage extends StatefulWidget {
   final String typeRole;
   final String title;
+  final String? typeBranch;
 
-  const EmploymentLevelDetailPage({super.key, required this.typeRole, required this.title});
+  const EmploymentLevelDetailPage({
+    super.key,
+    required this.typeRole,
+    required this.title,
+    this.typeBranch,
+  });
 
   @override
   State<EmploymentLevelDetailPage> createState() => _EmploymentLevelDetailPageState();
@@ -262,7 +270,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
         value: provider,
         child: UserRoleFormBottomSheet(
           typeRole: widget.typeRole,
-          typeBranch: 'office', // Default to office, bisa disesuaikan
+          typeBranch: widget.typeBranch ?? 'office',
           availableSupervisorRoles: allRoles,
           onSuccess: _loadData,
         ),
@@ -282,7 +290,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
         value: provider,
         child: UserRoleFormBottomSheet(
           typeRole: widget.typeRole,
-          typeBranch: 'office', // Default to office, bisa disesuaikan
+          typeBranch: widget.typeBranch ?? 'office',
           userRole: role,
           availableSupervisorRoles: allRoles,
           onSuccess: _loadData,
@@ -292,44 +300,32 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
   }
 
   void _showDeleteConfirmation(UserRoleEntity role) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi Hapus'),
-        content: Text('Apakah Anda yakin ingin menghapus tingkatan "${role.name}"?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await _handleDelete(role);
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Hapus'),
-          ),
-        ],
-      ),
+    ConfirmDialog.show(
+      context,
+      title: 'Konfirmasi Hapus',
+      message: 'Apakah Anda yakin ingin',
+      messageActionText: 'menghapus tingkatan "${role.name}"',
+      onConfirm: () async {
+        final provider = context.read<OrganizationalStructureProvider>();
+        final success = await provider.deleteUserRoleData(role.id);
+
+        if (!mounted) return;
+
+        if (success) {
+          SuccessDialog.show(
+            context,
+            message: 'Tingkatan "${role.name}" berhasil dihapus',
+            onConfirm: _loadData,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
     );
-  }
-
-  Future<void> _handleDelete(UserRoleEntity role) async {
-    final provider = context.read<OrganizationalStructureProvider>();
-    final success = await provider.deleteUserRoleData(role.id);
-
-    if (!mounted) return;
-
-    if (success) {
-      await _loadData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tingkatan berhasil dihapus'), backgroundColor: Colors.green),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(provider.errorMessage ?? 'Gagal menghapus tingkatan'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 }

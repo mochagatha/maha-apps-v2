@@ -4,8 +4,8 @@ import '../../../../core/router/route_paths.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../shared/widgets/menu_item_card.dart';
 
-class EmploymentLevelListPage extends StatelessWidget {
-  const EmploymentLevelListPage({super.key});
+class EmploymentLevelProjectPage extends StatelessWidget {
+  const EmploymentLevelProjectPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +38,16 @@ class EmploymentLevelListPage extends StatelessWidget {
     return [
       {
         'icon': 'assets/images/icon/jam_kerja.svg',
-        'text': 'Kantor',
+        'text': 'Karyawan',
         'action': () {
-          context.push(RoutePaths.employmentLevelOffice);
+          context.push(RoutePaths.employmentLevelProjectEmployee);
         },
       },
       {
         'icon': 'assets/images/icon/pengaturan_lembur.svg',
-        'text': 'Proyek',
+        'text': 'Pekerja Harian',
         'action': () {
-          context.push(RoutePaths.employmentLevelProject);
+          context.push(RoutePaths.employmentLevelProjectWorker);
         },
       },
     ];
