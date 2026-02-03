@@ -95,6 +95,15 @@ import '../../features/organizational_structure/presentation/providers/employmen
 import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
 import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
 
+// Access Menu feature imports
+import '../../features/access_menu/data/datasources/access_menu_remote_data_source.dart';
+import '../../features/access_menu/data/repositories/access_menu_repository_impl.dart';
+import '../../features/access_menu/domain/repositories/access_menu_repository.dart';
+import '../../features/access_menu/domain/usecases/get_employee_menus.dart' as access_menu_usecases;
+import '../../features/access_menu/domain/usecases/get_all_menus.dart';
+import '../../features/access_menu/domain/usecases/manage_menu_access.dart';
+import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -315,6 +324,31 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<OrganizationalStructureRemoteDataSource>(
     () => OrganizationalStructureRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Access Menu
+  // Provider
+  sl.registerFactory(
+    () => AccessMenuProvider(
+      getEmployeeMenus: sl(),
+      getAllMenus: sl(),
+      manageMenuAccess: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => access_menu_usecases.GetEmployeeMenus(sl()));
+  sl.registerLazySingleton(() => GetAllMenus(sl()));
+  sl.registerLazySingleton(() => ManageMenuAccess(sl()));
+
+  // Repository
+  sl.registerLazySingleton<AccessMenuRepository>(
+    () => AccessMenuRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<AccessMenuRemoteDataSource>(
+    () => AccessMenuRemoteDataSourceImpl(client: sl()),
   );
 
   //! Core

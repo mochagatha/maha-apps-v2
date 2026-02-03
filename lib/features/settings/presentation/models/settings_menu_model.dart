@@ -85,7 +85,7 @@ class SettingsMenuModel {
         icon: 'assets/images/icon/hak_akses_menu.svg',
         text: context.l10n.menuHakAksesMenu,
         count: 0,
-        route: RoutePaths.settingsHakAksesMenu,
+        route: RoutePaths.accessMenuList,
       ),
       SettingsMenuItem(
         id: MenuConfig.pengaturanPelcakanJamKerja,

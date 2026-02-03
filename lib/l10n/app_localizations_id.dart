@@ -377,7 +377,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get featureComingSoon => 'Fitur segera hadir!';
 
   @override
-  String get menuPenempatanKerja => 'Penempatan kerja';
+  String get menuPenempatanKerja => 'Penempatan dan Jam kerja';
 
   @override
   String get menuHariLibur => 'Hari Libur & Cuti Bersama';

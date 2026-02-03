@@ -28,4 +28,12 @@ class ApiEndpoints {
   static const String employmentLevel = '/employment-level';
   static const String filterDropdown = '/filter-dropdown';
   static const String getAllEmployees = '/employee';
+
+  // Menu Access
+  static const String employeeMenuApplication = '/employee/employee-menu-application';
+  static const String menuApplication = '/employee/menu-application';
+  static const String createEmployeeMenuApplication =
+      '/employee/employee-menu-application/create';
+  static const String deleteEmployeeMenuApplication =
+      '/employee/employee-menu-application/delete-by-employee';
 }

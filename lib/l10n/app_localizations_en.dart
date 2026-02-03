@@ -376,7 +376,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get featureComingSoon => 'Feature coming soon!';
 
   @override
-  String get menuPenempatanKerja => 'Job Placement';
+  String get menuPenempatanKerja => 'Placement and Working Hours';
 
   @override
   String get menuHariLibur => 'Holidays & Joint Leave';

@@ -133,6 +133,9 @@ class RoutePaths {
       '/organizational-structure/job-title/project/employee';
   static const String jobTitleProjectWorker = '/organizational-structure/job-title/project/worker';
 
+  // Access Menu
+  static const String accessMenuList = '/access-menu';
+
   // Settings Submenus
   static const String settingsPenempatanKerja = '/settings/penempatan-kerja';
   static const String settingsLibur = '/settings/libur';

@@ -791,7 +791,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuPenempatanKerja.
   ///
   /// In id, this message translates to:
-  /// **'Penempatan kerja'**
+  /// **'Penempatan dan Jam kerja'**
   String get menuPenempatanKerja;
 
   /// No description provided for @menuHariLibur.

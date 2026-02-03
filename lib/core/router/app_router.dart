@@ -68,6 +68,8 @@ import '../../features/organizational_structure/presentation/pages/department_pr
 import '../../features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
+import '../../features/access_menu/presentation/pages/access_menu_list_page.dart';
+import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -462,6 +464,22 @@ class AppRouter {
               title: 'Data Jabatan',
             ),
           ),
+        ),
+
+        // Access Menu Routes
+        GoRoute(
+          path: RoutePaths.accessMenuList,
+          name: RouteNames.accessMenuList,
+          builder: (context, state) {
+            final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
+            if (employeeId == null) {
+              return const Scaffold(body: Center(child: Text('Employee ID required')));
+            }
+            return ChangeNotifierProvider(
+              create: (_) => sl<AccessMenuProvider>(),
+              child: AccessMenuListPage(employeeId: int.parse(employeeId)),
+            );
+          },
         ),
 
         // Settings Routes
