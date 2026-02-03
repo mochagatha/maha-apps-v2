@@ -78,5 +78,6 @@ class RouteNames {
   static const String jobTitleOfficeWorker = 'job-title-office-worker';
   static const String jobTitleProjectEmployee = 'job-title-project-employee';
   static const String jobTitleProjectWorker = 'job-title-project-worker';
+  static const String employeeSelection = 'employee-selection';
   static const String accessMenuList = 'access-menu-list';
 }

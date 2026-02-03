@@ -69,7 +69,9 @@ import '../../features/organizational_structure/presentation/pages/employment_le
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
 import '../../features/access_menu/presentation/pages/access_menu_list_page.dart';
+import '../../features/access_menu/presentation/pages/employee_selection_page.dart';
 import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -467,6 +469,14 @@ class AppRouter {
         ),
 
         // Access Menu Routes
+        GoRoute(
+          path: RoutePaths.employeeSelection,
+          name: RouteNames.employeeSelection,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<EmployeeListProvider>(),
+            child: const EmployeeSelectionPage(),
+          ),
+        ),
         GoRoute(
           path: RoutePaths.accessMenuList,
           name: RouteNames.accessMenuList,

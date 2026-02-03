@@ -103,6 +103,7 @@ import '../../features/access_menu/domain/usecases/get_employee_menus.dart' as a
 import '../../features/access_menu/domain/usecases/get_all_menus.dart';
 import '../../features/access_menu/domain/usecases/manage_menu_access.dart';
 import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -334,6 +335,10 @@ Future<void> init() async {
       getAllMenus: sl(),
       manageMenuAccess: sl(),
     ),
+  );
+
+  sl.registerFactory(
+    () => EmployeeListProvider(getOrganizationalData: sl()),
   );
 
   // Use cases
