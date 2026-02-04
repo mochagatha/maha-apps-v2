@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:responsive_sizer/responsive_sizer.dart';
@@ -8,7 +8,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/education_form_provider.dart';
-import 'biodata_form_page.dart' show CustomTextFormField;
+import '../widgets/custom_text_form_field.dart';
 
 // Note: Reusing CustomLabelBiodata, CustomTextBiodata, CustomTextFormField from biodata_form_page.dart
 // But we need to update HeaderScroll to make step 2 active.
@@ -24,6 +24,12 @@ class EducationFormPage extends StatefulWidget {
 
 class _EducationFormPageState extends State<EducationFormPage> {
   @override
+  void initState() {
+    super.initState();
+    context.read<EducationFormProvider>().initialize();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,7 +37,9 @@ class _EducationFormPageState extends State<EducationFormPage> {
       body: Consumer<EducationFormProvider>(
         builder: (context, provider, child) {
           if (provider.isLoadingData) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
           return Stack(
             children: [
@@ -44,14 +52,22 @@ class _EducationFormPageState extends State<EducationFormPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Divider(color: AppColors.third, height: 20, thickness: 10),
+                        const Divider(
+                          color: AppColors.third,
+                          height: 20,
+                          thickness: 10,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const CustomTextBiodata(text: 'Riwayat Pendidikan'),
-                              const CustomLabelBiodata(text: 'Pendidikan Terakhir'),
+                              const CustomTextBiodata(
+                                text: 'Riwayat Pendidikan',
+                              ),
+                              const CustomLabelBiodata(
+                                text: 'Pendidikan Terakhir',
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 18.0),
                                 child: DropdownButtonFormField<String>(
@@ -64,7 +80,8 @@ class _EducationFormPageState extends State<EducationFormPage> {
                                         );
                                       })
                                       .toList(),
-                                  validator: (value) => value == null || value.isEmpty
+                                  validator: (value) =>
+                                      value == null || value.isEmpty
                                       ? 'Pilih Pendidikan Terakhir!'
                                       : null,
                                   onChanged: (String? value) {
@@ -84,7 +101,8 @@ class _EducationFormPageState extends State<EducationFormPage> {
                                 ),
                               ),
                               if (provider.lastEducationOption != null) ...[
-                                if (provider.lastEducationOption == 'sd') _PrimarySchoolFields(),
+                                if (provider.lastEducationOption == 'sd')
+                                  _PrimarySchoolFields(),
                                 if (provider.lastEducationOption == 'smp')
                                   _JuniorHighSchoolFields(),
                                 if (provider.lastEducationOption == 'sma')
@@ -95,7 +113,10 @@ class _EducationFormPageState extends State<EducationFormPage> {
                                   Column(
                                     children: [
                                       _SeniorHighSchoolFields(),
-                                      _BachelorFields(lastEducation: provider.lastEducationOption!),
+                                      _BachelorFields(
+                                        lastEducation:
+                                            provider.lastEducationOption!,
+                                      ),
                                     ],
                                   ),
                                 if (provider.lastEducationOption == 's2')
@@ -142,13 +163,19 @@ class _EducationFormPageState extends State<EducationFormPage> {
                 },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.primary),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: AppColors.primary),
+                    Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
                     SizedBox(width: 8),
                     Text(
                       'Kembali',
@@ -175,7 +202,9 @@ class _EducationFormPageState extends State<EducationFormPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Row(
@@ -190,7 +219,11 @@ class _EducationFormPageState extends State<EducationFormPage> {
                       ),
                     ),
                     SizedBox(width: 8),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                      color: Colors.white,
+                    ),
                   ],
                 ),
               ),
@@ -212,7 +245,11 @@ class CustomLabelBiodata extends StatelessWidget {
       padding: const EdgeInsets.only(top: 18, bottom: 6),
       child: Text(
         text,
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xff404040)),
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
+          color: Color(0xff404040),
+        ),
       ),
     );
   }
@@ -227,7 +264,11 @@ class CustomTextBiodata extends StatelessWidget {
       padding: const EdgeInsets.only(top: 24, bottom: 8),
       child: Text(
         text,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primary),
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: AppColors.primary,
+        ),
       ),
     );
   }
@@ -255,11 +296,17 @@ class CustomTextFieldJam extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             readOnly: true,
-            validator: (value) => (value == null || value.isEmpty) ? 'Wajib diisi!' : null,
+            validator: (value) =>
+                (value == null || value.isEmpty) ? 'Wajib diisi!' : null,
             decoration: InputDecoration(
               hintText: labelText,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
           ),
         ),
@@ -279,6 +326,7 @@ class _PrimarySchoolFields extends StatelessWidget {
         const CustomTextBiodata(text: 'Sekolah Dasar'),
         const CustomLabelBiodata(text: 'Nama Sekolah'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.namePrimarySchool,
           controller: provider.namePrimarySchoolController,
           hintText: 'Masukkan nama sekolah anda..',
           validator: (v) => v!.isEmpty ? 'Nama sekolah wajib diisi' : null,
@@ -289,7 +337,11 @@ class _PrimarySchoolFields extends StatelessWidget {
           labelText: 'Masukkan tahun mulai disini..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.startYearPrimarySchoolController, val),
+            (val) => provider.setYear(
+              provider.startYearPrimarySchoolController,
+              val,
+              AppConstants.biodata.startYearPrimarySchool,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'Tahun Selesai'),
@@ -298,7 +350,11 @@ class _PrimarySchoolFields extends StatelessWidget {
           labelText: 'Masukkan tahun selesai disini..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.endYearPrimarySchoolController, val),
+            (val) => provider.setYear(
+              provider.endYearPrimarySchoolController,
+              val,
+              AppConstants.biodata.endYearPrimarySchool,
+            ),
           ),
         ),
       ],
@@ -316,6 +372,7 @@ class _JuniorHighSchoolFields extends StatelessWidget {
         const CustomTextBiodata(text: 'SMP/MTSn'),
         const CustomLabelBiodata(text: 'Nama Sekolah'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.nameJuniorSchool,
           controller: provider.nameJuniorSchoolController,
           hintText: 'Masukkan nama sekolah anda..',
           validator: (v) => v!.isEmpty ? 'Nama sekolah wajib diisi' : null,
@@ -326,7 +383,11 @@ class _JuniorHighSchoolFields extends StatelessWidget {
           labelText: 'Masukkan tahun mulai disini..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.startYearJuniorSchoolController, val),
+            (val) => provider.setYear(
+              provider.startYearJuniorSchoolController,
+              val,
+              AppConstants.biodata.startYearJuniorSchool,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'Tahun Selesai'),
@@ -335,7 +396,11 @@ class _JuniorHighSchoolFields extends StatelessWidget {
           labelText: 'Masukkan tahun selesai disini..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.endYearJuniorSchoolController, val),
+            (val) => provider.setYear(
+              provider.endYearJuniorSchoolController,
+              val,
+              AppConstants.biodata.endYearJuniorSchool,
+            ),
           ),
         ),
       ],
@@ -353,6 +418,7 @@ class _SeniorHighSchoolFields extends StatelessWidget {
         const CustomTextBiodata(text: 'SMA/SMK/MAN'),
         const CustomLabelBiodata(text: 'Nama Sekolah'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.nameSeniorSchool,
           controller: provider.nameSeniorSchoolController,
           hintText: 'Masukkan nama sekolah anda..',
           validator: (v) => v!.isEmpty ? 'Nama sekolah wajib diisi' : null,
@@ -363,7 +429,11 @@ class _SeniorHighSchoolFields extends StatelessWidget {
           labelText: 'Masukkan tahun mulai disini..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.startYearSeniorSchoolController, val),
+            (val) => provider.setYear(
+              provider.startYearSeniorSchoolController,
+              val,
+              AppConstants.biodata.startYearSeniorSchool,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'Tahun Selesai'),
@@ -372,7 +442,11 @@ class _SeniorHighSchoolFields extends StatelessWidget {
           labelText: 'Masukkan tahun selesai disini..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.endYearSeniorSchoolController, val),
+            (val) => provider.setYear(
+              provider.endYearSeniorSchoolController,
+              val,
+              AppConstants.biodata.endYearSeniorSchool,
+            ),
           ),
         ),
       ],
@@ -397,11 +471,13 @@ class _BachelorFields extends StatelessWidget {
         ),
         const CustomLabelBiodata(text: 'Nama Universitas'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.nameBachelor,
           controller: provider.nameBachelorController,
           hintText: 'Masukkan nama universitas anda..',
         ),
         const CustomLabelBiodata(text: 'Jurusan'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.majorBachelor,
           controller: provider.majorBachelorController,
           hintText: 'Masukkan jurusan anda..',
         ),
@@ -411,7 +487,11 @@ class _BachelorFields extends StatelessWidget {
           labelText: 'Masukkan tahun mulai..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.startYearBachelorController, val),
+            (val) => provider.setYear(
+              provider.startYearBachelorController,
+              val,
+              AppConstants.biodata.startYearBachelor,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'Tahun Selesai'),
@@ -420,7 +500,11 @@ class _BachelorFields extends StatelessWidget {
           labelText: 'Masukkan tahun selesai..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.endYearBachelorController, val),
+            (val) => provider.setYear(
+              provider.endYearBachelorController,
+              val,
+              AppConstants.biodata.endYearBachelor,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'IPK'),
@@ -429,11 +513,16 @@ class _BachelorFields extends StatelessWidget {
           labelText: 'Masukkan IPK Anda..',
           onTap: () => _showIPKDialog(
             context,
-            (val) => provider.setIPK(provider.ipkBachelorController, val),
+            (val) => provider.setIPK(
+              provider.ipkBachelorController,
+              val,
+              AppConstants.biodata.ipkBachelor,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'Gelar'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.titleBachelor,
           controller: provider.titleBachelorController,
           hintText: 'Contoh : S.E, S.T, S.H',
         ),
@@ -452,11 +541,13 @@ class _MasterFields extends StatelessWidget {
         const CustomTextBiodata(text: 'S2'),
         const CustomLabelBiodata(text: 'Nama Universitas'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.nameMaster,
           controller: provider.nameMasterController,
           hintText: 'Masukkan nama universitas anda..',
         ),
         const CustomLabelBiodata(text: 'Jurusan'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.majorMaster,
           controller: provider.majorMasterController,
           hintText: 'Masukkan jurusan anda..',
         ),
@@ -466,7 +557,11 @@ class _MasterFields extends StatelessWidget {
           labelText: 'Masukkan tahun mulai..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.startYearMasterController, val),
+            (val) => provider.setYear(
+              provider.startYearMasterController,
+              val,
+              AppConstants.biodata.startYearMaster,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'Tahun Selesai'),
@@ -475,18 +570,29 @@ class _MasterFields extends StatelessWidget {
           labelText: 'Masukkan tahun selesai..',
           onTap: () => _showYearPicker(
             context,
-            (val) => provider.setYear(provider.endYearMasterController, val),
+            (val) => provider.setYear(
+              provider.endYearMasterController,
+              val,
+              AppConstants.biodata.endYearMaster,
+            ),
           ),
         ),
         const CustomLabelBiodata(text: 'IPK'),
         CustomTextFieldJam(
           controller: provider.ipkMasterController,
           labelText: 'Masukkan IPK Anda..',
-          onTap: () =>
-              _showIPKDialog(context, (val) => provider.setIPK(provider.ipkMasterController, val)),
+          onTap: () => _showIPKDialog(
+            context,
+            (val) => provider.setIPK(
+              provider.ipkMasterController,
+              val,
+              AppConstants.biodata.ipkMaster,
+            ),
+          ),
         ),
         const CustomLabelBiodata(text: 'Gelar'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.titleMaster,
           controller: provider.titleMasterController,
           hintText: 'Contoh : M.M, M.Kom',
         ),
@@ -505,6 +611,7 @@ class _DoctorFields extends StatelessWidget {
         const CustomTextBiodata(text: 'S3'),
         const CustomLabelBiodata(text: 'Nama Universitas'),
         CustomTextFormField(
+          prefKey: AppConstants.biodata.nameDoctor,
           controller: provider.nameDoctorController,
           hintText: 'Masukkan nama universitas anda..',
         ),
@@ -558,7 +665,10 @@ void _showIPKDialog(BuildContext context, Function(String) onSaved) {
           decoration: const InputDecoration(hintText: "Contoh: 3.50"),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Batal")),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Batal"),
+          ),
           ElevatedButton(
             onPressed: () {
               onSaved(controller.text);
@@ -593,12 +703,19 @@ class HeaderScrollEducation extends StatelessWidget {
             child: Row(
               children: [
                 _checkContract(isActive: true, number: 1, title: "Biodata"),
-                _checkContract(isActive: true, number: 2, title: "Riwayat Pendidikan"),
+                _checkContract(
+                  isActive: true,
+                  number: 2,
+                  title: "Riwayat Pendidikan",
+                ),
                 _checkContract(number: 3, title: "Data Keluarga"),
                 _checkContract(number: 4, title: "Kelengkapan Dokumen"),
                 _checkContract(number: 5, title: "Keahlian"),
                 _checkContract(number: 6, title: "Ambil Foto Selfie"),
-                _checkContract(number: 7, title: "Ambil Foto Selfie dengan KTP"),
+                _checkContract(
+                  number: 7,
+                  title: "Ambil Foto Selfie dengan KTP",
+                ),
               ],
             ),
           ),
@@ -607,7 +724,11 @@ class HeaderScrollEducation extends StatelessWidget {
     );
   }
 
-  Widget _checkContract({required int number, required String title, bool isActive = false}) {
+  Widget _checkContract({
+    required int number,
+    required String title,
+    bool isActive = false,
+  }) {
     return Row(
       children: [
         if (number != 1)
@@ -625,7 +746,9 @@ class HeaderScrollEducation extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: isActive ? AppColors.primary : Colors.white,
-            border: Border.all(color: isActive ? AppColors.primary : AppColors.secondary),
+            border: Border.all(
+              color: isActive ? AppColors.primary : AppColors.secondary,
+            ),
           ),
           child: Center(
             child: Text(
