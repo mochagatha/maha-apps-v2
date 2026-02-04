@@ -73,12 +73,17 @@ class _LoginPageState extends State<LoginPage> {
       // Check if the user is admin
       final email = _emailController.text.trim().toLowerCase();
       if (email == 'admin@mahasejahtera.com') {
+        // Set admin status
+        await authProvider.setAdminStatus(true);
         // Navigate to admin face verification
         context.go(RoutePaths.adminFaceVerification);
-      } else if (authProvider.user?.status == 1) {
-        context.go(RoutePaths.welcomeBiodata);
       } else {
-        context.go(RoutePaths.home);
+        await authProvider.setAdminStatus(false);
+        if (authProvider.user?.status == 1) {
+          context.go(RoutePaths.welcomeBiodata);
+        } else {
+          context.go(RoutePaths.home);
+        }
       }
     } else if (authProvider.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(

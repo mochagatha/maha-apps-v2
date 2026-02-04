@@ -206,4 +206,26 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(NetworkFailure('No internet connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> saveIsAdmin(bool isAdmin) async {
+    try {
+      await localDataSource.saveIsAdmin(isAdmin);
+      return const Right(null);
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    } on Exception catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> getIsAdmin() async {
+    try {
+      final isAdmin = await localDataSource.getIsAdmin();
+      return Right(isAdmin);
+    } on Exception catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
 }

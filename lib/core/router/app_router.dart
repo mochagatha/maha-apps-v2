@@ -91,6 +91,10 @@ class AppRouter {
         // If user is on splash and already authenticated, skip splash
         // BUT: Admin users should NOT skip - they must login fresh each time
         if (currentPath == RoutePaths.splash && authProvider.isAuthenticated) {
+          // Check if admin
+          if (authProvider.isAdmin) {
+            return RoutePaths.adminHome;
+          }
           // Check user status to determine destination (matching v1 logic)
           if (authProvider.user?.status == 1) {
             return RoutePaths.welcomeBiodata;

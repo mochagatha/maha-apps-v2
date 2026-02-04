@@ -47,4 +47,10 @@ abstract class AuthRepository {
     required String locationName,
     required String location,
   });
+
+  /// Save admin status
+  Future<Either<Failure, void>> saveIsAdmin(bool isAdmin);
+
+  /// Get admin status
+  Future<Either<Failure, bool>> getIsAdmin();
 }

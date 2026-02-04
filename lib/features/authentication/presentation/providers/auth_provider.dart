@@ -38,12 +38,14 @@ class AuthProvider extends ChangeNotifier {
   AuthStatus _status = AuthStatus.initial;
   User? _user;
   String? _errorMessage;
+  bool _isAdmin = false;
 
   // Getters
   AuthStatus get status => _status;
   User? get user => _user;
   String? get errorMessage => _errorMessage;
   bool get isAuthenticated => _status == AuthStatus.authenticated;
+  bool get isAdmin => _isAdmin;
   bool get isLoading => _status == AuthStatus.loading;
 
   /// Login user
@@ -115,6 +117,7 @@ class AuthProvider extends ChangeNotifier {
       (_) {
         _status = AuthStatus.unauthenticated;
         _user = null;
+        _isAdmin = false;
         _errorMessage = null;
       },
     );
@@ -142,6 +145,7 @@ class AuthProvider extends ChangeNotifier {
             (failure) async {
               _status = AuthStatus.unauthenticated;
               _user = null;
+              _isAdmin = false;
             },
             (user) async {
               // User is logged in locally, now try to fetch fresh profile
@@ -173,7 +177,28 @@ class AuthProvider extends ChangeNotifier {
       },
     );
 
+    // Check admin status
+    final adminResult = await _getIsAdmin();
+    _isAdmin = adminResult;
+
     notifyListeners();
+  }
+
+  /// Set admin status
+  Future<void> setAdminStatus(bool isAdmin) async {
+    _isAdmin = isAdmin;
+    await _saveIsAdmin(isAdmin);
+    notifyListeners();
+  }
+
+  Future<bool> _getIsAdmin() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('is_admin') ?? false;
+  }
+
+  Future<void> _saveIsAdmin(bool isAdmin) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_admin', isAdmin);
   }
 
   /// Clear error message
