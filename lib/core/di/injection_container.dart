@@ -116,6 +116,14 @@ import '../../features/permissions/domain/usecases/is_permission_permanently_den
 import '../../features/permissions/domain/usecases/get_denied_permissions_detail.dart';
 import '../../features/permissions/presentation/providers/permission_provider.dart';
 
+// Access Screen feature imports
+import '../../features/access_screen/data/datasources/access_screen_remote_datasource.dart';
+import '../../features/access_screen/data/repositories/access_screen_repository_impl.dart';
+import '../../features/access_screen/domain/repositories/access_screen_repository.dart';
+import '../../features/access_screen/domain/usecases/get_access_screen.dart';
+import '../../features/access_screen/domain/usecases/update_access_screen.dart';
+import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -382,6 +390,31 @@ Future<void> init() async {
 
   // Repository
   sl.registerLazySingleton<PermissionRepository>(() => PermissionRepositoryImpl());
+
+  //! Features - Access Screen
+  // Provider
+  sl.registerFactory(
+    () => AccessScreenProvider(
+      getAccessScreenList: sl(),
+      getAccessScreenDetail: sl(),
+      updateGlobalAccessScreen: sl(),
+      updateDetailAccessScreen: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetAccessScreenList(sl()));
+  sl.registerLazySingleton(() => GetAccessScreenDetail(sl()));
+  sl.registerLazySingleton(() => UpdateGlobalAccessScreen(sl()));
+  sl.registerLazySingleton(() => UpdateDetailAccessScreen(sl()));
+
+  // Repository
+  sl.registerLazySingleton<AccessScreenRepository>(
+      () => AccessScreenRepositoryImpl(remoteDataSource: sl()));
+
+  // Data sources
+  sl.registerLazySingleton<AccessScreenRemoteDataSource>(
+      () => AccessScreenRemoteDataSourceImpl(client: sl()));
 
   //! Core
   // Network

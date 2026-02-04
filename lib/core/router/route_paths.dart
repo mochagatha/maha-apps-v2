@@ -149,6 +149,7 @@ class RoutePaths {
   static const String settingsJamKerja = '/settings/jam-kerja';
   static const String settingsFormatDanDraf = '/settings/format-dan-draf';
   static const String settingsAksesLayar = '/settings/akses-layar';
+  static const String settingsAksesLayarDetail = '/settings/akses-layar/detail';
   static const String settingsHakAksesMenu = '/settings/hak-akses-menu';
   static const String settingsPelacakanJamKerja = '/settings/pelacakan-jam-kerja';
   static const String settingsKpi = '/settings/kpi';

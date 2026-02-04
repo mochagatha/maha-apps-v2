@@ -36,4 +36,7 @@ class ApiEndpoints {
       '/employee/employee-menu-application/create';
   static const String deleteEmployeeMenuApplication =
       '/employee/employee-menu-application/delete-by-employee';
+
+  // Screen Settings
+  static const String screenSetting = '/record-screen-app';
 }

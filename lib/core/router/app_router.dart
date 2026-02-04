@@ -72,6 +72,9 @@ import '../../features/access_menu/presentation/providers/access_menu_provider.d
 import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
 import '../../features/permissions/presentation/pages/permission_page.dart';
 import '../../features/permissions/presentation/providers/permission_provider.dart';
+import '../../features/access_screen/presentation/pages/access_screen_list_page.dart';
+import '../../features/access_screen/presentation/pages/access_screen_detail_page.dart';
+import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -546,7 +549,25 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsAksesLayar,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Akses Layar'),
+          name: RouteNames.settingsAksesLayar,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<AccessScreenProvider>(),
+            child: const AccessScreenListPage(),
+          ),
+          routes: [
+            GoRoute(
+              path: 'detail',
+              name: RouteNames.accessScreenDetail,
+              builder: (context, state) {
+                final id = int.parse(state.uri.queryParameters['id'] ?? '0');
+                final type = state.uri.queryParameters['type'] ?? 'employee';
+                return ChangeNotifierProvider(
+                  create: (_) => sl<AccessScreenProvider>(),
+                  child: AccessScreenDetailPage(id: id, type: type),
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: RoutePaths.settingsHakAksesMenu,
