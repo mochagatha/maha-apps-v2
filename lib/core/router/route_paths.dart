@@ -7,6 +7,7 @@ class RoutePaths {
   static const String forgotPassword = '/forgot-password';
   static const String termsAndConditions = '/terms-and-conditions';
   static const String privacyNotice = '/privacy-notice';
+  static const String permission = '/permission';
 
   // Home
   static const String home = '/home';

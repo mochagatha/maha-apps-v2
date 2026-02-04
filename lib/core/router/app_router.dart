@@ -57,10 +57,8 @@ import '../../features/organizational_structure/presentation/pages/job_title_lis
 import '../../features/organizational_structure/presentation/pages/job_title_office_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_project_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_detail_page.dart';
-import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
 import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
 import '../../features/organizational_structure/presentation/providers/department_provider.dart';
-import '../../features/organizational_structure/presentation/providers/employment_level_provider.dart';
 import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
 import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
 import '../../features/organizational_structure/presentation/pages/department_office_page.dart';
@@ -72,6 +70,8 @@ import '../../features/access_menu/presentation/pages/access_menu_list_page.dart
 import '../../features/access_menu/presentation/pages/employee_selection_page.dart';
 import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
 import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
+import '../../features/permissions/presentation/pages/permission_page.dart';
+import '../../features/permissions/presentation/providers/permission_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -113,6 +113,14 @@ class AppRouter {
           path: RoutePaths.login,
           name: RouteNames.login,
           builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.permission,
+          name: RouteNames.permission,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<PermissionProvider>(),
+            child: const PermissionPage(),
+          ),
         ),
         GoRoute(
           path: RoutePaths.register,
@@ -482,9 +490,6 @@ class AppRouter {
           name: RouteNames.accessMenuList,
           builder: (context, state) {
             final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
-            if (employeeId == null) {
-              return const Scaffold(body: Center(child: Text('Employee ID required')));
-            }
             return ChangeNotifierProvider(
               create: (_) => sl<AccessMenuProvider>(),
               child: AccessMenuListPage(employeeId: int.parse(employeeId)),

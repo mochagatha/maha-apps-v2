@@ -103,7 +103,18 @@ import '../../features/access_menu/domain/usecases/get_employee_menus.dart' as a
 import '../../features/access_menu/domain/usecases/get_all_menus.dart';
 import '../../features/access_menu/domain/usecases/manage_menu_access.dart';
 import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+
 import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
+
+// Permission feature imports
+import '../../features/permissions/data/repositories/permission_repository_impl.dart';
+import '../../features/permissions/domain/repositories/permission_repository.dart';
+import '../../features/permissions/domain/usecases/check_permissions_status.dart';
+import '../../features/permissions/domain/usecases/request_permissions.dart';
+import '../../features/permissions/domain/usecases/open_settings.dart';
+import '../../features/permissions/domain/usecases/is_permission_permanently_denied.dart';
+import '../../features/permissions/domain/usecases/get_denied_permissions_detail.dart';
+import '../../features/permissions/presentation/providers/permission_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -330,16 +341,10 @@ Future<void> init() async {
   //! Features - Access Menu
   // Provider
   sl.registerFactory(
-    () => AccessMenuProvider(
-      getEmployeeMenus: sl(),
-      getAllMenus: sl(),
-      manageMenuAccess: sl(),
-    ),
+    () => AccessMenuProvider(getEmployeeMenus: sl(), getAllMenus: sl(), manageMenuAccess: sl()),
   );
 
-  sl.registerFactory(
-    () => EmployeeListProvider(getOrganizationalData: sl()),
-  );
+  sl.registerFactory(() => EmployeeListProvider(getOrganizationalData: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => access_menu_usecases.GetEmployeeMenus(sl()));
@@ -355,6 +360,28 @@ Future<void> init() async {
   sl.registerLazySingleton<AccessMenuRemoteDataSource>(
     () => AccessMenuRemoteDataSourceImpl(client: sl()),
   );
+
+  //! Features - Permissions
+  // Provider
+  sl.registerFactory(
+    () => PermissionProvider(
+      checkPermissionsStatus: sl(),
+      requestPermissionsUseCase: sl(),
+      openSettingsUseCase: sl(),
+      isPermissionPermanentlyDeniedUseCase: sl(),
+      getDeniedPermissionsDetailUseCase: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => CheckPermissionsStatus(sl()));
+  sl.registerLazySingleton(() => RequestPermissions(sl()));
+  sl.registerLazySingleton(() => OpenSettings(sl()));
+  sl.registerLazySingleton(() => IsPermissionPermanentlyDenied(sl()));
+  sl.registerLazySingleton(() => GetDeniedPermissionsDetail(sl()));
+
+  // Repository
+  sl.registerLazySingleton<PermissionRepository>(() => PermissionRepositoryImpl());
 
   //! Core
   // Network

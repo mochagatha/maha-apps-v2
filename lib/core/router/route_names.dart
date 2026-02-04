@@ -7,6 +7,7 @@ class RouteNames {
   static const String forgotPassword = 'forgot-password';
   static const String termsAndConditions = 'termsAndConditions';
   static const String privacyNotice = 'privacyNotice';
+  static const String permission = 'permission';
 
   // Home
   static const String home = 'home';

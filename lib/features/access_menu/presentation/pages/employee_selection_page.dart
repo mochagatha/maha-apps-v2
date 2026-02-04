@@ -147,10 +147,8 @@ class _EmployeeCard extends StatelessWidget {
         leading: CircleAvatar(
           radius: 28,
           backgroundColor: Colors.red.shade100,
-          backgroundImage: employee.photoUrl != null && employee.photoUrl!.isNotEmpty
-              ? NetworkImage(employee.photoUrl!)
-              : null,
-          child: employee.photoUrl == null || employee.photoUrl!.isEmpty
+          backgroundImage: employee.photoUrl.isNotEmpty ? NetworkImage(employee.photoUrl) : null,
+          child: employee.photoUrl.isEmpty
               ? Text(
                   employee.fullname.isNotEmpty ? employee.fullname[0].toUpperCase() : 'U',
                   style: const TextStyle(

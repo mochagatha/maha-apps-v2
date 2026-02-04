@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../permissions/presentation/providers/permission_provider.dart';
+import '../../../../core/di/injection_container.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -26,6 +28,17 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 7));
 
     if (!mounted) return;
+
+    // Check permissions
+    final permissionProvider = sl<PermissionProvider>();
+    await permissionProvider.checkPermissions();
+
+    if (!mounted) return;
+
+    if (permissionProvider.state != PermissionState.granted) {
+      context.go(RoutePaths.permission);
+      return;
+    }
 
     // Check authentication status
     final authProvider = context.read<AuthProvider>();

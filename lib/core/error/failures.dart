@@ -26,3 +26,7 @@ class NetworkFailure extends Failure {
 class ValidationFailure extends Failure {
   const ValidationFailure(String message) : super(message);
 }
+
+class PlatformFailure extends Failure {
+  const PlatformFailure([String message = 'Platform error occurred']) : super(message);
+}
