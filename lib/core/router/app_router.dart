@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/bank_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/create_signature_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/signature_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -72,7 +75,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.bank,
+      initialLocation: RoutePaths.biodataBank,
       debugLogDiagnostics: true,
 
       // Redirect logic
@@ -265,12 +268,27 @@ class AppRouter {
           builder: (context, state) => const SelfieKtpResultPage(),
         ),
         GoRoute(
-          path: RoutePaths.bank,
-          name: RouteNames.bank,
+          path: RoutePaths.biodataBank,
+          name: RouteNames.biodataBank,
           builder: (context, state) {
             return ChangeNotifierProvider(
               create: (context) => BankProvider(),
               child: const BankPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: RoutePaths.biodataSignature,
+          name: RouteNames.biodataSignature,
+          builder: (context, state) => SignaturePage(),
+        ),
+        GoRoute(
+          path: RoutePaths.biodataCreateSignature,
+          name: RouteNames.biodataCreateSignature,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => SignatureProvider(),
+              child: CreateSignaturePage(),
             );
           },
         ),

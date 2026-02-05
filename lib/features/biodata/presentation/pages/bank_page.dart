@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/core/router/route_names.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_text_form_field.dart';
@@ -123,6 +125,7 @@ class _SubmitButtonState extends State<_SubmitButton> {
   void _submit() async {
     final provider = context.read<BankProvider>();
     final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
 
     setState(() => _loading = true);
     final error = await provider.submit();
@@ -135,6 +138,8 @@ class _SubmitButtonState extends State<_SubmitButton> {
           backgroundColor: Colors.grey.shade700,
         ),
       );
+    } else {
+      router.pushNamed(RouteNames.biodataSignature);
     }
   }
 
