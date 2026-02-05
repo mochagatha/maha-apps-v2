@@ -22,7 +22,7 @@ class DocumentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> submit() async {
+  Future<String?> submit() async {
     // Validate required files
     // Required: photo, ktp, kk, rekening, ijazah
     final requiredKeys = ['photo', 'ktp', 'kk', 'rekening', 'ijazah'];
@@ -30,12 +30,12 @@ class DocumentProvider extends ChangeNotifier {
       if (selectedFiles[key] == null || selectedFiles[key]!.isEmpty) {
         debugPrint("Validation Error: $key is missing");
         // You can add error message state here to show in UI
-        return false;
+        return "Ada data yang kosong!";
       }
     }
 
     debugPrint("Submitting Documents: $selectedFiles");
     // Proceed to upload
-    return true;
+    return null;
   }
 }

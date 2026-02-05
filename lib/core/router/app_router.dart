@@ -1,6 +1,8 @@
 // GoRouter Configuration
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/bank_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -70,7 +72,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.splash,
+      initialLocation: RoutePaths.bank,
       debugLogDiagnostics: true,
 
       // Redirect logic
@@ -261,6 +263,16 @@ class AppRouter {
           path: RoutePaths.selfieResultKtp,
           name: RouteNames.selfieResultKtp,
           builder: (context, state) => const SelfieKtpResultPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.bank,
+          name: RouteNames.bank,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => BankProvider(),
+              child: const BankPage(),
+            );
+          },
         ),
         GoRoute(
           path: RoutePaths.recruitment,

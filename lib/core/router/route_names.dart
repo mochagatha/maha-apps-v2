@@ -54,6 +54,7 @@ class RouteNames {
   static const String selfieKtpForm = 'selfie-ktp-form';
   static const String selfieCameraKtp = 'selfie-camera-ktp';
   static const String selfieResultKtp = 'selfie-result-ktp';
+  static const String bank = 'bank';
   static const String verificationData = 'verification-data';
   static const String employeeVerification = 'employee-verification';
   static const String companyCode = 'company-code';

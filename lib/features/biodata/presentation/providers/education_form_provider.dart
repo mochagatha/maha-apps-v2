@@ -139,7 +139,6 @@ class EducationFormProvider extends ChangeNotifier {
   }
 
   Future<void> initialize() async {
-    // TODO: local save data family;;
     final prefs = await SharedPreferences.getInstance();
     final lastEducation = prefs.getString(AppConstants.biodata.lastEducation);
     final namePrimarySchool = prefs.getString(
@@ -228,16 +227,16 @@ class EducationFormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> submit() async {
+  Future<String?> submit() async {
     final isFormValid = formKey.currentState?.validate() ?? false;
 
     if (!isFormValid) {
-      return false;
+      return "Ada data yang kosong!";
     }
 
     formKey.currentState?.save();
     debugPrint("Submitting Education Form...");
     // Implement submit logic
-    return true;
+    return null;
   }
 }

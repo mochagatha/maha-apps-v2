@@ -8,7 +8,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/family_provider.dart';
-import '../widgets/custom_text_form_field.dart';
+import '../../../../shared/widgets/custom_text_form_field.dart';
 import 'biodata_form_page.dart' show CustomLabelBiodata, CustomTextBiodata;
 
 class FamilyPage extends StatefulWidget {
@@ -416,9 +416,23 @@ class _FamilyPageState extends State<FamilyPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   final provider = context.read<FamilyProvider>();
-                  final isValid = await provider.submit();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final error = await provider.submit();
 
-                  if (isValid && context.mounted) {
+                  if (error != null) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          error,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.grey.shade800,
+                      ),
+                    );
+                    return;
+                  }
+
+                  if (context.mounted) {
                     context.pushNamed(RouteNames.documentForm);
                   }
                 },

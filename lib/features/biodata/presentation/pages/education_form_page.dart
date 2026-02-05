@@ -8,7 +8,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/education_form_provider.dart';
-import '../widgets/custom_text_form_field.dart';
+import '../../../../shared/widgets/custom_text_form_field.dart';
 
 // Note: Reusing CustomLabelBiodata, CustomTextBiodata, CustomTextFormField from biodata_form_page.dart
 // But we need to update HeaderScroll to make step 2 active.
@@ -194,9 +194,23 @@ class _EducationFormPageState extends State<EducationFormPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   final provider = context.read<EducationFormProvider>();
-                  final isValid = await provider.submit();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final error = await provider.submit();
 
-                  if (isValid && context.mounted) {
+                  if (error != null) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          error,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.grey.shade800,
+                      ),
+                    );
+                    return;
+                  }
+
+                  if (context.mounted) {
                     context.pushNamed(RouteNames.familyForm);
                   }
                 },

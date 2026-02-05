@@ -204,9 +204,23 @@ class DocumentPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () async {
                   final provider = context.read<DocumentProvider>();
-                  final isValid = await provider.submit();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final error = await provider.submit();
 
-                  if (isValid && context.mounted) {
+                  if (error != null) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          error,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.grey.shade800,
+                      ),
+                    );
+                    return;
+                  }
+
+                  if (context.mounted) {
                     context.pushNamed(RouteNames.skillForm);
                   }
                 },

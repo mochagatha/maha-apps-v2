@@ -14,7 +14,7 @@ class CustomSearchDropdown<T> extends StatefulWidget {
   final String Function(T) itemAsString;
   final int Function(T item) itemId;
   final T Function(int id) itemFromId;
-  final String prefKey;
+  final String? prefKey;
 
   const CustomSearchDropdown({
     super.key,
@@ -22,11 +22,11 @@ class CustomSearchDropdown<T> extends StatefulWidget {
     required this.onChanged,
     required this.itemAsString,
     required this.itemFromId,
+    required this.itemId,
     this.isLoading = false,
     this.hint = 'Pilih',
     this.validator,
-    required this.prefKey,
-    required this.itemId,
+    this.prefKey,
   });
 
   @override
@@ -39,8 +39,9 @@ class _CustomSearchDropdownState<T> extends State<CustomSearchDropdown<T>> {
   T? _selectedItem;
 
   void _onChanged(T? value) async {
-    _prefs!.setInt(widget.prefKey, widget.itemId(value as T));
     widget.onChanged(value);
+    if (widget.prefKey == null) return;
+    _prefs!.setInt(widget.prefKey!, widget.itemId(value as T));
   }
 
   void _getPrefs() async {
@@ -48,8 +49,8 @@ class _CustomSearchDropdownState<T> extends State<CustomSearchDropdown<T>> {
   }
 
   void _getValue() {
-    if (_prefs == null) return;
-    final id = _prefs!.getInt(widget.prefKey);
+    if (_prefs == null || widget.prefKey == null) return;
+    final id = _prefs!.getInt(widget.prefKey!);
     if (widget.items.isEmpty || id == null || _selectedItem != null) {
       return;
     }

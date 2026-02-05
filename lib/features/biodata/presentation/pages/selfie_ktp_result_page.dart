@@ -47,10 +47,13 @@ class SelfieKtpResultPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Validate both selfie images exist
-                  if (provider.selfieImage == null || provider.selfieKtpImage == null) {
+                  if (provider.selfieImage == null ||
+                      provider.selfieKtpImage == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Foto selfie dan foto selfie dengan KTP harus diambil!'),
+                        content: Text(
+                          'Foto selfie dan foto selfie dengan KTP harus diambil!',
+                        ),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -60,37 +63,23 @@ class SelfieKtpResultPage extends StatelessWidget {
                   // Submit Data and Finish
                   showDialog(
                     context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text("Konfirmasi"),
-                      content: const Text("Apakah data yang anda masukkan sudah benar?"),
-                      actions: [
-                        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Batal")),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Mock Submission
-                            Navigator.pop(ctx);
-                            // Navigate to Home or Success Screen
-                            // Assuming root for now or some dashboard
-                            // context.goNamed(RouteNames.home);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Data Berhasil Disimpan!")),
-                            );
-                            // For demo purpose, maybe pop to root or biodata list
-                          },
-                          child: const Text("Ya, Simpan"),
-                        ),
-                      ],
-                    ),
+                    builder: (context) => _SuccessPopup(),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Text(
                   'Unggah Foto',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -103,13 +92,95 @@ class SelfieKtpResultPage extends StatelessWidget {
                 },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Colors.red),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Text(
                   'Ambil Ulang',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SuccessPopup extends StatelessWidget {
+  const _SuccessPopup();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Data diri berhasil dikirim!",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 24),
+            Image.asset(
+              "assets/images/icon/verifikasi-data.png",
+              height: 150,
+            ),
+            SizedBox(height: 24),
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: "Mohon untuk menunggu "),
+                  TextSpan(
+                    text: "Verifikasi Data Diri",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: " Anda dari HRD Maha!"),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/icon/whatsapp.png",
+                    height: 16,
+                    width: 16,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(width: 8),
+                  const Text(
+                    'Hubungi Admin',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

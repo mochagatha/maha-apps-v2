@@ -10,7 +10,7 @@ import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../shared/widgets/custom_search_dropdown.dart';
 import '../../domain/entities/region.dart';
 import '../providers/biodata_form_provider.dart';
-import '../widgets/custom_text_form_field.dart';
+import '../../../../shared/widgets/custom_text_form_field.dart';
 
 class BiodataFormPage extends StatefulWidget {
   const BiodataFormPage({super.key});
@@ -395,7 +395,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 controller: provider.emergencyPhoneController,
                                 keyboardType: TextInputType.number,
                                 hintText: 'Masukkan kontak darurat..',
-                                prefKey: AppConstants.biodata.emergencyContact,
+                                prefKey: AppConstants.biodata.emergencyPhone,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
@@ -536,10 +536,24 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   final provider = context.read<BiodataFormProvider>();
-                  final isValid = await provider.submit();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final error = await provider.submit();
+
+                  if (error != null) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          error,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.grey.shade800,
+                      ),
+                    );
+                    return;
+                  }
 
                   // Only navigate if form validation passes
-                  if (isValid && context.mounted) {
+                  if (context.mounted) {
                     context.pushNamed(RouteNames.educationForm);
                   }
                 },

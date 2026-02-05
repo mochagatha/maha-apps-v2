@@ -88,8 +88,8 @@ class _BiodataConstants {
   final String sameCurrentAddress = "SESUAI_ALAMAT_KTP";
 
   final String residenceStatus = "STATUS_TEMPAT_TINGGAL";
-  final String phone = "NO_HP";
-  final String emergencyContact = "KONTAK_DARURAT";
+  final String phone = "HP";
+  final String emergencyPhone = "HP_DARURAT";
   final String gender = "JK";
   final String birthPlace = "TEMPAT_LAHIR";
   final String birthDate = "TGL_LAHIR";

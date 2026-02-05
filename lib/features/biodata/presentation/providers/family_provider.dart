@@ -213,17 +213,17 @@ class FamilyProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> submit() async {
+  Future<String?> submit() async {
     final isFormValid = formKey.currentState?.validate() ?? false;
 
     if (!isFormValid) {
-      return false;
+      return "Ada data yang kosong!";
     }
 
     formKey.currentState?.save();
     debugPrint("Submitting Family Form...");
     // Handle data collection and API submission here
-    return true;
+    return null;
   }
 
   @override

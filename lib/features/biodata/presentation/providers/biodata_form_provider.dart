@@ -320,6 +320,30 @@ class BiodataFormProvider extends ChangeNotifier {
   void initialize() async {
     final prefs = await SharedPreferences.getInstance();
 
+    final name = prefs.getString(AppConstants.biodata.name);
+    final nickname = prefs.getString(AppConstants.biodata.nickname);
+    final nik = prefs.getString(AppConstants.biodata.nik);
+    final postalCode = prefs.getString(AppConstants.biodata.postalCode);
+    final address = prefs.getString(AppConstants.biodata.address);
+    final postalCodeDom = prefs.getString(AppConstants.biodata.currentPostalCode);
+    final addressDom = prefs.getString(AppConstants.biodata.currentAddress);
+    final phone = prefs.getString(AppConstants.biodata.phone);
+    final emergencyPhone = prefs.getString(AppConstants.biodata.emergencyPhone);
+    final birthPlace = prefs.getString(AppConstants.biodata.birthPlace);
+    final birthDate = prefs.getString(AppConstants.biodata.birthDate);
+
+    nameController.text = name ?? "";
+    nicknameController.text = nickname ?? "";
+    nikController.text = nik ?? "";
+    postalCodeController.text = postalCode ?? "";
+    addressController.text = address ?? "";
+    postalCodeDomController.text = postalCodeDom ?? "";
+    addressDomController.text = addressDom ?? "";
+    phoneController.text = phone ?? "";
+    emergencyPhoneController.text = emergencyPhone ?? "";
+    birthPlaceController.text = birthPlace ?? "";
+    birthDateController.text = birthDate ?? "";
+
     selectedGender =
         prefs.getString(
           AppConstants.biodata.gender,
@@ -445,7 +469,7 @@ class BiodataFormProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<bool> submit() async {
+  Future<String?> submit() async {
     // Clear previous errors
     genderError = null;
 
@@ -462,7 +486,7 @@ class BiodataFormProvider extends ChangeNotifier {
     }
 
     if (!isFormValid || hasErrors) {
-      return false;
+      return "Ada data yang kosong!";
     }
 
     formKey.currentState?.save();
@@ -470,6 +494,6 @@ class BiodataFormProvider extends ChangeNotifier {
     // final currentProvince = isSwitchOn ? selectedProvince! : selectedProvinceDom!;
     // ... construct model and send to API
     debugPrint("Submitting Form...");
-    return true;
+    return null;
   }
 }

@@ -9,7 +9,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization textCapitalization;
-  final String prefKey;
+  final String? prefKey;
 
   const CustomTextFormField({
     super.key,
@@ -19,7 +19,7 @@ class CustomTextFormField extends StatefulWidget {
     this.keyboardType,
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.none,
-    required this.prefKey,
+    this.prefKey,
   });
 
   @override
@@ -30,12 +30,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late SharedPreferences _prefs;
 
   void _saveChanges(String value) async {
-    _prefs.setString(widget.prefKey, value);
+    if (widget.prefKey == null) return;
+    _prefs.setString(widget.prefKey!, value);
   }
 
   void _getValue() async {
+    if (widget.prefKey == null) return;
     _prefs = await SharedPreferences.getInstance();
-    widget.controller.text = _prefs.getString(widget.prefKey) ?? "";
+    widget.controller.text = _prefs.getString(widget.prefKey!) ?? "";
   }
 
   @override

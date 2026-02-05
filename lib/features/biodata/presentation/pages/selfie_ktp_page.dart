@@ -16,7 +16,7 @@ class SelfieKtpPage extends StatelessWidget {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 50, bottom: 90),
+            padding: const EdgeInsets.only(top: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
