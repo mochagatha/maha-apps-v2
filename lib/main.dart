@@ -9,6 +9,7 @@ import 'features/authentication/presentation/providers/forgot_password_provider.
 import 'features/home/presentation/providers/home_provider.dart';
 import 'features/profile/presentation/providers/profile_provider.dart';
 import 'features/biodata/presentation/providers/selfie_provider.dart';
+import 'features/screen_security/presentation/providers/screen_security_provider.dart';
 import 'core/providers/language_provider.dart';
 import 'l10n/app_localizations.dart';
 import 'shared/theme/app_theme.dart';
@@ -44,28 +45,66 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SelfieProvider()),
         // Language Provider
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        // Screen Security Provider from GetIt
+        ChangeNotifierProvider(create: (_) => di.sl<ScreenSecurityProvider>()),
       ],
-      child: Consumer<LanguageProvider>(
-        builder: (context, languageProvider, child) {
-          return MaterialApp.router(
-            title: 'MAHA Apps',
-            theme: AppTheme.lightTheme,
-            debugShowCheckedModeBanner: false,
-            routerConfig: AppRouter.router(),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('id', ''), // Indonesian
-              Locale('en', ''), // English
-            ],
-            locale: languageProvider.currentLocale,
-          );
-        },
-      ),
+      child: const AppInitializer(),
+    );
+  }
+}
+
+class AppInitializer extends StatefulWidget {
+  const AppInitializer({super.key});
+
+  @override
+  State<AppInitializer> createState() => _AppInitializerState();
+}
+
+class _AppInitializerState extends State<AppInitializer> {
+  @override
+  void initState() {
+    super.initState();
+    // Initialize screen security after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeScreenSecurity();
+    });
+  }
+
+  Future<void> _initializeScreenSecurity() async {
+    final authProvider = context.read<AuthProvider>();
+    final screenSecurityProvider = context.read<ScreenSecurityProvider>();
+
+    // Check if user is authenticated and has employeeId
+    if (authProvider.isAuthenticated && authProvider.user?.employeeId != null) {
+      await screenSecurityProvider.fetchAndApplySecuritySettings(
+        type: 'employee',
+        employeeWorkerId: authProvider.user!.employeeId!,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, child) {
+        return MaterialApp.router(
+          title: 'MAHA Apps',
+          theme: AppTheme.lightTheme,
+          debugShowCheckedModeBanner: false,
+          routerConfig: AppRouter.router(),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('id', ''), // Indonesian
+            Locale('en', ''), // English
+          ],
+          locale: languageProvider.currentLocale,
+        );
+      },
     );
   }
 }

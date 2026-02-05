@@ -6,6 +6,7 @@ import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../screen_security/presentation/providers/screen_security_provider.dart';
 import '../../domain/entities/notification_count.dart';
 
 class AdminProfileCard extends StatelessWidget {
@@ -63,6 +64,8 @@ class AdminProfileCard extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           Navigator.pop(dialogContext);
+                          // Disable screen security before logout
+                          await context.read<ScreenSecurityProvider>().disableSecurity();
                           await context.read<AuthProvider>().logoutUser();
                           if (context.mounted) {
                             context.go(RoutePaths.login);

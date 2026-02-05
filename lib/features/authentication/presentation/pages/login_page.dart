@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../screen_security/presentation/providers/screen_security_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/pin_verification_dialog.dart';
 
@@ -70,6 +71,21 @@ class _LoginPageState extends State<LoginPage> {
     if (!mounted) return;
 
     if (authProvider.isAuthenticated) {
+      // Apply screen security settings after successful login
+      final screenSecurityProvider = context.read<ScreenSecurityProvider>();
+      if (authProvider.user?.employeeId != null) {
+        await screenSecurityProvider.fetchAndApplySecuritySettings(
+          type: 'employee',
+          employeeWorkerId: authProvider.user!.employeeId!,
+        );
+
+        if (kDebugMode) {
+          print('Screen security applied: ${screenSecurityProvider.isSecurityEnabled}');
+        }
+      }
+
+      if (!mounted) return;
+
       // Check if the user is admin
       final email = _emailController.text.trim().toLowerCase();
       if (email == 'admin@mahasejahtera.com') {

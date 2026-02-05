@@ -124,6 +124,13 @@ import '../../features/access_screen/domain/usecases/get_access_screen.dart';
 import '../../features/access_screen/domain/usecases/update_access_screen.dart';
 import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
 
+// Screen Security feature imports
+import '../../features/screen_security/data/datasources/screen_security_remote_datasource.dart';
+import '../../features/screen_security/data/repositories/screen_security_repository_impl.dart';
+import '../../features/screen_security/domain/repositories/screen_security_repository.dart';
+import '../../features/screen_security/domain/usecases/get_screen_security_settings.dart';
+import '../../features/screen_security/presentation/providers/screen_security_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -410,11 +417,30 @@ Future<void> init() async {
 
   // Repository
   sl.registerLazySingleton<AccessScreenRepository>(
-      () => AccessScreenRepositoryImpl(remoteDataSource: sl()));
+    () => AccessScreenRepositoryImpl(remoteDataSource: sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<AccessScreenRemoteDataSource>(
-      () => AccessScreenRemoteDataSourceImpl(client: sl()));
+    () => AccessScreenRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Screen Security
+  // Provider
+  sl.registerFactory(() => ScreenSecurityProvider(getScreenSecuritySettings: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetScreenSecuritySettings(sl()));
+
+  // Repository
+  sl.registerLazySingleton<ScreenSecurityRepository>(
+    () => ScreenSecurityRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ScreenSecurityRemoteDataSource>(
+    () => ScreenSecurityRemoteDataSourceImpl(apiClient: sl()),
+  );
 
   //! Core
   // Network
