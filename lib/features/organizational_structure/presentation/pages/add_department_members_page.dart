@@ -67,25 +67,26 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
                     children: [
                       _buildDepartmentsList(provider.departments),
                       const SizedBox(height: 24),
+                      if (_selectedEmployees.isNotEmpty) ...[
+                        _buildSelectedMembersList('Anggota Karyawan', _selectedEmployees, true),
+                        const SizedBox(height: 16),
+                      ],
                       _buildAddMemberButton(
                         'Tambah Anggota Karyawan',
                         Icons.add_box_outlined,
                         () => _showSelectEmployeeDialog(isEmployee: true),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
+
+                      if (_selectedWorkers.isNotEmpty) ...[
+                        _buildSelectedMembersList('Pekerja Harian', _selectedWorkers, false),
+                        const SizedBox(height: 16),
+                      ],
                       _buildAddMemberButton(
                         'Tambah Pekerja Harian',
                         Icons.add_box_outlined,
                         () => _showSelectEmployeeDialog(isEmployee: false),
                       ),
-                      const SizedBox(height: 24),
-                      if (_selectedEmployees.isNotEmpty) ...[
-                        _buildSelectedMembersList('Anggota Karyawan', _selectedEmployees, true),
-                        const SizedBox(height: 16),
-                      ],
-                      if (_selectedWorkers.isNotEmpty) ...[
-                        _buildSelectedMembersList('Pekerja Harian', _selectedWorkers, false),
-                      ],
                     ],
                   ),
                 ),
@@ -187,52 +188,58 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
           ),
         ),
         const SizedBox(height: 12),
-        ...members.map((member) => _buildSelectedMemberCard(member, isEmployee)),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ...members.map((member) => _buildSelectedMemberCard(member, isEmployee)),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildSelectedMemberCard(EmployeeEntity employee, bool isEmployee) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(color: AppColors.blue.withOpacity(0.3)),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
-            radius: 24,
+            radius: 16,
             backgroundImage: NetworkImage(employee.photoUrl),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                employee.fullname,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              if (employee.jobTitleName != null)
                 Text(
-                  employee.fullname,
+                  employee.jobTitleName!,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    color: Colors.grey,
+                    fontSize: 10,
                   ),
                 ),
-                if (employee.jobTitleName != null)
-                  Text(
-                    employee.jobTitleName!,
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                    ),
-                  ),
-              ],
-            ),
+            ],
           ),
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () {
+          SizedBox(
+            width: 4,
+          ),
+          InkWell(
+            onTap: () {
               setState(() {
                 if (isEmployee) {
                   _selectedEmployees.remove(employee);
@@ -241,6 +248,7 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
                 }
               });
             },
+            child: Icon(Icons.close, color: Colors.grey),
           ),
         ],
       ),
