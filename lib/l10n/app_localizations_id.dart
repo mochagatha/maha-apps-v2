@@ -377,7 +377,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get featureComingSoon => 'Fitur segera hadir!';
 
   @override
-  String get menuPenempatanKerja => 'Penempatan kerja';
+  String get menuPenempatanKerja => 'Penempatan dan Jam kerja';
 
   @override
   String get menuHariLibur => 'Hari Libur & Cuti Bersama';
@@ -500,6 +500,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get archive => 'Arsip';
+
+  @override
+  String get delete => 'Hapus';
 
   @override
   String get deleteRole => 'Hapus Role';

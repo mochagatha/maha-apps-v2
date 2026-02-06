@@ -7,6 +7,7 @@ class RouteNames {
   static const String forgotPassword = 'forgot-password';
   static const String termsAndConditions = 'termsAndConditions';
   static const String privacyNotice = 'privacyNotice';
+  static const String permission = 'permission';
 
   // Home
   static const String home = 'home';
@@ -21,7 +22,6 @@ class RouteNames {
   static const String profile = 'profile';
 
   // Settings
-  static const String setting = 'setting';
   static const String settings = 'settings';
 
   // Features
@@ -63,16 +63,18 @@ class RouteNames {
   static const String verificationData = 'verification-data';
   static const String employeeVerification = 'employee-verification';
   static const String companyCode = 'company-code';
-  
+
   // Organizational Structure
   static const String organizationalStructure = 'organizational-structure';
   static const String structureMain = 'structure-main';
   static const String organizationalChart = 'organizational-chart';
   static const String employmentLevel = 'employment-level';
-  static const String employmentLevelEmployee = 'employment-level-employee';
-  static const String employmentLevelWorker = 'employment-level-worker';
-  static const String employmentLevelEmployeeDetail = 'employment-level-employee-detail';
-  static const String employmentLevelWorkerDetail = 'employment-level-worker-detail';
+  static const String employmentLevelOffice = 'employment-level-office';
+  static const String employmentLevelProject = 'employment-level-project';
+  static const String employmentLevelOfficeEmployee = 'employment-level-office-employee';
+  static const String employmentLevelOfficeWorker = 'employment-level-office-worker';
+  static const String employmentLevelProjectEmployee = 'employment-level-project-employee';
+  static const String employmentLevelProjectWorker = 'employment-level-project-worker';
   static const String departmentList = 'department-list';
   static const String departmentOffice = 'department-office';
   static const String departmentProject = 'department-project';
@@ -83,4 +85,10 @@ class RouteNames {
   static const String jobTitleOfficeWorker = 'job-title-office-worker';
   static const String jobTitleProjectEmployee = 'job-title-project-employee';
   static const String jobTitleProjectWorker = 'job-title-project-worker';
+  static const String jobTitleSelection = 'job-title-selection';
+  static const String employeeByJobTitleSelection = 'employee-by-job-title-selection';
+  static const String employeeSelection = 'employee-selection';
+  static const String accessMenuList = 'access-menu-list';
+  static const String settingsAksesLayar = 'access-screen-list';
+  static const String accessScreenDetail = 'access-screen-detail';
 }

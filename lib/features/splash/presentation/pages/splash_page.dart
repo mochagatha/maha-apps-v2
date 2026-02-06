@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../permissions/presentation/providers/permission_provider.dart';
+import '../../../../core/di/injection_container.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -27,6 +29,17 @@ class _SplashPageState extends State<SplashPage> {
 
     if (!mounted) return;
 
+    // Check permissions
+    final permissionProvider = sl<PermissionProvider>();
+    await permissionProvider.checkPermissions();
+
+    if (!mounted) return;
+
+    if (permissionProvider.state != PermissionState.granted) {
+      context.go(RoutePaths.permission);
+      return;
+    }
+
     // Check authentication status
     final authProvider = context.read<AuthProvider>();
     await authProvider.checkAuth();
@@ -35,6 +48,10 @@ class _SplashPageState extends State<SplashPage> {
 
     // Navigate based on auth status
     if (authProvider.isAuthenticated) {
+      // Check if admin
+      if (authProvider.isAdmin) {
+        context.go(RoutePaths.adminHome);
+      }
       // Check status to match v1 logic
       // v1 source: employee?.data.status
       if (authProvider.user?.status == 1) {

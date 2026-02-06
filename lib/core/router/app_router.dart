@@ -16,6 +16,7 @@ import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
 import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
+import '../../features/authentication/presentation/providers/auth_provider.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
@@ -59,19 +60,33 @@ import '../../features/authentication/presentation/providers/admin_face_provider
 import '../../features/organizational_structure/presentation/pages/organizational_structure_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/structure_main_page.dart';
 import '../../features/organizational_structure/presentation/pages/employment_level_list_page.dart';
+import '../../features/organizational_structure/presentation/pages/employment_level_office_page.dart';
+import '../../features/organizational_structure/presentation/pages/employment_level_project_page.dart';
 import '../../features/organizational_structure/presentation/pages/department_list_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_list_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title/job_title_office_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title/job_title_project_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title_page.dart';
-import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_office_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_project_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_detail_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_selection_page.dart';
+import '../../features/organizational_structure/presentation/pages/employee_by_job_title_selection_page.dart';
+import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
+import '../../features/organizational_structure/presentation/providers/department_provider.dart';
+import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
+import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
 import '../../features/organizational_structure/presentation/pages/department_office_page.dart';
 import '../../features/organizational_structure/presentation/pages/department_project_page.dart';
-import '../../features/organizational_structure/presentation/pages/employment_level_employee_page.dart';
-import '../../features/organizational_structure/presentation/pages/employment_level_worker_page.dart';
 import '../../features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
+import '../../features/access_menu/presentation/pages/access_menu_list_page.dart';
+import '../../features/access_menu/presentation/pages/employee_selection_page.dart';
+import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
+import '../../features/permissions/presentation/pages/permission_page.dart';
+import '../../features/permissions/presentation/providers/permission_provider.dart';
+import '../../features/access_screen/presentation/pages/access_screen_list_page.dart';
+import '../../features/access_screen/presentation/pages/access_screen_detail_page.dart';
+import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -80,11 +95,29 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.splash,
+      initialLocation: RoutePaths.organizationalStructure,
       debugLogDiagnostics: true,
-
-      // Redirect logic
+      // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
+        final authProvider = context.read<AuthProvider>();
+        final currentPath = state.matchedLocation;
+
+        // If user is on splash and already authenticated, skip splash
+        // BUT: Admin users should NOT skip - they must login fresh each time
+        if (currentPath == RoutePaths.splash && authProvider.isAuthenticated) {
+          // Check if admin
+          if (authProvider.isAdmin) {
+            return RoutePaths.adminHome;
+          }
+          // Check user status to determine destination (matching v1 logic)
+          if (authProvider.user?.status == 1) {
+            return RoutePaths.welcomeBiodata;
+          } else {
+            return RoutePaths.home;
+          }
+        }
+
+        // Allow normal navigation for all other cases
         return null;
       },
 
@@ -92,12 +125,41 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.splash,
           name: RouteNames.splash,
+
           builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
           path: RoutePaths.login,
           name: RouteNames.login,
+          redirect: (context, state) {
+            final authProvider = context.read<AuthProvider>();
+            // If user is on splash and already authenticated, skip splash
+            // BUT: Admin users should NOT skip - they must login fresh each time
+            if (authProvider.isAuthenticated) {
+              // Check if admin
+              if (authProvider.isAdmin) {
+                return RoutePaths.adminHome;
+              }
+              // Check user status to determine destination (matching v1 logic)
+              if (authProvider.user?.status == 1) {
+                return RoutePaths.welcomeBiodata;
+              } else {
+                return RoutePaths.home;
+              }
+            }
+
+            // Allow normal navigation for all other cases
+            return null;
+          },
           builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.permission,
+          name: RouteNames.permission,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<PermissionProvider>(),
+            child: const PermissionPage(),
+          ),
         ),
         GoRoute(
           path: RoutePaths.register,
@@ -361,7 +423,7 @@ class AppRouter {
           path: RoutePaths.structureMain,
           name: RouteNames.structureMain,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
+            create: (_) => sl<StructureProvider>(),
             child: const StructureMainPage(),
           ),
         ),
@@ -371,43 +433,64 @@ class AppRouter {
           builder: (context, state) => const EmploymentLevelListPage(),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelEmployee,
-          name: RouteNames.employmentLevelEmployee,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
-            child: const EmploymentLevelEmployeePage(),
-          ),
+          path: RoutePaths.employmentLevelOffice,
+          name: RouteNames.employmentLevelOffice,
+          builder: (context, state) => const EmploymentLevelOfficePage(),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelWorker,
-          name: RouteNames.employmentLevelWorker,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
-            child: const EmploymentLevelWorkerPage(),
-          ),
+          path: RoutePaths.employmentLevelProject,
+          name: RouteNames.employmentLevelProject,
+          builder: (context, state) => const EmploymentLevelProjectPage(),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelEmployeeDetail,
-          name: RouteNames.employmentLevelEmployeeDetail,
+          path: RoutePaths.employmentLevelOfficeEmployee,
+          name: RouteNames.employmentLevelOfficeEmployee,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
+            create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
               typeRole: 'employee',
+              typeBranch: 'office',
               title: 'Tingkatan Karyawan',
             ),
           ),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelWorkerDetail,
-          name: RouteNames.employmentLevelWorkerDetail,
+          path: RoutePaths.employmentLevelOfficeWorker,
+          name: RouteNames.employmentLevelOfficeWorker,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
+            create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
               typeRole: 'worker',
+              typeBranch: 'office',
               title: 'Tingkatan Pekerja Harian',
             ),
           ),
         ),
+        GoRoute(
+          path: RoutePaths.employmentLevelProjectEmployee,
+          name: RouteNames.employmentLevelProjectEmployee,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<UserRoleProvider>(),
+            child: const EmploymentLevelDetailPage(
+              typeRole: 'employee',
+              typeBranch: 'project',
+              title: 'Tingkatan Karyawan',
+            ),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.employmentLevelProjectWorker,
+          name: RouteNames.employmentLevelProjectWorker,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<UserRoleProvider>(),
+            child: const EmploymentLevelDetailPage(
+              typeRole: 'worker',
+              typeBranch: 'project',
+              title: 'Tingkatan Pekerja Harian',
+            ),
+          ),
+        ),
+
         GoRoute(
           path: RoutePaths.departmentList,
           name: RouteNames.departmentList,
@@ -417,7 +500,7 @@ class AppRouter {
           path: RoutePaths.departmentOffice,
           name: RouteNames.departmentOffice,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
+            create: (_) => sl<DepartmentProvider>(),
             child: const DepartmentOfficePage(),
           ),
         ),
@@ -425,7 +508,7 @@ class AppRouter {
           path: RoutePaths.departmentProject,
           name: RouteNames.departmentProject,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
+            create: (_) => sl<DepartmentProvider>(),
             child: const DepartmentProjectPage(),
           ),
         ),
@@ -448,8 +531,8 @@ class AppRouter {
           path: RoutePaths.jobTitleOfficeEmployee,
           name: RouteNames.jobTitleOfficeEmployee,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
-            child: const JobTitlePage(
+            create: (_) => sl<JobTitleProvider>(),
+            child: const JobTitleDetailPage(
               typeRole: 'employee',
               typeBranch: 'office',
               title: 'Data Jabatan',
@@ -460,8 +543,8 @@ class AppRouter {
           path: RoutePaths.jobTitleOfficeWorker,
           name: RouteNames.jobTitleOfficeWorker,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
-            child: const JobTitlePage(
+            create: (_) => sl<JobTitleProvider>(),
+            child: const JobTitleDetailPage(
               typeRole: 'worker',
               typeBranch: 'office',
               title: 'Data Jabatan',
@@ -472,8 +555,8 @@ class AppRouter {
           path: RoutePaths.jobTitleProjectEmployee,
           name: RouteNames.jobTitleProjectEmployee,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
-            child: const JobTitlePage(
+            create: (_) => sl<JobTitleProvider>(),
+            child: const JobTitleDetailPage(
               typeRole: 'employee',
               typeBranch: 'project',
               title: 'Data Jabatan',
@@ -484,19 +567,74 @@ class AppRouter {
           path: RoutePaths.jobTitleProjectWorker,
           name: RouteNames.jobTitleProjectWorker,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<OrganizationalStructureProvider>(),
-            child: const JobTitlePage(
+            create: (_) => sl<JobTitleProvider>(),
+            child: const JobTitleDetailPage(
               typeRole: 'worker',
               typeBranch: 'project',
               title: 'Data Jabatan',
             ),
           ),
         ),
+        GoRoute(
+          path: RoutePaths.jobTitleSelection,
+          name: RouteNames.jobTitleSelection,
+          builder: (context, state) {
+            final companyStructureId = int.parse(state.uri.queryParameters['companyStructureId']!);
+            final roleStructureId = int.parse(state.uri.queryParameters['roleStructureId']!);
+            return ChangeNotifierProvider(
+              create: (_) => sl<JobTitleProvider>(),
+              child: JobTitleSelectionPage(
+                companyStructureId: companyStructureId,
+                roleStructureId: roleStructureId,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: RoutePaths.employeeByJobTitleSelection,
+          name: RouteNames.employeeByJobTitleSelection,
+          builder: (context, state) {
+            final companyStructureId = int.parse(state.uri.queryParameters['companyStructureId']!);
+            final roleStructureId = int.parse(state.uri.queryParameters['roleStructureId']!);
+            final jobTitleId = int.parse(state.uri.queryParameters['jobTitleId']!);
+            final jobTitleName = state.uri.queryParameters['jobTitleName'] ?? '';
+            return ChangeNotifierProvider(
+              create: (_) => sl<StructureProvider>(),
+              child: EmployeeByJobTitleSelectionPage(
+                companyStructureId: companyStructureId,
+                roleStructureId: roleStructureId,
+                jobTitleId: jobTitleId,
+                jobTitleName: jobTitleName,
+              ),
+            );
+          },
+        ),
+
+        // Access Menu Routes
+        GoRoute(
+          path: RoutePaths.employeeSelection,
+          name: RouteNames.employeeSelection,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<EmployeeListProvider>(),
+            child: const EmployeeSelectionPage(),
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.accessMenuList,
+          name: RouteNames.accessMenuList,
+          builder: (context, state) {
+            final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
+            return ChangeNotifierProvider(
+              create: (_) => sl<AccessMenuProvider>(),
+              child: AccessMenuListPage(employeeId: int.parse(employeeId)),
+            );
+          },
+        ),
 
         // Settings Routes
         GoRoute(
-          path: RoutePaths.setting,
-          name: RouteNames.setting,
+          path: RoutePaths.settings,
+          name: RouteNames.settings,
           builder: (context, state) => const SettingsPage(),
         ),
         GoRoute(
@@ -546,8 +684,25 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsAksesLayar,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Akses Layar'),
+          name: RouteNames.settingsAksesLayar,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<AccessScreenProvider>(),
+            child: const AccessScreenListPage(),
+          ),
+          routes: [
+            GoRoute(
+              path: 'detail',
+              name: RouteNames.accessScreenDetail,
+              builder: (context, state) {
+                final id = int.parse(state.uri.queryParameters['id'] ?? '0');
+                final type = state.uri.queryParameters['type'] ?? 'employee';
+                return ChangeNotifierProvider(
+                  create: (_) => sl<AccessScreenProvider>(),
+                  child: AccessScreenDetailPage(id: id, type: type),
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: RoutePaths.settingsHakAksesMenu,

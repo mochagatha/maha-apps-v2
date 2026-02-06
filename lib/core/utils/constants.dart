@@ -9,7 +9,8 @@ class AppConstants {
   static const String keyIsLoggedIn = 'is_logged_in';
   static const String keyRememberMe = 'remember_me';
   static const String keyBranchCode = 'branch_code';
-
+  static const String keyIsAdmin = 'is_admin';
+  
   // Auth endpoints (V1 compatible)
   static const String endpointLogin = '/employee/login';
   static const String endpointLogout = '/auth/logout';

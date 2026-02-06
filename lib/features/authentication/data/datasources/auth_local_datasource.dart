@@ -26,6 +26,12 @@ abstract class AuthLocalDataSource {
 
   /// Get cached token
   Future<String?> getToken();
+
+  /// Save admin status
+  Future<void> saveIsAdmin(bool isAdmin);
+
+  /// Get admin status
+  Future<bool> getIsAdmin();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -77,7 +83,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> saveLoginStatus(bool rememberMe) async {
     try {
-      await sharedPreferences.setBool(AppConstants.keyIsLoggedIn, rememberMe);
+      // Always set logged in status to true after successful login
+      await sharedPreferences.setBool(AppConstants.keyIsLoggedIn, true);
+      // Save remember me preference separately
       await sharedPreferences.setBool(AppConstants.keyRememberMe, rememberMe);
     } catch (e) {
       throw CacheException('Failed to save login status: ${e.toString()}');
@@ -112,6 +120,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       await sharedPreferences.remove(AppConstants.keyRefreshToken);
       await sharedPreferences.remove(AppConstants.keyBranchCode);
       await sharedPreferences.remove(AppConstants.keyIsLoggedIn);
+      await sharedPreferences.remove(AppConstants.keyIsLoggedIn);
+      await sharedPreferences.remove(AppConstants.keyIsAdmin);
       // Keep remember me preference
       // await sharedPreferences.remove(AppConstants.keyRememberMe);
     } catch (e) {
@@ -125,6 +135,24 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       return sharedPreferences.getString(AppConstants.keyToken);
     } catch (e) {
       return null;
+    }
+  }
+
+  @override
+  Future<void> saveIsAdmin(bool isAdmin) async {
+    try {
+      await sharedPreferences.setBool(AppConstants.keyIsAdmin, isAdmin);
+    } catch (e) {
+      throw CacheException('Failed to save admin status: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<bool> getIsAdmin() async {
+    try {
+      return sharedPreferences.getBool(AppConstants.keyIsAdmin) ?? false;
+    } catch (e) {
+      return false;
     }
   }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/department_entity.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/department_provider.dart';
 import 'department_form_bottom_sheet.dart';
+import 'empty_state_widget.dart';
+import 'entity_card_widget.dart';
 
 class DepartmentListWidget extends StatelessWidget {
   final List<DepartmentEntity> departments;
@@ -21,14 +25,10 @@ class DepartmentListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OrganizationalStructureProvider>();
+    final provider = context.watch<DepartmentProvider>();
 
     if (provider.isLoading && departments.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: Colors.red,
-        ),
-      );
+      return const Center(child: SpinKitThreeBounce(color: Colors.red));
     }
 
     if (departments.isEmpty) {
@@ -38,38 +38,11 @@ class DepartmentListWidget extends StatelessWidget {
           onRefresh();
         },
         child: ListView(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/images/icon/data_aproval_kosong.svg',
-                      height: 175,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Belum Ada List Data Departemen!',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Jangan lupa untuk melihat List Data Departemen melalui aplikasi Maha!',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+          padding: const EdgeInsets.all(16),
+          children: const [
+            EmptyStateWidget(
+              title: 'Belum Ada List Data Departemen!',
+              message: 'Jangan lupa untuk melihat List Data Departemen melalui aplikasi Maha!',
             ),
           ],
         ),
@@ -89,10 +62,10 @@ class DepartmentListWidget extends StatelessWidget {
             final department = departments[index];
             return Column(
               children: [
-                _buildDepartmentCard(
-                  context,
-                  department,
-                  provider,
+                EntityCardWidget(
+                  title: department.departmentName,
+                  onEdit: () => _showEditDialog(context, department),
+                  onDelete: () => _handleDelete(context, department, provider),
                 ),
                 const SizedBox(height: 16),
               ],
@@ -103,64 +76,8 @@ class DepartmentListWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDepartmentCard(
-    BuildContext context,
-    DepartmentEntity department,
-    OrganizationalStructureProvider provider,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.shade400,
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              department.departmentName,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, size: 20),
-            padding: EdgeInsets.zero,
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'edit',
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                height: 30,
-                child: Text('Edit'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'delete',
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                height: 30,
-                child: Text('Hapus'),
-              ),
-            ],
-            onSelected: (value) {
-              if (value == 'edit') {
-                _showEditDialog(context, department);
-              } else if (value == 'delete') {
-                _showDeleteConfirmation(context, department, provider);
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showEditDialog(BuildContext context, DepartmentEntity department) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<DepartmentProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -181,58 +98,35 @@ class DepartmentListWidget extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmation(
+  void _handleDelete(
     BuildContext context,
     DepartmentEntity department,
-    OrganizationalStructureProvider provider,
+    DepartmentProvider provider,
   ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Konfirmasi Hapus'),
-          content: Text(
-            'Apakah Anda yakin ingin menghapus departemen "${department.departmentName}"?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Batal'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(dialogContext).pop();
-                
-                final success = await provider.deleteDepartmentData(department.id);
-                
-                if (context.mounted) {
-                  if (success) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Departemen berhasil dihapus'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    onRefresh();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          provider.errorMessage ?? 'Gagal menghapus departemen',
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              },
-              child: const Text(
-                'Hapus',
-                style: TextStyle(color: Colors.red),
+    ConfirmDialog.show(
+      context,
+      title: 'Konfirmasi Hapus',
+      message: 'Apakah Anda yakin ingin',
+      messageActionText: 'menghapus departemen "${department.departmentName}"',
+      onConfirm: () async {
+        final success = await provider.deleteDepartmentData(department.id);
+
+        if (context.mounted) {
+          if (success) {
+            SuccessDialog.show(
+              context,
+              message: 'Departemen "${department.departmentName}" berhasil dihapus',
+              onConfirm: onRefresh,
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(provider.errorMessage ?? 'Gagal menghapus departemen'),
+                backgroundColor: Colors.red,
               ),
-            ),
-          ],
-        );
+            );
+          }
+        }
       },
     );
   }

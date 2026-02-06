@@ -21,6 +21,7 @@ class ApiEndpoints {
       '/employee/company-structure/superior-employee/department/worker';
   static const String companyStructureDetail = '/employee/company-structure/get-by-id';
   static const String userRole = '/employee/user-role';
+  static const String userRoleList = '/employee/user-role/list';
   static const String userRoleUpdate = '/employee/user-role/update';
   static const String userRoleDelete = '/employee/user-role/delete';
   static const String jobTitle = '/job-title';
@@ -28,4 +29,14 @@ class ApiEndpoints {
   static const String employmentLevel = '/employment-level';
   static const String filterDropdown = '/filter-dropdown';
   static const String getAllEmployees = '/employee';
+
+  // Menu Access
+  static const String employeeMenuApplication = '/employee/employee-menu-application';
+  static const String menuApplication = '/employee/menu-application';
+  static const String createEmployeeMenuApplication = '/employee/employee-menu-application/create';
+  static const String deleteEmployeeMenuApplication =
+      '/employee/employee-menu-application/delete-by-employee';
+
+  // Screen Settings
+  static const String screenSetting = '/record-screen-app';
 }

@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/router/route_names.dart';
 import '../../../../core/utils/localization_extension.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
+import '../../../../shared/widgets/success_dialog.dart';
+import '../providers/structure_provider.dart';
+import '../providers/job_title_provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../domain/entities/role_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
+import '../../domain/entities/user_role_entity.dart';
 import '../widgets/superior_employee_form_bottom_sheet.dart';
 import 'structure_team_page.dart';
+import '../../../../core/di/injection_container.dart';
 
 class StructureMainPage extends StatefulWidget {
   const StructureMainPage({super.key});
@@ -25,7 +34,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     await provider.loadCompanyStructure('utama');
   }
 
@@ -33,10 +42,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.mainStructure),
-      body: Consumer<OrganizationalStructureProvider>(
+      body: Consumer<StructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator(color: Colors.red));
+            return const Center(child: SpinKitThreeBounce(color: AppColors.primary));
           }
 
           if (provider.errorMessage != null) {
@@ -44,7 +53,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  const Icon(Icons.error_outline, size: 64, color: AppColors.primary),
                   const SizedBox(height: 16),
                   Text(
                     provider.errorMessage!,
@@ -55,7 +64,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                   ElevatedButton(
                     onPressed: _loadData,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
                     child: Text(context.l10n.retry),
@@ -80,7 +89,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
   Widget _buildEmptyState() {
     return RefreshIndicator(
-      color: Colors.red,
+      color: AppColors.primary,
       onRefresh: _loadData,
       child: ListView(
         padding: const EdgeInsets.all(16),
@@ -111,7 +120,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 const SizedBox(height: 12),
                 Text(
                   context.l10n.emptyStructureMessage,
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 14, color: AppColors.neutral6),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -138,7 +147,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                     ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColors.blue,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -157,7 +166,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                     ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -174,7 +183,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
         // Role structure list
         Expanded(
           child: RefreshIndicator(
-            color: Colors.red,
+            color: AppColors.primary,
             onRefresh: _loadData,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -206,105 +215,136 @@ class _StructureMainPageState extends State<StructureMainPage> {
         children: [
           Row(
             children: [
+              Expanded(flex: 1, child: SizedBox()),
               Expanded(
+                flex: 6,
                 child: Text(
                   role.userRole.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: AppColors.blue,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.more_vert, color: Colors.grey),
-                onPressed: () => _showRoleMenu(role.id),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+              Expanded(
+                flex: 1,
+                child: Builder(
+                  builder: (buttonContext) => IconButton(
+                    icon: const Icon(Icons.more_vert, color: Colors.grey),
+                    onPressed: () => _showRoleMenu(role.id, buttonContext),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ),
               ),
             ],
           ),
-          Divider(color: Colors.grey.shade300),
           if (role.superiorEmployeeStructure.isNotEmpty) ...[
             ...role.superiorEmployeeStructure.map((superior) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: InkWell(
-                  onTap: () => _navigateToTeamManagement(superior.id),
-                  child: Row(
+              return Column(
+                children: [
+                  Stack(
                     children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(superior.employee.photoUrl),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              superior.employee.fullname,
-                              style: const TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              superior.employee.nik,
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                            ),
-                            Text(
-                              superior.jobTitle.name ?? "-",
-                              style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                            ),
-                          ],
+                      InkWell(
+                        onTap: () => _navigateToTeamManagement(superior.id),
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundImage: NetworkImage(superior.employee.photoUrl),
                         ),
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, size: 20, color: Colors.blue),
-                            onPressed: () =>
-                                _showEditSuperiorDialog(superior, companyStructureId, role.id),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minHeight: 24, minWidth: 24),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () =>
+                              _showEditSuperiorDialog(superior, companyStructureId, role.id),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: AppColors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.edit, size: 16, color: Colors.white),
                           ),
-                          const SizedBox(height: 8),
-                          IconButton(
-                            icon: const Icon(Icons.delete, size: 20, color: Colors.red),
-                            onPressed: () => _confirmDeleteSuperior(superior.id),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minHeight: 24, minWidth: 24),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  Text(
+                    superior.employee.fullname,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    superior.employee.nik,
+                    style: TextStyle(fontSize: 12, color: AppColors.neutral6),
+                  ),
+                  SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => _showAddSuperiorDialog(companyStructureId, role.id),
+                      icon: const Icon(Icons.add_box_outlined, size: 26),
+                      label: const Text(
+                        "Tambah Departemen",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.blue,
+                        side: const BorderSide(color: AppColors.blue, width: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               );
             }),
-          ],
-
-          // Button Tambah Pejabat jika kosong atau allowed multiple (asumsi multiple allowed based on List)
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () => _showAddSuperiorDialog(companyStructureId, role.id),
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text("Tambah Pejabat"),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
+          ] else ...[
+            const SizedBox(height: 12),
+            InkWell(
+              onTap: () => _navigateToJobTitleSelection(companyStructureId, role.id),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
+                ),
+                child: Column(
+                  children: [
+                    Icon(Icons.add_circle_outline, size: 48, color: AppColors.blue),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Pilih Karyawan',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.blue,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Klik untuk memilih karyawan yang mengisi struktur ini',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );
   }
 
   Widget _buildBottomButton() {
-    return Consumer<OrganizationalStructureProvider>(
+    return Consumer<StructureProvider>(
       builder: (context, provider, child) {
         return Container(
           padding: const EdgeInsets.all(16),
@@ -316,9 +356,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
           ),
           child: SafeArea(
             child: ElevatedButton(
-              onPressed: provider.isLoading ? null : _showAddRoleDialog,
+              onPressed: provider.isLoading ? null : _addStructureDialog,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 disabledBackgroundColor: Colors.grey,
@@ -343,6 +383,17 @@ class _StructureMainPageState extends State<StructureMainPage> {
     _loadData();
   }
 
+  void _navigateToJobTitleSelection(int companyStructureId, int roleStructureId) async {
+    await context.pushNamed(
+      RouteNames.jobTitleSelection,
+      queryParameters: {
+        'companyStructureId': companyStructureId.toString(),
+        'roleStructureId': roleStructureId.toString(),
+      },
+    );
+    _loadData();
+  }
+
   void _showAddSuperiorDialog(int companyStructureId, int roleStructureId) {
     showModalBottomSheet(
       context: context,
@@ -350,8 +401,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => ChangeNotifierProvider.value(
-        value: context.read<OrganizationalStructureProvider>(),
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: this.context.read<StructureProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<JobTitleProvider>()),
+        ],
         child: SuperiorEmployeeFormBottomSheet(
           companyStructureId: companyStructureId,
           roleStructureId: roleStructureId,
@@ -372,8 +426,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => ChangeNotifierProvider.value(
-        value: context.read<OrganizationalStructureProvider>(),
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: this.context.read<StructureProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<JobTitleProvider>()),
+        ],
         child: SuperiorEmployeeFormBottomSheet(
           companyStructureId: companyStructureId,
           roleStructureId: roleStructureId,
@@ -388,7 +445,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   void _confirmDeleteSuperior(int superiorId) {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -409,53 +466,39 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(provider.errorMessage ?? 'Gagal menghapus'),
-                    backgroundColor: Colors.red,
+                    backgroundColor: AppColors.primary,
                   ),
                 );
               }
             },
-            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+            child: const Text('Hapus', style: TextStyle(color: AppColors.primary)),
           ),
         ],
       ),
     );
   }
 
-  void _showRoleMenu(int roleId) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: Text(context.l10n.deleteRole),
-              onTap: () {
-                Navigator.pop(context);
-                _confirmDeleteRole(roleId);
-              },
-            ),
-          ],
-        ),
-      ),
+  void _addStructureDialog() async {
+    final provider = context.read<StructureProvider>();
+
+    // Load user roles list for office employees
+    final result = await provider.getOrganizationalData.getUserRolesList(
+      typeRole: 'employee',
+      typeBranch: 'office',
     );
-  }
-
-  void _showAddRoleDialog() async {
-    final provider = context.read<OrganizationalStructureProvider>();
-
-    // Load available user roles
-    await provider.loadUserRoles('utama');
 
     if (!mounted) return;
 
-    final availableRoles = provider.userRoles;
+    // Handle the result
+    final availableRoles = result.fold((failure) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message)));
+      return <UserRoleEntity>[];
+    }, (roles) => roles);
 
     if (availableRoles.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(context.l10n.noRolesAvailable)));
+      ).showSnackBar(SnackBar(content: Text('Tidak ada data tingkatan pekerjaan')));
       return;
     }
 
@@ -477,7 +520,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
     final selectedRoleIds = <int>{};
 
-    final result = await showDialog<bool>(
+    final dialogResult = await showDialog<bool>(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => Dialog(
@@ -488,7 +531,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  context.l10n.jobLevelList,
+                  'Daftar Tingkatan Pekerjaan',
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
@@ -506,8 +549,12 @@ class _StructureMainPageState extends State<StructureMainPage> {
                             }
                           });
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: Row(
                             children: [
                               Expanded(
@@ -524,29 +571,32 @@ class _StructureMainPageState extends State<StructureMainPage> {
                                     }
                                   });
                                 },
-                                activeColor: Colors.red,
+                                activeColor: AppColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      if (role != selectableRoles.last) const Divider(height: 1),
+                      if (role != selectableRoles.last) const SizedBox(height: 12),
                     ],
                   );
-                }).toList(),
+                }),
                 const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: selectedRoleIds.isEmpty ? null : () => Navigator.pop(context, true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       disabledBackgroundColor: Colors.grey,
                     ),
                     child: Text(
-                      context.l10n.select,
+                      'Pilih',
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -558,80 +608,23 @@ class _StructureMainPageState extends State<StructureMainPage> {
       ),
     );
 
-    if (result == true && selectedRoleIds.isNotEmpty) {
+    if (dialogResult == true && selectedRoleIds.isNotEmpty) {
       _showConfirmationDialog(selectedRoleIds.toList());
     }
   }
 
   void _showConfirmationDialog(List<int> selectedRoleIds) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.l10n.sorryBeforehand,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Image.asset(
-                'assets/images/confirmation_icon.png',
-                width: 100,
-                height: 100,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.help_outline, size: 80, color: Colors.orange);
-                },
-              ),
-              const SizedBox(height: 20),
-              Text(
-                context.l10n.confirmAddJobLevelStructure,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        side: const BorderSide(color: Colors.red),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      child: Text(context.l10n.cancel),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _addRoles(selectedRoleIds);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      child: Text(context.l10n.ok),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    ConfirmDialog.show(
+      context,
+      message: context.l10n.confirmAddJobLevelStructure,
+      onConfirm: () {
+        _addRoles(selectedRoleIds);
+      },
     );
   }
 
   void _addRoles(List<int> selectedRoleIds) async {
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     final structure = provider.currentStructure;
 
     if (structure == null) {
@@ -655,66 +648,56 @@ class _StructureMainPageState extends State<StructureMainPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.errorMessage ?? context.l10n.failedToAddRole),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.primary,
         ),
       );
     }
   }
 
   void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+    SuccessDialog.show(
+      context,
+      title: context.l10n.successExclamation,
+      message: context.l10n.jobLevelAddedSuccess,
+    );
+  }
+
+  void _showRoleMenu(int roleId, BuildContext buttonContext) {
+    final RenderBox button = buttonContext.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(buttonContext).context.findRenderObject() as RenderBox;
+    final RelativeRect position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
+        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+
+    showMenu<String>(
+      context: buttonContext,
+      position: position,
+      items: [
+        PopupMenuItem<String>(
+          value: 'delete',
+          child: Row(
             children: [
-              Text(
-                context.l10n.successExclamation,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                child: const Icon(Icons.check, size: 60, color: Colors.white),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                context.l10n.jobLevelAddedSuccess,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Text(
-                    context.l10n.ok,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              const Icon(Icons.delete_outline, color: AppColors.primary),
+              const SizedBox(width: 8),
+              Text(context.l10n.delete),
             ],
           ),
         ),
-      ),
-    );
+      ],
+    ).then((value) {
+      if (value == 'delete') {
+        _confirmDeleteRole(roleId);
+      }
+    });
   }
 
   void _confirmDeleteRole(int roleId) {
     // Capture provider before dialog
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<StructureProvider>();
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -732,11 +715,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
               if (success && mounted) {
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(SnackBar(content: Text(context.l10n.roleDeletedSuccess)));
+                ).showSnackBar(SnackBar(content: Text(context.l10n.delete)));
                 _loadData();
               }
             },
-            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+            child: const Text('Hapus', style: TextStyle(color: AppColors.primary)),
           ),
         ],
       ),

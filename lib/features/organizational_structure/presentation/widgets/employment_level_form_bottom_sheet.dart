@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../../../../shared/widgets/success_dialog.dart';
+import '../providers/employment_level_provider.dart';
 
 class EmploymentLevelFormBottomSheet extends StatefulWidget {
   final bool isEdit;
@@ -46,7 +48,7 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
       _isSubmitting = true;
     });
 
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<EmploymentLevelProvider>();
     bool success;
 
     if (widget.isEdit) {
@@ -68,63 +70,26 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
     if (mounted) {
       if (success) {
         Navigator.pop(context);
-        _showSuccessDialog();
+        SuccessDialog.show(
+          context,
+          message: 'Tingkatan telah berhasil',
+          messageActionText: widget.isEdit ? 'diupdate' : 'ditambahkan',
+          onConfirm: () {
+            widget.onSuccess();
+          },
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              provider.errorMessage ?? 
-              (widget.isEdit ? 'Gagal mengupdate tingkatan' : 'Gagal menambahkan tingkatan'),
+              provider.errorMessage ??
+                  (widget.isEdit ? 'Gagal mengupdate tingkatan' : 'Gagal menambahkan tingkatan'),
             ),
             backgroundColor: Colors.red,
           ),
         );
       }
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 60,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                widget.isEdit
-                    ? 'Tingkatan Berhasil Diupdate!'
-                    : 'Tingkatan Berhasil Ditambahkan!',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                widget.onSuccess();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -144,10 +109,7 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
           children: [
             Text(
               widget.isEdit ? 'Edit Tingkatan' : 'Tambah Tingkatan',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             TextFormField(
@@ -155,13 +117,8 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
               decoration: InputDecoration(
                 labelText: 'Nama Tingkatan',
                 hintText: 'Masukkan nama tingkatan',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -181,25 +138,17 @@ class _EmploymentLevelFormBottomSheetState extends State<EmploymentLevelFormBott
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 child: _isSubmitting
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
+                        child: SpinKitThreeBounce(color: Colors.white),
                       )
                     : Text(
                         widget.isEdit ? 'Update' : 'Simpan',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
               ),
             ),

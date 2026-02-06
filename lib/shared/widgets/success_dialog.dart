@@ -4,59 +4,98 @@ import '../theme/app_theme.dart';
 class SuccessDialog extends StatelessWidget {
   final String title;
   final String message;
+  final String? messageActionText;
+  final Widget? child;
   final VoidCallback? onConfirm;
+  final bool canPop;
 
-  const SuccessDialog({super.key, this.title = 'Berhasil', required this.message, this.onConfirm});
+  const SuccessDialog({
+    super.key,
+    this.title = 'Berhasil!',
+    required this.message,
+    this.messageActionText,
+    this.child,
+    this.onConfirm,
+    this.canPop = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(color: Color(0xFFE8F5E9), shape: BoxShape.circle),
-              child: const Icon(Icons.check_circle, color: Color(0xFF4CAF50), size: 60),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              style: const TextStyle(fontSize: 14, color: AppColors.neutral6),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  onConfirm?.call();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (_, __) async {
+        if (onConfirm != null) {
+          onConfirm?.call();
+        }
+      },
+      child: AlertDialog(
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width - 120,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width / 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: const Text(
-                  'OK',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              Container(
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.width / 3,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/images/icon/done.png')),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              child ??
+                  Text.rich(
+                    TextSpan(
+                      text: message,
+                      style: const TextStyle(color: Colors.grey),
+                      children: [
+                        if (messageActionText != null)
+                          TextSpan(
+                            text: " $messageActionText",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        const TextSpan(
+                          text: '!',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    onConfirm?.call();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                  ),
+                  child: const Text(
+                    'Oke',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -66,13 +105,23 @@ class SuccessDialog extends StatelessWidget {
     BuildContext context, {
     String? title,
     required String message,
+    String? messageActionText,
+    Widget? child,
     VoidCallback? onConfirm,
+    bool canPop = true,
   }) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return SuccessDialog(title: title ?? 'Berhasil', message: message, onConfirm: onConfirm);
+        return SuccessDialog(
+          title: title ?? 'Berhasil!',
+          message: message,
+          messageActionText: messageActionText,
+          onConfirm: onConfirm,
+          canPop: canPop,
+          child: child,
+        );
       },
     );
   }

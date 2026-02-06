@@ -89,7 +89,47 @@ import '../../features/organizational_structure/domain/usecases/manage_job_title
 import '../../features/organizational_structure/domain/usecases/manage_department.dart';
 import '../../features/organizational_structure/domain/usecases/manage_employment_level.dart';
 import '../../features/organizational_structure/domain/usecases/manage_user_role.dart';
-import '../../features/organizational_structure/presentation/providers/organizational_structure_provider.dart';
+import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
+import '../../features/organizational_structure/presentation/providers/department_provider.dart';
+import '../../features/organizational_structure/presentation/providers/employment_level_provider.dart';
+import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
+import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
+
+// Access Menu feature imports
+import '../../features/access_menu/data/datasources/access_menu_remote_data_source.dart';
+import '../../features/access_menu/data/repositories/access_menu_repository_impl.dart';
+import '../../features/access_menu/domain/repositories/access_menu_repository.dart';
+import '../../features/access_menu/domain/usecases/get_employee_menus.dart' as access_menu_usecases;
+import '../../features/access_menu/domain/usecases/get_all_menus.dart';
+import '../../features/access_menu/domain/usecases/manage_menu_access.dart';
+import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+
+import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
+
+// Permission feature imports
+import '../../features/permissions/data/repositories/permission_repository_impl.dart';
+import '../../features/permissions/domain/repositories/permission_repository.dart';
+import '../../features/permissions/domain/usecases/check_permissions_status.dart';
+import '../../features/permissions/domain/usecases/request_permissions.dart';
+import '../../features/permissions/domain/usecases/open_settings.dart';
+import '../../features/permissions/domain/usecases/is_permission_permanently_denied.dart';
+import '../../features/permissions/domain/usecases/get_denied_permissions_detail.dart';
+import '../../features/permissions/presentation/providers/permission_provider.dart';
+
+// Access Screen feature imports
+import '../../features/access_screen/data/datasources/access_screen_remote_datasource.dart';
+import '../../features/access_screen/data/repositories/access_screen_repository_impl.dart';
+import '../../features/access_screen/domain/repositories/access_screen_repository.dart';
+import '../../features/access_screen/domain/usecases/get_access_screen.dart';
+import '../../features/access_screen/domain/usecases/update_access_screen.dart';
+import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
+
+// Screen Security feature imports
+import '../../features/screen_security/data/datasources/screen_security_remote_datasource.dart';
+import '../../features/screen_security/data/repositories/screen_security_repository_impl.dart';
+import '../../features/screen_security/domain/repositories/screen_security_repository.dart';
+import '../../features/screen_security/domain/usecases/get_screen_security_settings.dart';
+import '../../features/screen_security/presentation/providers/screen_security_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -283,19 +323,25 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ManageEmploymentLevel(sl()));
   sl.registerLazySingleton(() => ManageUserRole(sl()));
 
-  // Provider
+  // Providers - Specialized
+  sl.registerFactory(() => JobTitleProvider(getOrganizationalData: sl(), manageJobTitle: sl()));
+
+  sl.registerFactory(() => DepartmentProvider(getOrganizationalData: sl(), manageDepartment: sl()));
+
   sl.registerFactory(
-    () => OrganizationalStructureProvider(
+    () => EmploymentLevelProvider(getOrganizationalData: sl(), manageEmploymentLevel: sl()),
+  );
+
+  sl.registerFactory(
+    () => StructureProvider(
       getCompanyStructure: sl(),
       manageStructureRole: sl(),
       manageSuperiorEmployee: sl(),
       getOrganizationalData: sl(),
-      manageJobTitle: sl(),
-      manageDepartment: sl(),
-      manageEmploymentLevel: sl(),
-      manageUserRole: sl(),
     ),
   );
+
+  sl.registerFactory(() => UserRoleProvider(getOrganizationalData: sl(), manageUserRole: sl()));
 
   // Repository
   sl.registerLazySingleton<OrganizationalStructureRepository>(
@@ -305,6 +351,95 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<OrganizationalStructureRemoteDataSource>(
     () => OrganizationalStructureRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Access Menu
+  // Provider
+  sl.registerFactory(
+    () => AccessMenuProvider(getEmployeeMenus: sl(), getAllMenus: sl(), manageMenuAccess: sl()),
+  );
+
+  sl.registerFactory(() => EmployeeListProvider(getOrganizationalData: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => access_menu_usecases.GetEmployeeMenus(sl()));
+  sl.registerLazySingleton(() => GetAllMenus(sl()));
+  sl.registerLazySingleton(() => ManageMenuAccess(sl()));
+
+  // Repository
+  sl.registerLazySingleton<AccessMenuRepository>(
+    () => AccessMenuRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<AccessMenuRemoteDataSource>(
+    () => AccessMenuRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Permissions
+  // Provider
+  sl.registerFactory(
+    () => PermissionProvider(
+      checkPermissionsStatus: sl(),
+      requestPermissionsUseCase: sl(),
+      openSettingsUseCase: sl(),
+      isPermissionPermanentlyDeniedUseCase: sl(),
+      getDeniedPermissionsDetailUseCase: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => CheckPermissionsStatus(sl()));
+  sl.registerLazySingleton(() => RequestPermissions(sl()));
+  sl.registerLazySingleton(() => OpenSettings(sl()));
+  sl.registerLazySingleton(() => IsPermissionPermanentlyDenied(sl()));
+  sl.registerLazySingleton(() => GetDeniedPermissionsDetail(sl()));
+
+  // Repository
+  sl.registerLazySingleton<PermissionRepository>(() => PermissionRepositoryImpl());
+
+  //! Features - Access Screen
+  // Provider
+  sl.registerFactory(
+    () => AccessScreenProvider(
+      getAccessScreenList: sl(),
+      getAccessScreenDetail: sl(),
+      updateGlobalAccessScreen: sl(),
+      updateDetailAccessScreen: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetAccessScreenList(sl()));
+  sl.registerLazySingleton(() => GetAccessScreenDetail(sl()));
+  sl.registerLazySingleton(() => UpdateGlobalAccessScreen(sl()));
+  sl.registerLazySingleton(() => UpdateDetailAccessScreen(sl()));
+
+  // Repository
+  sl.registerLazySingleton<AccessScreenRepository>(
+    () => AccessScreenRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<AccessScreenRemoteDataSource>(
+    () => AccessScreenRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - Screen Security
+  // Provider
+  sl.registerFactory(() => ScreenSecurityProvider(getScreenSecuritySettings: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetScreenSecuritySettings(sl()));
+
+  // Repository
+  sl.registerLazySingleton<ScreenSecurityRepository>(
+    () => ScreenSecurityRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ScreenSecurityRemoteDataSource>(
+    () => ScreenSecurityRemoteDataSourceImpl(apiClient: sl()),
   );
 
   //! Core

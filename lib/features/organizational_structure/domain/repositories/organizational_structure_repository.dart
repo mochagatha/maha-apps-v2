@@ -71,6 +71,12 @@ abstract class OrganizationalStructureRepository {
   /// Get user roles hierarchy by type role (employee/worker)
   Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(String typeRole);
 
+  /// Get user roles list by type role and type branch
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesList({
+    required String typeRole,
+    required String typeBranch,
+  });
+
   /// Add user role
   Future<Either<Failure, void>> addUserRole({
     required String name,

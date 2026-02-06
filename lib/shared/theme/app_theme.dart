@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   static const Color primary = Color.fromRGBO(233, 30, 33, 1);
+  static const Color blue = Color(0xfe106AE8);
   static const Color background = Color(0xfeFEFEFE);
   static const Color card = Color(0xfeF4F4F4);
   static const Color border = Color(0xfe000000);

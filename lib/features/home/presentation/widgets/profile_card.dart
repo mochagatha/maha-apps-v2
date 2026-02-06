@@ -6,6 +6,7 @@ import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../screen_security/presentation/providers/screen_security_provider.dart';
 import '../../domain/entities/employee.dart';
 import '../../domain/entities/notification_count.dart';
 
@@ -66,6 +67,9 @@ class ProfileCard extends StatelessWidget {
                       flex: 1,
                       child: ElevatedButton(
                         onPressed: () async {
+                          // Disable screen security before logout
+                          await context.read<ScreenSecurityProvider>().disableSecurity();
+
                           // Perform logout first
                           await context.read<AuthProvider>().logoutUser();
 
@@ -141,7 +145,6 @@ class ProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

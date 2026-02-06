@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +20,7 @@ class SkillPage extends StatelessWidget {
       body: Consumer<SkillProvider>(
         builder: (context, provider, child) {
           if (provider.isLoadingSkill) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(child: SpinKitThreeBounce(color: AppColors.primary));
           }
 
           return Stack(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../domain/entities/user_role_entity.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../providers/user_role_provider.dart';
 
 class UserRoleFormBottomSheet extends StatefulWidget {
   final String typeRole;
@@ -116,7 +117,7 @@ class _UserRoleFormBottomSheetState extends State<UserRoleFormBottomSheet> {
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
-                  child: Consumer<OrganizationalStructureProvider>(
+                  child: Consumer<UserRoleProvider>(
                     builder: (context, provider, child) {
                       return ElevatedButton(
                         onPressed: provider.isLoading ? null : _handleSubmit,
@@ -130,10 +131,7 @@ class _UserRoleFormBottomSheetState extends State<UserRoleFormBottomSheet> {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
+                                child: SpinKitThreeBounce(color: Colors.white),
                               )
                             : Text(
                                 isEdit ? 'Update' : 'Simpan',
@@ -154,7 +152,7 @@ class _UserRoleFormBottomSheetState extends State<UserRoleFormBottomSheet> {
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<UserRoleProvider>();
     bool success;
 
     if (isEdit) {

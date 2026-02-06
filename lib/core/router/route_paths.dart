@@ -7,6 +7,7 @@ class RoutePaths {
   static const String forgotPassword = '/forgot-password';
   static const String termsAndConditions = '/terms-and-conditions';
   static const String privacyNotice = '/privacy-notice';
+  static const String permission = '/permission';
 
   // Home
   static const String home = '/home';
@@ -21,8 +22,7 @@ class RoutePaths {
   static const String profile = '/profile';
 
   // Settings
-  static const String setting = '/settings';
-  static const String settings = '/settings'; // Legacy/Duplicate?
+  static const String settings = '/settings';
 
   // Features
   static const String absensi = '/absensi';
@@ -64,11 +64,11 @@ class RoutePaths {
   static const String verificationData = '/recruitment/verification-data';
   static const String employeeVerification = '/recruitment/employee-verification';
   static const String companyCode = '/recruitment/company-code';
-  
+
   // Recruitment Submenus
   static const String recruitmentAgreement = '/recruitment/agreement';
   static const String recruitmentBpjsActivation = '/recruitment/bpjs-activation';
-  
+
   // Approval Submenus (Persetujuan)
   static const String approvalSupervision = '/approval/supervision';
   static const String approvalWorkPlan = '/approval/work-plan';
@@ -93,7 +93,7 @@ class RoutePaths {
   static const String approvalAgreementDirector = '/approval/agreement-director';
   static const String approvalSalaryDirector = '/approval/salary-director';
   static const String approvalLoanDirector = '/approval/loan-director';
-  
+
   // Monitoring Submenus (Mengamati)
   static const String monitoringActivityLog = '/monitoring/activity-log';
   static const String monitoringKpi = '/monitoring/kpi';
@@ -101,7 +101,7 @@ class RoutePaths {
   static const String monitoringAttendance = '/monitoring/attendance';
   static const String monitoringWorkPlan = '/monitoring/work-plan';
   static const String monitoringTask = '/monitoring/task';
-  
+
   // Attendance Submenus (Absensi)
   static const String attendancePresent = '/attendance/present';
   static const String attendanceOvertime = '/attendance/overtime';
@@ -111,28 +111,42 @@ class RoutePaths {
   static const String attendanceSupervision = '/attendance/supervision';
   static const String attendanceSupervision2 = '/attendance/supervision-2';
   static const String attendanceAnywhere = '/attendance/anywhere';
-  
+
   // Organizational Structure
   static const String organizationalStructure = '/organizational-structure';
   static const String structureMain = '/organizational-structure/main';
   static const String organizationalChart = '/organizational-structure/chart';
   static const String employmentLevel = '/organizational-structure/employment-level';
-  static const String employmentLevelEmployee = '/organizational-structure/employment-level/employee';
-  static const String employmentLevelWorker = '/organizational-structure/employment-level/worker';
-  static const String employmentLevelEmployeeDetail = '/organizational-structure/employment-level/employee-detail';
-  static const String employmentLevelWorkerDetail = '/organizational-structure/employment-level/worker-detail';
+  static const String employmentLevelOffice = '/organizational-structure/employment-level/office';
+  static const String employmentLevelProject = '/organizational-structure/employment-level/project';
+  static const String employmentLevelOfficeEmployee =
+      '/organizational-structure/employment-level/office/employee';
+  static const String employmentLevelOfficeWorker =
+      '/organizational-structure/employment-level/office/worker';
+  static const String employmentLevelProjectEmployee =
+      '/organizational-structure/employment-level/project/employee';
+  static const String employmentLevelProjectWorker =
+      '/organizational-structure/employment-level/project/worker';
   static const String departmentList = '/organizational-structure/department';
   static const String departmentOffice = '/organizational-structure/department/office';
   static const String departmentProject = '/organizational-structure/department/project';
   static const String jobTitleList = '/organizational-structure/job-title';
   static const String jobTitleOffice = '/organizational-structure/job-title/office';
   static const String jobTitleProject = '/organizational-structure/job-title/project';
-  static const String jobTitleOfficeEmployee = '/organizational-structure/job-title/office/employee';
+  static const String jobTitleOfficeEmployee =
+      '/organizational-structure/job-title/office/employee';
   static const String jobTitleOfficeWorker = '/organizational-structure/job-title/office/worker';
-  static const String jobTitleProjectEmployee = '/organizational-structure/job-title/project/employee';
+  static const String jobTitleProjectEmployee =
+      '/organizational-structure/job-title/project/employee';
   static const String jobTitleProjectWorker = '/organizational-structure/job-title/project/worker';
-  
-  
+  static const String jobTitleSelection = '/organizational-structure/job-title-selection';
+  static const String employeeByJobTitleSelection =
+      '/organizational-structure/employee-by-job-title-selection';
+
+  // Access Menu
+  static const String employeeSelection = '/employee-selection';
+  static const String accessMenuList = '/access-menu';
+
   // Settings Submenus
   static const String settingsPenempatanKerja = '/settings/penempatan-kerja';
   static const String settingsLibur = '/settings/libur';
@@ -144,9 +158,9 @@ class RoutePaths {
   static const String settingsJamKerja = '/settings/jam-kerja';
   static const String settingsFormatDanDraf = '/settings/format-dan-draf';
   static const String settingsAksesLayar = '/settings/akses-layar';
+  static const String settingsAksesLayarDetail = '/settings/akses-layar/detail';
   static const String settingsHakAksesMenu = '/settings/hak-akses-menu';
   static const String settingsPelacakanJamKerja = '/settings/pelacakan-jam-kerja';
   static const String settingsKpi = '/settings/kpi';
   static const String settingsBahasa = '/settings/bahasa';
 }
-

@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
@@ -80,7 +81,7 @@ class _SelfieCameraKtpPageState extends State<SelfieCameraKtpPage> {
                           scale: provider.controller!.value.aspectRatio / previewAspectRatio,
                           child: Center(child: CameraPreview(provider.controller!)),
                         )
-                      : const Center(child: CircularProgressIndicator(color: AppColors.primary)),
+                      : const Center(child: SpinKitThreeBounce(color: AppColors.primary)),
                 ),
               ),
 

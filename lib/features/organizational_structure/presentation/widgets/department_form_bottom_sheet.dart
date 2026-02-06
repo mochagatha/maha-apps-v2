@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import '../providers/organizational_structure_provider.dart';
+import '../../../../shared/widgets/success_dialog.dart';
+import '../providers/department_provider.dart';
 
 class DepartmentFormBottomSheet extends StatefulWidget {
   final bool isEdit;
@@ -21,8 +23,7 @@ class DepartmentFormBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<DepartmentFormBottomSheet> createState() =>
-      _DepartmentFormBottomSheetState();
+  State<DepartmentFormBottomSheet> createState() => _DepartmentFormBottomSheetState();
 }
 
 class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
@@ -51,7 +52,7 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
       _isLoading = true;
     });
 
-    final provider = context.read<OrganizationalStructureProvider>();
+    final provider = context.read<DepartmentProvider>();
     bool success;
 
     if (widget.isEdit) {
@@ -74,47 +75,26 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
     if (mounted) {
       if (success) {
         Navigator.of(context).pop();
-        _showSuccessDialog();
+        SuccessDialog.show(
+          context,
+          message: 'Data departemen telah berhasil',
+          messageActionText: widget.isEdit ? 'diubah' : 'ditambahkan',
+          onConfirm: () {
+            widget.onSuccess();
+          },
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               provider.errorMessage ??
-                  (widget.isEdit
-                      ? 'Gagal mengubah departemen'
-                      : 'Gagal menambahkan departemen'),
+                  (widget.isEdit ? 'Gagal mengubah departemen' : 'Gagal menambahkan departemen'),
             ),
             backgroundColor: Colors.red,
           ),
         );
       }
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Berhasil'),
-          content: Text(
-            widget.isEdit
-                ? 'Data departemen berhasil diubah'
-                : 'Data departemen berhasil ditambahkan',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                widget.onSuccess();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -134,10 +114,7 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
           children: [
             Text(
               widget.isEdit ? 'Edit Departemen' : 'Tambah Departemen',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -161,25 +138,13 @@ class _DepartmentFormBottomSheetState extends State<DepartmentFormBottomSheet> {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               ),
               child: _isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
+                  ? SizedBox(height: 20, width: 20, child: SpinKitThreeBounce(color: Colors.white))
                   : Text(
                       widget.isEdit ? 'Simpan' : 'Tambah',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
             ),
             const SizedBox(height: 16),

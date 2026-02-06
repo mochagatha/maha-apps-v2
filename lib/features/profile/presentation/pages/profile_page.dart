@@ -8,6 +8,7 @@ import '../../../../core/router/route_paths.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../screen_security/presentation/providers/screen_security_provider.dart';
 import '../providers/profile_provider.dart';
 import '../widgets/profile_menu_list.dart';
 import '../../../../core/di/injection_container.dart';
@@ -133,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     backgroundImage: employee?.photoUrl != null
                                         ? NetworkImage(employee!.photoUrl!)
                                         : const AssetImage('assets/images/user_placeholder.png')
-                                            as ImageProvider,
+                                              as ImageProvider,
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -256,7 +257,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.receipt_long, color: Colors.white, size: 16),
+                                        const Icon(
+                                          Icons.receipt_long,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
                                         const SizedBox(width: 4),
                                         Text(
                                           context.l10n.redeemPoints,
@@ -600,6 +605,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       flex: 1,
                       child: ElevatedButton(
                         onPressed: () async {
+                          // Disable screen security before logout
+                          await context.read<ScreenSecurityProvider>().disableSecurity();
+
                           // Perform logout
                           await context.read<AuthProvider>().logoutUser();
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -37,9 +39,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
       body: Consumer<EducationFormProvider>(
         builder: (context, provider, child) {
           if (provider.isLoadingData) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            );
+            return const Center(child: SpinKitThreeBounce(color: AppColors.primary));
           }
           return Stack(
             children: [
