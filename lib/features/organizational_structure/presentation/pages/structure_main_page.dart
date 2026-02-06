@@ -3,12 +3,17 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/structure_provider.dart';
+import '../providers/job_title_provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../domain/entities/role_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
+import '../../domain/entities/user_role_entity.dart';
 import '../widgets/superior_employee_form_bottom_sheet.dart';
 import 'structure_team_page.dart';
+import '../../../../core/di/injection_container.dart';
 
 class StructureMainPage extends StatefulWidget {
   const StructureMainPage({super.key});
@@ -316,7 +321,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
           ),
           child: SafeArea(
             child: ElevatedButton(
-              onPressed: provider.isLoading ? null : _showAddRoleDialog,
+              onPressed: provider.isLoading ? null : _addStructureDialog,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -350,8 +355,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => ChangeNotifierProvider.value(
-        value: context.read<StructureProvider>(),
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: this.context.read<StructureProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<JobTitleProvider>()),
+        ],
         child: SuperiorEmployeeFormBottomSheet(
           companyStructureId: companyStructureId,
           roleStructureId: roleStructureId,
@@ -372,8 +380,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => ChangeNotifierProvider.value(
-        value: context.read<StructureProvider>(),
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: this.context.read<StructureProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<JobTitleProvider>()),
+        ],
         child: SuperiorEmployeeFormBottomSheet(
           companyStructureId: companyStructureId,
           roleStructureId: roleStructureId,
@@ -421,20 +432,27 @@ class _StructureMainPageState extends State<StructureMainPage> {
     );
   }
 
-  void _showAddRoleDialog() async {
+  void _addStructureDialog() async {
     final provider = context.read<StructureProvider>();
 
-    // Load available user roles
-    await provider.loadUserRoles('utama');
+    // Load user roles list for office employees
+    final result = await provider.getOrganizationalData.getUserRolesList(
+      typeRole: 'employee',
+      typeBranch: 'office',
+    );
 
     if (!mounted) return;
 
-    final availableRoles = provider.userRoles;
+    // Handle the result
+    final availableRoles = result.fold((failure) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message)));
+      return <UserRoleEntity>[];
+    }, (roles) => roles);
 
     if (availableRoles.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(context.l10n.noRolesAvailable)));
+      ).showSnackBar(SnackBar(content: Text('Tidak ada data tingkatan pekerjaan')));
       return;
     }
 
@@ -456,7 +474,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
     final selectedRoleIds = <int>{};
 
-    final result = await showDialog<bool>(
+    final dialogResult = await showDialog<bool>(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => Dialog(
@@ -467,7 +485,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  context.l10n.jobLevelList,
+                  'Daftar Tingkatan Pekerjaan',
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
@@ -485,8 +503,12 @@ class _StructureMainPageState extends State<StructureMainPage> {
                             }
                           });
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: Row(
                             children: [
                               Expanded(
@@ -504,15 +526,18 @@ class _StructureMainPageState extends State<StructureMainPage> {
                                   });
                                 },
                                 activeColor: AppColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      if (role != selectableRoles.last) const Divider(height: 1),
+                      if (role != selectableRoles.last) const SizedBox(height: 12),
                     ],
                   );
-                }).toList(),
+                }),
                 const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
@@ -525,7 +550,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
                       disabledBackgroundColor: Colors.grey,
                     ),
                     child: Text(
-                      context.l10n.select,
+                      'Pilih',
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -537,75 +562,18 @@ class _StructureMainPageState extends State<StructureMainPage> {
       ),
     );
 
-    if (result == true && selectedRoleIds.isNotEmpty) {
+    if (dialogResult == true && selectedRoleIds.isNotEmpty) {
       _showConfirmationDialog(selectedRoleIds.toList());
     }
   }
 
   void _showConfirmationDialog(List<int> selectedRoleIds) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.l10n.sorryBeforehand,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Image.asset(
-                'assets/images/confirmation_icon.png',
-                width: 100,
-                height: 100,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.help_outline, size: 80, color: Colors.orange);
-                },
-              ),
-              const SizedBox(height: 20),
-              Text(
-                context.l10n.confirmAddJobLevelStructure,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        side: const BorderSide(color: AppColors.primary),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      child: Text(context.l10n.cancel),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _addRoles(selectedRoleIds);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      child: Text(context.l10n.ok),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    ConfirmDialog.show(
+      context,
+      message: context.l10n.confirmAddJobLevelStructure,
+      onConfirm: () {
+        _addRoles(selectedRoleIds);
+      },
     );
   }
 
@@ -641,53 +609,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.l10n.successExclamation,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                child: const Icon(Icons.check, size: 60, color: Colors.white),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                context.l10n.jobLevelAddedSuccess,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Text(
-                    context.l10n.ok,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    SuccessDialog.show(
+      context,
+      title: context.l10n.successExclamation,
+      message: context.l10n.jobLevelAddedSuccess,
     );
   }
 

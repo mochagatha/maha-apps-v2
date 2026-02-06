@@ -35,10 +35,7 @@ class GetOrganizationalData {
     required String typeRole,
     required String typeBranch,
   }) async {
-    return await repository.getDepartmentsByType(
-      typeRole: typeRole,
-      typeBranch: typeBranch,
-    );
+    return await repository.getDepartmentsByType(typeRole: typeRole, typeBranch: typeBranch);
   }
 
   Future<Either<Failure, List<EmploymentLevelEntity>>> getEmploymentLevels() async {
@@ -53,5 +50,12 @@ class GetOrganizationalData {
 
   Future<Either<Failure, List<EmployeeEntity>>> getEmployees() async {
     return await repository.getEmployees();
+  }
+
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesList({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    return await repository.getUserRolesList(typeRole: typeRole, typeBranch: typeBranch);
   }
 }

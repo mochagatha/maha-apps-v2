@@ -46,6 +46,10 @@ abstract class OrganizationalStructureRemoteDataSource {
   Future<OrganizationalStructureModel> getStructureDetail(int id);
   Future<List<EmploymentLevelModel>> getUserRoles(String typeBranch);
   Future<List<UserRoleModel>> getUserRolesByType(String typeRole);
+  Future<List<UserRoleModel>> getUserRolesList({
+    required String typeRole,
+    required String typeBranch,
+  });
   Future<void> addUserRole({
     required String name,
     int? supervisorRoleId,
@@ -274,6 +278,24 @@ class OrganizationalStructureRemoteDataSourceImpl
       final response = await client.dioGolang.get(
         ApiEndpoints.userRole,
         queryParameters: {'type_role': typeRole},
+      );
+
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => UserRoleModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<UserRoleModel>> getUserRolesList({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    try {
+      final response = await client.dioGolang.get(
+        ApiEndpoints.userRoleList,
+        queryParameters: {'type_role': typeRole, 'type_branch': typeBranch},
       );
 
       final List<dynamic> data = response.data['data'];
