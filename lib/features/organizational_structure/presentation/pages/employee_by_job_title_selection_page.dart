@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/structure_provider.dart';
 import '../../domain/entities/employee_entity.dart';
 
@@ -69,70 +71,12 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
   }
 
   void _onEmployeeSelected(EmployeeEntity employee) {
-    showDialog(context: context, builder: (dialogContext) => _buildConfirmationDialog(employee));
-  }
-
-  Widget _buildConfirmationDialog(EmployeeEntity employee) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Konfirmasi', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            CircleAvatar(radius: 40, backgroundImage: NetworkImage(employee.photoUrl)),
-            const SizedBox(height: 16),
-            Text(
-              employee.fullname,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(employee.nik, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-            const SizedBox(height: 8),
-            Text(widget.jobTitleName, style: const TextStyle(fontSize: 14, color: AppColors.blue)),
-            const SizedBox(height: 20),
-            const Text(
-              'Apakah Anda yakin ingin menambahkan karyawan ini ke struktur?',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primary,
-                      side: const BorderSide(color: AppColors.primary),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: const Text('Batal'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Navigator.pop(context); // Close confirmation dialog
-                      await _addEmployeeToStructure(employee);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: const Text('OK'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    ConfirmDialog.show(
+      context,
+      message: "Apakah anda yakin ingin menambahkan Struktur?",
+      onConfirm: () async {
+        await _addEmployeeToStructure(employee);
+      },
     );
   }
 
@@ -149,7 +93,14 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
     if (!mounted) return;
 
     if (success) {
-      _showSuccessDialog();
+      SuccessDialog.show(
+        context,
+        message: "Karyawan berhasil ditambahkan ke struktur",
+        onConfirm: () {
+          context.pop();
+          context.pop();
+        },
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -160,72 +111,11 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
     }
   }
 
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Berhasil!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 20),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                child: const Icon(Icons.check, size: 60, color: Colors.white),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Karyawan berhasil ditambahkan ke struktur',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(dialogContext); // Close success dialog
-                    context.pop(); // Back to employee list
-                    context.pop(); // Back to job title list
-                    context.pop(); // Back to structure page
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: const Text(
-                    'OK',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Pilih Karyawan',
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              // Search functionality handled by TextField
-            },
-          ),
-        ],
       ),
       body: Consumer<StructureProvider>(
         builder: (context, provider, child) {

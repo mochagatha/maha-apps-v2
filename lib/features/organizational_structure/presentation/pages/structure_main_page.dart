@@ -185,9 +185,12 @@ class _StructureMainPageState extends State<StructureMainPage> {
           child: RefreshIndicator(
             color: AppColors.primary,
             onRefresh: _loadData,
-            child: ListView.builder(
+            child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: structure.roleStructure.length,
+              separatorBuilder: (context, index) => SizedBox(
+                height: 16,
+              ),
               itemBuilder: (context, index) {
                 final role = structure.roleStructure[index];
                 return _buildRoleStructureCard(role, structure.id);
@@ -200,145 +203,116 @@ class _StructureMainPageState extends State<StructureMainPage> {
   }
 
   Widget _buildRoleStructureCard(RoleStructureEntity role, int companyStructureId) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(blurRadius: 8, color: Colors.grey.shade300, offset: const Offset(3, 3)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(flex: 1, child: SizedBox()),
-              Expanded(
-                flex: 6,
-                child: Text(
-                  role.userRole.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.blue,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Builder(
-                  builder: (buttonContext) => IconButton(
-                    icon: const Icon(Icons.more_vert, color: Colors.grey),
-                    onPressed: () => _showRoleMenu(role.id, buttonContext),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+    return InkWell(
+      onTap: role.superiorEmployeeStructure.isNotEmpty
+          ? null
+          : () => _navigateToJobTitleSelection(companyStructureId, role.id),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(blurRadius: 8, color: Colors.grey.shade300, offset: const Offset(3, 3)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(flex: 1, child: SizedBox()),
+                Expanded(
+                  flex: 6,
+                  child: Text(
+                    role.userRole.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.blue,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-            ],
-          ),
-          if (role.superiorEmployeeStructure.isNotEmpty) ...[
-            ...role.superiorEmployeeStructure.map((superior) {
-              return Column(
-                children: [
-                  Stack(
-                    children: [
-                      InkWell(
-                        onTap: () => _navigateToTeamManagement(superior.id),
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: NetworkImage(superior.employee.photoUrl),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: InkWell(
-                          onTap: () =>
-                              _showEditSuperiorDialog(superior, companyStructureId, role.id),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: AppColors.blue,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.edit, size: 16, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    superior.employee.fullname,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    superior.employee.nik,
-                    style: TextStyle(fontSize: 12, color: AppColors.neutral6),
-                  ),
-                  SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () => _showAddSuperiorDialog(companyStructureId, role.id),
-                      icon: const Icon(Icons.add_box_outlined, size: 26),
-                      label: const Text(
-                        "Tambah Departemen",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.blue,
-                        side: const BorderSide(color: AppColors.blue, width: 2),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(8),
-                        ),
-                      ),
+                Expanded(
+                  flex: 1,
+                  child: Builder(
+                    builder: (buttonContext) => IconButton(
+                      icon: const Icon(Icons.more_vert, color: Colors.grey),
+                      onPressed: () => _showRoleMenu(role.id, buttonContext),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ),
-                ],
-              );
-            }),
-          ] else ...[
-            const SizedBox(height: 12),
-            InkWell(
-              onTap: () => _navigateToJobTitleSelection(companyStructureId, role.id),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
                 ),
-                child: Column(
+              ],
+            ),
+            if (role.superiorEmployeeStructure.isNotEmpty) ...[
+              ...role.superiorEmployeeStructure.map((superior) {
+                return Column(
                   children: [
-                    Icon(Icons.add_circle_outline, size: 48, color: AppColors.blue),
+                    Stack(
+                      children: [
+                        InkWell(
+                          onTap: () => _navigateToTeamManagement(superior.id),
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: NetworkImage(superior.employee.photoUrl),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: InkWell(
+                            onTap: () =>
+                                _showEditSuperiorDialog(superior, companyStructureId, role.id),
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: AppColors.blue,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
                     Text(
-                      'Pilih Karyawan',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.blue,
-                      ),
+                      superior.employee.fullname,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Klik untuk memilih karyawan yang mengisi struktur ini',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                      superior.employee.nik,
+                      style: TextStyle(fontSize: 12, color: AppColors.neutral6),
+                    ),
+                    SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () => _showAddSuperiorDialog(companyStructureId, role.id),
+                        icon: const Icon(Icons.add_box_outlined, size: 26),
+                        label: const Text(
+                          "Tambah Departemen",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.blue,
+                          side: const BorderSide(color: AppColors.blue, width: 2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(8),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
-                ),
-              ),
-            ),
+                );
+              }),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -440,40 +414,6 @@ class _StructureMainPageState extends State<StructureMainPage> {
           initialJobTitleId: superior.jobTitle.id,
           onSuccess: _loadData,
         ),
-      ),
-    );
-  }
-
-  void _confirmDeleteSuperior(int superiorId) {
-    final provider = context.read<StructureProvider>();
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Hapus Pejabat'),
-        content: const Text('Apakah Anda yakin ingin menghapus pejabat ini?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Batal')),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(dialogContext);
-              final success = await provider.deleteSuperiorEmployee(superiorId);
-              if (success && mounted) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text('Pejabat berhasil dihapus')));
-                _loadData();
-              } else if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(provider.errorMessage ?? 'Gagal menghapus'),
-                    backgroundColor: AppColors.primary,
-                  ),
-                );
-              }
-            },
-            child: const Text('Hapus', style: TextStyle(color: AppColors.primary)),
-          ),
-        ],
       ),
     );
   }

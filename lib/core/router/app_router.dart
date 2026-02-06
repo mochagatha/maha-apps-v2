@@ -95,7 +95,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.organizationalStructure,
+      initialLocation: RoutePaths.structureMain,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -125,7 +125,6 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.splash,
           name: RouteNames.splash,
-
           builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
@@ -224,8 +223,7 @@ class AppRouter {
                 GoRoute(
                   path: RoutePaths.pesan,
                   name: RouteNames.pesan,
-                  builder: (context, state) =>
-                      const Scaffold(body: Center(child: Text("Pesan"))),
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
             ),
@@ -267,8 +265,7 @@ class AppRouter {
           path: RoutePaths.biodataForm,
           name: RouteNames.biodataForm,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) =>
-                BiodataFormProvider(repository: sl<BiodataRepository>()),
+            create: (_) => BiodataFormProvider(repository: sl<BiodataRepository>()),
             child: const BiodataFormPage(),
           ),
         ),
@@ -639,8 +636,7 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsPenempatanKerja,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsLibur,
@@ -649,38 +645,31 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsHirarkiOffice,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Hirarki Office'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hirarki Office'),
         ),
         GoRoute(
           path: RoutePaths.settingsLembur,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Lembur'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Lembur'),
         ),
         GoRoute(
           path: RoutePaths.settingsTindakanKaryawan,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
         ),
         GoRoute(
           path: RoutePaths.settingsBpjs,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'BPJS'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'BPJS'),
         ),
         GoRoute(
           path: RoutePaths.settingsPph21,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'PPH 21'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'PPH 21'),
         ),
         GoRoute(
           path: RoutePaths.settingsJamKerja,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Jam Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Jam Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsFormatDanDraf,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Format dan Draf'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Format dan Draf'),
         ),
         GoRoute(
           path: RoutePaths.settingsAksesLayar,
@@ -706,13 +695,11 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsHakAksesMenu,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
         ),
         GoRoute(
           path: RoutePaths.settingsPelacakanJamKerja,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsKpi,
@@ -722,8 +709,7 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsBahasa,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
         ),
       ],
 
