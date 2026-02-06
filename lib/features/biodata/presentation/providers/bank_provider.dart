@@ -13,10 +13,14 @@ class BankProvider extends ChangeNotifier {
     ),
     Bank(
       id: 2,
-      name: "BSI",
+      name: "Bank Mandiri 2",
     ),
     Bank(
       id: 3,
+      name: "BSI",
+    ),
+    Bank(
+      id: 4,
       name: "BCA",
     ),
   ];

@@ -43,7 +43,7 @@ class SignaturePage extends StatelessWidget {
         padding: EdgeInsetsGeometry.all(12),
         child: CustomElevatedButton(
           onPressed: () {
-            context.pushNamed(RouteNames.biodataCreateSignature);
+            context.pushReplacementNamed(RouteNames.biodataCreateSignature);
           },
           child: Text("Mulai Buat Tanda Tangan"),
         ),

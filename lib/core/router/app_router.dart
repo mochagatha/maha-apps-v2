@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/bank_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/create_signature_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/signature_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/statement_letter_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/statement_letter_signature_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -291,6 +294,26 @@ class AppRouter {
               child: CreateSignaturePage(),
             );
           },
+        ),
+        ShellRoute(
+          builder: (context, state, child) {
+            return ChangeNotifierProvider(
+              create: (context) => StatementLettersProvider(),
+              child: child,
+            );
+          },
+          routes: [
+            GoRoute(
+              path: RoutePaths.biodataStatementLetter,
+              name: RouteNames.biodataStatementLetter,
+              builder: (context, state) => StatementLetterPage(),
+            ),
+            GoRoute(
+              path: RoutePaths.biodataStatementLetterSignature,
+              name: RouteNames.biodataStatementLetterSignature,
+              builder: (context, state) => StatementLetterSignaturePage(),
+            ),
+          ],
         ),
         GoRoute(
           path: RoutePaths.recruitment,
