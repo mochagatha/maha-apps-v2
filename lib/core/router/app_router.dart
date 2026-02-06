@@ -1,6 +1,16 @@
 // GoRouter Configuration
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/bank_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/create_signature_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/employee_employment_agreement_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/signature_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/statement_letter_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/statement_letter_signature_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_agreement_provider.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -214,7 +224,8 @@ class AppRouter {
                 GoRoute(
                   path: RoutePaths.pesan,
                   name: RouteNames.pesan,
-                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
+                  builder: (context, state) =>
+                      const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
             ),
@@ -256,7 +267,8 @@ class AppRouter {
           path: RoutePaths.biodataForm,
           name: RouteNames.biodataForm,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => BiodataFormProvider(repository: sl<BiodataRepository>()),
+            create: (_) =>
+                BiodataFormProvider(repository: sl<BiodataRepository>()),
             child: const BiodataFormPage(),
           ),
         ),
@@ -271,8 +283,10 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.familyForm,
           name: RouteNames.familyForm,
-          builder: (context, state) =>
-              ChangeNotifierProvider(create: (_) => FamilyProvider(), child: const FamilyPage()),
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => FamilyProvider(),
+            child: const FamilyPage(),
+          ),
         ),
         GoRoute(
           path: RoutePaths.documentForm,
@@ -285,8 +299,10 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.skillForm,
           name: RouteNames.skillForm,
-          builder: (context, state) =>
-              ChangeNotifierProvider(create: (_) => SkillProvider(), child: const SkillPage()),
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => SkillProvider(),
+            child: const SkillPage(),
+          ),
         ),
         GoRoute(
           path: RoutePaths.selfieForm,
@@ -317,6 +333,61 @@ class AppRouter {
           path: RoutePaths.selfieResultKtp,
           name: RouteNames.selfieResultKtp,
           builder: (context, state) => const SelfieKtpResultPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.biodataBank,
+          name: RouteNames.biodataBank,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => BankProvider(),
+              child: const BankPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: RoutePaths.biodataSignature,
+          name: RouteNames.biodataSignature,
+          builder: (context, state) => SignaturePage(),
+        ),
+        GoRoute(
+          path: RoutePaths.biodataCreateSignature,
+          name: RouteNames.biodataCreateSignature,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => SignatureProvider(),
+              child: CreateSignaturePage(),
+            );
+          },
+        ),
+        ShellRoute(
+          builder: (context, state, child) {
+            return ChangeNotifierProvider(
+              create: (context) => StatementLettersProvider(),
+              child: child,
+            );
+          },
+          routes: [
+            GoRoute(
+              path: RoutePaths.biodataStatementLetter,
+              name: RouteNames.biodataStatementLetter,
+              builder: (context, state) => StatementLetterPage(),
+            ),
+            GoRoute(
+              path: RoutePaths.biodataStatementLetterSignature,
+              name: RouteNames.biodataStatementLetterSignature,
+              builder: (context, state) => StatementLetterSignaturePage(),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: RoutePaths.employeeEmploymentAgreement,
+          name: RouteNames.employeeEmploymentAgreement,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => EmploymentAgreementProvider(),
+              child: const EmployeeEmploymentAgreementPage(),
+            );
+          },
         ),
         GoRoute(
           path: RoutePaths.recruitment,
@@ -568,7 +639,8 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsPenempatanKerja,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsLibur,
@@ -577,31 +649,38 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsHirarkiOffice,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hirarki Office'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Hirarki Office'),
         ),
         GoRoute(
           path: RoutePaths.settingsLembur,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Lembur'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Lembur'),
         ),
         GoRoute(
           path: RoutePaths.settingsTindakanKaryawan,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
         ),
         GoRoute(
           path: RoutePaths.settingsBpjs,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'BPJS'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'BPJS'),
         ),
         GoRoute(
           path: RoutePaths.settingsPph21,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'PPH 21'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'PPH 21'),
         ),
         GoRoute(
           path: RoutePaths.settingsJamKerja,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Jam Kerja'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Jam Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsFormatDanDraf,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Format dan Draf'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Format dan Draf'),
         ),
         GoRoute(
           path: RoutePaths.settingsAksesLayar,
@@ -627,20 +706,24 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsHakAksesMenu,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
         ),
         GoRoute(
           path: RoutePaths.settingsPelacakanJamKerja,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsKpi,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Indikator Kinerja Utama (KPI)'),
+          builder: (context, state) => const SettingsPlaceholderPage(
+            title: 'Indikator Kinerja Utama (KPI)',
+          ),
         ),
         GoRoute(
           path: RoutePaths.settingsBahasa,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
+          builder: (context, state) =>
+              const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
         ),
       ],
 

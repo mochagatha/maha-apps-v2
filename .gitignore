@@ -46,3 +46,6 @@ app.*.map.json
 
 .vscode/templates
 .github/copilot-instructions.md
+
+# FVM Version Cache
+.fvm/
