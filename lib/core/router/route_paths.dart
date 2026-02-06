@@ -60,6 +60,7 @@ class RoutePaths {
   static const String biodataCreateSignature = '/biodata/signature/create';
   static const String biodataStatementLetter = '/biodata/statement-letter/statement';
   static const String biodataStatementLetterSignature = '/biodata/statement-letter/signature';
+  static const String employeeEmploymentAgreement = '/employment-agreement/employee';
   static const String verificationData = '/recruitment/verification-data';
   static const String employeeVerification = '/recruitment/employee-verification';
   static const String companyCode = '/recruitment/company-code';

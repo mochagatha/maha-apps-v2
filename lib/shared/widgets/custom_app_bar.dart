@@ -55,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     size: 24,
                   ),
                   tooltip: 'Back',
-                  onPressed: () => Navigator.maybePop(context),
+                  onPressed: () => Navigator.pop(context),
                 )
               : null),
       title: Text(

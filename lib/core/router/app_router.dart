@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/bank_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/create_signature_page.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/pages/employee_employment_agreement_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/signature_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/statement_letter_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/statement_letter_signature_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
+import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_agreement_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
@@ -78,7 +80,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.biodataBank,
+      initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
 
       // Redirect logic
@@ -314,6 +316,16 @@ class AppRouter {
               builder: (context, state) => StatementLetterSignaturePage(),
             ),
           ],
+        ),
+        GoRoute(
+          path: RoutePaths.employeeEmploymentAgreement,
+          name: RouteNames.employeeEmploymentAgreement,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => EmploymentAgreementProvider(),
+              child: const EmployeeEmploymentAgreementPage(),
+            );
+          },
         ),
         GoRoute(
           path: RoutePaths.recruitment,
