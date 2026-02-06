@@ -57,6 +57,8 @@ import '../../features/organizational_structure/presentation/pages/job_title_lis
 import '../../features/organizational_structure/presentation/pages/job_title_office_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_project_page.dart';
 import '../../features/organizational_structure/presentation/pages/job_title_detail_page.dart';
+import '../../features/organizational_structure/presentation/pages/job_title_selection_page.dart';
+import '../../features/organizational_structure/presentation/pages/employee_by_job_title_selection_page.dart';
 import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
 import '../../features/organizational_structure/presentation/providers/department_provider.dart';
 import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
@@ -501,6 +503,40 @@ class AppRouter {
               title: 'Data Jabatan',
             ),
           ),
+        ),
+        GoRoute(
+          path: RoutePaths.jobTitleSelection,
+          name: RouteNames.jobTitleSelection,
+          builder: (context, state) {
+            final companyStructureId = int.parse(state.uri.queryParameters['companyStructureId']!);
+            final roleStructureId = int.parse(state.uri.queryParameters['roleStructureId']!);
+            return ChangeNotifierProvider(
+              create: (_) => sl<JobTitleProvider>(),
+              child: JobTitleSelectionPage(
+                companyStructureId: companyStructureId,
+                roleStructureId: roleStructureId,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: RoutePaths.employeeByJobTitleSelection,
+          name: RouteNames.employeeByJobTitleSelection,
+          builder: (context, state) {
+            final companyStructureId = int.parse(state.uri.queryParameters['companyStructureId']!);
+            final roleStructureId = int.parse(state.uri.queryParameters['roleStructureId']!);
+            final jobTitleId = int.parse(state.uri.queryParameters['jobTitleId']!);
+            final jobTitleName = state.uri.queryParameters['jobTitleName'] ?? '';
+            return ChangeNotifierProvider(
+              create: (_) => sl<StructureProvider>(),
+              child: EmployeeByJobTitleSelectionPage(
+                companyStructureId: companyStructureId,
+                roleStructureId: roleStructureId,
+                jobTitleId: jobTitleId,
+                jobTitleName: jobTitleName,
+              ),
+            );
+          },
         ),
 
         // Access Menu Routes

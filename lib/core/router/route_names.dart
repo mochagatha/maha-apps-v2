@@ -57,7 +57,7 @@ class RouteNames {
   static const String verificationData = 'verification-data';
   static const String employeeVerification = 'employee-verification';
   static const String companyCode = 'company-code';
-  
+
   // Organizational Structure
   static const String organizationalStructure = 'organizational-structure';
   static const String structureMain = 'structure-main';
@@ -79,6 +79,8 @@ class RouteNames {
   static const String jobTitleOfficeWorker = 'job-title-office-worker';
   static const String jobTitleProjectEmployee = 'job-title-project-employee';
   static const String jobTitleProjectWorker = 'job-title-project-worker';
+  static const String jobTitleSelection = 'job-title-selection';
+  static const String employeeByJobTitleSelection = 'employee-by-job-title-selection';
   static const String employeeSelection = 'employee-selection';
   static const String accessMenuList = 'access-menu-list';
   static const String settingsAksesLayar = 'access-screen-list';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/router/route_names.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/confirm_dialog.dart';
@@ -302,6 +304,39 @@ class _StructureMainPageState extends State<StructureMainPage> {
                 ],
               );
             }),
+          ] else ...[
+            const SizedBox(height: 12),
+            InkWell(
+              onTap: () => _navigateToJobTitleSelection(companyStructureId, role.id),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
+                ),
+                child: Column(
+                  children: [
+                    Icon(Icons.add_circle_outline, size: 48, color: AppColors.blue),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Pilih Karyawan',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.blue,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Klik untuk memilih karyawan yang mengisi struktur ini',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ],
       ),
@@ -344,6 +379,17 @@ class _StructureMainPageState extends State<StructureMainPage> {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => StructureTeamPage(superiorId: superiorId)),
+    );
+    _loadData();
+  }
+
+  void _navigateToJobTitleSelection(int companyStructureId, int roleStructureId) async {
+    await context.pushNamed(
+      RouteNames.jobTitleSelection,
+      queryParameters: {
+        'companyStructureId': companyStructureId.toString(),
+        'roleStructureId': roleStructureId.toString(),
+      },
     );
     _loadData();
   }
