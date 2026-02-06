@@ -83,9 +83,8 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.splash,
+      initialLocation: RoutePaths.structureMain,
       debugLogDiagnostics: true,
-
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
         final authProvider = context.read<AuthProvider>();

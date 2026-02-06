@@ -1028,6 +1028,12 @@ abstract class AppLocalizations {
   /// **'Arsip'**
   String get archive;
 
+  /// No description provided for @delete.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus'**
+  String get delete;
+
   /// No description provided for @deleteRole.
   ///
   /// In id, this message translates to:

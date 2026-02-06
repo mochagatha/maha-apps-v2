@@ -502,6 +502,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get archive => 'Arsip';
 
   @override
+  String get delete => 'Hapus';
+
+  @override
   String get deleteRole => 'Hapus Role';
 
   @override

@@ -487,6 +487,7 @@
   "underMonitoring": "Kamu sedang dalam\npemantauan nih!",
   "showChart": "Tampilkan Bagan",
   "archive": "Arsip",
+  "delete": "Hapus",
   "deleteRole": "Hapus Role",
   "deleteStructureRoleTitle": "Hapus Role Struktur",
   "deleteStructureRoleMessage": "Apakah Anda yakin ingin menghapus role ini?",
