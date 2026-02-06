@@ -15,6 +15,7 @@ import '../../domain/entities/superior_employee_entity.dart';
 import '../../domain/entities/user_role_entity.dart';
 import '../widgets/superior_employee_form_bottom_sheet.dart';
 import 'structure_team_page.dart';
+import 'add_department_members_page.dart';
 import '../../../../core/di/injection_container.dart';
 
 class StructureMainPage extends StatefulWidget {
@@ -292,7 +293,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(
-                        onPressed: () => _showAddSuperiorDialog(companyStructureId, role.id),
+                        onPressed: () => _navigateToAddDepartment(
+                          companyStructureId: companyStructureId,
+                          roleStructureId: role.id,
+                          superiorEmployeeId: superior.id,
+                        ),
                         icon: const Icon(Icons.add_box_outlined, size: 26),
                         label: const Text(
                           "Tambah Departemen",
@@ -364,6 +369,28 @@ class _StructureMainPageState extends State<StructureMainPage> {
         'companyStructureId': companyStructureId.toString(),
         'roleStructureId': roleStructureId.toString(),
       },
+    );
+    _loadData();
+  }
+
+  void _navigateToAddDepartment({
+    required int companyStructureId,
+    required int roleStructureId,
+    required int superiorEmployeeId,
+  }) async {
+    final provider = context.read<StructureProvider>();
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider.value(
+          value: provider,
+          child: AddDepartmentMembersPage(
+            companyStructureId: companyStructureId,
+            roleStructureId: roleStructureId,
+            superiorEmployeeId: superiorEmployeeId,
+          ),
+        ),
+      ),
     );
     _loadData();
   }
