@@ -83,7 +83,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> saveLoginStatus(bool rememberMe) async {
     try {
-      await sharedPreferences.setBool(AppConstants.keyIsLoggedIn, rememberMe);
+      // Always set logged in status to true after successful login
+      await sharedPreferences.setBool(AppConstants.keyIsLoggedIn, true);
+      // Save remember me preference separately
       await sharedPreferences.setBool(AppConstants.keyRememberMe, rememberMe);
     } catch (e) {
       throw CacheException('Failed to save login status: ${e.toString()}');

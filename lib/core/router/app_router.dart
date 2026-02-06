@@ -114,11 +114,32 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.splash,
           name: RouteNames.splash,
+
           builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
           path: RoutePaths.login,
           name: RouteNames.login,
+          redirect: (context, state) {
+            final authProvider = context.read<AuthProvider>();
+            // If user is on splash and already authenticated, skip splash
+            // BUT: Admin users should NOT skip - they must login fresh each time
+            if (authProvider.isAuthenticated) {
+              // Check if admin
+              if (authProvider.isAdmin) {
+                return RoutePaths.adminHome;
+              }
+              // Check user status to determine destination (matching v1 logic)
+              if (authProvider.user?.status == 1) {
+                return RoutePaths.welcomeBiodata;
+              } else {
+                return RoutePaths.home;
+              }
+            }
+
+            // Allow normal navigation for all other cases
+            return null;
+          },
           builder: (context, state) => const LoginPage(),
         ),
         GoRoute(

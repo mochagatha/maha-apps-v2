@@ -91,10 +91,9 @@ class AuthProvider extends ChangeNotifier {
           },
         );
 
-        // Save login status
-        if (rememberMe) {
-          await saveLoginStatus(SaveLoginStatusParams(rememberMe: true));
-        }
+        // Always save login status after successful login
+        // rememberMe flag determines if user wants to stay logged in
+        await saveLoginStatus(SaveLoginStatusParams(rememberMe: rememberMe));
       },
     );
 
@@ -150,22 +149,20 @@ class AuthProvider extends ChangeNotifier {
             (user) async {
               // User is logged in locally, now try to fetch fresh profile
               // to ensure we have the latest status
+              _status = AuthStatus.authenticated;
               if (user.token != null) {
                 final profileResult = await getProfile(const NoParams());
                 profileResult.fold(
                   (failure) {
                     // If fetch fails, we fall back to cached user
                     // (or should we?)
-                    _status = AuthStatus.authenticated;
                     _user = user;
                   },
                   (freshUser) {
-                    _status = AuthStatus.authenticated;
                     _user = freshUser;
                   },
                 );
               } else {
-                _status = AuthStatus.authenticated;
                 _user = user;
               }
             },

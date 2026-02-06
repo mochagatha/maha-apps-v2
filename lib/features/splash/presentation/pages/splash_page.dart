@@ -51,7 +51,6 @@ class _SplashPageState extends State<SplashPage> {
       // Check if admin
       if (authProvider.isAdmin) {
         context.go(RoutePaths.adminHome);
-        return;
       }
       // Check status to match v1 logic
       // v1 source: employee?.data.status
