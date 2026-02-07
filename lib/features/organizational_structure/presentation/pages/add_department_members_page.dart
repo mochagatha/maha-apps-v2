@@ -289,17 +289,10 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
   void _showSelectEmployeeDialog({required bool isEmployee}) async {
     final provider = context.read<StructureProvider>();
 
-    // Load employees if not already loaded
-    if (provider.employees.isEmpty) {
-      await provider.loadEmployees();
-    }
-
-    if (!mounted) return;
-
     final selectedEmployees = await showDialog<List<EmployeeEntity>>(
       context: context,
       builder: (context) => SelectEmployeeDialog(
-        employees: provider.employees,
+        employeesFuture: provider.getEmployeesFuture(),
         initialSelectedEmployees: isEmployee ? _selectedEmployees : _selectedWorkers,
       ),
     );

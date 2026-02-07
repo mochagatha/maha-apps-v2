@@ -62,13 +62,15 @@ class _MyAppState extends State<MyApp> {
         // Screen Security Provider from GetIt
         ChangeNotifierProvider(create: (_) => di.sl<ScreenSecurityProvider>()),
       ],
-      child: const AppInitializer(),
+      child: AppInitializer(router: _router),
     );
   }
 }
 
 class AppInitializer extends StatefulWidget {
-  const AppInitializer({super.key});
+  final GoRouter router;
+
+  const AppInitializer({super.key, required this.router});
 
   @override
   State<AppInitializer> createState() => _AppInitializerState();
@@ -105,7 +107,7 @@ class _AppInitializerState extends State<AppInitializer> {
           title: 'MAHA Apps',
           theme: AppTheme.lightTheme,
           debugShowCheckedModeBanner: false,
-          routerConfig: AppRouter.router(),
+          routerConfig: widget.router,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

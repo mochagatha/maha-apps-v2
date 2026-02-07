@@ -322,6 +322,22 @@ class StructureProvider with ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Get employees as a Future (for dialogs that can't access provider context)
+  Future<List<EmployeeEntity>> getEmployeesFuture() async {
+    final result = await getOrganizationalData.getEmployees();
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return [];
+      },
+      (employees) {
+        _employees = employees;
+        notifyListeners();
+        return employees;
+      },
+    );
+  }
+
   /// Clear error message
   void clearError() {
     _errorMessage = null;

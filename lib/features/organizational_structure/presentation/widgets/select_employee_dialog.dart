@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../domain/entities/employee_entity.dart';
 
 class SelectEmployeeDialog extends StatefulWidget {
-  final List<EmployeeEntity> employees;
+  final Future<List<EmployeeEntity>> employeesFuture;
   final List<EmployeeEntity> initialSelectedEmployees;
 
   const SelectEmployeeDialog({
     super.key,
-    required this.employees,
+    required this.employeesFuture,
     this.initialSelectedEmployees = const [],
   });
 
@@ -18,14 +19,14 @@ class SelectEmployeeDialog extends StatefulWidget {
 
 class _SelectEmployeeDialogState extends State<SelectEmployeeDialog> {
   late List<EmployeeEntity> _selectedEmployees;
-  late List<EmployeeEntity> _filteredEmployees;
+  List<EmployeeEntity>? _employees;
+  List<EmployeeEntity> _filteredEmployees = [];
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _selectedEmployees = List.from(widget.initialSelectedEmployees);
-    _filteredEmployees = widget.employees;
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -37,12 +38,14 @@ class _SelectEmployeeDialogState extends State<SelectEmployeeDialog> {
   }
 
   void _onSearchChanged() {
+    if (_employees == null) return;
+
     setState(() {
       final query = _searchController.text.toLowerCase();
       if (query.isEmpty) {
-        _filteredEmployees = widget.employees;
+        _filteredEmployees = _employees!;
       } else {
-        _filteredEmployees = widget.employees.where((employee) {
+        _filteredEmployees = _employees!.where((employee) {
           return employee.fullname.toLowerCase().contains(query) ||
               employee.nik.toLowerCase().contains(query) ||
               (employee.jobTitleName?.toLowerCase().contains(query) ?? false);
@@ -114,82 +117,142 @@ class _SelectEmployeeDialogState extends State<SelectEmployeeDialog> {
             ),
             const SizedBox(height: 16),
 
-            // Employee list
+            // Employee list with FutureBuilder
             Expanded(
-              child: _filteredEmployees.isEmpty
-                  ? const Center(
+              child: FutureBuilder<List<EmployeeEntity>>(
+                future: widget.employeesFuture,
+                builder: (context, snapshot) {
+                  // Loading state
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: SpinKitThreeBounce(color: AppColors.primary),
+                    );
+                  }
+
+                  // Error state
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 48,
+                            color: Colors.red,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Gagal memuat data pekerja',
+                            style: TextStyle(color: Colors.grey.shade600),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // Initialize _employees and _filteredEmployees on first load
+                  final employees = snapshot.data ?? [];
+                  if (_employees == null) {
+                    _employees = employees;
+                    _filteredEmployees = employees;
+                  } else if (_employees != employees) {
+                    // Update _employees when data changes
+                    _employees = employees;
+                    _filteredEmployees = employees;
+                  }
+
+                  // Empty state
+                  if (employees.isEmpty) {
+                    return const Center(
                       child: Text(
                         'Tidak ada data pekerja',
                         style: TextStyle(color: Colors.grey),
                       ),
-                    )
-                  : ListView.separated(
-                      itemCount: _filteredEmployees.length,
-                      separatorBuilder: (context, index) => const Divider(height: 1),
-                      itemBuilder: (context, index) {
-                        final employee = _filteredEmployees[index];
-                        final isSelected = _selectedEmployees.any((e) => e.id == employee.id);
+                    );
+                  }
 
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (isSelected) {
-                                _selectedEmployees.removeWhere((e) => e.id == employee.id);
-                              } else {
-                                _selectedEmployees.add(employee);
-                              }
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 24,
-                                  backgroundImage: NetworkImage(employee.photoUrl),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
+                  // No search results
+                  if (_filteredEmployees.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'Tidak ada hasil pencarian',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
+
+                  // Employee list
+                  return ListView.separated(
+                    itemCount: _filteredEmployees.length,
+                    separatorBuilder: (context, index) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final employee = _filteredEmployees[index];
+                      final isSelected = _selectedEmployees.any((e) => e.id == employee.id);
+
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (isSelected) {
+                              _selectedEmployees.removeWhere((e) => e.id == employee.id);
+                            } else {
+                              _selectedEmployees.add(employee);
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundImage: NetworkImage(employee.photoUrl),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      employee.fullname,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    if (employee.jobTitleName != null)
                                       Text(
-                                        employee.fullname,
+                                        employee.jobTitleName!,
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
+                                          color: Colors.grey,
+                                          fontSize: 12,
                                         ),
                                       ),
-                                      if (employee.jobTitleName != null)
-                                        Text(
-                                          employee.jobTitleName!,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
+                                  ],
                                 ),
-                                Checkbox(
-                                  value: isSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value == true) {
-                                        _selectedEmployees.add(employee);
-                                      } else {
-                                        _selectedEmployees.removeWhere((e) => e.id == employee.id);
-                                      }
-                                    });
-                                  },
-                                  activeColor: AppColors.blue,
-                                ),
-                              ],
-                            ),
+                              ),
+                              Checkbox(
+                                value: isSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      _selectedEmployees.add(employee);
+                                    } else {
+                                      _selectedEmployees.removeWhere(
+                                        (e) => e.id == employee.id,
+                                      );
+                                    }
+                                  });
+                                },
+                                activeColor: AppColors.blue,
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
 
             // Button
