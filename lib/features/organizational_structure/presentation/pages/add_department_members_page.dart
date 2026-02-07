@@ -325,43 +325,36 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
     }
 
     // Tampilkan konfirmasi
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(
-        title: 'Konfirmasi',
-        message: 'Apakah Anda yakin ingin menyimpan data ini?',
-      ),
+    // Tampilkan konfirmasi
+    ConfirmDialog.show(
+      context,
+      message: 'Apakah Anda yakin ingin menyimpan data ini?',
+      onConfirm: () async {
+        final provider = context.read<StructureProvider>();
+
+        final success = await provider.addDepartment(
+          superiorEmployeeStructureId: widget.superiorEmployeeId,
+          departmentId: _selectedDepartmentId!,
+          employeeIds: _selectedEmployees.map((e) => e.id).toList(),
+          workerIds: _selectedWorkers.map((e) => e.id).toList(),
+        );
+
+        if (!mounted) return;
+
+        if (success) {
+          SuccessDialog.show(
+            context,
+            message: 'Data berhasil disimpan',
+            onConfirm: () {
+              Navigator.pop(context);
+            },
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(provider.errorMessage ?? 'Gagal menyimpan data')),
+          );
+        }
+      },
     );
-
-    if (confirmed != true) return;
-
-    if (!mounted) return;
-
-    final provider = context.read<StructureProvider>();
-
-    final success = await provider.addDepartment(
-      superiorEmployeeStructureId: widget.superiorEmployeeId,
-      departmentId: _selectedDepartmentId!,
-      employeeIds: _selectedEmployees.map((e) => e.id).toList(),
-      workerIds: _selectedWorkers.map((e) => e.id).toList(),
-    );
-
-    if (!mounted) return;
-
-    if (success) {
-      await showDialog(
-        context: context,
-        builder: (context) => SuccessDialog(
-          message: 'Data berhasil disimpan',
-          onConfirm: () {
-            Navigator.pop(context);
-          },
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(provider.errorMessage ?? 'Gagal menyimpan data')),
-      );
-    }
   }
 }
