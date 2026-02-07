@@ -10,6 +10,7 @@ import '../../../../shared/widgets/success_dialog.dart';
 import '../providers/structure_provider.dart';
 import '../providers/job_title_provider.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../domain/entities/organizational_structure_entity.dart';
 import '../../domain/entities/role_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
 import '../../domain/entities/user_role_entity.dart';
@@ -132,7 +133,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
     );
   }
 
-  Widget _buildDataDisplay(dynamic structure) {
+  Widget _buildDataDisplay(OrganizationalStructureEntity structure) {
     return Column(
       children: [
         // Action buttons
@@ -290,6 +291,56 @@ class _StructureMainPageState extends State<StructureMainPage> {
                       style: TextStyle(fontSize: 12, color: AppColors.neutral6),
                     ),
                     SizedBox(height: 8),
+                    if (superior.departmentStructure.isNotEmpty) ...[
+                      ...superior.departmentStructure.map((department) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      department.department.departmentName,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
+                                          color: AppColors.blue,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.edit,
+                                          size: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              if (department.employeeStructure.isNotEmpty) ...[
+                                ...department.employeeStructure.map((subDepartment) {
+                                  return CircleAvatar(
+                                    radius: 16,
+                                    backgroundImage: NetworkImage(subDepartment.employee.photoUrl),
+                                    backgroundColor: Colors.grey.shade200,
+                                  );
+                                }),
+                              ],
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(

@@ -14,10 +14,10 @@ class DepartmentStructureModel extends DepartmentStructureEntity {
     return DepartmentStructureModel(
       id: json['id'] as int,
       department: DepartmentModel.fromJson(json['department'] as Map<String, dynamic>),
-      employeeStructure: (json['employee_structure'] as List)
+      employeeStructure: (json['employee_structure'] as List? ?? [])
           .map((e) => EmployeeStructureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      workerStructure: (json['worker_structure'] as List)
+      workerStructure: (json['worker_structure'] as List? ?? [])
           .map((e) => WorkerStructureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -30,9 +30,7 @@ class DepartmentStructureModel extends DepartmentStructureEntity {
       'employee_structure': employeeStructure
           .map((e) => (e as EmployeeStructureModel).toJson())
           .toList(),
-      'worker_structure': workerStructure
-          .map((e) => (e as WorkerStructureModel).toJson())
-          .toList(),
+      'worker_structure': workerStructure.map((e) => (e as WorkerStructureModel).toJson()).toList(),
     };
   }
 

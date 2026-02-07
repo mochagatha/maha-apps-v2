@@ -17,7 +17,7 @@ class RoleStructureModel extends RoleStructureEntity {
       userRoleId: json['user_role_id'] as int,
       companyStructureId: json['company_structure_id'] as int,
       userRole: EmploymentLevelModel.fromJson(json['user_role'] as Map<String, dynamic>),
-      superiorEmployeeStructure: (json['superior_employee_structure'] as List)
+      superiorEmployeeStructure: (json['superior_employee_structure'] as List? ?? [])
           .map((e) => SuperiorEmployeeModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );

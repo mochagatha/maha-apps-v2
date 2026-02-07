@@ -12,7 +12,7 @@ class OrganizationalStructureModel extends OrganizationalStructureEntity {
     return OrganizationalStructureModel(
       id: json['id'] as int,
       typeStructure: json['type_structure'] as String,
-      roleStructure: (json['role_structure'] as List)
+      roleStructure: (json['role_structure'] as List? ?? [])
           .map((e) => RoleStructureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -22,9 +22,7 @@ class OrganizationalStructureModel extends OrganizationalStructureEntity {
     return {
       'id': id,
       'type_structure': typeStructure,
-      'role_structure': roleStructure
-          .map((e) => (e as RoleStructureModel).toJson())
-          .toList(),
+      'role_structure': roleStructure.map((e) => (e as RoleStructureModel).toJson()).toList(),
     };
   }
 

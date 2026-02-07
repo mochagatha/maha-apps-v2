@@ -19,7 +19,7 @@ class SuperiorEmployeeModel extends SuperiorEmployeeEntity {
       employee: EmployeeModel.fromJson(json['employee'] as Map<String, dynamic>),
       department: DepartmentModel.fromJson(json['department'] as Map<String, dynamic>),
       jobTitle: JobTitleModel.fromJson(json['job_title'] as Map<String, dynamic>),
-      departmentStructure: (json['department_structure'] as List)
+      departmentStructure: (json['department_structure'] as List? ?? [])
           .map((e) => DepartmentStructureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
