@@ -131,6 +131,16 @@ import '../../features/screen_security/domain/repositories/screen_security_repos
 import '../../features/screen_security/domain/usecases/get_screen_security_settings.dart';
 import '../../features/screen_security/presentation/providers/screen_security_provider.dart';
 
+// Pelacakan Jam Kerja feature imports
+import '../../features/pelacakan_jam_kerja/data/datasources/pelacakan_local_data_source.dart';
+import '../../features/pelacakan_jam_kerja/data/datasources/pelacakan_remote_data_source.dart';
+import '../../features/pelacakan_jam_kerja/data/repositories/pelacakan_repository_impl.dart';
+import '../../features/pelacakan_jam_kerja/domain/repositories/pelacakan_repository.dart';
+import '../../features/pelacakan_jam_kerja/domain/usecases/get_employees.dart';
+import '../../features/pelacakan_jam_kerja/domain/usecases/get_tracking_settings.dart';
+import '../../features/pelacakan_jam_kerja/domain/usecases/save_tracking_settings.dart';
+import '../../features/pelacakan_jam_kerja/presentation/providers/pelacakan_provider.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -440,6 +450,38 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<ScreenSecurityRemoteDataSource>(
     () => ScreenSecurityRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  //! Features - Pelacakan Jam Kerja
+  // Provider
+  sl.registerFactory(
+    () => PelacakanProvider(
+      getTrackingSettings: sl(),
+      getEmployees: sl(),
+      saveTrackingSettings: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetTrackingSettings(sl()));
+  sl.registerLazySingleton(() => GetEmployees(sl()));
+  sl.registerLazySingleton(() => SaveTrackingSettings(sl()));
+
+  // Repository
+  sl.registerLazySingleton<PelacakanRepository>(
+    () => PelacakanRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<PelacakanRemoteDataSource>(
+    () => PelacakanRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  sl.registerLazySingleton<PelacakanLocalDataSource>(
+    () => PelacakanLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
   //! Core

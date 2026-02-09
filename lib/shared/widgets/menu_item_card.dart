@@ -29,8 +29,24 @@ class MenuItemCard extends StatelessWidget {
               children: [
                 if (asset != null) ...[
                   asset!.toLowerCase().endsWith('.svg')
-                      ? SvgPicture.asset(asset!, height: 40, width: 40)
-                      : Image.asset(asset!, height: 40, width: 40),
+                      ? SvgPicture.asset(
+                          asset!,
+                          height: 40,
+                          width: 40,
+                          errorBuilder: (context, error, stackTrace) => SizedBox(
+                            height: 40,
+                            width: 40,
+                          ),
+                        )
+                      : Image.asset(
+                          asset!,
+                          height: 40,
+                          width: 40,
+                          errorBuilder: (context, error, stackTrace) => SizedBox(
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
                   const SizedBox(width: 16),
                 ],
                 Expanded(

@@ -91,4 +91,9 @@ class RouteNames {
   static const String accessMenuList = 'access-menu-list';
   static const String settingsAksesLayar = 'access-screen-list';
   static const String accessScreenDetail = 'access-screen-detail';
+
+  // Pelacakan Jam Kerja
+  static const String pelacakanJamKerja = 'pelacakan-jam-kerja';
+  static const String pelacakanSettings = 'pelacakan-settings';
+  static const String pelacakanEmployeeDetail = 'pelacakan-employee-detail';
 }

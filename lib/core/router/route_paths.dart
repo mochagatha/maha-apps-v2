@@ -161,6 +161,8 @@ class RoutePaths {
   static const String settingsAksesLayarDetail = '/settings/akses-layar/detail';
   static const String settingsHakAksesMenu = '/settings/hak-akses-menu';
   static const String settingsPelacakanJamKerja = '/settings/pelacakan-jam-kerja';
+  static const String settingsPelacakanSettings = '/settings/pelacakan-jam-kerja/settings';
+  static const String settingsPelacakanEmployeeDetail = '/settings/pelacakan-jam-kerja/employee';
   static const String settingsKpi = '/settings/kpi';
   static const String settingsBahasa = '/settings/bahasa';
 }

@@ -78,6 +78,10 @@ import '../../features/organizational_structure/presentation/pages/department_pr
 import '../../features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
+import '../../features/pelacakan_jam_kerja/presentation/pages/pelacakan_jam_kerja_page.dart';
+import '../../features/pelacakan_jam_kerja/presentation/pages/pelacakan_settings_page.dart';
+import '../../features/pelacakan_jam_kerja/presentation/pages/employee_detail_page.dart';
+import '../../features/pelacakan_jam_kerja/presentation/providers/pelacakan_provider.dart';
 import '../../features/access_menu/presentation/pages/access_menu_list_page.dart';
 import '../../features/access_menu/presentation/pages/employee_selection_page.dart';
 import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
@@ -698,8 +702,37 @@ class AppRouter {
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
         ),
         GoRoute(
+          name: RouteNames.pelacakanJamKerja,
           path: RoutePaths.settingsPelacakanJamKerja,
-          builder: (context, state) => const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
+          builder: (context, state) => const PelacakanJamKerjaPage(),
+          routes: [
+            GoRoute(
+              name: RouteNames.pelacakanSettings,
+              path: 'settings',
+              builder: (context, state) {
+                final type = state.uri.queryParameters['type'] ?? 'karyawan';
+                return ChangeNotifierProvider(
+                  create: (_) => sl<PelacakanProvider>(),
+                  child: PelacakanSettingsPage(employeeType: type),
+                );
+              },
+              routes: [
+                GoRoute(
+                  name: RouteNames.pelacakanEmployeeDetail,
+                  path: 'employee/:id',
+                  builder: (context, state) {
+                    final employeeId = int.parse(state.pathParameters['id'] ?? '0');
+                    final provider = context.read<PelacakanProvider>();
+                    final employee = provider.filteredEmployees.firstWhere(
+                      (e) => e.id == employeeId,
+                      orElse: () => provider.employees.firstWhere((e) => e.id == employeeId),
+                    );
+                    return EmployeeDetailPage(employee: employee);
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: RoutePaths.settingsKpi,
