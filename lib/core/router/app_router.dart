@@ -423,10 +423,18 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.structureMain,
           name: RouteNames.structureMain,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<StructureProvider>(),
-            child: const StructureMainPage(),
-          ),
+          builder: (context, state) {
+            final args = state.extra as Map<String, dynamic>?;
+            final type = args != null && args.containsKey('type')
+                ? args['type'] as String
+                : 'utama';
+            return ChangeNotifierProvider(
+              create: (_) => sl<StructureProvider>(),
+              child: StructureMainPage(
+                type: type,
+              ),
+            );
+          },
         ),
         GoRoute(
           path: RoutePaths.employmentLevel,
@@ -610,7 +618,6 @@ class AppRouter {
             );
           },
         ),
-
         // Access Menu Routes
         GoRoute(
           path: RoutePaths.employeeSelection,

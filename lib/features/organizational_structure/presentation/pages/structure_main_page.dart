@@ -21,7 +21,9 @@ import 'add_department_members_page.dart';
 import '../../../../core/di/injection_container.dart';
 
 class StructureMainPage extends StatefulWidget {
-  const StructureMainPage({super.key});
+  const StructureMainPage({super.key, required this.type});
+
+  final String type;
 
   @override
   State<StructureMainPage> createState() => _StructureMainPageState();
@@ -38,7 +40,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
   Future<void> _loadData() async {
     final provider = context.read<StructureProvider>();
-    await provider.loadCompanyStructure('utama');
+    await provider.loadCompanyStructure(widget.type);
   }
 
   @override
@@ -415,7 +417,12 @@ class _StructureMainPageState extends State<StructureMainPage> {
   void _navigateToTeamManagement(int superiorId) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => StructureTeamPage(superiorId: superiorId)),
+      MaterialPageRoute(
+        builder: (context) => StructureTeamPage(
+          superiorId: superiorId,
+          type: widget.type,
+        ),
+      ),
     );
     _loadData();
   }
@@ -453,27 +460,6 @@ class _StructureMainPageState extends State<StructureMainPage> {
     _loadData();
   }
 
-  void _showAddSuperiorDialog(int companyStructureId, int roleStructureId) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(value: this.context.read<StructureProvider>()),
-          ChangeNotifierProvider(create: (_) => sl<JobTitleProvider>()),
-        ],
-        child: SuperiorEmployeeFormBottomSheet(
-          companyStructureId: companyStructureId,
-          roleStructureId: roleStructureId,
-          onSuccess: _loadData,
-        ),
-      ),
-    );
-  }
-
   void _showEditSuperiorDialog(
     SuperiorEmployeeEntity superior,
     int companyStructureId,
@@ -498,6 +484,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
           initialEmployeeId: superior.employee.id,
           initialJobTitleId: superior.jobTitle.id,
           onSuccess: _loadData,
+          type: widget.type,
         ),
       ),
     );

@@ -11,8 +11,9 @@ import '../widgets/multi_select_employee_dialog.dart';
 
 class StructureTeamPage extends StatefulWidget {
   final int superiorId;
+  final String type;
 
-  const StructureTeamPage({super.key, required this.superiorId});
+  const StructureTeamPage({super.key, required this.superiorId, required this.type});
 
   @override
   State<StructureTeamPage> createState() => _StructureTeamPageState();
@@ -32,7 +33,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
     provider.loadDepartments();
     provider.loadEmployees();
     // Refresh main structure to ensure ups-to-date
-    provider.loadCompanyStructure('utama');
+    provider.loadCompanyStructure(widget.type);
   }
 
   SuperiorEmployeeEntity? _getSuperior(StructureProvider provider) {

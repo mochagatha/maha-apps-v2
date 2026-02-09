@@ -12,6 +12,7 @@ class SuperiorEmployeeFormBottomSheet extends StatefulWidget {
   final int? superiorEmployeeId;
   final int? initialEmployeeId;
   final int? initialJobTitleId;
+  final String type;
 
   const SuperiorEmployeeFormBottomSheet({
     super.key,
@@ -22,6 +23,7 @@ class SuperiorEmployeeFormBottomSheet extends StatefulWidget {
     this.superiorEmployeeId,
     this.initialEmployeeId,
     this.initialJobTitleId,
+    required this.type,
   });
 
   @override
@@ -54,7 +56,7 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
     }
     // Load job titles for 'utama' branch? or general?
     // Assuming 'utama' for now as this is Main Structure
-    jobTitleProvider.loadJobTitles(typeRole: 'employee', typeBranch: 'utama');
+    jobTitleProvider.loadJobTitles(typeRole: 'employee', typeBranch: widget.type);
   }
 
   Future<void> _submit() async {

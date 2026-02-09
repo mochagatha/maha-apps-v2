@@ -67,6 +67,7 @@ class RouteNames {
   // Organizational Structure
   static const String organizationalStructure = 'organizational-structure';
   static const String structureMain = 'structure-main';
+  static const String structureProject = 'structure-project';
   static const String organizationalChart = 'organizational-chart';
   static const String employmentLevel = 'employment-level';
   static const String employmentLevelOffice = 'employment-level-office';
@@ -87,6 +88,8 @@ class RouteNames {
   static const String jobTitleProjectWorker = 'job-title-project-worker';
   static const String jobTitleSelection = 'job-title-selection';
   static const String employeeByJobTitleSelection = 'employee-by-job-title-selection';
+
+  // Access Menu
   static const String employeeSelection = 'employee-selection';
   static const String accessMenuList = 'access-menu-list';
   static const String settingsAksesLayar = 'access-screen-list';

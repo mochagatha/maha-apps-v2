@@ -48,20 +48,33 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Struktur Utama',
         'enabled': true,
         'action': () {
-          context.push(RoutePaths.structureMain);
+          context.push(
+            RoutePaths.structureMain,
+            extra: {'type': 'utama'},
+          );
         },
       },
       {
         'icon': 'assets/images/icon/penempatan_kerja_icon.svg',
         'text': 'Struktur Proyek',
-        'enabled': false,
-        'action': null,
+        'enabled': true,
+        'action': () {
+          context.push(
+            RoutePaths.structureMain,
+            extra: {'type': 'project'},
+          );
+        },
       },
       {
         'icon': 'assets/images/icon/penempatan_kerja_icon.svg',
         'text': 'Struktur Cabang',
-        'enabled': false,
-        'action': null,
+        'enabled': true,
+        'action': () {
+          context.push(
+            RoutePaths.structureMain,
+            extra: {'type': 'cabang'},
+          );
+        },
       },
       {
         'icon': 'assets/images/icon/tingkatan.svg',
