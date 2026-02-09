@@ -268,6 +268,52 @@ class StructureProvider with ChangeNotifier {
     );
   }
 
+  /// Update department
+  Future<bool> updateDepartment({
+    required int id,
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageSuperiorEmployee.updateDepartment(
+      id: id,
+      superiorEmployeeStructureId: superiorEmployeeStructureId,
+      departmentId: departmentId,
+      employeeIds: employeeIds,
+    );
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
+  /// Delete department
+  Future<bool> deleteDepartment(int id) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await manageSuperiorEmployee.deleteDepartment(id);
+
+    _setLoading(false);
+
+    return result.fold(
+      (failure) {
+        _setError(failure.message);
+        return false;
+      },
+      (_) => true,
+    );
+  }
+
   /// Load user roles by branch type
   Future<void> loadUserRoles(String typeBranch) async {
     _setLoading(true);

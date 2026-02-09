@@ -74,4 +74,22 @@ class ManageSuperiorEmployee {
       deleteWorkerIds: deleteWorkerIds,
     );
   }
+
+  Future<Either<Failure, void>> updateDepartment({
+    required int id,
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+  }) async {
+    return await repository.updateSuperiorEmployeeDepartment(
+      id: id,
+      superiorEmployeeStructureId: superiorEmployeeStructureId,
+      departmentId: departmentId,
+      employeeIds: employeeIds,
+    );
+  }
+
+  Future<Either<Failure, void>> deleteDepartment(int id) async {
+    return await repository.deleteSuperiorEmployeeDepartment(id);
+  }
 }

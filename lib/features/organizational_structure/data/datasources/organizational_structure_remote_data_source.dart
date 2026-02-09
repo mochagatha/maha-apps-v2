@@ -43,6 +43,13 @@ abstract class OrganizationalStructureRemoteDataSource {
     required List<int> workerIds,
     required List<int> deleteWorkerIds,
   });
+  Future<void> updateSuperiorEmployeeDepartment({
+    required int id,
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+  });
+  Future<void> deleteSuperiorEmployeeDepartment(int id);
   Future<OrganizationalStructureModel> getStructureDetail(int id);
   Future<List<EmploymentLevelModel>> getUserRoles(String typeBranch);
   Future<List<UserRoleModel>> getUserRolesByType(String typeRole);
@@ -241,6 +248,36 @@ class OrganizationalStructureRemoteDataSourceImpl
           'worker_delete_ids': deleteWorkerIds,
         },
       );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateSuperiorEmployeeDepartment({
+    required int id,
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+  }) async {
+    try {
+      await client.dioGolang.put(
+        '${ApiEndpoints.superiorEmployeeDepartmentUpdate}/$id',
+        data: {
+          'superior_employee_structure_id': superiorEmployeeStructureId,
+          'department_id': departmentId,
+          'employee_ids': employeeIds,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteSuperiorEmployeeDepartment(int id) async {
+    try {
+      await client.dioGolang.delete('${ApiEndpoints.superiorEmployeeDepartmentDelete}/$id');
     } catch (e) {
       rethrow;
     }

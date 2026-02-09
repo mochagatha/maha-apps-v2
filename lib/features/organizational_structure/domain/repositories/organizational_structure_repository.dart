@@ -62,6 +62,17 @@ abstract class OrganizationalStructureRepository {
     required List<int> deleteWorkerIds,
   });
 
+  /// Update superior employee department
+  Future<Either<Failure, void>> updateSuperiorEmployeeDepartment({
+    required int id,
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+  });
+
+  /// Delete superior employee department
+  Future<Either<Failure, void>> deleteSuperiorEmployeeDepartment(int id);
+
   /// Get structure detail by ID
   Future<Either<Failure, OrganizationalStructureEntity>> getStructureDetail(int id);
 

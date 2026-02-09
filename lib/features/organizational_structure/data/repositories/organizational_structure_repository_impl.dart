@@ -182,6 +182,40 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
   }
 
   @override
+  Future<Either<Failure, void>> updateSuperiorEmployeeDepartment({
+    required int id,
+    required int superiorEmployeeStructureId,
+    required int departmentId,
+    required List<int> employeeIds,
+  }) async {
+    try {
+      await remoteDataSource.updateSuperiorEmployeeDepartment(
+        id: id,
+        superiorEmployeeStructureId: superiorEmployeeStructureId,
+        departmentId: departmentId,
+        employeeIds: employeeIds,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengubah departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteSuperiorEmployeeDepartment(int id) async {
+    try {
+      await remoteDataSource.deleteSuperiorEmployeeDepartment(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal menghapus departemen'));
+    } catch (e) {
+      return Left(ServerFailure('Terjadi kesalahan tidak terduga'));
+    }
+  }
+
+  @override
   Future<Either<Failure, OrganizationalStructureEntity>> getStructureDetail(int id) async {
     try {
       final result = await remoteDataSource.getStructureDetail(id);
