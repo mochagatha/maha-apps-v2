@@ -7,6 +7,7 @@ import '../../domain/entities/menu_item.dart';
 import '../../domain/entities/notification_count.dart';
 import '../../domain/usecases/get_employee_menus.dart';
 import '../../domain/usecases/get_employee_profile.dart';
+import '../../domain/usecases/get_hierarchical_menus.dart';
 import '../../domain/usecases/get_kpi_summary.dart';
 import '../../domain/usecases/get_notification_count.dart';
 
@@ -17,17 +18,19 @@ class HomeProvider extends ChangeNotifier {
   final GetEmployeeMenus getEmployeeMenus;
   final GetNotificationCount getNotificationCount;
   final GetKpiSummary getKpiSummary;
+  final GetHierarchicalMenus getHierarchicalMenus;
 
   HomeProvider({
     required this.getEmployeeProfile,
     required this.getEmployeeMenus,
     required this.getNotificationCount,
     required this.getKpiSummary,
+    required this.getHierarchicalMenus,
   });
 
   HomeStatus _status = HomeStatus.initial;
   Employee? _employee;
-  List<MenuItem> _menus = [];
+  List<MenuItem> _hierarchicalMenus = [];
   NotificationCount? _notificationCount;
   Kpi? _kpi;
   String? _errorMessage;
@@ -36,7 +39,7 @@ class HomeProvider extends ChangeNotifier {
   // Getters
   HomeStatus get status => _status;
   Employee? get employee => _employee;
-  List<MenuItem> get menus => _menus;
+  List<MenuItem> get hierarchicalMenus => _hierarchicalMenus;
   NotificationCount? get notificationCount => _notificationCount;
   Kpi? get kpi => _kpi;
   String? get errorMessage => _errorMessage;
@@ -64,22 +67,8 @@ class HomeProvider extends ChangeNotifier {
       },
     );
 
-    // Load menus
-    final menusResult = await getEmployeeMenus(NoParams());
-
-    menusResult.fold(
-      (failure) {
-        _status = HomeStatus.error;
-        _errorMessage = failure.message;
-        notifyListeners();
-        return;
-      },
-      (menus) {
-        _menus = menus;
-        // Sort menus by order
-        _menus.sort((a, b) => a.order.compareTo(b.order));
-      },
-    );
+    // Load hierarchical menus (cache-first, but always check for updates)
+    await loadHierarchicalMenus();
 
     // Load KPI Summary (Current Month)
     await refreshKpiSummary();
@@ -151,6 +140,55 @@ class HomeProvider extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Load hierarchical menus (with caching)
+  /// This method uses cache-first strategy and should be called once on app start
+  Future<void> loadHierarchicalMenus() async {
+    final result = await getHierarchicalMenus(NoParams());
+
+    result.fold(
+      (failure) {
+        debugPrint('Failed to load hierarchical menus: ${failure.message}');
+        _errorMessage = failure.message;
+      },
+      (menus) {
+        _hierarchicalMenus = menus;
+        notifyListeners();
+      },
+    );
+  }
+
+  /// Find menu by code (recursive search)
+  /// Returns the menu item with the matching code, or null if not found
+  MenuItem? findMenuByCode(String code) {
+    return _findMenuByCodeRecursive(_hierarchicalMenus, code);
+  }
+
+  /// Recursive helper method to find menu by code
+  MenuItem? _findMenuByCodeRecursive(List<MenuItem> menus, String code) {
+    for (final menu in menus) {
+      if (menu.code == code) {
+        return menu;
+      }
+      if (menu.children != null && menu.children!.isNotEmpty) {
+        final found = _findMenuByCodeRecursive(menu.children!, code);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  /// Get children of a menu by code
+  /// Returns empty list if menu not found or has no children
+  List<MenuItem> getChildrenByCode(String code) {
+    final menu = findMenuByCode(code);
+    return menu?.children ?? [];
+  }
+
+  /// Refresh hierarchical menus (force reload from API)
+  Future<void> refreshHierarchicalMenus() async {
+    await loadHierarchicalMenus();
   }
 
   @override

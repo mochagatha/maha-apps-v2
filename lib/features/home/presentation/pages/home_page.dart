@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: MenuGrid(
-                            menus: homeProvider.menus,
+                            menus: homeProvider.hierarchicalMenus,
                             notificationCount: homeProvider.notificationCount,
                           ),
                         ),

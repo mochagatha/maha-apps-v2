@@ -17,6 +17,9 @@ abstract class HomeRemoteDataSource {
   /// Get admin menus from API with user_type parameter
   Future<List<MenuItemModel>> getAdminMenus();
 
+  /// Get hierarchical employee menus from API
+  Future<List<MenuItemModel>> getHierarchicalMenus();
+
   /// Get notification count from API
   Future<NotificationCountModel> getNotificationCount();
 
@@ -121,6 +124,40 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         rethrow;
       }
       throw ServerException('Failed to get admin menus: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<List<MenuItemModel>> getHierarchicalMenus() async {
+    try {
+      // Get employee_id from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id');
+
+      if (employeeId == null) {
+        throw ServerException('Employee ID not found. Please login again.');
+      }
+
+      // Use dioGolang for hierarchical menu endpoint
+      // This endpoint returns menu with children structure
+      final response = await client.dioGolang.get(
+        AppConstants.endpointEmployeeMenus,
+        queryParameters: {'employee_id': employeeId},
+      );
+
+      if (response.statusCode == 200) {
+        print('DEBUG: Hierarchical Menu Response Data: ${response.data}');
+        final List<dynamic> menusJson = response.data['data'] ?? [];
+        print('DEBUG: Parsed Hierarchical Menus Count: ${menusJson.length}');
+        return menusJson.map((json) => MenuItemModel.fromJson(json)).toList();
+      } else {
+        throw ServerException(response.data['message'] ?? 'Failed to get hierarchical menus');
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        rethrow;
+      }
+      throw ServerException('Failed to get hierarchical menus: ${e.toString()}');
     }
   }
 

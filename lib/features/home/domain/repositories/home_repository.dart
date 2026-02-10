@@ -12,8 +12,12 @@ abstract class HomeRepository {
   /// Get menu items for current employee based on role
   Future<Either<Failure, List<MenuItem>>> getEmployeeMenus();
 
-  /// Get menu items for admin with user_type parameter
+  /// Get admin menus from API with user_type parameter
   Future<Either<Failure, List<MenuItem>>> getAdminMenus();
+
+  /// Get hierarchical employee menus with caching
+  /// Uses cache-first strategy: returns cached data if valid, otherwise fetches from API
+  Future<Either<Failure, List<MenuItem>>> getHierarchicalMenus();
 
   /// Get notification counts
   Future<Either<Failure, NotificationCount>> getNotificationCount();

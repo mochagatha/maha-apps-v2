@@ -38,6 +38,7 @@ import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/domain/repositories/home_repository.dart';
 import '../../features/home/domain/usecases/get_employee_menus.dart';
 import '../../features/home/domain/usecases/get_employee_profile.dart';
+import '../../features/home/domain/usecases/get_hierarchical_menus.dart';
 import '../../features/home/domain/usecases/get_kpi_summary.dart';
 import '../../features/home/domain/usecases/get_notification_count.dart';
 import '../../features/home/presentation/providers/home_provider.dart';
@@ -213,6 +214,7 @@ Future<void> init() async {
       getEmployeeMenus: sl(),
       getNotificationCount: sl(),
       getKpiSummary: sl(),
+      getHierarchicalMenus: sl(),
     ),
   );
 
@@ -222,6 +224,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetEmployeeProfile(sl()));
   sl.registerLazySingleton(() => GetEmployeeMenus(sl()));
   sl.registerLazySingleton(() => GetAdminMenus(sl()));
+  sl.registerLazySingleton(() => GetHierarchicalMenus(sl()));
   sl.registerLazySingleton(() => GetNotificationCount(sl()));
   sl.registerLazySingleton(() => GetKpiSummary(sl()));
 
