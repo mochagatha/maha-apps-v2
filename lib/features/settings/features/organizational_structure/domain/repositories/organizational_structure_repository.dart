@@ -169,6 +169,6 @@ abstract class OrganizationalStructureRepository {
   /// Delete employment level
   Future<Either<Failure, void>> deleteEmploymentLevel(int id);
 
-  /// Get all employees
-  Future<Either<Failure, List<EmployeeEntity>>> getEmployees();
+  /// Get all employees, optionally filtered by job title
+  Future<Either<Failure, List<EmployeeEntity>>> getEmployees({int? jobTitleId});
 }

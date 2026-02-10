@@ -309,11 +309,15 @@ class _StructureMainPageState extends State<StructureMainPage> {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    Text(
-                                      department.department.departmentName,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
+                                    Flexible(
+                                      child: Text(
+                                        department.department.departmentName,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                       ),
                                     ),
                                     const SizedBox(width: 4),

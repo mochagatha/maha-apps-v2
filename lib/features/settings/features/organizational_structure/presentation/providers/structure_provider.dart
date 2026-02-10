@@ -350,12 +350,12 @@ class StructureProvider with ChangeNotifier {
     _setLoading(false);
   }
 
-  /// Load all employees
-  Future<void> loadEmployees() async {
+  /// Load all employees, optionally filtered by job title
+  Future<void> loadEmployees({int? jobTitleId}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await getOrganizationalData.getEmployees();
+    final result = await getOrganizationalData.getEmployees(jobTitleId: jobTitleId);
 
     result.fold(
       (failure) => _setError(failure.message),
@@ -369,8 +369,8 @@ class StructureProvider with ChangeNotifier {
   }
 
   /// Get employees as a Future (for dialogs that can't access provider context)
-  Future<List<EmployeeEntity>> getEmployeesFuture() async {
-    final result = await getOrganizationalData.getEmployees();
+  Future<List<EmployeeEntity>> getEmployeesFuture({int? jobTitleId}) async {
+    final result = await getOrganizationalData.getEmployees(jobTitleId: jobTitleId);
     return result.fold(
       (failure) {
         _setError(failure.message);

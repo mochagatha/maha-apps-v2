@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../shared/theme/app_theme.dart';
@@ -41,7 +42,7 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
 
   Future<void> _loadData() async {
     final provider = context.read<StructureProvider>();
-    await provider.loadEmployees();
+    await provider.loadEmployees(jobTitleId: widget.jobTitleId);
     setState(() {
       _filteredEmployees = provider.employees;
     });
@@ -120,7 +121,7 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
       body: Consumer<StructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.employees.isEmpty) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(child: SpinKitThreeBounce(color: AppColors.primary));
           }
 
           if (provider.errorMessage != null && provider.employees.isEmpty) {

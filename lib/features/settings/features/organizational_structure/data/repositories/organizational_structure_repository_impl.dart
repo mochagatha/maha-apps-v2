@@ -539,9 +539,9 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
   }
 
   @override
-  Future<Either<Failure, List<EmployeeEntity>>> getEmployees() async {
+  Future<Either<Failure, List<EmployeeEntity>>> getEmployees({int? jobTitleId}) async {
     try {
-      final result = await remoteDataSource.getEmployees();
+      final result = await remoteDataSource.getEmployees(jobTitleId: jobTitleId);
       return Right(result.map((model) => model.toEntity()).toList());
     } on DioException catch (e) {
       final errorMessage = e.response?.data is Map

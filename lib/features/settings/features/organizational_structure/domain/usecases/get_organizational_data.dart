@@ -48,8 +48,8 @@ class GetOrganizationalData {
     return await repository.getEmploymentLevelsByType(typeRole: typeRole);
   }
 
-  Future<Either<Failure, List<EmployeeEntity>>> getEmployees() async {
-    return await repository.getEmployees();
+  Future<Either<Failure, List<EmployeeEntity>>> getEmployees({int? jobTitleId}) async {
+    return await repository.getEmployees(jobTitleId: jobTitleId);
   }
 
   Future<Either<Failure, List<UserRoleEntity>>> getUserRolesList({

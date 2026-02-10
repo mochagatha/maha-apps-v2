@@ -96,7 +96,7 @@ abstract class OrganizationalStructureRemoteDataSource {
   Future<void> addEmploymentLevel({required String name, required String typeRole});
   Future<void> updateEmploymentLevel({required int id, required String name});
   Future<void> deleteEmploymentLevel(int id);
-  Future<List<EmployeeModel>> getEmployees();
+  Future<List<EmployeeModel>> getEmployees({int? jobTitleId});
 }
 
 class OrganizationalStructureRemoteDataSourceImpl
@@ -577,9 +577,12 @@ class OrganizationalStructureRemoteDataSourceImpl
   }
 
   @override
-  Future<List<EmployeeModel>> getEmployees() async {
+  Future<List<EmployeeModel>> getEmployees({int? jobTitleId}) async {
     try {
-      final response = await client.dioGolang.get(ApiEndpoints.getAllEmployees);
+      final response = await client.dioGolang.get(
+        ApiEndpoints.getAllEmployees,
+        queryParameters: jobTitleId != null ? {'job_title': jobTitleId} : null,
+      );
 
       final List<dynamic> data = response.data['data'];
       return data.map((json) => EmployeeModel.fromJson(json)).toList();
