@@ -138,6 +138,7 @@ class MenuConfig {
   static const String aduanTrackingJamKerja = 'ADUAN/TRACKING_JAM_KERJA';
 
   // Pengaturan Submenus
+  static const String pengaturanAbsensi = 'PENGATURAN/ABSENSI';
   static const String pengaturanPenempatanKerja = 'PENGATURAN/PENEMPATAN_KERJA';
   static const String pengaturanHirarkiOffice = 'PENGATURAN/HIRARKI_OFFICE';
   static const String pengaturanPengaturanLembur = 'PENGATURAN/PENGATURAN_LEMBUR';
@@ -153,6 +154,10 @@ class MenuConfig {
   static const String pengaturanKpi = 'PENGATURAN/KPI';
   static const String pengaturanBahasa = 'PENGATURAN/BAHASA';
   static const String pengaturanHakAksesMenu = 'PENGATURAN/HAK_AKSES_MENU';
+  static const String pengaturanEmail = 'PENGATURAN/EMAIL';
+  static const String pengaturanWhatsapp = 'PENGATURAN/WHATSAPP';
+  static const String pengaturanAlurOperasional = 'PENGATURAN/ALUR_OPERASIONAL';
+  static const String pengaturanNotifikasi = 'PENGATURAN/NOTIFIKASI';
 
   // Arsip Submenus
   static const String arsipStrukturOrganisasi = 'ARSIP/STRUKTUR_ORGANISASI';
@@ -204,6 +209,10 @@ class MenuConfig {
     pengaturanPelcakanJamKerja: 'assets/images/icon/jam_kerja.svg',
     pengaturanKpi: 'assets/images/icon/setting_kpi.svg',
     pengaturanBahasa: 'assets/images/icon/setting_language.svg',
+    pengaturanEmail: 'assets/icons/settings/email.png',
+    pengaturanWhatsapp: 'assets/icons/settings/whatsapp.png',
+    pengaturanAlurOperasional: 'assets/icons/settings/alur_operasional.png',
+    pengaturanNotifikasi: 'assets/icons/settings/notifikasi.png',
   };
 
   // ==================== ROUTE MAPPING ====================
@@ -302,6 +311,10 @@ class MenuConfig {
     pengaturanPelcakanJamKerja: RoutePaths.settingsPelacakanJamKerja,
     pengaturanKpi: RoutePaths.settingsKpi,
     pengaturanBahasa: RoutePaths.settingsBahasa,
+    pengaturanEmail: RoutePaths.settingsEmail,
+    pengaturanWhatsapp: RoutePaths.settingsWhatsapp,
+    pengaturanAlurOperasional: RoutePaths.settingsAlurOperasional,
+    pengaturanNotifikasi: RoutePaths.settingsNotifikasi,
   };
 
   // ==================== PUBLIC METHODS ====================

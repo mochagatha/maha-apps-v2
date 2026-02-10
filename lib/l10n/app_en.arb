@@ -148,6 +148,10 @@
   "menuPelacakanJamKerja": "Working Hours Tracking",
   "menuStrukturOrganisasi": "Organizational Structure",
   "menuKpi": "Key Performance Indicator (KPI)",
+  "menuEmail": "Email",
+  "menuWhatsapp": "WhatsApp",
+  "menuAlurOperasional": "Operational Flow",
+  "menuNotifikasi": "Notification",
 
   "redeemPoints": "Redeem Points",
   "performance": "Performance",

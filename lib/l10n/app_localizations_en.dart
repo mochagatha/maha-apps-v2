@@ -415,6 +415,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuStrukturOrganisasi => 'Organizational Structure';
 
   @override
+  String get menuEmail => 'Email';
+
+  @override
+  String get menuWhatsapp => 'WhatsApp';
+
+  @override
+  String get menuAlurOperasional => 'Operational Flow';
+
+  @override
+  String get menuNotifikasi => 'Notification';
+
+  @override
   String get redeemPoints => 'Redeem Points';
 
   @override

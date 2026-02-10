@@ -416,6 +416,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get menuStrukturOrganisasi => 'Struktur Organisasi';
 
   @override
+  String get menuEmail => 'Email';
+
+  @override
+  String get menuWhatsapp => 'WhatsApp';
+
+  @override
+  String get menuAlurOperasional => 'Alur Operasional';
+
+  @override
+  String get menuNotifikasi => 'Notifikasi';
+
+  @override
   String get redeemPoints => 'Tukar Poin';
 
   @override

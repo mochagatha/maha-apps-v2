@@ -11,6 +11,20 @@ class SettingsMenuModel {
   static List<SettingsMenuItem> getAllSettingsMenu(BuildContext context) {
     return [
       SettingsMenuItem(
+        id: MenuConfig.pengaturanAbsensi,
+        icon: 'assets/icons/settings/absensi.png',
+        text: context.l10n.menuAbsensi,
+        count: 0,
+        route: RoutePaths.settingsAbsensi,
+      ),
+      SettingsMenuItem(
+        id: MenuConfig.pengaturanFormatDanDraf,
+        icon: 'assets/icons/settings/format_dan_draf.png',
+        text: context.l10n.menuFormatDanDraf,
+        count: 0,
+        route: RoutePaths.settingsFormatDanDraf,
+      ),
+      SettingsMenuItem(
         id: MenuConfig.pengaturanPenempatanKerja,
         icon: 'assets/images/icon/penempatan_kerja_icon.svg',
         text: context.l10n.menuPenempatanKerja,
@@ -88,6 +102,27 @@ class SettingsMenuModel {
         route: RoutePaths.employeeSelection,
       ),
       SettingsMenuItem(
+        id: MenuConfig.pengaturanEmail,
+        icon: 'assets/icons/settings/email.png',
+        text: context.l10n.menuEmail,
+        count: 0,
+        route: RoutePaths.settingsEmail,
+      ),
+      SettingsMenuItem(
+        id: MenuConfig.pengaturanWhatsapp,
+        icon: 'assets/icons/settings/whatsapp.png',
+        text: context.l10n.menuWhatsapp,
+        count: 0,
+        route: RoutePaths.settingsWhatsapp,
+      ),
+      SettingsMenuItem(
+        id: MenuConfig.pengaturanAlurOperasional,
+        icon: 'assets/icons/settings/alur_operasional.png',
+        text: context.l10n.menuAlurOperasional,
+        count: 0,
+        route: RoutePaths.settingsAlurOperasional,
+      ),
+      SettingsMenuItem(
         id: MenuConfig.pengaturanPelcakanJamKerja,
         icon: 'assets/images/icon/jam_kerja.svg',
         text: context.l10n.menuPelacakanJamKerja,
@@ -115,12 +150,21 @@ class SettingsMenuModel {
         count: 0,
         route: RoutePaths.settingsBahasa,
       ),
+      SettingsMenuItem(
+        id: MenuConfig.pengaturanNotifikasi,
+        icon: 'assets/icons/settings/notifikasi.png',
+        text: context.l10n.menuNotifikasi,
+        count: 0,
+        route: RoutePaths.settingsNotifikasi,
+      ),
     ];
   }
 
   /// Get default menu IDs (used when API returns empty)
   static List<String> getDefaultMenuIds() {
     return [
+      MenuConfig.pengaturanAbsensi,
+      MenuConfig.pengaturanFormatDanDraf,
       MenuConfig.pengaturanPenempatanKerja,
       MenuConfig.pengaturanHirarkiOffice,
       MenuConfig.pengaturanPengaturanLembur,
@@ -136,6 +180,10 @@ class SettingsMenuModel {
       MenuConfig.pengaturanPelcakanJamKerja,
       MenuConfig.pengaturanKpi,
       MenuConfig.pengaturanBahasa,
+      MenuConfig.pengaturanEmail,
+      MenuConfig.pengaturanWhatsapp,
+      MenuConfig.pengaturanAlurOperasional,
+      MenuConfig.pengaturanNotifikasi,
     ];
   }
 }

@@ -149,6 +149,7 @@ class RoutePaths {
   static const String accessMenuList = '/access-menu';
 
   // Settings Submenus
+  static const String settingsAbsensi = '/settings/absensi';
   static const String settingsPenempatanKerja = '/settings/penempatan-kerja';
   static const String settingsLibur = '/settings/libur';
   static const String settingsHirarkiOffice = '/settings/hirarki-office';
@@ -166,4 +167,8 @@ class RoutePaths {
   static const String settingsPelacakanEmployeeDetail = '/settings/pelacakan-jam-kerja/employee';
   static const String settingsKpi = '/settings/kpi';
   static const String settingsBahasa = '/settings/bahasa';
+  static const String settingsEmail = '/settings/email';
+  static const String settingsWhatsapp = '/settings/whatsapp';
+  static const String settingsAlurOperasional = '/settings/alur-operasional';
+  static const String settingsNotifikasi = '/settings/notifikasi';
 }

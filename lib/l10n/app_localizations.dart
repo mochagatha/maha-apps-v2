@@ -866,6 +866,30 @@ abstract class AppLocalizations {
   /// **'Struktur Organisasi'**
   String get menuStrukturOrganisasi;
 
+  /// No description provided for @menuEmail.
+  ///
+  /// In id, this message translates to:
+  /// **'Email'**
+  String get menuEmail;
+
+  /// No description provided for @menuWhatsapp.
+  ///
+  /// In id, this message translates to:
+  /// **'WhatsApp'**
+  String get menuWhatsapp;
+
+  /// No description provided for @menuAlurOperasional.
+  ///
+  /// In id, this message translates to:
+  /// **'Alur Operasional'**
+  String get menuAlurOperasional;
+
+  /// No description provided for @menuNotifikasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi'**
+  String get menuNotifikasi;
+
   /// No description provided for @redeemPoints.
   ///
   /// In id, this message translates to:

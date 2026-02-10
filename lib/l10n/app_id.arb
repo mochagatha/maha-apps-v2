@@ -444,6 +444,10 @@
   "menuPelacakanJamKerja": "Pelacakan Jam Kerja",
   "menuStrukturOrganisasi": "Struktur Organisasi",
   "menuKpi": "Indikator Kinerja Utama (KPI)",
+  "menuEmail": "Email",
+  "menuWhatsapp": "WhatsApp",
+  "menuAlurOperasional": "Alur Operasional",
+  "menuNotifikasi": "Notifikasi",
 
   "redeemPoints": "Tukar Poin",
   "performance": "Performa",
