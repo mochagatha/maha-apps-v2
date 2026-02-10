@@ -9,7 +9,7 @@ import '../../../../../../shared/widgets/success_dialog.dart';
 import '../../domain/entities/department_entity.dart';
 import '../../domain/entities/employee_entity.dart';
 import '../providers/structure_provider.dart';
-import '../widgets/select_employee_dialog.dart';
+import '../widgets/select_members_dialog.dart';
 
 class AddDepartmentMembersPage extends StatefulWidget {
   final int companyStructureId;
@@ -29,8 +29,8 @@ class AddDepartmentMembersPage extends StatefulWidget {
 
 class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
   int? _selectedDepartmentId;
-  List<EmployeeEntity> _selectedEmployees = [];
-  List<EmployeeEntity> _selectedWorkers = [];
+  List<int> _selectedEmployeeIds = [];
+  List<int> _selectedWorkerIds = [];
 
   @override
   void initState() {
@@ -42,7 +42,10 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
 
   Future<void> _loadData() async {
     final provider = context.read<StructureProvider>();
-    await provider.loadDepartments();
+    await Future.wait([
+      provider.loadDepartments(),
+      provider.loadEmployees(),
+    ]);
   }
 
   @override
@@ -67,25 +70,35 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
                     children: [
                       _buildDepartmentsList(provider.departments),
                       const SizedBox(height: 24),
-                      if (_selectedEmployees.isNotEmpty) ...[
-                        _buildSelectedMembersList('Anggota Karyawan', _selectedEmployees, true),
+                      if (_selectedEmployeeIds.isNotEmpty) ...[
+                        _buildSelectedMembersList(
+                          'Anggota Karyawan',
+                          _selectedEmployeeIds,
+                          provider.employees,
+                          true,
+                        ),
                         const SizedBox(height: 16),
                       ],
                       _buildAddMemberButton(
                         'Tambah Anggota Karyawan',
                         Icons.add_box_outlined,
-                        () => _showSelectEmployeeDialog(isEmployee: true),
+                        () => _showSelectMembersDialog(isEmployee: true),
                       ),
                       const SizedBox(height: 24),
 
-                      if (_selectedWorkers.isNotEmpty) ...[
-                        _buildSelectedMembersList('Pekerja Harian', _selectedWorkers, false),
+                      if (_selectedWorkerIds.isNotEmpty) ...[
+                        _buildSelectedMembersList(
+                          'Pekerja Harian',
+                          _selectedWorkerIds,
+                          provider.employees,
+                          false,
+                        ),
                         const SizedBox(height: 16),
                       ],
                       _buildAddMemberButton(
                         'Tambah Pekerja Harian',
                         Icons.add_box_outlined,
-                        () => _showSelectEmployeeDialog(isEmployee: false),
+                        () => _showSelectMembersDialog(isEmployee: false),
                       ),
                     ],
                   ),
@@ -176,7 +189,14 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
     );
   }
 
-  Widget _buildSelectedMembersList(String title, List<EmployeeEntity> members, bool isEmployee) {
+  Widget _buildSelectedMembersList(
+    String title,
+    List<int> memberIds,
+    List<EmployeeEntity> allEmployees,
+    bool isEmployee,
+  ) {
+    final members = allEmployees.where((e) => memberIds.contains(e.id)).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -242,13 +262,13 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
             onTap: () {
               setState(() {
                 if (isEmployee) {
-                  _selectedEmployees.remove(employee);
+                  _selectedEmployeeIds.remove(employee.id);
                 } else {
-                  _selectedWorkers.remove(employee);
+                  _selectedWorkerIds.remove(employee.id);
                 }
               });
             },
-            child: Icon(Icons.close, color: Colors.grey),
+            child: const Icon(Icons.close, color: Colors.grey),
           ),
         ],
       ),
@@ -286,23 +306,25 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
     );
   }
 
-  void _showSelectEmployeeDialog({required bool isEmployee}) async {
+  void _showSelectMembersDialog({required bool isEmployee}) async {
     final provider = context.read<StructureProvider>();
 
-    final selectedEmployees = await showDialog<List<EmployeeEntity>>(
+    final selectedIds = await showDialog<List<int>>(
       context: context,
-      builder: (context) => SelectEmployeeDialog(
-        employeesFuture: provider.getEmployeesFuture(),
-        initialSelectedEmployees: isEmployee ? _selectedEmployees : _selectedWorkers,
+      builder: (context) => SelectMembersDialog(
+        title: isEmployee ? 'Pilih Anggota Karyawan' : 'Pilih Pekerja Harian',
+        allEmployees: provider.employees,
+        initialSelectedIds: isEmployee ? _selectedEmployeeIds : _selectedWorkerIds,
+        isLoading: provider.isLoading,
       ),
     );
 
-    if (selectedEmployees != null) {
+    if (selectedIds != null) {
       setState(() {
         if (isEmployee) {
-          _selectedEmployees = selectedEmployees;
+          _selectedEmployeeIds = selectedIds;
         } else {
-          _selectedWorkers = selectedEmployees;
+          _selectedWorkerIds = selectedIds;
         }
       });
     }
@@ -317,14 +339,13 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
       return;
     }
 
-    if (_selectedEmployees.isEmpty && _selectedWorkers.isEmpty) {
+    if (_selectedEmployeeIds.isEmpty && _selectedWorkerIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Pilih minimal satu anggota')),
       );
       return;
     }
 
-    // Tampilkan konfirmasi
     // Tampilkan konfirmasi
     ConfirmDialog.show(
       context,
@@ -335,8 +356,8 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
         final success = await provider.addDepartment(
           superiorEmployeeStructureId: widget.superiorEmployeeId,
           departmentId: _selectedDepartmentId!,
-          employeeIds: _selectedEmployees.map((e) => e.id).toList(),
-          workerIds: _selectedWorkers.map((e) => e.id).toList(),
+          employeeIds: _selectedEmployeeIds,
+          workerIds: _selectedWorkerIds,
         );
 
         if (!mounted) return;
@@ -346,7 +367,7 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
             context,
             message: 'Data berhasil disimpan',
             onConfirm: () {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             },
           );
         } else {
