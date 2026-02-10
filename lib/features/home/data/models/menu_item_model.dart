@@ -4,24 +4,15 @@ import '../../domain/entities/menu_item.dart';
 /// Handles JSON serialization/deserialization for hierarchical menu structure
 class MenuItemModel extends MenuItem {
   const MenuItemModel({
-    required int id,
-    required String name,
-    required String code,
-    required String label,
-    required String icon,
-    required bool isAsset,
-    required int order,
-    List<MenuItem>? children,
-  }) : super(
-          id: id,
-          name: name,
-          code: code,
-          label: label,
-          icon: icon,
-          isAsset: isAsset,
-          order: order,
-          children: children,
-        );
+    required super.id,
+    required super.name,
+    required super.code,
+    required super.label,
+    required super.icon,
+    required super.isAsset,
+    required super.order,
+    super.children,
+  });
 
   /// Create model from JSON for hierarchical menu structure
   /// Supports both nested menu_application format and flat structure
@@ -35,7 +26,7 @@ class MenuItemModel extends MenuItem {
     // V1 response format has nested structure:
     // { "menu_application": { "id": xxx, "name": "xxx", "code": "xxx" }, "children": [...] }
     final menuApp = json['menu_application'] as Map<String, dynamic>?;
-    
+
     if (menuApp != null) {
       // V1 format with nested menu_application
       return MenuItemModel(
@@ -74,9 +65,7 @@ class MenuItemModel extends MenuItem {
       'is_asset': isAsset,
       'order': order,
       if (children != null)
-        'children': children!
-            .map((e) => (e as MenuItemModel).toJson())
-            .toList(),
+        'children': children!.map((e) => (e as MenuItemModel).toJson()).toList(),
     };
   }
 

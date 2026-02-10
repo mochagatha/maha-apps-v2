@@ -755,4 +755,52 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get startVerification => 'Mulai Verifikasi';
+
+  @override
+  String get settingsAbsensi => 'Absensi';
+
+  @override
+  String get settingsFormatDanDraf => 'Format dan Draf';
+
+  @override
+  String get settingsPenempatanKerja => 'Penempatan Kerja';
+
+  @override
+  String get settingsLibur => 'Hari Libur';
+
+  @override
+  String get settingsLembur => 'Pengaturan Lembur';
+
+  @override
+  String get settingsTindakanKaryawan => 'Tindakan Karyawan';
+
+  @override
+  String get settingsAksesLayar => 'Akses Layar';
+
+  @override
+  String get settingsHakAksesMenu => 'Hak Akses Menu';
+
+  @override
+  String get settingsEmail => 'Email';
+
+  @override
+  String get settingsWhatsapp => 'WhatsApp';
+
+  @override
+  String get settingsAlurOperasional => 'Alur Operasional';
+
+  @override
+  String get settingsPelacakanJamKerja => 'Pelacakan Jam Kerja';
+
+  @override
+  String get settingsStrukturOrganisasi => 'Struktur Organisasi';
+
+  @override
+  String get settingsKpi => 'KPI';
+
+  @override
+  String get settingsBahasa => 'Bahasa';
+
+  @override
+  String get settingsNotifikasi => 'Notifikasi';
 }

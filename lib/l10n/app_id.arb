@@ -566,5 +566,22 @@
   "faceVisibleInstruction": "Pastikan wajah Anda terlihat jelas",
   "sufficientLightingInstruction": "Gunakan pencahayaan yang cukup",
   "blinkToCaptureInstruction": "Kedipkan mata untuk menangkap gambar",
-  "startVerification": "Mulai Verifikasi"
+  "startVerification": "Mulai Verifikasi",
+
+  "settingsAbsensi": "Absensi",
+  "settingsFormatDanDraf": "Format dan Draf",
+  "settingsPenempatanKerja": "Penempatan Kerja",
+  "settingsLibur": "Hari Libur",
+  "settingsLembur": "Pengaturan Lembur",
+  "settingsTindakanKaryawan": "Tindakan Karyawan",
+  "settingsAksesLayar": "Akses Layar",
+  "settingsHakAksesMenu": "Hak Akses Menu",
+  "settingsEmail": "Email",
+  "settingsWhatsapp": "WhatsApp",
+  "settingsAlurOperasional": "Alur Operasional",
+  "settingsPelacakanJamKerja": "Pelacakan Jam Kerja",
+  "settingsStrukturOrganisasi": "Struktur Organisasi",
+  "settingsKpi": "KPI",
+  "settingsBahasa": "Bahasa",
+  "settingsNotifikasi": "Notifikasi"
 }

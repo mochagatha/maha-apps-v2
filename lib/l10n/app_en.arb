@@ -261,5 +261,22 @@
   "faceVisibleInstruction": "Ensure your face is clearly visible",
   "sufficientLightingInstruction": "Use sufficient lighting",
   "blinkToCaptureInstruction": "Blink to capture image",
-  "startVerification": "Start Verification"
+  "startVerification": "Start Verification",
+
+  "settingsAbsensi": "Attendance",
+  "settingsFormatDanDraf": "Format and Drafts",
+  "settingsPenempatanKerja": "Work Placement",
+  "settingsLibur": "Holidays",
+  "settingsLembur": "Overtime",
+  "settingsTindakanKaryawan": "Employee Actions",
+  "settingsAksesLayar": "Screen Access",
+  "settingsHakAksesMenu": "Menu Access Rights",
+  "settingsEmail": "Email Settings",
+  "settingsWhatsapp": "WhatsApp Settings",
+  "settingsAlurOperasional": "Operational Flow",
+  "settingsPelacakanJamKerja": "Working Hours Tracking",
+  "settingsStrukturOrganisasi": "Organizational Structure",
+  "settingsKpi": "KPI Settings",
+  "settingsBahasa": "Language Settings",
+  "settingsNotifikasi": "Notification Settings"
 }

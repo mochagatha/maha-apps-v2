@@ -1495,6 +1495,102 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Mulai Verifikasi'**
   String get startVerification;
+
+  /// No description provided for @settingsAbsensi.
+  ///
+  /// In id, this message translates to:
+  /// **'Absensi'**
+  String get settingsAbsensi;
+
+  /// No description provided for @settingsFormatDanDraf.
+  ///
+  /// In id, this message translates to:
+  /// **'Format dan Draf'**
+  String get settingsFormatDanDraf;
+
+  /// No description provided for @settingsPenempatanKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Penempatan Kerja'**
+  String get settingsPenempatanKerja;
+
+  /// No description provided for @settingsLibur.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Libur'**
+  String get settingsLibur;
+
+  /// No description provided for @settingsLembur.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan Lembur'**
+  String get settingsLembur;
+
+  /// No description provided for @settingsTindakanKaryawan.
+  ///
+  /// In id, this message translates to:
+  /// **'Tindakan Karyawan'**
+  String get settingsTindakanKaryawan;
+
+  /// No description provided for @settingsAksesLayar.
+  ///
+  /// In id, this message translates to:
+  /// **'Akses Layar'**
+  String get settingsAksesLayar;
+
+  /// No description provided for @settingsHakAksesMenu.
+  ///
+  /// In id, this message translates to:
+  /// **'Hak Akses Menu'**
+  String get settingsHakAksesMenu;
+
+  /// No description provided for @settingsEmail.
+  ///
+  /// In id, this message translates to:
+  /// **'Email'**
+  String get settingsEmail;
+
+  /// No description provided for @settingsWhatsapp.
+  ///
+  /// In id, this message translates to:
+  /// **'WhatsApp'**
+  String get settingsWhatsapp;
+
+  /// No description provided for @settingsAlurOperasional.
+  ///
+  /// In id, this message translates to:
+  /// **'Alur Operasional'**
+  String get settingsAlurOperasional;
+
+  /// No description provided for @settingsPelacakanJamKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Pelacakan Jam Kerja'**
+  String get settingsPelacakanJamKerja;
+
+  /// No description provided for @settingsStrukturOrganisasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Struktur Organisasi'**
+  String get settingsStrukturOrganisasi;
+
+  /// No description provided for @settingsKpi.
+  ///
+  /// In id, this message translates to:
+  /// **'KPI'**
+  String get settingsKpi;
+
+  /// No description provided for @settingsBahasa.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa'**
+  String get settingsBahasa;
+
+  /// No description provided for @settingsNotifikasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi'**
+  String get settingsNotifikasi;
 }
 
 class _AppLocalizationsDelegate

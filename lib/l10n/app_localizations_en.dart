@@ -751,4 +751,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startVerification => 'Start Verification';
+
+  @override
+  String get settingsAbsensi => 'Attendance';
+
+  @override
+  String get settingsFormatDanDraf => 'Format and Drafts';
+
+  @override
+  String get settingsPenempatanKerja => 'Work Placement';
+
+  @override
+  String get settingsLibur => 'Holidays';
+
+  @override
+  String get settingsLembur => 'Overtime';
+
+  @override
+  String get settingsTindakanKaryawan => 'Employee Actions';
+
+  @override
+  String get settingsAksesLayar => 'Screen Access';
+
+  @override
+  String get settingsHakAksesMenu => 'Menu Access Rights';
+
+  @override
+  String get settingsEmail => 'Email Settings';
+
+  @override
+  String get settingsWhatsapp => 'WhatsApp Settings';
+
+  @override
+  String get settingsAlurOperasional => 'Operational Flow';
+
+  @override
+  String get settingsPelacakanJamKerja => 'Working Hours Tracking';
+
+  @override
+  String get settingsStrukturOrganisasi => 'Organizational Structure';
+
+  @override
+  String get settingsKpi => 'KPI Settings';
+
+  @override
+  String get settingsBahasa => 'Language Settings';
+
+  @override
+  String get settingsNotifikasi => 'Notification Settings';
 }
