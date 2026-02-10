@@ -511,6 +511,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get showChart => 'Tampilkan Bagan';
 
   @override
+  String get organizationChart => 'Bagan Organisasi';
+
+  @override
   String get archive => 'Arsip';
 
   @override

@@ -510,6 +510,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showChart => 'Show Chart';
 
   @override
+  String get organizationChart => 'Organization Chart';
+
+  @override
   String get archive => 'Archive';
 
   @override

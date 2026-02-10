@@ -185,6 +185,7 @@
   
   "underMonitoring": "You are under\nmonitoring!",
   "showChart": "Show Chart",
+  "organizationChart": "Organization Chart",
   "archive": "Archive",
   "delete": "Delete",
   "deleteRole": "Delete Role",

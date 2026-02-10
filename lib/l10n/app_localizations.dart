@@ -1046,6 +1046,12 @@ abstract class AppLocalizations {
   /// **'Tampilkan Bagan'**
   String get showChart;
 
+  /// No description provided for @organizationChart.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagan Organisasi'**
+  String get organizationChart;
+
   /// No description provided for @archive.
   ///
   /// In id, this message translates to:

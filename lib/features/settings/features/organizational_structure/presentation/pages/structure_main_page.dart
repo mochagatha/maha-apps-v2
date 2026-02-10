@@ -18,6 +18,7 @@ import '../../domain/entities/user_role_entity.dart';
 import '../widgets/superior_employee_form_bottom_sheet.dart';
 import 'structure_team_page.dart';
 import 'add_department_members_page.dart';
+import 'organization_chart_page.dart';
 import '../../../../../../core/di/injection_container.dart';
 
 class StructureMainPage extends StatefulWidget {
@@ -147,9 +148,14 @@ class _StructureMainPageState extends State<StructureMainPage> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(
+                    Navigator.push(
                       context,
-                    ).showSnackBar(SnackBar(content: Text(context.l10n.featureComingSoon)));
+                      MaterialPageRoute(
+                        builder: (context) => OrganizationChartPage(
+                          structure: structure,
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.blue,

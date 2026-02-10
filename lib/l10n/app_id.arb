@@ -490,6 +490,7 @@
   
   "underMonitoring": "Kamu sedang dalam\npemantauan nih!",
   "showChart": "Tampilkan Bagan",
+  "organizationChart": "Bagan Organisasi",
   "archive": "Arsip",
   "delete": "Hapus",
   "deleteRole": "Hapus Role",
