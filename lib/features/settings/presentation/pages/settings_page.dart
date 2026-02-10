@@ -3,7 +3,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/config/menu_config.dart';
 import '../../../../core/config/settings_menu_registry.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
@@ -137,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
   ) {
     // Check if menu has custom action (e.g., language dialog)
     if (config.hasCustomAction) {
-      if (menuCode == MenuConfig.pengaturanBahasa) {
+      if (menuCode == config.code) {
         LanguageSelector.show(context);
       }
       return;
