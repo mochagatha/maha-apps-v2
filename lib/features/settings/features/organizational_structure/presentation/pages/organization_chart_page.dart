@@ -83,31 +83,20 @@ class _OrganizationChartPageState extends State<OrganizationChartPage> {
         minScale: 0.01,
         maxScale: 5.6,
         child: GraphView(
+          centerGraph: true,
           graph: graph,
-          algorithm: SugiyamaAlgorithm(
-            SugiyamaConfiguration()
-              ..nodeSeparation = (50)
-              ..levelSeparation = (100)
-              ..orientation = SugiyamaConfiguration.ORIENTATION_TOP_BOTTOM
-              ..coordinateAssignment = CoordinateAssignment.Average,
+          algorithm: BuchheimWalkerAlgorithm(
+            builder,
+            ArrowEdgeRenderer(),
           ),
           paint: Paint()
             ..color = AppColors.blue
-            ..strokeWidth = 1
+            ..strokeWidth = 3
             ..style = PaintingStyle.stroke,
           builder: (Node node) {
             return _buildNodeWidget(node, widget.structure);
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _buildGraph(widget.structure);
-          });
-        },
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.refresh, color: Colors.white),
       ),
     );
   }
