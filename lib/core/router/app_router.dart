@@ -78,6 +78,9 @@ import '../../features/settings/features/organizational_structure/presentation/p
 import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
+import '../../features/settings/features/absensi/presentation/pages/settings_absensi_page.dart';
+import '../../features/settings/features/absensi/presentation/pages/settings_placeholder_page.dart'
+    as absensi_placeholder;
 import '../../features/settings/features/pelacakan_jam_kerja/presentation/pages/pelacakan_jam_kerja_page.dart';
 import '../../features/settings/features/pelacakan_jam_kerja/presentation/pages/pelacakan_settings_page.dart';
 import '../../features/settings/features/pelacakan_jam_kerja/presentation/pages/employee_detail_page.dart';
@@ -644,6 +647,65 @@ class AppRouter {
           path: RoutePaths.settings,
           name: RouteNames.settings,
           builder: (context, state) => const SettingsPage(),
+        ),
+        // Settings Absensi Routes
+        GoRoute(
+          path: RoutePaths.settingsAbsensi,
+          builder: (context, state) => const SettingsAbsensiPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiPenempatanKerja,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Penempatan Kerja',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiZonasi,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Zonasi',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiJamKerja,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Jam Kerja',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiKaryawan,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Karyawan',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiPekerjaHarian,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Pekerja Harian',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiHariLiburCuti,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Hari Libur & Cuti Bersama',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiLembur,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Lembur',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiAbsenDimanaSaja,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Absen Dimana Saja',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiPerbaikanKehadiran,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Perbaikan Kehadiran',
+          ),
         ),
         GoRoute(
           path: RoutePaths.settingsPenempatanKerja,

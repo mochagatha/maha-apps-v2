@@ -1,39 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 import 'package:provider/provider.dart';
 
-import '../config/settings_menu_registry.dart';
-import '../../../../core/utils/localization_extension.dart';
-import '../../../../shared/widgets/custom_app_bar.dart';
-import '../../../home/presentation/providers/home_provider.dart';
-import '../../../../core/config/sub_menu_config.dart';
-import '../widgets/language_selector.dart';
+import '../../../../../../core/config/sub_menu_config.dart';
+import '../../../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../../home/presentation/providers/home_provider.dart';
+import '../config/settings_absensi_menu_registry.dart';
 import '../widgets/settings_menu_item.dart' as settings;
 
-/// Settings page displaying all available settings menu items
+/// Settings Absensi page displaying all available absensi submenu items
 /// Uses centralized configuration for maintainability and l10n support
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class SettingsAbsensiPage extends StatefulWidget {
+  const SettingsAbsensiPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsAbsensiPage> createState() => _SettingsAbsensiPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsAbsensiPageState extends State<SettingsAbsensiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.menuPengaturan),
+      appBar: CustomAppBar(title: context.l10n.settingsAbsensi),
       body: Consumer<HomeProvider>(
         builder: (context, homeProvider, child) {
           // Get settings menus from hierarchical cache
           final settingsParent = homeProvider.hierarchicalMenus.firstWhere(
             (element) => element.code == "PENGATURAN",
-            orElse: () => homeProvider.hierarchicalMenus.first,
           );
 
-          final settingsMenus = settingsParent.children ?? [];
+          final settingsAbsensiParent = settingsParent.children?.firstWhere(
+            (element) => element.code == "PENGATURAN/ABSENSI",
+          );
+
+          final settingsMenus = settingsAbsensiParent?.children ?? [];
 
           // Show loading if no menus yet
           if (settingsMenus.isEmpty) {
@@ -44,13 +46,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
           // Filter only menus that have configuration in registry
           final validMenus = settingsMenus
-              .where((menu) => SettingsMenuRegistry.hasConfig(menu.code))
+              .where((menu) => SettingsAbsensiMenuRegistry.hasConfig(menu.code))
               .toList();
 
           // Sort by order from registry
           validMenus.sort((a, b) {
-            final configA = SettingsMenuRegistry.getConfig(a.code);
-            final configB = SettingsMenuRegistry.getConfig(b.code);
+            final configA = SettingsAbsensiMenuRegistry.getConfig(a.code);
+            final configB = SettingsAbsensiMenuRegistry.getConfig(b.code);
             return (configA?.order ?? 0).compareTo(configB?.order ?? 0);
           });
 
@@ -64,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 // Settings Menu Items
                 ...validMenus.map((menuItem) {
-                  final config = SettingsMenuRegistry.getConfig(menuItem.code);
+                  final config = SettingsAbsensiMenuRegistry.getConfig(menuItem.code);
                   if (config == null) return const SizedBox.shrink();
 
                   // Get localized title using the titleKey from config
@@ -91,38 +93,24 @@ class _SettingsPageState extends State<SettingsPage> {
     final l10n = context.l10n;
 
     switch (titleKey) {
-      case 'settingsAbsensi':
-        return l10n.settingsAbsensi;
-      case 'settingsFormatDanDraf':
-        return l10n.settingsFormatDanDraf;
-      case 'settingsPenempatanKerja':
-        return l10n.settingsPenempatanKerja;
-      case 'settingsLibur':
-        return l10n.settingsLibur;
-      case 'settingsLembur':
-        return l10n.settingsLembur;
-      case 'settingsTindakanKaryawan':
-        return l10n.settingsTindakanKaryawan;
-      case 'settingsAksesLayar':
-        return l10n.settingsAksesLayar;
-      case 'settingsHakAksesMenu':
-        return l10n.settingsHakAksesMenu;
-      case 'settingsEmail':
-        return l10n.settingsEmail;
-      case 'settingsWhatsapp':
-        return l10n.settingsWhatsapp;
-      case 'settingsAlurOperasional':
-        return l10n.settingsAlurOperasional;
-      case 'settingsPelacakanJamKerja':
-        return l10n.settingsPelacakanJamKerja;
-      case 'settingsStrukturOrganisasi':
-        return l10n.settingsStrukturOrganisasi;
-      case 'settingsKpi':
-        return l10n.settingsKpi;
-      case 'settingsBahasa':
-        return l10n.settingsBahasa;
-      case 'settingsNotifikasi':
-        return l10n.settingsNotifikasi;
+      case 'settingsAbsensiPenempatanKerja':
+        return l10n.settingsAbsensiPenempatanKerja;
+      case 'settingsAbsensiZonasi':
+        return l10n.settingsAbsensiZonasi;
+      case 'settingsAbsensiJamKerja':
+        return l10n.settingsAbsensiJamKerja;
+      case 'settingsAbsensiKaryawan':
+        return l10n.settingsAbsensiKaryawan;
+      case 'settingsAbsensiPekerjaHarian':
+        return l10n.settingsAbsensiPekerjaHarian;
+      case 'settingsAbsensiHariLiburCutiBersama':
+        return l10n.settingsAbsensiHariLiburCutiBersama;
+      case 'settingsAbsensiLembur':
+        return l10n.settingsAbsensiLembur;
+      case 'settingsAbsensiAbsenDimanaSaja':
+        return l10n.settingsAbsensiAbsenDimanaSaja;
+      case 'settingsAbsensiPerbaikanKehadiran':
+        return l10n.settingsAbsensiPerbaikanKehadiran;
       default:
         return titleKey; // Fallback to key if not found
     }
@@ -134,14 +122,6 @@ class _SettingsPageState extends State<SettingsPage> {
     String menuCode,
     SubMenuConfig config,
   ) {
-    // Check if menu has custom action (e.g., language dialog)
-    if (config.hasCustomAction) {
-      if (menuCode == config.code) {
-        LanguageSelector.show(context);
-      }
-      return;
-    }
-
     // Navigate to route if available
     if (config.routePath != null) {
       context.push(config.routePath!);

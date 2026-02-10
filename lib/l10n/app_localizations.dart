@@ -1502,6 +1502,60 @@ abstract class AppLocalizations {
   /// **'Absensi'**
   String get settingsAbsensi;
 
+  /// No description provided for @settingsAbsensiPenempatanKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Penempatan Kerja'**
+  String get settingsAbsensiPenempatanKerja;
+
+  /// No description provided for @settingsAbsensiZonasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Zonasi'**
+  String get settingsAbsensiZonasi;
+
+  /// No description provided for @settingsAbsensiJamKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Jam Kerja'**
+  String get settingsAbsensiJamKerja;
+
+  /// No description provided for @settingsAbsensiKaryawan.
+  ///
+  /// In id, this message translates to:
+  /// **'Karyawan'**
+  String get settingsAbsensiKaryawan;
+
+  /// No description provided for @settingsAbsensiPekerjaHarian.
+  ///
+  /// In id, this message translates to:
+  /// **'Pekerja Harian'**
+  String get settingsAbsensiPekerjaHarian;
+
+  /// No description provided for @settingsAbsensiHariLiburCutiBersama.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Libur & Cuti Bersama'**
+  String get settingsAbsensiHariLiburCutiBersama;
+
+  /// No description provided for @settingsAbsensiLembur.
+  ///
+  /// In id, this message translates to:
+  /// **'Lembur'**
+  String get settingsAbsensiLembur;
+
+  /// No description provided for @settingsAbsensiAbsenDimanaSaja.
+  ///
+  /// In id, this message translates to:
+  /// **'Absen Dimana Saja'**
+  String get settingsAbsensiAbsenDimanaSaja;
+
+  /// No description provided for @settingsAbsensiPerbaikanKehadiran.
+  ///
+  /// In id, this message translates to:
+  /// **'Perbaikan Kehadiran'**
+  String get settingsAbsensiPerbaikanKehadiran;
+
   /// No description provided for @settingsFormatDanDraf.
   ///
   /// In id, this message translates to:

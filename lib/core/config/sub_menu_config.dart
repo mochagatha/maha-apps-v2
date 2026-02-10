@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// Configuration for a settings menu item
 /// Contains all necessary information for display and navigation
-class SettingsMenuConfig extends Equatable {
+class SubMenuConfig extends Equatable {
   /// Menu code identifier (e.g., "PENGATURAN/ABSENSI")
   final String code;
 
@@ -21,7 +21,7 @@ class SettingsMenuConfig extends Equatable {
   /// Display order in the list
   final int order;
 
-  const SettingsMenuConfig({
+  const SubMenuConfig({
     required this.code,
     required this.titleKey,
     required this.iconPath,

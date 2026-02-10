@@ -760,6 +760,33 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsAbsensi => 'Absensi';
 
   @override
+  String get settingsAbsensiPenempatanKerja => 'Penempatan Kerja';
+
+  @override
+  String get settingsAbsensiZonasi => 'Zonasi';
+
+  @override
+  String get settingsAbsensiJamKerja => 'Jam Kerja';
+
+  @override
+  String get settingsAbsensiKaryawan => 'Karyawan';
+
+  @override
+  String get settingsAbsensiPekerjaHarian => 'Pekerja Harian';
+
+  @override
+  String get settingsAbsensiHariLiburCutiBersama => 'Hari Libur & Cuti Bersama';
+
+  @override
+  String get settingsAbsensiLembur => 'Lembur';
+
+  @override
+  String get settingsAbsensiAbsenDimanaSaja => 'Absen Dimana Saja';
+
+  @override
+  String get settingsAbsensiPerbaikanKehadiran => 'Perbaikan Kehadiran';
+
+  @override
   String get settingsFormatDanDraf => 'Format dan Draf';
 
   @override

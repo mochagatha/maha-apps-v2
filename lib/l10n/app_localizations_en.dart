@@ -756,6 +756,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAbsensi => 'Attendance';
 
   @override
+  String get settingsAbsensiPenempatanKerja => 'Work Placement';
+
+  @override
+  String get settingsAbsensiZonasi => 'Zoning';
+
+  @override
+  String get settingsAbsensiJamKerja => 'Working Hours';
+
+  @override
+  String get settingsAbsensiKaryawan => 'Employee';
+
+  @override
+  String get settingsAbsensiPekerjaHarian => 'Daily Worker';
+
+  @override
+  String get settingsAbsensiHariLiburCutiBersama => 'Holidays & Joint Leave';
+
+  @override
+  String get settingsAbsensiLembur => 'Overtime';
+
+  @override
+  String get settingsAbsensiAbsenDimanaSaja => 'Attendance Anywhere';
+
+  @override
+  String get settingsAbsensiPerbaikanKehadiran => 'Attendance Correction';
+
+  @override
   String get settingsFormatDanDraf => 'Format and Drafts';
 
   @override
