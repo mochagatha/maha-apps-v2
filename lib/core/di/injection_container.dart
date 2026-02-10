@@ -79,33 +79,33 @@ import '../../features/recruitment/domain/usecases/get_recruitment_menus.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 
 // Organizational Structure feature imports
-import '../../features/organizational_structure/data/datasources/organizational_structure_remote_data_source.dart';
-import '../../features/organizational_structure/data/repositories/organizational_structure_repository_impl.dart';
-import '../../features/organizational_structure/domain/repositories/organizational_structure_repository.dart';
-import '../../features/organizational_structure/domain/usecases/get_company_structure.dart';
-import '../../features/organizational_structure/domain/usecases/manage_structure_role.dart';
-import '../../features/organizational_structure/domain/usecases/manage_superior_employee.dart';
-import '../../features/organizational_structure/domain/usecases/get_organizational_data.dart';
-import '../../features/organizational_structure/domain/usecases/manage_job_title.dart';
-import '../../features/organizational_structure/domain/usecases/manage_department.dart';
-import '../../features/organizational_structure/domain/usecases/manage_employment_level.dart';
-import '../../features/organizational_structure/domain/usecases/manage_user_role.dart';
-import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
-import '../../features/organizational_structure/presentation/providers/department_provider.dart';
-import '../../features/organizational_structure/presentation/providers/employment_level_provider.dart';
-import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
-import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
+import '../../features/settings/features/organizational_structure/data/datasources/organizational_structure_remote_data_source.dart';
+import '../../features/settings/features/organizational_structure/data/repositories/organizational_structure_repository_impl.dart';
+import '../../features/settings/features/organizational_structure/domain/repositories/organizational_structure_repository.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/get_company_structure.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/manage_structure_role.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/manage_superior_employee.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/get_organizational_data.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/manage_job_title.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/manage_department.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/manage_employment_level.dart';
+import '../../features/settings/features/organizational_structure/domain/usecases/manage_user_role.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/job_title_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/department_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/employment_level_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/structure_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/user_role_provider.dart';
 
 // Access Menu feature imports
-import '../../features/access_menu/data/datasources/access_menu_remote_data_source.dart';
-import '../../features/access_menu/data/repositories/access_menu_repository_impl.dart';
-import '../../features/access_menu/domain/repositories/access_menu_repository.dart';
-import '../../features/access_menu/domain/usecases/get_employee_menus.dart' as access_menu_usecases;
-import '../../features/access_menu/domain/usecases/get_all_menus.dart';
-import '../../features/access_menu/domain/usecases/manage_menu_access.dart';
-import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
+import '../../features/settings/features/access_menu/data/datasources/access_menu_remote_data_source.dart';
+import '../../features/settings/features/access_menu/data/repositories/access_menu_repository_impl.dart';
+import '../../features/settings/features/access_menu/domain/repositories/access_menu_repository.dart';
+import '../../features/settings/features/access_menu/domain/usecases/get_employee_menus.dart' as access_menu_usecases;
+import '../../features/settings/features/access_menu/domain/usecases/get_all_menus.dart';
+import '../../features/settings/features/access_menu/domain/usecases/manage_menu_access.dart';
+import '../../features/settings/features/access_menu/presentation/providers/access_menu_provider.dart';
 
-import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
+import '../../features/settings/features/access_menu/presentation/providers/employee_list_provider.dart';
 
 // Permission feature imports
 import '../../features/permissions/data/repositories/permission_repository_impl.dart';
@@ -118,12 +118,12 @@ import '../../features/permissions/domain/usecases/get_denied_permissions_detail
 import '../../features/permissions/presentation/providers/permission_provider.dart';
 
 // Access Screen feature imports
-import '../../features/access_screen/data/datasources/access_screen_remote_datasource.dart';
-import '../../features/access_screen/data/repositories/access_screen_repository_impl.dart';
-import '../../features/access_screen/domain/repositories/access_screen_repository.dart';
-import '../../features/access_screen/domain/usecases/get_access_screen.dart';
-import '../../features/access_screen/domain/usecases/update_access_screen.dart';
-import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
+import '../../features/settings/features/access_screen/data/datasources/access_screen_remote_datasource.dart';
+import '../../features/settings/features/access_screen/data/repositories/access_screen_repository_impl.dart';
+import '../../features/settings/features/access_screen/domain/repositories/access_screen_repository.dart';
+import '../../features/settings/features/access_screen/domain/usecases/get_access_screen.dart';
+import '../../features/settings/features/access_screen/domain/usecases/update_access_screen.dart';
+import '../../features/settings/features/access_screen/presentation/providers/access_screen_provider.dart';
 
 // Screen Security feature imports
 import '../../features/screen_security/data/datasources/screen_security_remote_datasource.dart';
@@ -133,14 +133,14 @@ import '../../features/screen_security/domain/usecases/get_screen_security_setti
 import '../../features/screen_security/presentation/providers/screen_security_provider.dart';
 
 // Pelacakan Jam Kerja feature imports
-import '../../features/pelacakan_jam_kerja/data/datasources/pelacakan_local_data_source.dart';
-import '../../features/pelacakan_jam_kerja/data/datasources/pelacakan_remote_data_source.dart';
-import '../../features/pelacakan_jam_kerja/data/repositories/pelacakan_repository_impl.dart';
-import '../../features/pelacakan_jam_kerja/domain/repositories/pelacakan_repository.dart';
-import '../../features/pelacakan_jam_kerja/domain/usecases/get_employees.dart';
-import '../../features/pelacakan_jam_kerja/domain/usecases/get_tracking_settings.dart';
-import '../../features/pelacakan_jam_kerja/domain/usecases/save_tracking_settings.dart';
-import '../../features/pelacakan_jam_kerja/presentation/providers/pelacakan_provider.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/data/datasources/pelacakan_local_data_source.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/data/datasources/pelacakan_remote_data_source.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/data/repositories/pelacakan_repository_impl.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/domain/repositories/pelacakan_repository.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/domain/usecases/get_employees.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/domain/usecases/get_tracking_settings.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/domain/usecases/save_tracking_settings.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/presentation/providers/pelacakan_provider.dart';
 
 final sl = GetIt.instance;
 

@@ -68,6 +68,9 @@ flutter:
     - assets/audio/
     - assets/
     - assets/templates/
+    - assets/icons/
+    - assets/icons/recruitments/
+    - assets/icons/settings/
     - .env
   # fonts:
   #   - family: Schyler
