@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/features/settings/domain/entities/settings_menu_item.dart';
-import 'package:maha_apps_v2/features/settings/presentation/models/settings_menu_model.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/config/menu_config.dart';
-import '../../../../core/providers/language_provider.dart';
-import '../../../../core/utils/localization_extension.dart';
 
+import '../config/settings_menu_registry.dart';
+import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../../../../shared/widgets/menu_item_card.dart';
+import '../../../home/presentation/providers/home_provider.dart';
+import '../../../../core/config/sub_menu_config.dart';
+import '../widgets/language_selector.dart';
+import '../widgets/settings_menu_item.dart' as settings;
 
 /// Settings page displaying all available settings menu items
+/// Uses centralized configuration for maintainability and l10n support
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -20,176 +21,130 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  List<SettingsMenuItem> _menuItems = [];
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    // TODO: Fetch menu access from API based on user permissions
-    // For now, use all menu items
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    if (!mounted) return;
-
-    final allMenus = SettingsMenuModel.getAllSettingsMenu(context);
-    final defaultMenuIds = SettingsMenuModel.getDefaultMenuIds();
-
-    // TODO: Filter based on actual user permissions from API
-    // For now, show all menus
-    final filteredMenus = allMenus.where((menu) {
-      return defaultMenuIds.contains(menu.id);
-    }).toList();
-
-    setState(() {
-      _menuItems = filteredMenus;
-      _isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.menuPengaturan),
-      body: _isLoading
-          ? const Center(child: SpinKitThreeBounce(color: Colors.red))
-          : RefreshIndicator(
-              color: Colors.red,
-              onRefresh: _fetchData,
-              child: ListView.builder(
-                itemCount: _menuItems.length,
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                itemBuilder: (context, index) {
-                  final menuItem = _menuItems[index];
-                  return MenuItemCard(
-                    asset: menuItem.icon,
-                    title: menuItem.text,
-                    onTap: () {
-                      if (menuItem.id == MenuConfig.pengaturanBahasa) {
-                        _showLanguageDialog(context);
-                      } else if (menuItem.route != null) {
-                        context.push(menuItem.route!);
-                      }
-                    },
-                  );
-                },
-              ),
-            ),
-    );
-  }
+      body: Consumer<HomeProvider>(
+        builder: (context, homeProvider, child) {
+          // Get settings menus from hierarchical cache
+          final settingsParent = homeProvider.hierarchicalMenus.firstWhere(
+            (element) => element.code == "PENGATURAN",
+            orElse: () => homeProvider.hierarchicalMenus.first,
+          );
 
-  void _showLanguageDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Consumer<LanguageProvider>(
-          builder: (context, languageProvider, child) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    context.l10n.selectLanguage, // "Pilih Bahasa"
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  _buildLanguageOption(
-                    context,
-                    title: context.l10n.languageIndonesian,
-                    flag: '🇮🇩',
-                    isSelected: languageProvider.currentLocale.languageCode == 'id',
-                    onTap: () {
-                      languageProvider.changeLanguage(const Locale('id'));
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLanguageOption(
-                    context,
-                    title: context.l10n.languageEnglish,
-                    flag: '🇺🇸',
-                    isSelected: languageProvider.currentLocale.languageCode == 'en',
-                    onTap: () {
-                      languageProvider.changeLanguage(const Locale('en'));
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
+          final settingsMenus = settingsParent.children ?? [];
+
+          // Show loading if no menus yet
+          if (settingsMenus.isEmpty) {
+            return const Center(
+              child: SpinKitThreeBounce(color: Colors.red),
             );
-          },
-        );
-      },
+          }
+
+          // Filter only menus that have configuration in registry
+          final validMenus = settingsMenus
+              .where((menu) => SettingsMenuRegistry.hasConfig(menu.code))
+              .toList();
+
+          // Sort by order from registry
+          validMenus.sort((a, b) {
+            final configA = SettingsMenuRegistry.getConfig(a.code);
+            final configB = SettingsMenuRegistry.getConfig(b.code);
+            return (configA?.order ?? 0).compareTo(configB?.order ?? 0);
+          });
+
+          return RefreshIndicator(
+            color: Colors.red,
+            onRefresh: () async {
+              await homeProvider.refreshHierarchicalMenus();
+            },
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              children: [
+                // Settings Menu Items
+                ...validMenus.map((menuItem) {
+                  final config = SettingsMenuRegistry.getConfig(menuItem.code);
+                  if (config == null) return const SizedBox.shrink();
+
+                  // Get localized title using the titleKey from config
+                  final localizedTitle = _getLocalizedTitle(context, config.titleKey);
+
+                  return settings.SettingsMenuItem(
+                    iconPath: config.iconPath,
+                    title: localizedTitle,
+                    onTap: () => _handleMenuTap(context, menuItem.code, config),
+                  );
+                }),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildLanguageOption(
-    BuildContext context, {
-    required String title,
-    required String flag,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFFFF0F0) : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? Colors.red : Colors.grey.shade300,
-            width: isSelected ? 1.5 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Text(flag, style: const TextStyle(fontSize: 24)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: isSelected ? Colors.red : Colors.black,
-                ),
-              ),
-            ),
-            if (isSelected) const Icon(Icons.check_circle_rounded, color: Colors.red),
-          ],
-        ),
-      ),
-    );
+  /// Get localized title for menu using l10n
+  String _getLocalizedTitle(BuildContext context, String titleKey) {
+    // Use reflection-like approach to get the localized string
+    // This maps the titleKey to the actual l10n getter
+    final l10n = context.l10n;
+
+    switch (titleKey) {
+      case 'settingsAbsensi':
+        return l10n.settingsAbsensi;
+      case 'settingsFormatDanDraf':
+        return l10n.settingsFormatDanDraf;
+      case 'settingsPenempatanKerja':
+        return l10n.settingsPenempatanKerja;
+      case 'settingsLibur':
+        return l10n.settingsLibur;
+      case 'settingsLembur':
+        return l10n.settingsLembur;
+      case 'settingsTindakanKaryawan':
+        return l10n.settingsTindakanKaryawan;
+      case 'settingsAksesLayar':
+        return l10n.settingsAksesLayar;
+      case 'settingsHakAksesMenu':
+        return l10n.settingsHakAksesMenu;
+      case 'settingsEmail':
+        return l10n.settingsEmail;
+      case 'settingsWhatsapp':
+        return l10n.settingsWhatsapp;
+      case 'settingsAlurOperasional':
+        return l10n.settingsAlurOperasional;
+      case 'settingsPelacakanJamKerja':
+        return l10n.settingsPelacakanJamKerja;
+      case 'settingsStrukturOrganisasi':
+        return l10n.settingsStrukturOrganisasi;
+      case 'settingsKpi':
+        return l10n.settingsKpi;
+      case 'settingsBahasa':
+        return l10n.settingsBahasa;
+      case 'settingsNotifikasi':
+        return l10n.settingsNotifikasi;
+      default:
+        return titleKey; // Fallback to key if not found
+    }
+  }
+
+  /// Handle menu item tap with proper navigation or custom action
+  void _handleMenuTap(
+    BuildContext context,
+    String menuCode,
+    SubMenuConfig config,
+  ) {
+    // Check if menu has custom action (e.g., language dialog)
+    if (config.hasCustomAction) {
+      if (menuCode == config.code) {
+        LanguageSelector.show(context);
+      }
+      return;
+    }
+
+    // Navigate to route if available
+    if (config.routePath != null) {
+      context.push(config.routePath!);
+    }
   }
 }

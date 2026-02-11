@@ -59,9 +59,6 @@ class HomeRepositoryImpl implements HomeRepository {
       try {
         final menuModels = await remoteDataSource.getEmployeeMenus();
 
-        // Cache the menus
-        await localDataSource.cacheMenus(menuModels);
-
         return Right(menuModels.map((model) => model.toEntity()).toList());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
@@ -69,19 +66,7 @@ class HomeRepositoryImpl implements HomeRepository {
         return Left(ServerFailure(e.toString()));
       }
     } else {
-      // Try to get from cache when offline
-      try {
-        final cachedMenus = await localDataSource.getCachedMenus();
-        if (cachedMenus != null) {
-          return Right(cachedMenus.map((model) => model.toEntity()).toList());
-        } else {
-          return Left(CacheFailure('No cached menu data available'));
-        }
-      } on CacheException catch (e) {
-        return Left(CacheFailure(e.message));
-      } on Exception catch (e) {
-        return Left(CacheFailure(e.toString()));
-      }
+      return Left(NetworkFailure('No internet connection'));
     }
   }
 
@@ -91,8 +76,22 @@ class HomeRepositoryImpl implements HomeRepository {
       try {
         final menuModels = await remoteDataSource.getAdminMenus();
 
-        // Cache the admin menus
-        await localDataSource.cacheMenus(menuModels);
+        return Right(menuModels.map((model) => model.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on Exception catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure('No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MenuItem>>> getHierarchicalMenus() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final menuModels = await remoteDataSource.getHierarchicalMenus();
 
         return Right(menuModels.map((model) => model.toEntity()).toList());
       } on ServerException catch (e) {
@@ -101,19 +100,7 @@ class HomeRepositoryImpl implements HomeRepository {
         return Left(ServerFailure(e.toString()));
       }
     } else {
-      // Try to get from cache when offline
-      try {
-        final cachedMenus = await localDataSource.getCachedMenus();
-        if (cachedMenus != null) {
-          return Right(cachedMenus.map((model) => model.toEntity()).toList());
-        } else {
-          return Left(CacheFailure('No cached menu data available'));
-        }
-      } on CacheException catch (e) {
-        return Left(CacheFailure(e.message));
-      } on Exception catch (e) {
-        return Left(CacheFailure(e.toString()));
-      }
+      return Left(NetworkFailure('No internet connection'));
     }
   }
 

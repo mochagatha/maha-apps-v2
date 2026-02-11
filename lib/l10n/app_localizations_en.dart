@@ -415,6 +415,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuStrukturOrganisasi => 'Organizational Structure';
 
   @override
+  String get menuEmail => 'Email';
+
+  @override
+  String get menuWhatsapp => 'WhatsApp';
+
+  @override
+  String get menuAlurOperasional => 'Operational Flow';
+
+  @override
+  String get menuNotifikasi => 'Notification';
+
+  @override
   String get redeemPoints => 'Redeem Points';
 
   @override
@@ -496,6 +508,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showChart => 'Show Chart';
+
+  @override
+  String get organizationChart => 'Organization Chart';
 
   @override
   String get archive => 'Archive';
@@ -739,4 +754,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startVerification => 'Start Verification';
+
+  @override
+  String get settingsAbsensi => 'Attendance';
+
+  @override
+  String get settingsAbsensiPenempatanKerja => 'Work Placement';
+
+  @override
+  String get settingsAbsensiZonasi => 'Zoning';
+
+  @override
+  String get settingsAbsensiJamKerja => 'Working Hours';
+
+  @override
+  String get settingsAbsensiKaryawan => 'Employee';
+
+  @override
+  String get settingsAbsensiPekerjaHarian => 'Daily Worker';
+
+  @override
+  String get settingsAbsensiHariLiburCutiBersama => 'Holidays & Joint Leave';
+
+  @override
+  String get settingsAbsensiLembur => 'Overtime';
+
+  @override
+  String get settingsAbsensiAbsenDimanaSaja => 'Attendance Anywhere';
+
+  @override
+  String get settingsAbsensiPerbaikanKehadiran => 'Attendance Correction';
+
+  @override
+  String get settingsFormatDanDraf => 'Format and Drafts';
+
+  @override
+  String get settingsPenempatanKerja => 'Work Placement';
+
+  @override
+  String get settingsLibur => 'Holidays';
+
+  @override
+  String get settingsLembur => 'Overtime';
+
+  @override
+  String get settingsTindakanKaryawan => 'Employee Actions';
+
+  @override
+  String get settingsAksesLayar => 'Screen Access';
+
+  @override
+  String get settingsHakAksesMenu => 'Menu Access Rights';
+
+  @override
+  String get settingsEmail => 'Email Settings';
+
+  @override
+  String get settingsWhatsapp => 'WhatsApp Settings';
+
+  @override
+  String get settingsAlurOperasional => 'Operational Flow';
+
+  @override
+  String get settingsPelacakanJamKerja => 'Working Hours Tracking';
+
+  @override
+  String get settingsStrukturOrganisasi => 'Organizational Structure';
+
+  @override
+  String get settingsKpi => 'KPI Settings';
+
+  @override
+  String get settingsBahasa => 'Language Settings';
+
+  @override
+  String get settingsNotifikasi => 'Notification Settings';
 }

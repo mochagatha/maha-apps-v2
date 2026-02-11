@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/route_paths.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../home/presentation/providers/home_provider.dart';
 import '../../../permissions/presentation/providers/permission_provider.dart';
 import '../../../../core/di/injection_container.dart';
 
@@ -46,21 +47,33 @@ class _SplashPageState extends State<SplashPage> {
 
     if (!mounted) return;
 
+    // Load hierarchical menus if authenticated (cache for app-wide use)
+    if (authProvider.isAuthenticated) {
+      final homeProvider = context.read<HomeProvider>();
+      await homeProvider.loadHierarchicalMenus();
+    }
+
+    if (!mounted) return;
+
     // Navigate based on auth status
     if (authProvider.isAuthenticated) {
       // Check if admin
       if (authProvider.isAdmin) {
         context.go(RoutePaths.adminHome);
+        return;
       }
       // Check status to match v1 logic
       // v1 source: employee?.data.status
       if (authProvider.user?.status == 1) {
         context.go(RoutePaths.welcomeBiodata);
+        return;
       } else {
         context.go(RoutePaths.home);
+        return;
       }
     } else {
       context.go(RoutePaths.login);
+      return;
     }
   }
 

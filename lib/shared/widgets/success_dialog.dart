@@ -23,11 +23,6 @@ class SuccessDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: canPop,
-      onPopInvokedWithResult: (_, __) async {
-        if (onConfirm != null) {
-          onConfirm?.call();
-        }
-      },
       child: AlertDialog(
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),

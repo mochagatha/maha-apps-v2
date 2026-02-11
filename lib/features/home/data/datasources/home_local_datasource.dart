@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/exceptions.dart';
 import '../models/employee_model.dart';
-import '../models/menu_item_model.dart';
 
 abstract class HomeLocalDataSource {
   /// Cache employee profile
@@ -10,12 +9,6 @@ abstract class HomeLocalDataSource {
 
   /// Get cached employee profile
   Future<EmployeeModel?> getCachedEmployeeProfile();
-
-  /// Cache employee menus
-  Future<void> cacheMenus(List<MenuItemModel> menus);
-
-  /// Get cached menus
-  Future<List<MenuItemModel>?> getCachedMenus();
 
   /// Clear all cached home data
   Future<void> clearCache();
@@ -25,7 +18,6 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
   final SharedPreferences sharedPreferences;
 
   static const String keyEmployeeProfile = 'CACHED_EMPLOYEE_PROFILE';
-  static const String keyEmployeeMenus = 'CACHED_EMPLOYEE_MENUS';
 
   HomeLocalDataSourceImpl({required this.sharedPreferences});
 
@@ -54,35 +46,9 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
   }
 
   @override
-  Future<void> cacheMenus(List<MenuItemModel> menus) async {
-    try {
-      final jsonList = menus.map((menu) => menu.toJson()).toList();
-      final jsonString = json.encode(jsonList);
-      await sharedPreferences.setString(keyEmployeeMenus, jsonString);
-    } catch (e) {
-      throw CacheException('Failed to cache menus: ${e.toString()}');
-    }
-  }
-
-  @override
-  Future<List<MenuItemModel>?> getCachedMenus() async {
-    try {
-      final jsonString = sharedPreferences.getString(keyEmployeeMenus);
-      if (jsonString != null) {
-        final List<dynamic> jsonList = json.decode(jsonString);
-        return jsonList.map((json) => MenuItemModel.fromJson(json)).toList();
-      }
-      return null;
-    } catch (e) {
-      throw CacheException('Failed to get cached menus: ${e.toString()}');
-    }
-  }
-
-  @override
   Future<void> clearCache() async {
     try {
       await sharedPreferences.remove(keyEmployeeProfile);
-      await sharedPreferences.remove(keyEmployeeMenus);
     } catch (e) {
       throw CacheException('Failed to clear cache: ${e.toString()}');
     }

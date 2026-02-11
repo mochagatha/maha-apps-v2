@@ -15,6 +15,10 @@ class ApiEndpoints {
       '/employee/company-structure/superior-employee/delete';
   static const String superiorEmployeeDepartment =
       '/employee/company-structure/superior-employee/department';
+  static const String superiorEmployeeDepartmentUpdate =
+      '/employee/company-structure/superior-employee/department/update';
+  static const String superiorEmployeeDepartmentDelete =
+      '/employee/company-structure/superior-employee/department/delete';
   static const String superiorEmployeeDepartmentEmployee =
       '/employee/company-structure/superior-employee/department/employee';
   static const String superiorEmployeeDepartmentWorker =

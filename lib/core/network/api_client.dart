@@ -18,28 +18,28 @@ class ApiClient {
   ApiClient() {
     // Main service
     _dio = _createDio(dotenv.env['BASE_URL'] ?? '');
-    
+
     // Golang service
     _dioGolang = _createDio(dotenv.env['BASE_URL_GOLANG'] ?? '');
-    
+
     // Employee service
     _dioEmployee = _createDio(dotenv.env['BASE_URL_EMPLOYEE'] ?? '');
-    
+
     // Region service
     _dioRegion = _createDio(dotenv.env['BASE_URL_REGION'] ?? '');
-    
+
     // Letter service
     _dioLetter = _createDio(dotenv.env['BASE_URL_LETTER'] ?? '');
-    
+
     // Attendance service
     _dioAttendance = _createDio(dotenv.env['BASE_URL_ATTENDANCE'] ?? '');
-    
+
     // Payroll service
     _dioPayroll = _createDio(dotenv.env['BASE_URL_PAYROLL'] ?? '');
-    
+
     // Count service
     _dioCount = _createDio(dotenv.env['BASE_URL_COUNT'] ?? '');
-    
+
     // Public service
     _dioPublic = _createDio(dotenv.env['BASE_URL_PUBLIC'] ?? '');
   }
@@ -75,7 +75,7 @@ class ApiClient {
           } catch (e) {
             print('Failed to get token: $e');
           }
-          
+
           print('REQUEST[${options.method}] => PATH: ${options.path}');
           return handler.next(options);
         },
@@ -176,11 +176,11 @@ class ApiClient {
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
         return NetworkException('Connection timeout. Please check your internet connection.');
-      
+
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
         final message = error.response?.data['message'] ?? 'An error occurred';
-        
+
         if (statusCode != null) {
           if (statusCode >= 500) {
             return ServerException('Server error: $message');
@@ -189,16 +189,16 @@ class ApiClient {
           }
         }
         return ServerException(message);
-      
+
       case DioExceptionType.cancel:
         return ServerException('Request cancelled');
-      
+
       case DioExceptionType.unknown:
         if (error.message?.contains('SocketException') ?? false) {
           return NetworkException('No internet connection');
         }
         return ServerException('Unexpected error occurred');
-      
+
       default:
         return ServerException('Unexpected error occurred');
     }

@@ -58,36 +58,43 @@ import '../../features/recruitment/presentation/pages/company_code_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_verification_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
 import '../../features/authentication/presentation/providers/admin_face_provider.dart';
-import '../../features/organizational_structure/presentation/pages/organizational_structure_list_page.dart';
-import '../../features/organizational_structure/presentation/pages/structure_main_page.dart';
-import '../../features/organizational_structure/presentation/pages/employment_level_list_page.dart';
-import '../../features/organizational_structure/presentation/pages/employment_level_office_page.dart';
-import '../../features/organizational_structure/presentation/pages/employment_level_project_page.dart';
-import '../../features/organizational_structure/presentation/pages/department_list_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title_list_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title_office_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title_project_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title_detail_page.dart';
-import '../../features/organizational_structure/presentation/pages/job_title_selection_page.dart';
-import '../../features/organizational_structure/presentation/pages/employee_by_job_title_selection_page.dart';
-import '../../features/organizational_structure/presentation/providers/job_title_provider.dart';
-import '../../features/organizational_structure/presentation/providers/department_provider.dart';
-import '../../features/organizational_structure/presentation/providers/structure_provider.dart';
-import '../../features/organizational_structure/presentation/providers/user_role_provider.dart';
-import '../../features/organizational_structure/presentation/pages/department_office_page.dart';
-import '../../features/organizational_structure/presentation/pages/department_project_page.dart';
-import '../../features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/organizational_structure_list_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/structure_main_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_list_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_office_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_project_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/department_list_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/job_title_list_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/job_title_office_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/job_title_project_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/job_title_detail_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/job_title_selection_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/employee_by_job_title_selection_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/job_title_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/department_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/structure_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/providers/user_role_provider.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/department_office_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/department_project_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
-import '../../features/access_menu/presentation/pages/access_menu_list_page.dart';
-import '../../features/access_menu/presentation/pages/employee_selection_page.dart';
-import '../../features/access_menu/presentation/providers/access_menu_provider.dart';
-import '../../features/access_menu/presentation/providers/employee_list_provider.dart';
+import '../../features/settings/features/absensi/presentation/pages/settings_absensi_page.dart';
+import '../../features/settings/features/absensi/presentation/pages/settings_placeholder_page.dart'
+    as absensi_placeholder;
+import '../../features/settings/features/pelacakan_jam_kerja/presentation/pages/pelacakan_jam_kerja_page.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/presentation/pages/pelacakan_settings_page.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/presentation/pages/employee_detail_page.dart';
+import '../../features/settings/features/pelacakan_jam_kerja/presentation/providers/pelacakan_provider.dart';
+import '../../features/settings/features/access_menu/presentation/pages/access_menu_list_page.dart';
+import '../../features/settings/features/access_menu/presentation/pages/employee_selection_page.dart';
+import '../../features/settings/features/access_menu/presentation/providers/access_menu_provider.dart';
+import '../../features/settings/features/access_menu/presentation/providers/employee_list_provider.dart';
 import '../../features/permissions/presentation/pages/permission_page.dart';
 import '../../features/permissions/presentation/providers/permission_provider.dart';
-import '../../features/access_screen/presentation/pages/access_screen_list_page.dart';
-import '../../features/access_screen/presentation/pages/access_screen_detail_page.dart';
-import '../../features/access_screen/presentation/providers/access_screen_provider.dart';
+import '../../features/settings/features/access_screen/presentation/pages/access_screen_list_page.dart';
+import '../../features/settings/features/access_screen/presentation/pages/access_screen_detail_page.dart';
+import '../../features/settings/features/access_screen/presentation/providers/access_screen_provider.dart';
 
 class AppRouter {
   static GoRouter router() {
@@ -126,7 +133,6 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.splash,
           name: RouteNames.splash,
-
           builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
@@ -225,8 +231,7 @@ class AppRouter {
                 GoRoute(
                   path: RoutePaths.pesan,
                   name: RouteNames.pesan,
-                  builder: (context, state) =>
-                      const Scaffold(body: Center(child: Text("Pesan"))),
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
             ),
@@ -268,8 +273,7 @@ class AppRouter {
           path: RoutePaths.biodataForm,
           name: RouteNames.biodataForm,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) =>
-                BiodataFormProvider(repository: sl<BiodataRepository>()),
+            create: (_) => BiodataFormProvider(repository: sl<BiodataRepository>()),
             child: const BiodataFormPage(),
           ),
         ),
@@ -431,10 +435,18 @@ class AppRouter {
         GoRoute(
           path: RoutePaths.structureMain,
           name: RouteNames.structureMain,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<StructureProvider>(),
-            child: const StructureMainPage(),
-          ),
+          builder: (context, state) {
+            final args = state.extra as Map<String, dynamic>?;
+            final type = args != null && args.containsKey('type')
+                ? args['type'] as String
+                : 'utama';
+            return ChangeNotifierProvider(
+              create: (_) => sl<StructureProvider>(),
+              child: StructureMainPage(
+                type: type,
+              ),
+            );
+          },
         ),
         GoRoute(
           path: RoutePaths.employmentLevel,
@@ -618,7 +630,6 @@ class AppRouter {
             );
           },
         ),
-
         // Access Menu Routes
         GoRoute(
           path: RoutePaths.employeeSelection,
@@ -646,10 +657,68 @@ class AppRouter {
           name: RouteNames.settings,
           builder: (context, state) => const SettingsPage(),
         ),
+        // Settings Absensi Routes
+        GoRoute(
+          path: RoutePaths.settingsAbsensi,
+          builder: (context, state) => const SettingsAbsensiPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiPenempatanKerja,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Penempatan Kerja',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiZonasi,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Zonasi',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiJamKerja,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Jam Kerja',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiKaryawan,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Karyawan',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiPekerjaHarian,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Pekerja Harian',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiHariLiburCuti,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Hari Libur & Cuti Bersama',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiLembur,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Lembur',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiAbsenDimanaSaja,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Absen Dimana Saja',
+          ),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiPerbaikanKehadiran,
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Perbaikan Kehadiran',
+          ),
+        ),
         GoRoute(
           path: RoutePaths.settingsPenempatanKerja,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsLibur,
@@ -658,38 +727,31 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsHirarkiOffice,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Hirarki Office'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hirarki Office'),
         ),
         GoRoute(
           path: RoutePaths.settingsLembur,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Lembur'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Lembur'),
         ),
         GoRoute(
           path: RoutePaths.settingsTindakanKaryawan,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
         ),
         GoRoute(
           path: RoutePaths.settingsBpjs,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'BPJS'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'BPJS'),
         ),
         GoRoute(
           path: RoutePaths.settingsPph21,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'PPH 21'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'PPH 21'),
         ),
         GoRoute(
           path: RoutePaths.settingsJamKerja,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Jam Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Jam Kerja'),
         ),
         GoRoute(
           path: RoutePaths.settingsFormatDanDraf,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Format dan Draf'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Format dan Draf'),
         ),
         GoRoute(
           path: RoutePaths.settingsAksesLayar,
@@ -715,13 +777,40 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsHakAksesMenu,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
         ),
         GoRoute(
+          name: RouteNames.pelacakanJamKerja,
           path: RoutePaths.settingsPelacakanJamKerja,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Pelacakan Jam Kerja'),
+          builder: (context, state) => const PelacakanJamKerjaPage(),
+          routes: [
+            GoRoute(
+              name: RouteNames.pelacakanSettings,
+              path: 'settings',
+              builder: (context, state) {
+                final type = state.uri.queryParameters['type'] ?? 'karyawan';
+                return ChangeNotifierProvider(
+                  create: (_) => sl<PelacakanProvider>(),
+                  child: PelacakanSettingsPage(employeeType: type),
+                );
+              },
+              routes: [
+                GoRoute(
+                  name: RouteNames.pelacakanEmployeeDetail,
+                  path: 'employee/:id',
+                  builder: (context, state) {
+                    final employeeId = int.parse(state.pathParameters['id'] ?? '0');
+                    final provider = context.read<PelacakanProvider>();
+                    final employee = provider.filteredEmployees.firstWhere(
+                      (e) => e.id == employeeId,
+                      orElse: () => provider.employees.firstWhere((e) => e.id == employeeId),
+                    );
+                    return EmployeeDetailPage(employee: employee);
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: RoutePaths.settingsKpi,
@@ -731,8 +820,7 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsBahasa,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
         ),
       ],
 

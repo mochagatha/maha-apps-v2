@@ -73,52 +73,10 @@ class RoutePaths {
   static const String recruitmentAgreement = '/recruitment/agreement';
   static const String recruitmentBpjsActivation = '/recruitment/bpjs-activation';
 
-  // Approval Submenus (Persetujuan)
-  static const String approvalSupervision = '/approval/supervision';
-  static const String approvalWorkPlan = '/approval/work-plan';
-  static const String approvalAssignmentLetter = '/approval/assignment-letter';
-  static const String approvalWarning = '/approval/warning';
-  static const String approvalHandover = '/approval/handover';
-  static const String approvalDeduction = '/approval/deduction';
-  static const String approvalIncome = '/approval/income';
-  static const String approvalCostControl = '/approval/cost-control';
-  static const String approvalDataVerification = '/approval/data-verification';
-  static const String approvalContractChange = '/approval/contract-change';
-  static const String approvalPromotion = '/approval/promotion';
-  static const String approvalDemotion = '/approval/demotion';
-  static const String approvalTransfer = '/approval/transfer';
-  static const String approvalAttendanceAnywhere = '/approval/attendance-anywhere';
-  static const String approvalSalaryIncrease = '/approval/salary-increase';
-  static const String approvalSalaryDecrease = '/approval/salary-decrease';
-  static const String approvalOvertimeDirector = '/approval/overtime-director';
-  static const String approvalPermitDirector = '/approval/permit-director';
-  static const String approvalSickDirector = '/approval/sick-director';
-  static const String approvalLeaveDirector = '/approval/leave-director';
-  static const String approvalAgreementDirector = '/approval/agreement-director';
-  static const String approvalSalaryDirector = '/approval/salary-director';
-  static const String approvalLoanDirector = '/approval/loan-director';
-
-  // Monitoring Submenus (Mengamati)
-  static const String monitoringActivityLog = '/monitoring/activity-log';
-  static const String monitoringKpi = '/monitoring/kpi';
-  static const String monitoringSalary = '/monitoring/salary';
-  static const String monitoringAttendance = '/monitoring/attendance';
-  static const String monitoringWorkPlan = '/monitoring/work-plan';
-  static const String monitoringTask = '/monitoring/task';
-
-  // Attendance Submenus (Absensi)
-  static const String attendancePresent = '/attendance/present';
-  static const String attendanceOvertime = '/attendance/overtime';
-  static const String attendancePermit = '/attendance/permit';
-  static const String attendanceSick = '/attendance/sick';
-  static const String attendanceLeave = '/attendance/leave';
-  static const String attendanceSupervision = '/attendance/supervision';
-  static const String attendanceSupervision2 = '/attendance/supervision-2';
-  static const String attendanceAnywhere = '/attendance/anywhere';
-
   // Organizational Structure
   static const String organizationalStructure = '/organizational-structure';
   static const String structureMain = '/organizational-structure/main';
+  static const String structureProject = '/organizational-structure/project';
   static const String organizationalChart = '/organizational-structure/chart';
   static const String employmentLevel = '/organizational-structure/employment-level';
   static const String employmentLevelOffice = '/organizational-structure/employment-level/office';
@@ -152,6 +110,16 @@ class RoutePaths {
   static const String accessMenuList = '/access-menu';
 
   // Settings Submenus
+  static const String settingsAbsensi = '/settings/absensi';
+  static const String settingsAbsensiPenempatanKerja = '/settings/absensi/penempatan-kerja';
+  static const String settingsAbsensiZonasi = '/settings/absensi/zonasi';
+  static const String settingsAbsensiJamKerja = '/settings/absensi/jam-kerja';
+  static const String settingsAbsensiKaryawan = '/settings/absensi/karyawan';
+  static const String settingsAbsensiPekerjaHarian = '/settings/absensi/pekerja-harian';
+  static const String settingsAbsensiHariLiburCuti = '/settings/absensi/hari-libur-cuti-bersama';
+  static const String settingsAbsensiLembur = '/settings/absensi/lembur';
+  static const String settingsAbsensiAbsenDimanaSaja = '/settings/absensi/absen-dimana-saja';
+  static const String settingsAbsensiPerbaikanKehadiran = '/settings/absensi/perbaikan-kehadiran';
   static const String settingsPenempatanKerja = '/settings/penempatan-kerja';
   static const String settingsLibur = '/settings/libur';
   static const String settingsHirarkiOffice = '/settings/hirarki-office';
@@ -165,6 +133,12 @@ class RoutePaths {
   static const String settingsAksesLayarDetail = '/settings/akses-layar/detail';
   static const String settingsHakAksesMenu = '/settings/hak-akses-menu';
   static const String settingsPelacakanJamKerja = '/settings/pelacakan-jam-kerja';
+  static const String settingsPelacakanSettings = '/settings/pelacakan-jam-kerja/settings';
+  static const String settingsPelacakanEmployeeDetail = '/settings/pelacakan-jam-kerja/employee';
   static const String settingsKpi = '/settings/kpi';
   static const String settingsBahasa = '/settings/bahasa';
+  static const String settingsEmail = '/settings/email';
+  static const String settingsWhatsapp = '/settings/whatsapp';
+  static const String settingsAlurOperasional = '/settings/alur-operasional';
+  static const String settingsNotifikasi = '/settings/notifikasi';
 }
