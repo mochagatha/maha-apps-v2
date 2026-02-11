@@ -43,6 +43,7 @@ class RoutePaths {
   static const String recruitment = '/recruitment';
   static const String contractUpdates = '/contract-updates';
   static const String kpi = '/kpi';
+  
   static const String welcomeBiodata = '/biodata/welcome';
   static const String biodataForm = '/biodata/form';
   static const String educationForm = '/biodata/education';
@@ -61,8 +62,11 @@ class RoutePaths {
   static const String biodataStatementLetter = '/biodata/statement-letter/statement';
   static const String biodataStatementLetterSignature = '/biodata/statement-letter/signature';
   static const String employeeEmploymentAgreement = '/employment-agreement/employee';
+
   static const String verificationData = '/recruitment/verification-data';
   static const String employeeVerification = '/recruitment/employee-verification';
+  static const String employeePersonalData = '/recruitment/personal-data/employee';
+  
   static const String companyCode = '/recruitment/company-code';
 
   // Recruitment Submenus

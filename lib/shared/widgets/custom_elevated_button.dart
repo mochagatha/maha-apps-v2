@@ -7,18 +7,20 @@ class CustomElevatedButton extends StatelessWidget {
     required this.onPressed,
     required this.child,
     this.loading = false,
+    this.color = AppColors.primary,
   });
 
   final VoidCallback onPressed;
   final bool loading;
   final Widget child;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

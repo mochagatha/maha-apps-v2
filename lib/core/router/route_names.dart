@@ -42,6 +42,7 @@ class RouteNames {
   static const String approvalNew = 'approval-new';
   static const String recruitment = 'recruitment';
   static const String contractUpdates = 'contract-updates';
+  
   static const String welcomeBiodata = 'welcome-biodata';
   static const String biodataForm = 'biodata-form';
   static const String educationForm = 'education-form';
@@ -60,8 +61,11 @@ class RouteNames {
   static const String biodataStatementLetter = 'biodata-statement-letter-statement';
   static const String biodataStatementLetterSignature = 'biodata-statement-letter-signature';
   static const String employeeEmploymentAgreement = 'employee-employment-agreement';
+
   static const String verificationData = 'verification-data';
   static const String employeeVerification = 'employee-verification';
+  static const String employeePersonalData = 'employee-personal-data';
+
   static const String companyCode = 'company-code';
 
   // Organizational Structure

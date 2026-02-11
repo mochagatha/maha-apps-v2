@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/utils/localization_extension.dart';
-import '../../../../shared/theme/app_theme.dart';
-import '../../../../shared/widgets/custom_app_bar.dart';
+import '../../../../../../core/utils/localization_extension.dart';
+import '../../../../../../shared/theme/app_theme.dart';
+import '../../../../../../shared/widgets/custom_app_bar.dart';
 
 class VerificationDataPage extends StatelessWidget {
   const VerificationDataPage({super.key});

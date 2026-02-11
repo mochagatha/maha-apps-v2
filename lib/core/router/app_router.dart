@@ -11,6 +11,7 @@ import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provid
 import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_agreement_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
+import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -51,8 +52,8 @@ import '../../features/biodata/presentation/pages/selfie_ktp_result_page.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
-import '../../features/recruitment/presentation/pages/verification_data_page.dart';
-import '../../features/recruitment/presentation/pages/employee_verification_page.dart';
+import '../../features/recruitment/features/data_verification/presentation/pages/verification_data_page.dart';
+import '../../features/recruitment/features/data_verification/presentation/pages/employee_verification_page.dart';
 import '../../features/recruitment/presentation/pages/company_code_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_verification_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
@@ -95,7 +96,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.organizationalStructure,
+      initialLocation: RoutePaths.splash,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -406,6 +407,14 @@ class AppRouter {
           path: RoutePaths.employeeVerification,
           name: RouteNames.employeeVerification,
           builder: (context, state) => const EmployeeVerificationPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.employeePersonalData,
+          name: RouteNames.employeePersonalData,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return EmployeePersonalDataPage(id: extra["id"]);
+          },
         ),
         GoRoute(
           path: RoutePaths.companyCode,

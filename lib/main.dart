@@ -35,14 +35,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late final GoRouter _router;
-
-  @override
-  void initState() {
-    super.initState();
-    _router = AppRouter.router();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -75,6 +67,8 @@ class AppInitializer extends StatefulWidget {
 }
 
 class _AppInitializerState extends State<AppInitializer> {
+  late final GoRouter _router;
+  
   @override
   void initState() {
     super.initState();
@@ -82,6 +76,7 @@ class _AppInitializerState extends State<AppInitializer> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeScreenSecurity();
     });
+    _router = AppRouter.router();
   }
 
   Future<void> _initializeScreenSecurity() async {
@@ -105,7 +100,7 @@ class _AppInitializerState extends State<AppInitializer> {
           title: 'MAHA Apps',
           theme: AppTheme.lightTheme,
           debugShowCheckedModeBanner: false,
-          routerConfig: AppRouter.router(),
+          routerConfig: _router,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
