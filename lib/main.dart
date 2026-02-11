@@ -27,14 +27,9 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -54,15 +49,13 @@ class _MyAppState extends State<MyApp> {
         // Screen Security Provider from GetIt
         ChangeNotifierProvider(create: (_) => di.sl<ScreenSecurityProvider>()),
       ],
-      child: AppInitializer(router: _router),
+      child: AppInitializer(),
     );
   }
 }
 
 class AppInitializer extends StatefulWidget {
-  final GoRouter router;
-
-  const AppInitializer({super.key, required this.router});
+  const AppInitializer({super.key});
 
   @override
   State<AppInitializer> createState() => _AppInitializerState();
