@@ -428,9 +428,12 @@ class _StructureMainPageState extends State<StructureMainPage> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StructureTeamPage(
-          superiorId: superiorId,
-          type: widget.type,
+        builder: (context) => ChangeNotifierProvider(
+          create: (_) => sl<StructureProvider>(),
+          child: StructureTeamPage(
+            superiorId: superiorId,
+            type: widget.type,
+          ),
         ),
       ),
     );
