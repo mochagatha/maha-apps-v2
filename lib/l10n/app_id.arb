@@ -637,5 +637,90 @@
   "targetPointDialogSuccessMessage": "Target Poin telah berhasil di Ubah !",
   "@targetPointDialogSuccessMessage": {
     "description": "Success dialog message"
+  },
+  
+  "performanceAssessmentTitle": "Penilaian Kinerja",
+  "@performanceAssessmentTitle": {
+    "description": "Performance Assessment page title"
+  },
+  "performanceAssessmentKehadiran": "Kehadiran",
+  "@performanceAssessmentKehadiran": {
+    "description": "Attendance section title"
+  },
+  "performanceAssessmentMaksimalPointAbsensi": "Maksimal Point Absensi",
+  "@performanceAssessmentMaksimalPointAbsensi": {
+    "description": "Maximum attendance point label"
+  },
+  "performanceAssessmentTerlambat": "Terlambat",
+  "@performanceAssessmentTerlambat": {
+    "description": "Late label"
+  },
+  "performanceAssessmentTidakAbsenPulang": "Tidak Absen Pulang",
+  "@performanceAssessmentTidakAbsenPulang": {
+    "description": "No checkout label"
+  },
+  "performanceAssessmentSakit": "Sakit",
+  "@performanceAssessmentSakit": {
+    "description": "Sick label"
+  },
+  "performanceAssessmentManasikMasuk": "Manasik Masuk",
+  "@performanceAssessmentManasikMasuk": {
+    "description": "Manasik attendance label"
+  },
+  "performanceAssessmentPenilaianAtasan": "Penilaian Atasan",
+  "@performanceAssessmentPenilaianAtasan": {
+    "description": "Supervisor assessment section title"
+  },
+  "performanceAssessmentMaksimalPointAtasan": "Maksimal Point Atasan",
+  "@performanceAssessmentMaksimalPointAtasan": {
+    "description": "Maximum supervisor point label"
+  },
+  "performanceAssessmentRencanaKerja": "Rencana Kerja",
+  "@performanceAssessmentRencanaKerja": {
+    "description": "Work plan section title"
+  },
+  "performanceAssessmentJabatan": "Jabatan",
+  "@performanceAssessmentJabatan": {
+    "description": "Position column header"
+  },
+  "performanceAssessmentMinPoint": "Min Point",
+  "@performanceAssessmentMinPoint": {
+    "description": "Minimum point column header"
+  },
+  "performanceAssessmentMaxPoint": "Max Point",
+  "@performanceAssessmentMaxPoint": {
+    "description": "Maximum point column header"
+  },
+  "performanceAssessmentTargetPointX": "Target Point X",
+  "@performanceAssessmentTargetPointX": {
+    "description": "Target point X formula text"
+  },
+  "performanceAssessmentPoinAbsensiHarian": "Poin Absensi Harian",
+  "@performanceAssessmentPoinAbsensiHarian": {
+    "description": "Daily attendance point formula text"
+  },
+  "performanceAssessmentButtonReset": "Reset",
+  "@performanceAssessmentButtonReset": {
+    "description": "Reset button text"
+  },
+  "performanceAssessmentButtonApply": "Terapkan",
+  "@performanceAssessmentButtonApply": {
+    "description": "Apply button text"
+  },
+  "performanceAssessmentDialogConfirmTitle": "Maaf, Sebelumnya...",
+  "@performanceAssessmentDialogConfirmTitle": {
+    "description": "Confirmation dialog title"
+  },
+  "performanceAssessmentDialogConfirmMessage": "Apakah anda yakin ingin menerapkan Format Penilaian Kinerja ini ?",
+  "@performanceAssessmentDialogConfirmMessage": {
+    "description": "Confirmation dialog message"
+  },
+  "performanceAssessmentDialogSuccessTitle": "Berhasil!",
+  "@performanceAssessmentDialogSuccessTitle": {
+    "description": "Success dialog title"
+  },
+  "performanceAssessmentDialogSuccessMessage": "Format telah berhasil di Terapkan !",
+  "@performanceAssessmentDialogSuccessMessage": {
+    "description": "Success dialog message"
   }
 }

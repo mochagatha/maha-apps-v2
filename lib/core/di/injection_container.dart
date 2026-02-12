@@ -1,6 +1,7 @@
 // Dependency Injection Container using GetIt
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 import '../network/api_client.dart';
@@ -461,6 +462,9 @@ Future<void> init() async {
   // Provider
   sl.registerFactory(
     () => TargetPointProvider(),
+  );
+  sl.registerFactory(
+    () => PenilaianKinerjaProvider(),
   );
 
   // Use cases

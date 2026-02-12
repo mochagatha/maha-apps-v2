@@ -12,6 +12,8 @@ import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_
 import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
+import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/pages/settings_kpi_penilaian_kinerja_page.dart';
+import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -663,6 +665,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<TargetPointProvider>(),
             child: const SettingsKpiTargetPointPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiPenilaianKinerja.path,
+          name: AppRoutes.settingsKpiPenilaianKinerja.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<PenilaianKinerjaProvider>(),
+            child: const SettingsKpiPenilaianKinerjaPage(),
           ),
         ),
 

@@ -305,5 +305,27 @@
   "targetPointDialogConfirmTitle": "Before Continuing...",
   "targetPointDialogConfirmMessage": "Are you sure you want to change this Target Point?",
   "targetPointDialogSuccessTitle": "Success!",
-  "targetPointDialogSuccessMessage": "Target Point has been successfully changed!"
+  "targetPointDialogSuccessMessage": "Target Point has been successfully changed!",
+  
+  "performanceAssessmentTitle": "Performance Assessment",
+  "performanceAssessmentKehadiran": "Attendance",
+  "performanceAssessmentMaksimalPointAbsensi": "Maximum Attendance Point",
+  "performanceAssessmentTerlambat": "Late",
+  "performanceAssessmentTidakAbsenPulang": "No Checkout",
+  "performanceAssessmentSakit": "Sick",
+  "performanceAssessmentManasikMasuk": "Manasik Attendance",
+  "performanceAssessmentPenilaianAtasan": "Supervisor Assessment",
+  "performanceAssessmentMaksimalPointAtasan": "Maximum Supervisor Point",
+  "performanceAssessmentRencanaKerja": "Work Plan",
+  "performanceAssessmentJabatan": "Position",
+  "performanceAssessmentMinPoint": "Min Point",
+  "performanceAssessmentMaxPoint": "Max Point",
+  "performanceAssessmentTargetPointX": "Target Point X",
+  "performanceAssessmentPoinAbsensiHarian": "Daily Attendance Point",
+  "performanceAssessmentButtonReset": "Reset",
+  "performanceAssessmentButtonApply": "Apply",
+  "performanceAssessmentDialogConfirmTitle": "Before Continuing...",
+  "performanceAssessmentDialogConfirmMessage": "Are you sure you want to apply this Performance Assessment Format?",
+  "performanceAssessmentDialogSuccessTitle": "Success!",
+  "performanceAssessmentDialogSuccessMessage": "Format has been successfully applied!"
 }

@@ -885,4 +885,71 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get targetPointDialogSuccessMessage =>
       'Target Poin telah berhasil di Ubah !';
+
+  @override
+  String get performanceAssessmentTitle => 'Penilaian Kinerja';
+
+  @override
+  String get performanceAssessmentKehadiran => 'Kehadiran';
+
+  @override
+  String get performanceAssessmentMaksimalPointAbsensi =>
+      'Maksimal Point Absensi';
+
+  @override
+  String get performanceAssessmentTerlambat => 'Terlambat';
+
+  @override
+  String get performanceAssessmentTidakAbsenPulang => 'Tidak Absen Pulang';
+
+  @override
+  String get performanceAssessmentSakit => 'Sakit';
+
+  @override
+  String get performanceAssessmentManasikMasuk => 'Manasik Masuk';
+
+  @override
+  String get performanceAssessmentPenilaianAtasan => 'Penilaian Atasan';
+
+  @override
+  String get performanceAssessmentMaksimalPointAtasan =>
+      'Maksimal Point Atasan';
+
+  @override
+  String get performanceAssessmentRencanaKerja => 'Rencana Kerja';
+
+  @override
+  String get performanceAssessmentJabatan => 'Jabatan';
+
+  @override
+  String get performanceAssessmentMinPoint => 'Min Point';
+
+  @override
+  String get performanceAssessmentMaxPoint => 'Max Point';
+
+  @override
+  String get performanceAssessmentTargetPointX => 'Target Point X';
+
+  @override
+  String get performanceAssessmentPoinAbsensiHarian => 'Poin Absensi Harian';
+
+  @override
+  String get performanceAssessmentButtonReset => 'Reset';
+
+  @override
+  String get performanceAssessmentButtonApply => 'Terapkan';
+
+  @override
+  String get performanceAssessmentDialogConfirmTitle => 'Maaf, Sebelumnya...';
+
+  @override
+  String get performanceAssessmentDialogConfirmMessage =>
+      'Apakah anda yakin ingin menerapkan Format Penilaian Kinerja ini ?';
+
+  @override
+  String get performanceAssessmentDialogSuccessTitle => 'Berhasil!';
+
+  @override
+  String get performanceAssessmentDialogSuccessMessage =>
+      'Format telah berhasil di Terapkan !';
 }

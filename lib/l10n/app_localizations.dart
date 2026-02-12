@@ -1747,6 +1747,132 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Target Poin telah berhasil di Ubah !'**
   String get targetPointDialogSuccessMessage;
+
+  /// Performance Assessment page title
+  ///
+  /// In id, this message translates to:
+  /// **'Penilaian Kinerja'**
+  String get performanceAssessmentTitle;
+
+  /// Attendance section title
+  ///
+  /// In id, this message translates to:
+  /// **'Kehadiran'**
+  String get performanceAssessmentKehadiran;
+
+  /// Maximum attendance point label
+  ///
+  /// In id, this message translates to:
+  /// **'Maksimal Point Absensi'**
+  String get performanceAssessmentMaksimalPointAbsensi;
+
+  /// Late label
+  ///
+  /// In id, this message translates to:
+  /// **'Terlambat'**
+  String get performanceAssessmentTerlambat;
+
+  /// No checkout label
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak Absen Pulang'**
+  String get performanceAssessmentTidakAbsenPulang;
+
+  /// Sick label
+  ///
+  /// In id, this message translates to:
+  /// **'Sakit'**
+  String get performanceAssessmentSakit;
+
+  /// Manasik attendance label
+  ///
+  /// In id, this message translates to:
+  /// **'Manasik Masuk'**
+  String get performanceAssessmentManasikMasuk;
+
+  /// Supervisor assessment section title
+  ///
+  /// In id, this message translates to:
+  /// **'Penilaian Atasan'**
+  String get performanceAssessmentPenilaianAtasan;
+
+  /// Maximum supervisor point label
+  ///
+  /// In id, this message translates to:
+  /// **'Maksimal Point Atasan'**
+  String get performanceAssessmentMaksimalPointAtasan;
+
+  /// Work plan section title
+  ///
+  /// In id, this message translates to:
+  /// **'Rencana Kerja'**
+  String get performanceAssessmentRencanaKerja;
+
+  /// Position column header
+  ///
+  /// In id, this message translates to:
+  /// **'Jabatan'**
+  String get performanceAssessmentJabatan;
+
+  /// Minimum point column header
+  ///
+  /// In id, this message translates to:
+  /// **'Min Point'**
+  String get performanceAssessmentMinPoint;
+
+  /// Maximum point column header
+  ///
+  /// In id, this message translates to:
+  /// **'Max Point'**
+  String get performanceAssessmentMaxPoint;
+
+  /// Target point X formula text
+  ///
+  /// In id, this message translates to:
+  /// **'Target Point X'**
+  String get performanceAssessmentTargetPointX;
+
+  /// Daily attendance point formula text
+  ///
+  /// In id, this message translates to:
+  /// **'Poin Absensi Harian'**
+  String get performanceAssessmentPoinAbsensiHarian;
+
+  /// Reset button text
+  ///
+  /// In id, this message translates to:
+  /// **'Reset'**
+  String get performanceAssessmentButtonReset;
+
+  /// Apply button text
+  ///
+  /// In id, this message translates to:
+  /// **'Terapkan'**
+  String get performanceAssessmentButtonApply;
+
+  /// Confirmation dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Maaf, Sebelumnya...'**
+  String get performanceAssessmentDialogConfirmTitle;
+
+  /// Confirmation dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah anda yakin ingin menerapkan Format Penilaian Kinerja ini ?'**
+  String get performanceAssessmentDialogConfirmMessage;
+
+  /// Success dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Berhasil!'**
+  String get performanceAssessmentDialogSuccessTitle;
+
+  /// Success dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Format telah berhasil di Terapkan !'**
+  String get performanceAssessmentDialogSuccessMessage;
 }
 
 class _AppLocalizationsDelegate
