@@ -2,6 +2,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
 
@@ -100,7 +101,8 @@ import '../../features/settings/features/organizational_structure/presentation/p
 import '../../features/settings/features/access_menu/data/datasources/access_menu_remote_data_source.dart';
 import '../../features/settings/features/access_menu/data/repositories/access_menu_repository_impl.dart';
 import '../../features/settings/features/access_menu/domain/repositories/access_menu_repository.dart';
-import '../../features/settings/features/access_menu/domain/usecases/get_employee_menus.dart' as access_menu_usecases;
+import '../../features/settings/features/access_menu/domain/usecases/get_employee_menus.dart'
+    as access_menu_usecases;
 import '../../features/settings/features/access_menu/domain/usecases/get_all_menus.dart';
 import '../../features/settings/features/access_menu/domain/usecases/manage_menu_access.dart';
 import '../../features/settings/features/access_menu/presentation/providers/access_menu_provider.dart';
@@ -454,6 +456,18 @@ Future<void> init() async {
   sl.registerLazySingleton<ScreenSecurityRemoteDataSource>(
     () => ScreenSecurityRemoteDataSourceImpl(apiClient: sl()),
   );
+
+  //! Features - KPI
+  // Provider
+  sl.registerFactory(
+    () => TargetPointProvider(),
+  );
+
+  // Use cases
+
+  // Repository
+
+  // Data sources
 
   //! Features - Pelacakan Jam Kerja
   // Provider

@@ -851,4 +851,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsNotifikasi => 'Notification Settings';
+
+  @override
+  String get targetPointTitle => 'Target Point';
+
+  @override
+  String get targetPointInfoText =>
+      'Target point is the number of points that must be achieved by employees in one period (a full month). Target points are obtained through Total Salary [....]';
+
+  @override
+  String get targetPointTotalGaji => 'Total Salary';
+
+  @override
+  String get targetPointButtonReset => 'Reset';
+
+  @override
+  String get targetPointButtonApply => 'Apply';
+
+  @override
+  String get targetPointDialogConfirmTitle => 'Before Continuing...';
+
+  @override
+  String get targetPointDialogConfirmMessage =>
+      'Are you sure you want to change this Target Point?';
+
+  @override
+  String get targetPointDialogSuccessTitle => 'Success!';
+
+  @override
+  String get targetPointDialogSuccessMessage =>
+      'Target Point has been successfully changed!';
 }

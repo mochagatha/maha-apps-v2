@@ -22,6 +22,8 @@ import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/settings/features/kpi/features/target_point/presentation/pages/settings_kpi_target_point_page.dart';
+import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 import '../../features/settings/features/kpi/presentation/pages/settings_kpi_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
@@ -658,13 +660,10 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.settingsKpiTargetPoint.path,
           name: AppRoutes.settingsKpiTargetPoint.name,
-          builder: (context, state) {
-            final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
-            return ChangeNotifierProvider(
-              create: (_) => sl<AccessMenuProvider>(),
-              child: AccessMenuListPage(employeeId: int.parse(employeeId)),
-            );
-          },
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<TargetPointProvider>(),
+            child: const SettingsKpiTargetPointPage(),
+          ),
         ),
 
         // Settings Routes

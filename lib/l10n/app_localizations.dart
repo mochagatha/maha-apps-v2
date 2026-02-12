@@ -1693,6 +1693,60 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Notifikasi'**
   String get settingsNotifikasi;
+
+  /// Target Point page title
+  ///
+  /// In id, this message translates to:
+  /// **'Target Point'**
+  String get targetPointTitle;
+
+  /// Information text explaining what target point is
+  ///
+  /// In id, this message translates to:
+  /// **'Target point adalah jumlah point yang harus dicapai oleh karyawan dalam satu periode (sebulan penuh). Target point didapatkan melalui Total Gaji [....]'**
+  String get targetPointInfoText;
+
+  /// Total salary label
+  ///
+  /// In id, this message translates to:
+  /// **'Total Gaji'**
+  String get targetPointTotalGaji;
+
+  /// Reset button text
+  ///
+  /// In id, this message translates to:
+  /// **'Reset'**
+  String get targetPointButtonReset;
+
+  /// Apply button text
+  ///
+  /// In id, this message translates to:
+  /// **'Terapkan'**
+  String get targetPointButtonApply;
+
+  /// Confirmation dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Maaf, Sebelumnya...'**
+  String get targetPointDialogConfirmTitle;
+
+  /// Confirmation dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah anda yakin ingin mengubah Target Poin ini ?'**
+  String get targetPointDialogConfirmMessage;
+
+  /// Success dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Berhasil!'**
+  String get targetPointDialogSuccessTitle;
+
+  /// Success dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Target Poin telah berhasil di Ubah !'**
+  String get targetPointDialogSuccessMessage;
 }
 
 class _AppLocalizationsDelegate

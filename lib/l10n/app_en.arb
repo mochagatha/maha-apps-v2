@@ -295,5 +295,15 @@
   "settingsKpiUbahPeriodeSurat": "Change Warning Letter & Reprimand Letter Period",
   "settingsKpiPengaturanAktivasiPoint": "Point Activation Settings",
   "settingsBahasa": "Language Settings",
-  "settingsNotifikasi": "Notification Settings"
+  "settingsNotifikasi": "Notification Settings",
+  
+  "targetPointTitle": "Target Point",
+  "targetPointInfoText": "Target point is the number of points that must be achieved by employees in one period (a full month). Target points are obtained through Total Salary [....]",
+  "targetPointTotalGaji": "Total Salary",
+  "targetPointButtonReset": "Reset",
+  "targetPointButtonApply": "Apply",
+  "targetPointDialogConfirmTitle": "Before Continuing...",
+  "targetPointDialogConfirmMessage": "Are you sure you want to change this Target Point?",
+  "targetPointDialogSuccessTitle": "Success!",
+  "targetPointDialogSuccessMessage": "Target Point has been successfully changed!"
 }

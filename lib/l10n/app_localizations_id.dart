@@ -855,4 +855,34 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsNotifikasi => 'Notifikasi';
+
+  @override
+  String get targetPointTitle => 'Target Point';
+
+  @override
+  String get targetPointInfoText =>
+      'Target point adalah jumlah point yang harus dicapai oleh karyawan dalam satu periode (sebulan penuh). Target point didapatkan melalui Total Gaji [....]';
+
+  @override
+  String get targetPointTotalGaji => 'Total Gaji';
+
+  @override
+  String get targetPointButtonReset => 'Reset';
+
+  @override
+  String get targetPointButtonApply => 'Terapkan';
+
+  @override
+  String get targetPointDialogConfirmTitle => 'Maaf, Sebelumnya...';
+
+  @override
+  String get targetPointDialogConfirmMessage =>
+      'Apakah anda yakin ingin mengubah Target Poin ini ?';
+
+  @override
+  String get targetPointDialogSuccessTitle => 'Berhasil!';
+
+  @override
+  String get targetPointDialogSuccessMessage =>
+      'Target Poin telah berhasil di Ubah !';
 }
