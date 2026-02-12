@@ -7,6 +7,13 @@ import '../../features/settings/features/kpi/features/target_point/presentation/
 import '../network/api_client.dart';
 import '../network/network_info.dart';
 
+// Target Point KPI feature imports
+import '../../features/settings/features/kpi/features/target_point/data/datasources/target_point_remote_datasource.dart';
+import '../../features/settings/features/kpi/features/target_point/data/repositories/target_point_repository_impl.dart';
+import '../../features/settings/features/kpi/features/target_point/domain/repositories/target_point_repository.dart';
+import '../../features/settings/features/kpi/features/target_point/domain/usecases/get_target_point_indicators.dart';
+import '../../features/settings/features/kpi/features/target_point/domain/usecases/update_target_point_indicator.dart';
+
 // Authentication feature imports
 import '../../features/authentication/data/datasources/auth_local_datasource.dart';
 import '../../features/authentication/data/datasources/auth_remote_datasource.dart';
@@ -459,19 +466,32 @@ Future<void> init() async {
   );
 
   //! Features - KPI
-  // Provider
+  // Target Point Provider
   sl.registerFactory(
-    () => TargetPointProvider(),
+    () => TargetPointProvider(
+      getTargetPointIndicatorsUseCase: sl(),
+      updateTargetPointIndicatorUseCase: sl(),
+    ),
   );
+
+  // Target Point Use cases
+  sl.registerLazySingleton(() => GetTargetPointIndicators(sl()));
+  sl.registerLazySingleton(() => UpdateTargetPointIndicator(sl()));
+
+  // Target Point Repository
+  sl.registerLazySingleton<TargetPointRepository>(
+    () => TargetPointRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Target Point Data sources
+  sl.registerLazySingleton<TargetPointRemoteDataSource>(
+    () => TargetPointRemoteDataSourceImpl(client: sl()),
+  );
+
+  // Penilaian Kinerja Provider
   sl.registerFactory(
     () => PenilaianKinerjaProvider(),
   );
-
-  // Use cases
-
-  // Repository
-
-  // Data sources
 
   //! Features - Pelacakan Jam Kerja
   // Provider

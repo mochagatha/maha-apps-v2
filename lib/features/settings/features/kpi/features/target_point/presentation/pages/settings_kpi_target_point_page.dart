@@ -30,10 +30,14 @@ class _SettingsKpiTargetPointPageState extends State<SettingsKpiTargetPointPage>
   @override
   void initState() {
     super.initState();
-    // Initialize controller with current value from provider
+    // Initialize controller with current value from provider and load data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = context.read<TargetPointProvider>();
-      _totalGajiController.text = provider.totalGaji.toString();
+      // Load indicators from API
+      provider.loadTargetPointIndicators().then((_) {
+        // Update text controller with loaded value
+        _totalGajiController.text = provider.totalGaji.toString();
+      });
     });
   }
 
