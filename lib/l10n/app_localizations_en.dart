@@ -825,6 +825,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsKpi => 'KPI Settings';
 
   @override
+  String get settingsKpiTargetPoint => 'Target Point';
+
+  @override
+  String get settingsKpiZonasi => 'Zoning';
+
+  @override
+  String get settingsKpiJamKerja => 'Working Hours';
+
+  @override
+  String get settingsKpiKaryawan => 'Employee';
+
+  @override
+  String get settingsKpiPenilaianKinerja => 'Performance Appraisal';
+
+  @override
+  String get settingsKpiUbahPeriodeSurat =>
+      'Change Warning Letter & Reprimand Letter Period';
+
+  @override
+  String get settingsKpiPengaturanAktivasiPoint => 'Point Activation Settings';
+
+  @override
   String get settingsBahasa => 'Language Settings';
 
   @override

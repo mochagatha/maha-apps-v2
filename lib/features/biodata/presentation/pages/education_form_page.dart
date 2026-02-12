@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/education_form_provider.dart';
@@ -211,7 +211,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   }
 
                   if (context.mounted) {
-                    context.pushNamed(RouteNames.familyForm);
+                    context.pushNamed(AppRoutes.familyForm.name);
                   }
                 },
                 style: ElevatedButton.styleFrom(

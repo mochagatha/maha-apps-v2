@@ -1,4 +1,4 @@
-import 'package:maha_apps_v2/core/router/route_paths.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 
 class MenuConfig {
   // ==================== MENU CODES ====================
@@ -53,28 +53,28 @@ class MenuConfig {
 
   // ==================== ROUTE MAPPING ====================
 
-  static const Map<String, String> _routeMap = {
+  static final Map<String, String> _routeMap = {
     // Main Menus
-    absensi: RoutePaths.absensi,
-    mengamati: RoutePaths.monitoringList,
-    persetujuan: RoutePaths.approvalList,
-    rencanaKerja: RoutePaths.workerPlanManager,
-    permintaan: RoutePaths.permintaan,
-    tugas: RoutePaths.listFeature,
-    pengajuan: RoutePaths.requestHomeScreen,
-    administrasi: RoutePaths.administration,
-    arsip: RoutePaths.arsipMenu,
-    dataAbsensi: RoutePaths.dataAbsensi,
-    dataKaryawan: RoutePaths.dataKaryawanList,
-    proyek: RoutePaths.listProyek,
-    aduan: RoutePaths.reportList,
-    dataPayroll: RoutePaths.dataListPayroll,
-    kasir: RoutePaths.approvalNew,
-    akuntansi: RoutePaths.approvalNew,
-    rekrutment: RoutePaths.recruitment,
-    kpi: RoutePaths.kpi,
-    pengaturan: RoutePaths.settings,
-    updateKontrak: RoutePaths.contractUpdates,
+    absensi: AppRoutes.absensi.path,
+    mengamati: AppRoutes.monitoringList.path,
+    persetujuan: AppRoutes.approvalList.path,
+    rencanaKerja: AppRoutes.workerPlanManager.path,
+    permintaan: AppRoutes.permintaan.path,
+    tugas: AppRoutes.listFeature.path,
+    pengajuan: AppRoutes.requestHomeScreen.path,
+    administrasi: AppRoutes.administration.path,
+    arsip: AppRoutes.arsipMenu.path,
+    dataAbsensi: AppRoutes.dataAbsensi.path,
+    dataKaryawan: AppRoutes.dataKaryawanList.path,
+    proyek: AppRoutes.listProyek.path,
+    aduan: AppRoutes.reportList.path,
+    dataPayroll: AppRoutes.dataListPayroll.path,
+    kasir: AppRoutes.approvalNew.path,
+    akuntansi: AppRoutes.approvalNew.path,
+    rekrutment: AppRoutes.recruitment.path,
+    kpi: AppRoutes.kpi.path,
+    pengaturan: AppRoutes.settings.path,
+    updateKontrak: AppRoutes.contractUpdates.path,
   };
 
   // ==================== PUBLIC METHODS ====================

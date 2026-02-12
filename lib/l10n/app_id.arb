@@ -592,6 +592,13 @@
   "settingsPelacakanJamKerja": "Pelacakan Jam Kerja",
   "settingsStrukturOrganisasi": "Struktur Organisasi",
   "settingsKpi": "KPI",
+  "settingsKpiTargetPoint": "Target Point",
+  "settingsKpiZonasi": "Zonasi",
+  "settingsKpiJamKerja": "Jam Kerja",
+  "settingsKpiKaryawan": "Karyawan",
+  "settingsKpiPenilaianKinerja": "Penilaian Kinerja",
+  "settingsKpiUbahPeriodeSurat": "Ubah Periode Surat Teguran & Surat Peringatan",
+  "settingsKpiPengaturanAktivasiPoint": "Pengaturan Aktivasi Point",
   "settingsBahasa": "Bahasa",
   "settingsNotifikasi": "Notifikasi"
 }

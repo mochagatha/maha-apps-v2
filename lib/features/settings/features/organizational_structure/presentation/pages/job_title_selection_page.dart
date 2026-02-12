@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/theme/app_theme.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/job_title_provider.dart';
@@ -108,7 +108,7 @@ class _JobTitleSelectionPageState extends State<JobTitleSelectionPage> {
                 child: InkWell(
                   onTap: () {
                     context.pushNamed(
-                      RouteNames.employeeByJobTitleSelection,
+                      AppRoutes.employeeByJobTitleSelection.name,
                       queryParameters: {
                         'companyStructureId': widget.companyStructureId.toString(),
                         'roleStructureId': widget.roleStructureId.toString(),

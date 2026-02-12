@@ -829,6 +829,28 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsKpi => 'KPI';
 
   @override
+  String get settingsKpiTargetPoint => 'Target Point';
+
+  @override
+  String get settingsKpiZonasi => 'Zonasi';
+
+  @override
+  String get settingsKpiJamKerja => 'Jam Kerja';
+
+  @override
+  String get settingsKpiKaryawan => 'Karyawan';
+
+  @override
+  String get settingsKpiPenilaianKinerja => 'Penilaian Kinerja';
+
+  @override
+  String get settingsKpiUbahPeriodeSurat =>
+      'Ubah Periode Surat Teguran & Surat Peringatan';
+
+  @override
+  String get settingsKpiPengaturanAktivasiPoint => 'Pengaturan Aktivasi Point';
+
+  @override
   String get settingsBahasa => 'Bahasa';
 
   @override

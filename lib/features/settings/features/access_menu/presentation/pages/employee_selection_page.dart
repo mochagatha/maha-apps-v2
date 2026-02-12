@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 // import '../../domain/entities/organizational_structure_entity.dart';
 import '../../../organizational_structure/domain/entities/employee_entity.dart';
@@ -116,7 +116,7 @@ class _EmployeeSelectionPageState extends State<EmployeeSelectionPage> {
                             employee: employee,
                             onTap: () {
                               context.pushNamed(
-                                RouteNames.accessMenuList,
+                                AppRoutes.accessMenuList.name,
                                 queryParameters: {'employeeId': employee.id.toString()},
                               );
                             },

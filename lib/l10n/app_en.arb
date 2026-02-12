@@ -287,6 +287,13 @@
   "settingsPelacakanJamKerja": "Working Hours Tracking",
   "settingsStrukturOrganisasi": "Organizational Structure",
   "settingsKpi": "KPI Settings",
+  "settingsKpiTargetPoint": "Target Point",
+  "settingsKpiZonasi": "Zoning",
+  "settingsKpiJamKerja": "Working Hours",
+  "settingsKpiKaryawan": "Employee",
+  "settingsKpiPenilaianKinerja": "Performance Appraisal",
+  "settingsKpiUbahPeriodeSurat": "Change Warning Letter & Reprimand Letter Period",
+  "settingsKpiPengaturanAktivasiPoint": "Point Activation Settings",
   "settingsBahasa": "Language Settings",
   "settingsNotifikasi": "Notification Settings"
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../core/utils/localization_extension.dart';
 import '../../../../../../shared/theme/app_theme.dart';
 import '../../../../../../shared/widgets/confirm_dialog.dart';
@@ -442,7 +442,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
   void _navigateToJobTitleSelection(int companyStructureId, int roleStructureId) async {
     await context.pushNamed(
-      RouteNames.jobTitleSelection,
+      AppRoutes.jobTitleSelection.name,
       queryParameters: {
         'companyStructureId': companyStructureId.toString(),
         'roleStructureId': roleStructureId.toString(),

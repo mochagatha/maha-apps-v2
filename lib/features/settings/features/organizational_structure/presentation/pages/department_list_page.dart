@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../core/router/route_paths.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 
 class DepartmentListPage extends StatelessWidget {
@@ -13,12 +13,12 @@ class DepartmentListPage extends StatelessWidget {
       {
         'icon': 'assets/images/icon/jam_kerja.svg',
         'text': 'Kantor',
-        'route': RoutePaths.departmentOffice,
+        'route': AppRoutes.departmentOffice.path,
       },
       {
         'icon': 'assets/images/icon/pengaturan_lembur.svg',
         'text': 'Proyek',
-        'route': RoutePaths.departmentProject,
+        'route': AppRoutes.departmentProject.path,
       },
     ];
 

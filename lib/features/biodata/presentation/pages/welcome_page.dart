@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/biodata_provider.dart';
 import '../widgets/welcome_dialogs.dart';
@@ -39,7 +39,7 @@ class _WelcomeBiodataState extends State<WelcomeBiodata> {
               context: context,
               onConfirm: () async {
                 await saveDataToPreferences('biodata', 'nama_lengkap');
-                context.goNamed(RouteNames.biodataForm);
+                context.goNamed(AppRoutes.biodataForm.name);
               },
             );
           },
@@ -134,7 +134,7 @@ class _WelcomeBiodataState extends State<WelcomeBiodata> {
                                   onTap: () async {
                                     // Logout logic here
                                     // For now just navigate to login
-                                    context.goNamed(RouteNames.login);
+                                    context.goNamed(AppRoutes.login.name);
                                   },
                                   child: const Icon(
                                     Icons.logout, // FontAwesome fallback

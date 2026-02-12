@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/skill_provider.dart'; // Ensure this model/provider matches
@@ -169,7 +169,7 @@ class SkillPage extends StatelessWidget {
                   final isValid = await provider.submit();
 
                   if (isValid && context.mounted) {
-                    context.pushNamed(RouteNames.selfieForm);
+                    context.pushNamed(AppRoutes.selfieForm.name);
                   } else if (!isValid) {
                     // Show error message
                     if (context.mounted) {

@@ -1640,6 +1640,48 @@ abstract class AppLocalizations {
   /// **'KPI'**
   String get settingsKpi;
 
+  /// No description provided for @settingsKpiTargetPoint.
+  ///
+  /// In id, this message translates to:
+  /// **'Target Point'**
+  String get settingsKpiTargetPoint;
+
+  /// No description provided for @settingsKpiZonasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Zonasi'**
+  String get settingsKpiZonasi;
+
+  /// No description provided for @settingsKpiJamKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Jam Kerja'**
+  String get settingsKpiJamKerja;
+
+  /// No description provided for @settingsKpiKaryawan.
+  ///
+  /// In id, this message translates to:
+  /// **'Karyawan'**
+  String get settingsKpiKaryawan;
+
+  /// No description provided for @settingsKpiPenilaianKinerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Penilaian Kinerja'**
+  String get settingsKpiPenilaianKinerja;
+
+  /// No description provided for @settingsKpiUbahPeriodeSurat.
+  ///
+  /// In id, this message translates to:
+  /// **'Ubah Periode Surat Teguran & Surat Peringatan'**
+  String get settingsKpiUbahPeriodeSurat;
+
+  /// No description provided for @settingsKpiPengaturanAktivasiPoint.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan Aktivasi Point'**
+  String get settingsKpiPengaturanAktivasiPoint;
+
   /// No description provided for @settingsBahasa.
   ///
   /// In id, this message translates to:

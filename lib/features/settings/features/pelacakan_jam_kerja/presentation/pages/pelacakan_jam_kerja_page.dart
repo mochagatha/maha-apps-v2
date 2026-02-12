@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/shared/widgets/menu_item_card.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 
 class PelacakanJamKerjaPage extends StatelessWidget {
   const PelacakanJamKerjaPage({super.key});
@@ -21,7 +21,7 @@ class PelacakanJamKerjaPage extends StatelessWidget {
               title: 'Karyawan',
               onTap: () {
                 context.pushNamed(
-                  RouteNames.pelacakanSettings,
+                  AppRoutes.pelacakanSettings.name,
                   queryParameters: {'type': 'karyawan'},
                 );
               },
@@ -31,7 +31,7 @@ class PelacakanJamKerjaPage extends StatelessWidget {
               title: 'Pekerja Harian',
               onTap: () {
                 context.pushNamed(
-                  RouteNames.pelacakanSettings,
+                  AppRoutes.pelacakanSettings.name,
                   queryParameters: {'type': 'pekerja_harian'},
                 );
               },
