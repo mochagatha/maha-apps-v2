@@ -23,7 +23,7 @@ class _SettingsKpiPageState extends State<SettingsKpiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.settingsAbsensi),
+      appBar: CustomAppBar(title: context.l10n.settingsKpi),
       body: Consumer<HomeProvider>(
         builder: (context, homeProvider, child) {
           final settingsParent = homeProvider.hierarchicalMenus.firstWhere(

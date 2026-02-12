@@ -22,6 +22,7 @@ import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/settings/features/kpi/presentation/pages/settings_kpi_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
 import 'not_found_page.dart';
@@ -510,7 +511,6 @@ class AppRouter {
             ),
           ),
         ),
-
         GoRoute(
           path: AppRoutes.departmentList.path,
           name: AppRoutes.departmentList.name,
@@ -641,6 +641,23 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.accessMenuList.path,
           name: AppRoutes.accessMenuList.name,
+          builder: (context, state) {
+            final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
+            return ChangeNotifierProvider(
+              create: (_) => sl<AccessMenuProvider>(),
+              child: AccessMenuListPage(employeeId: int.parse(employeeId)),
+            );
+          },
+        ),
+        // KPI Menu Routes
+        GoRoute(
+          path: AppRoutes.settingsKpi.path,
+          name: AppRoutes.settingsKpi.name,
+          builder: (context, state) => const SettingsKpiPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiTargetPoint.path,
+          name: AppRoutes.settingsKpiTargetPoint.name,
           builder: (context, state) {
             final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
             return ChangeNotifierProvider(
