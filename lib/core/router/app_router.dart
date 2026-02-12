@@ -670,9 +670,12 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.settingsKpiPenilaianKinerja.path,
           name: AppRoutes.settingsKpiPenilaianKinerja.name,
-          builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => sl<PenilaianKinerjaProvider>(),
-            child: const SettingsKpiPenilaianKinerjaPage(),
+          // builder: (context, state) => ChangeNotifierProvider(
+          //   create: (_) => sl<PenilaianKinerjaProvider>(),
+          //   child: const SettingsKpiPenilaianKinerjaPage(),
+          // ),
+          builder: (context, state) => const SettingsPlaceholderPage(
+            title: 'Penilaian Kinerja',
           ),
         ),
 
@@ -836,12 +839,6 @@ class AppRouter {
               ],
             ),
           ],
-        ),
-        GoRoute(
-          path: AppRoutes.settingsKpi.path,
-          builder: (context, state) => const SettingsPlaceholderPage(
-            title: 'Indikator Kinerja Utama (KPI)',
-          ),
         ),
         GoRoute(
           path: AppRoutes.settingsBahasa.path,
