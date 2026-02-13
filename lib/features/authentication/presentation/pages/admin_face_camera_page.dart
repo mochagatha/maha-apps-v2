@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:camera/camera.dart';
 
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/admin_face_provider.dart';
@@ -45,7 +45,7 @@ class _AdminFaceCameraViewState extends State<_AdminFaceCameraView> {
     if (provider.uploadStatus == UploadStatus.success) {
       // Navigate to admin home on success
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go(RoutePaths.adminHome);
+        context.go(AppRoutes.adminHome.path);
       });
     } else if (provider.uploadStatus == UploadStatus.error) {
       // Show error dialog

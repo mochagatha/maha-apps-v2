@@ -25,9 +25,11 @@ import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/settings/features/kpi/features/target_point/presentation/pages/settings_kpi_target_point_page.dart';
+import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
+import '../../features/settings/features/kpi/presentation/pages/settings_kpi_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
-import 'route_names.dart';
-import 'route_paths.dart';
+import 'app_routes.dart';
 import 'not_found_page.dart';
 import '../../shared/widgets/scaffold_with_navbar.dart';
 import 'package:provider/provider.dart';
@@ -106,7 +108,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: RoutePaths.splash,
+      initialLocation: AppRoutes.splash.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -115,16 +117,16 @@ class AppRouter {
 
         // If user is on splash and already authenticated, skip splash
         // BUT: Admin users should NOT skip - they must login fresh each time
-        if (currentPath == RoutePaths.splash && authProvider.isAuthenticated) {
+        if (currentPath == AppRoutes.splash.path && authProvider.isAuthenticated) {
           // Check if admin
           if (authProvider.isAdmin) {
-            return RoutePaths.adminHome;
+            return AppRoutes.adminHome.path;
           }
           // Check user status to determine destination (matching v1 logic)
           if (authProvider.user?.status == 1) {
-            return RoutePaths.welcomeBiodata;
+            return AppRoutes.welcomeBiodata.path;
           } else {
-            return RoutePaths.home;
+            return AppRoutes.home.path;
           }
         }
 
@@ -134,13 +136,13 @@ class AppRouter {
 
       routes: [
         GoRoute(
-          path: RoutePaths.splash,
-          name: RouteNames.splash,
+          path: AppRoutes.splash.path,
+          name: AppRoutes.splash.name,
           builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
-          path: RoutePaths.login,
-          name: RouteNames.login,
+          path: AppRoutes.login.path,
+          name: AppRoutes.login.name,
           redirect: (context, state) {
             final authProvider = context.read<AuthProvider>();
             // If user is on splash and already authenticated, skip splash
@@ -148,13 +150,13 @@ class AppRouter {
             if (authProvider.isAuthenticated) {
               // Check if admin
               if (authProvider.isAdmin) {
-                return RoutePaths.adminHome;
+                return AppRoutes.adminHome.path;
               }
               // Check user status to determine destination (matching v1 logic)
               if (authProvider.user?.status == 1) {
-                return RoutePaths.welcomeBiodata;
+                return AppRoutes.welcomeBiodata.path;
               } else {
-                return RoutePaths.home;
+                return AppRoutes.home.path;
               }
             }
 
@@ -164,49 +166,49 @@ class AppRouter {
           builder: (context, state) => const LoginPage(),
         ),
         GoRoute(
-          path: RoutePaths.permission,
-          name: RouteNames.permission,
+          path: AppRoutes.permission.path,
+          name: AppRoutes.permission.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<PermissionProvider>(),
             child: const PermissionPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.register,
-          name: RouteNames.register,
+          path: AppRoutes.register.path,
+          name: AppRoutes.register.name,
           builder: (context, state) => const RegisterPage(),
         ),
         GoRoute(
-          path: RoutePaths.forgotPassword,
-          name: RouteNames.forgotPassword,
+          path: AppRoutes.forgotPassword.path,
+          name: AppRoutes.forgotPassword.name,
           builder: (context, state) => const InputEmailForgetPasswordPage(),
         ),
         GoRoute(
-          path: RoutePaths.termsAndConditions,
-          name: RouteNames.termsAndConditions,
+          path: AppRoutes.termsAndConditions.path,
+          name: AppRoutes.termsAndConditions.name,
           builder: (context, state) => const TermsAndConditionsPage(),
         ),
         GoRoute(
-          path: RoutePaths.privacyNotice,
-          name: RouteNames.privacyNotice,
+          path: AppRoutes.privacyNotice.path,
+          name: AppRoutes.privacyNotice.name,
           builder: (context, state) => const PrivacyNoticePage(),
         ),
         GoRoute(
-          path: RoutePaths.adminHome,
-          name: RouteNames.adminHome,
+          path: AppRoutes.adminHome.path,
+          name: AppRoutes.adminHome.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<AdminHomeProvider>(),
             child: const AdminHomePage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.adminFaceVerification,
-          name: RouteNames.adminFaceVerification,
+          path: AppRoutes.adminFaceVerification.path,
+          name: AppRoutes.adminFaceVerification.name,
           builder: (context, state) => const AdminFaceVerificationPage(),
         ),
         GoRoute(
-          path: RoutePaths.adminFaceCamera,
-          name: RouteNames.adminFaceCamera,
+          path: AppRoutes.adminFaceCamera.path,
+          name: AppRoutes.adminFaceCamera.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<AdminFaceProvider>(),
             child: const AdminFaceCameraPage(),
@@ -223,8 +225,8 @@ class AppRouter {
               navigatorKey: shellNavigatorKey,
               routes: [
                 GoRoute(
-                  path: RoutePaths.home,
-                  name: RouteNames.home,
+                  path: AppRoutes.home.path,
+                  name: AppRoutes.home.name,
                   builder: (context, state) => const HomePage(),
                 ),
               ],
@@ -232,8 +234,8 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: RoutePaths.pesan,
-                  name: RouteNames.pesan,
+                  path: AppRoutes.pesan.path,
+                  name: AppRoutes.pesan.name,
                   builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
@@ -241,8 +243,8 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: RoutePaths.calendar,
-                  name: RouteNames.calendar,
+                  path: AppRoutes.calendar.path,
+                  name: AppRoutes.calendar.name,
                   builder: (context, state) =>
                       const Scaffold(body: Center(child: Text("Kalender"))),
                 ),
@@ -252,99 +254,99 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: RoutePaths.profile,
-          name: RouteNames.profile,
+          path: AppRoutes.profile.path,
+          name: AppRoutes.profile.name,
           builder: (context, state) => const ProfilePage(),
         ),
         GoRoute(
-          path: RoutePaths.absensi,
-          name: RouteNames.absensi,
+          path: AppRoutes.absensi.path,
+          name: AppRoutes.absensi.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<AttendanceProvider>(),
             child: const AbsensiPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.welcomeBiodata,
-          name: RouteNames.welcomeBiodata,
+          path: AppRoutes.welcomeBiodata.path,
+          name: AppRoutes.welcomeBiodata.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<BiodataProvider>(),
             child: const WelcomeBiodata(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.biodataForm,
-          name: RouteNames.biodataForm,
+          path: AppRoutes.biodataForm.path,
+          name: AppRoutes.biodataForm.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => BiodataFormProvider(repository: sl<BiodataRepository>()),
             child: const BiodataFormPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.educationForm,
-          name: RouteNames.educationForm,
+          path: AppRoutes.educationForm.path,
+          name: AppRoutes.educationForm.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => EducationFormProvider(),
             child: const EducationFormPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.familyForm,
-          name: RouteNames.familyForm,
+          path: AppRoutes.familyForm.path,
+          name: AppRoutes.familyForm.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => FamilyProvider(),
             child: const FamilyPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.documentForm,
-          name: RouteNames.documentForm,
+          path: AppRoutes.documentForm.path,
+          name: AppRoutes.documentForm.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => DocumentProvider(),
             child: const DocumentPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.skillForm,
-          name: RouteNames.skillForm,
+          path: AppRoutes.skillForm.path,
+          name: AppRoutes.skillForm.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => SkillProvider(),
             child: const SkillPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.selfieForm,
-          name: RouteNames.selfieForm,
+          path: AppRoutes.selfieForm.path,
+          name: AppRoutes.selfieForm.name,
           builder: (context, state) => const SelfiePage(),
         ),
         GoRoute(
-          path: RoutePaths.selfieCamera,
-          name: RouteNames.selfieCamera,
+          path: AppRoutes.selfieCamera.path,
+          name: AppRoutes.selfieCamera.name,
           builder: (context, state) => const SelfieCameraPage(),
         ),
         GoRoute(
-          path: RoutePaths.selfieResult,
-          name: RouteNames.selfieResult,
+          path: AppRoutes.selfieResult.path,
+          name: AppRoutes.selfieResult.name,
           builder: (context, state) => const SelfieResultPage(),
         ),
         GoRoute(
-          path: RoutePaths.selfieKtpForm,
-          name: RouteNames.selfieKtpForm,
+          path: AppRoutes.selfieKtpForm.path,
+          name: AppRoutes.selfieKtpForm.name,
           builder: (context, state) => const SelfieKtpPage(),
         ),
         GoRoute(
-          path: RoutePaths.selfieCameraKtp,
-          name: RouteNames.selfieCameraKtp,
+          path: AppRoutes.selfieCameraKtp.path,
+          name: AppRoutes.selfieCameraKtp.name,
           builder: (context, state) => const SelfieCameraKtpPage(),
         ),
         GoRoute(
-          path: RoutePaths.selfieResultKtp,
-          name: RouteNames.selfieResultKtp,
+          path: AppRoutes.selfieResultKtp.path,
+          name: AppRoutes.selfieResultKtp.name,
           builder: (context, state) => const SelfieKtpResultPage(),
         ),
         GoRoute(
-          path: RoutePaths.biodataBank,
-          name: RouteNames.biodataBank,
+          path: AppRoutes.biodataBank.path,
+          name: AppRoutes.biodataBank.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
               create: (context) => BankProvider(),
@@ -353,13 +355,13 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: RoutePaths.biodataSignature,
-          name: RouteNames.biodataSignature,
+          path: AppRoutes.biodataSignature.path,
+          name: AppRoutes.biodataSignature.name,
           builder: (context, state) => SignaturePage(),
         ),
         GoRoute(
-          path: RoutePaths.biodataCreateSignature,
-          name: RouteNames.biodataCreateSignature,
+          path: AppRoutes.biodataCreateSignature.path,
+          name: AppRoutes.biodataCreateSignature.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
               create: (context) => SignatureProvider(),
@@ -376,20 +378,20 @@ class AppRouter {
           },
           routes: [
             GoRoute(
-              path: RoutePaths.biodataStatementLetter,
-              name: RouteNames.biodataStatementLetter,
+              path: AppRoutes.biodataStatementLetter.path,
+              name: AppRoutes.biodataStatementLetter.name,
               builder: (context, state) => StatementLetterPage(),
             ),
             GoRoute(
-              path: RoutePaths.biodataStatementLetterSignature,
-              name: RouteNames.biodataStatementLetterSignature,
+              path: AppRoutes.biodataStatementLetterSignature.path,
+              name: AppRoutes.biodataStatementLetterSignature.name,
               builder: (context, state) => StatementLetterSignaturePage(),
             ),
           ],
         ),
         GoRoute(
-          path: RoutePaths.employeeEmploymentAgreement,
-          name: RouteNames.employeeEmploymentAgreement,
+          path: AppRoutes.employeeEmploymentAgreement.path,
+          name: AppRoutes.employeeEmploymentAgreement.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
               create: (context) => EmploymentAgreementProvider(),
@@ -398,46 +400,46 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: RoutePaths.recruitment,
-          name: RouteNames.recruitment,
+          path: AppRoutes.recruitment.path,
+          name: AppRoutes.recruitment.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<RecruitmentProvider>(),
             child: const RecruitmentPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.verificationData,
-          name: RouteNames.verificationData,
+          path: AppRoutes.verificationData.path,
+          name: AppRoutes.verificationData.name,
           builder: (context, state) => const VerificationDataPage(),
         ),
         GoRoute(
-          path: RoutePaths.employeeVerification,
-          name: RouteNames.employeeVerification,
+          path: AppRoutes.employeeVerification.path,
+          name: AppRoutes.employeeVerification.name,
           builder: (context, state) => const EmployeeVerificationPage(),
         ),
         GoRoute(
-          path: RoutePaths.employeePersonalData,
-          name: RouteNames.employeePersonalData,
+          path: AppRoutes.employeePersonalData.path,
+          name: AppRoutes.employeePersonalData.name,
           builder: (context, state) {
             final extra = state.extra as Map<String, dynamic>;
             return EmployeePersonalDataPage(id: extra["id"]);
           },
         ),
         GoRoute(
-          path: RoutePaths.companyCode,
-          name: RouteNames.companyCode,
+          path: AppRoutes.companyCode.path,
+          name: AppRoutes.companyCode.name,
           builder: (context, state) => const CompanyCodePage(),
         ),
 
         // Organizational Structure Routes
         GoRoute(
-          path: RoutePaths.organizationalStructure,
-          name: RouteNames.organizationalStructure,
+          path: AppRoutes.organizationalStructure.path,
+          name: AppRoutes.organizationalStructure.name,
           builder: (context, state) => const OrganizationalStructureListPage(),
         ),
         GoRoute(
-          path: RoutePaths.structureMain,
-          name: RouteNames.structureMain,
+          path: AppRoutes.structureMain.path,
+          name: AppRoutes.structureMain.name,
           builder: (context, state) {
             final args = state.extra as Map<String, dynamic>?;
             final type = args != null && args.containsKey('type')
@@ -452,23 +454,23 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: RoutePaths.employmentLevel,
-          name: RouteNames.employmentLevel,
+          path: AppRoutes.employmentLevel.path,
+          name: AppRoutes.employmentLevel.name,
           builder: (context, state) => const EmploymentLevelListPage(),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelOffice,
-          name: RouteNames.employmentLevelOffice,
+          path: AppRoutes.employmentLevelOffice.path,
+          name: AppRoutes.employmentLevelOffice.name,
           builder: (context, state) => const EmploymentLevelOfficePage(),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelProject,
-          name: RouteNames.employmentLevelProject,
+          path: AppRoutes.employmentLevelProject.path,
+          name: AppRoutes.employmentLevelProject.name,
           builder: (context, state) => const EmploymentLevelProjectPage(),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelOfficeEmployee,
-          name: RouteNames.employmentLevelOfficeEmployee,
+          path: AppRoutes.employmentLevelOfficeEmployee.path,
+          name: AppRoutes.employmentLevelOfficeEmployee.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
@@ -479,8 +481,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelOfficeWorker,
-          name: RouteNames.employmentLevelOfficeWorker,
+          path: AppRoutes.employmentLevelOfficeWorker.path,
+          name: AppRoutes.employmentLevelOfficeWorker.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
@@ -491,8 +493,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelProjectEmployee,
-          name: RouteNames.employmentLevelProjectEmployee,
+          path: AppRoutes.employmentLevelProjectEmployee.path,
+          name: AppRoutes.employmentLevelProjectEmployee.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
@@ -503,8 +505,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.employmentLevelProjectWorker,
-          name: RouteNames.employmentLevelProjectWorker,
+          path: AppRoutes.employmentLevelProjectWorker.path,
+          name: AppRoutes.employmentLevelProjectWorker.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<UserRoleProvider>(),
             child: const EmploymentLevelDetailPage(
@@ -514,46 +516,45 @@ class AppRouter {
             ),
           ),
         ),
-
         GoRoute(
-          path: RoutePaths.departmentList,
-          name: RouteNames.departmentList,
+          path: AppRoutes.departmentList.path,
+          name: AppRoutes.departmentList.name,
           builder: (context, state) => const DepartmentListPage(),
         ),
         GoRoute(
-          path: RoutePaths.departmentOffice,
-          name: RouteNames.departmentOffice,
+          path: AppRoutes.departmentOffice.path,
+          name: AppRoutes.departmentOffice.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<DepartmentProvider>(),
             child: const DepartmentOfficePage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.departmentProject,
-          name: RouteNames.departmentProject,
+          path: AppRoutes.departmentProject.path,
+          name: AppRoutes.departmentProject.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<DepartmentProvider>(),
             child: const DepartmentProjectPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleList,
-          name: RouteNames.jobTitleList,
+          path: AppRoutes.jobTitleList.path,
+          name: AppRoutes.jobTitleList.name,
           builder: (context, state) => const JobTitleListPage(),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleOffice,
-          name: RouteNames.jobTitleOffice,
+          path: AppRoutes.jobTitleOffice.path,
+          name: AppRoutes.jobTitleOffice.name,
           builder: (context, state) => const JobTitleOfficePage(),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleProject,
-          name: RouteNames.jobTitleProject,
+          path: AppRoutes.jobTitleProject.path,
+          name: AppRoutes.jobTitleProject.name,
           builder: (context, state) => const JobTitleProjectPage(),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleOfficeEmployee,
-          name: RouteNames.jobTitleOfficeEmployee,
+          path: AppRoutes.jobTitleOfficeEmployee.path,
+          name: AppRoutes.jobTitleOfficeEmployee.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<JobTitleProvider>(),
             child: const JobTitleDetailPage(
@@ -564,8 +565,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleOfficeWorker,
-          name: RouteNames.jobTitleOfficeWorker,
+          path: AppRoutes.jobTitleOfficeWorker.path,
+          name: AppRoutes.jobTitleOfficeWorker.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<JobTitleProvider>(),
             child: const JobTitleDetailPage(
@@ -576,8 +577,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleProjectEmployee,
-          name: RouteNames.jobTitleProjectEmployee,
+          path: AppRoutes.jobTitleProjectEmployee.path,
+          name: AppRoutes.jobTitleProjectEmployee.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<JobTitleProvider>(),
             child: const JobTitleDetailPage(
@@ -588,8 +589,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleProjectWorker,
-          name: RouteNames.jobTitleProjectWorker,
+          path: AppRoutes.jobTitleProjectWorker.path,
+          name: AppRoutes.jobTitleProjectWorker.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<JobTitleProvider>(),
             child: const JobTitleDetailPage(
@@ -600,8 +601,8 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: RoutePaths.jobTitleSelection,
-          name: RouteNames.jobTitleSelection,
+          path: AppRoutes.jobTitleSelection.path,
+          name: AppRoutes.jobTitleSelection.name,
           builder: (context, state) {
             final companyStructureId = int.parse(state.uri.queryParameters['companyStructureId']!);
             final roleStructureId = int.parse(state.uri.queryParameters['roleStructureId']!);
@@ -615,8 +616,8 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: RoutePaths.employeeByJobTitleSelection,
-          name: RouteNames.employeeByJobTitleSelection,
+          path: AppRoutes.employeeByJobTitleSelection.path,
+          name: AppRoutes.employeeByJobTitleSelection.name,
           builder: (context, state) {
             final companyStructureId = int.parse(state.uri.queryParameters['companyStructureId']!);
             final roleStructureId = int.parse(state.uri.queryParameters['roleStructureId']!);
@@ -635,16 +636,16 @@ class AppRouter {
         ),
         // Access Menu Routes
         GoRoute(
-          path: RoutePaths.employeeSelection,
-          name: RouteNames.employeeSelection,
+          path: AppRoutes.employeeSelection.path,
+          name: AppRoutes.employeeSelection.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<EmployeeListProvider>(),
             child: const EmployeeSelectionPage(),
           ),
         ),
         GoRoute(
-          path: RoutePaths.accessMenuList,
-          name: RouteNames.accessMenuList,
+          path: AppRoutes.accessMenuList.path,
+          name: AppRoutes.accessMenuList.name,
           builder: (context, state) {
             final employeeId = state.uri.queryParameters['employeeId'] ?? '1';
             return ChangeNotifierProvider(
@@ -653,43 +654,68 @@ class AppRouter {
             );
           },
         ),
+        // KPI Menu Routes
+        GoRoute(
+          path: AppRoutes.settingsKpi.path,
+          name: AppRoutes.settingsKpi.name,
+          builder: (context, state) => const SettingsKpiPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiTargetPoint.path,
+          name: AppRoutes.settingsKpiTargetPoint.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<TargetPointProvider>(),
+            child: const SettingsKpiTargetPointPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiPenilaianKinerja.path,
+          name: AppRoutes.settingsKpiPenilaianKinerja.name,
+          // builder: (context, state) => ChangeNotifierProvider(
+          //   create: (_) => sl<PenilaianKinerjaProvider>(),
+          //   child: const SettingsKpiPenilaianKinerjaPage(),
+          // ),
+          builder: (context, state) => const SettingsPlaceholderPage(
+            title: 'Penilaian Kinerja',
+          ),
+        ),
 
         // Settings Routes
         GoRoute(
-          path: RoutePaths.settings,
-          name: RouteNames.settings,
+          path: AppRoutes.settings.path,
+          name: AppRoutes.settings.name,
           builder: (context, state) => const SettingsPage(),
         ),
         // Settings Absensi Routes
         GoRoute(
-          path: RoutePaths.settingsAbsensi,
+          path: AppRoutes.settingsAbsensi.path,
           builder: (context, state) => const SettingsAbsensiPage(),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiPenempatanKerja,
+          path: AppRoutes.settingsAbsensiPenempatanKerja.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Penempatan Kerja',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiZonasi,
+          path: AppRoutes.settingsAbsensiZonasi.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Zonasi',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiJamKerja,
+          path: AppRoutes.settingsAbsensiJamKerja.path,
           builder: (context, state) => const SettingsWorkHoursPage(),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiDetailJamKerja,
+          path: AppRoutes.settingsAbsensiDetailJamKerja.path,
           builder: (context, state) {
             final extra = state.extra as Map<String, dynamic>;
             return DetailWorkHoursPage(name: extra["name"]);
           },
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiEditJamKerja,
+          path: AppRoutes.settingsAbsensiEditJamKerja.path,
           builder: (context, state) {
             final extra = state.extra as Map<String, dynamic>;
             return EditWorkHoursPage(
@@ -698,81 +724,81 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiKaryawan,
+          path: AppRoutes.settingsAbsensiKaryawan.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Karyawan',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiPekerjaHarian,
+          path: AppRoutes.settingsAbsensiPekerjaHarian.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Pekerja Harian',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiHariLiburCuti,
+          path: AppRoutes.settingsAbsensiHariLiburCuti.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Hari Libur & Cuti Bersama',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiLembur,
+          path: AppRoutes.settingsAbsensiLembur.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Lembur',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiAbsenDimanaSaja,
+          path: AppRoutes.settingsAbsensiAbsenDimanaSaja.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Absen Dimana Saja',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsAbsensiPerbaikanKehadiran,
+          path: AppRoutes.settingsAbsensiPerbaikanKehadiran.path,
           builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
             title: 'Perbaikan Kehadiran',
           ),
         ),
         GoRoute(
-          path: RoutePaths.settingsPenempatanKerja,
+          path: AppRoutes.settingsPenempatanKerja.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
         ),
         GoRoute(
-          path: RoutePaths.settingsLibur,
+          path: AppRoutes.settingsLibur.path,
           builder: (context, state) =>
               const SettingsPlaceholderPage(title: 'Hari Libur & Cuti Bersama'),
         ),
         GoRoute(
-          path: RoutePaths.settingsHirarkiOffice,
+          path: AppRoutes.settingsHirarkiOffice.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Hirarki Office'),
         ),
         GoRoute(
-          path: RoutePaths.settingsLembur,
+          path: AppRoutes.settingsLembur.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Lembur'),
         ),
         GoRoute(
-          path: RoutePaths.settingsTindakanKaryawan,
+          path: AppRoutes.settingsTindakanKaryawan.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
         ),
         GoRoute(
-          path: RoutePaths.settingsBpjs,
+          path: AppRoutes.settingsBpjs.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'BPJS'),
         ),
         GoRoute(
-          path: RoutePaths.settingsPph21,
+          path: AppRoutes.settingsPph21.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'PPH 21'),
         ),
         GoRoute(
-          path: RoutePaths.settingsJamKerja,
+          path: AppRoutes.settingsJamKerja.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Jam Kerja'),
         ),
         GoRoute(
-          path: RoutePaths.settingsFormatDanDraf,
+          path: AppRoutes.settingsFormatDanDraf.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Format dan Draf'),
         ),
         GoRoute(
-          path: RoutePaths.settingsAksesLayar,
-          name: RouteNames.settingsAksesLayar,
+          path: AppRoutes.settingsAksesLayar.path,
+          name: AppRoutes.settingsAksesLayar.name,
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<AccessScreenProvider>(),
             child: const AccessScreenListPage(),
@@ -780,7 +806,7 @@ class AppRouter {
           routes: [
             GoRoute(
               path: 'detail',
-              name: RouteNames.accessScreenDetail,
+              name: AppRoutes.accessScreenDetail.name,
               builder: (context, state) {
                 final id = int.parse(state.uri.queryParameters['id'] ?? '0');
                 final type = state.uri.queryParameters['type'] ?? 'employee';
@@ -793,16 +819,16 @@ class AppRouter {
           ],
         ),
         GoRoute(
-          path: RoutePaths.settingsHakAksesMenu,
+          path: AppRoutes.settingsHakAksesMenu.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
         ),
         GoRoute(
-          name: RouteNames.pelacakanJamKerja,
-          path: RoutePaths.settingsPelacakanJamKerja,
+          name: AppRoutes.settingsPelacakanJamKerja.name,
+          path: AppRoutes.settingsPelacakanJamKerja.path,
           builder: (context, state) => const PelacakanJamKerjaPage(),
           routes: [
             GoRoute(
-              name: RouteNames.pelacakanSettings,
+              name: AppRoutes.pelacakanSettings.name,
               path: 'settings',
               builder: (context, state) {
                 final type = state.uri.queryParameters['type'] ?? 'karyawan';
@@ -813,7 +839,7 @@ class AppRouter {
               },
               routes: [
                 GoRoute(
-                  name: RouteNames.pelacakanEmployeeDetail,
+                  name: AppRoutes.pelacakanEmployeeDetail.name,
                   path: 'employee/:id',
                   builder: (context, state) {
                     final employeeId = int.parse(state.pathParameters['id'] ?? '0');
@@ -830,13 +856,7 @@ class AppRouter {
           ],
         ),
         GoRoute(
-          path: RoutePaths.settingsKpi,
-          builder: (context, state) => const SettingsPlaceholderPage(
-            title: 'Indikator Kinerja Utama (KPI)',
-          ),
-        ),
-        GoRoute(
-          path: RoutePaths.settingsBahasa,
+          path: AppRoutes.settingsBahasa.path,
           builder: (context, state) => const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
         ),
       ],

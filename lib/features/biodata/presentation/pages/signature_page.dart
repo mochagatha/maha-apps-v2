@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/core/router/route_names.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 
@@ -43,7 +43,7 @@ class SignaturePage extends StatelessWidget {
         padding: EdgeInsetsGeometry.all(12),
         child: CustomElevatedButton(
           onPressed: () {
-            context.pushReplacementNamed(RouteNames.biodataCreateSignature);
+            context.pushReplacementNamed(AppRoutes.biodataCreateSignature.name);
           },
           child: Text("Mulai Buat Tanda Tangan"),
         ),

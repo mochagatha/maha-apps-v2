@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../../../shared/widgets/loading_dialog.dart';
@@ -122,7 +122,7 @@ class _AccessScreenListPageState extends State<AccessScreenListPage> {
                         return GestureDetector(
                           onTap: () {
                             context.pushNamed(
-                              RouteNames.accessScreenDetail,
+                              AppRoutes.accessScreenDetail.name,
                               queryParameters: {
                                 'id': employee.id.toString(),
                                 'type': 'employee', // Defaulting to employee for now

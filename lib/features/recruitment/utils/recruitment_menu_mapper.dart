@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/router/route_paths.dart';
+import '../../../core/router/app_routes.dart';
 import '../../../core/utils/localization_extension.dart';
 
 class RecruitmentMenuMapper {
@@ -15,13 +15,13 @@ class RecruitmentMenuMapper {
       case verifikasiData:
         return {
           'icon': 'assets/images/icon/icon_verifikasi_data.svg',
-          'route': RoutePaths.verificationData,
+          'route': AppRoutes.verificationData.path,
           'isAsset': true,
         };
       case perjanjianKerja:
         return {
           'icon': 'assets/images/icon/icon_verifikasi_data_hrManager.svg',
-          'route': RoutePaths.employeeVerification,
+          'route': AppRoutes.employeeVerification.path,
           'isAsset': true,
         };
       case aktivasiBpjs:
@@ -33,7 +33,7 @@ class RecruitmentMenuMapper {
       case kodePerusahaan:
         return {
           'icon': 'assets/images/icon/icon_verifikasi_kode.svg',
-          'route': RoutePaths.companyCode,
+          'route': AppRoutes.companyCode.path,
           'isAsset': true,
         };
       default:

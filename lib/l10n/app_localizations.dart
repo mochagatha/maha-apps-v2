@@ -1640,6 +1640,48 @@ abstract class AppLocalizations {
   /// **'KPI'**
   String get settingsKpi;
 
+  /// No description provided for @settingsKpiTargetPoint.
+  ///
+  /// In id, this message translates to:
+  /// **'Target Point'**
+  String get settingsKpiTargetPoint;
+
+  /// No description provided for @settingsKpiZonasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Zonasi'**
+  String get settingsKpiZonasi;
+
+  /// No description provided for @settingsKpiJamKerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Jam Kerja'**
+  String get settingsKpiJamKerja;
+
+  /// No description provided for @settingsKpiKaryawan.
+  ///
+  /// In id, this message translates to:
+  /// **'Karyawan'**
+  String get settingsKpiKaryawan;
+
+  /// No description provided for @settingsKpiPenilaianKinerja.
+  ///
+  /// In id, this message translates to:
+  /// **'Penilaian Kinerja'**
+  String get settingsKpiPenilaianKinerja;
+
+  /// No description provided for @settingsKpiUbahPeriodeSurat.
+  ///
+  /// In id, this message translates to:
+  /// **'Ubah Periode Surat Teguran & Surat Peringatan'**
+  String get settingsKpiUbahPeriodeSurat;
+
+  /// No description provided for @settingsKpiPengaturanAktivasiPoint.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan Aktivasi Point'**
+  String get settingsKpiPengaturanAktivasiPoint;
+
   /// No description provided for @settingsBahasa.
   ///
   /// In id, this message translates to:
@@ -1651,6 +1693,186 @@ abstract class AppLocalizations {
   /// In id, this message translates to:
   /// **'Notifikasi'**
   String get settingsNotifikasi;
+
+  /// Target Point page title
+  ///
+  /// In id, this message translates to:
+  /// **'Target Point'**
+  String get targetPointTitle;
+
+  /// Information text explaining what target point is
+  ///
+  /// In id, this message translates to:
+  /// **'Target point adalah jumlah point yang harus dicapai oleh karyawan dalam satu periode (sebulan penuh). Target point didapatkan melalui Total Gaji [....]'**
+  String get targetPointInfoText;
+
+  /// Total salary label
+  ///
+  /// In id, this message translates to:
+  /// **'Total Gaji'**
+  String get targetPointTotalGaji;
+
+  /// Reset button text
+  ///
+  /// In id, this message translates to:
+  /// **'Reset'**
+  String get targetPointButtonReset;
+
+  /// Apply button text
+  ///
+  /// In id, this message translates to:
+  /// **'Terapkan'**
+  String get targetPointButtonApply;
+
+  /// Confirmation dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Maaf, Sebelumnya...'**
+  String get targetPointDialogConfirmTitle;
+
+  /// Confirmation dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah anda yakin ingin mengubah Target Poin ini ?'**
+  String get targetPointDialogConfirmMessage;
+
+  /// Success dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Berhasil!'**
+  String get targetPointDialogSuccessTitle;
+
+  /// Success dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Target Poin telah berhasil di Ubah !'**
+  String get targetPointDialogSuccessMessage;
+
+  /// Performance Assessment page title
+  ///
+  /// In id, this message translates to:
+  /// **'Penilaian Kinerja'**
+  String get performanceAssessmentTitle;
+
+  /// Attendance section title
+  ///
+  /// In id, this message translates to:
+  /// **'Kehadiran'**
+  String get performanceAssessmentKehadiran;
+
+  /// Maximum attendance point label
+  ///
+  /// In id, this message translates to:
+  /// **'Maksimal Point Absensi'**
+  String get performanceAssessmentMaksimalPointAbsensi;
+
+  /// Late label
+  ///
+  /// In id, this message translates to:
+  /// **'Terlambat'**
+  String get performanceAssessmentTerlambat;
+
+  /// No checkout label
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak Absen Pulang'**
+  String get performanceAssessmentTidakAbsenPulang;
+
+  /// Sick label
+  ///
+  /// In id, this message translates to:
+  /// **'Sakit'**
+  String get performanceAssessmentSakit;
+
+  /// Manasik attendance label
+  ///
+  /// In id, this message translates to:
+  /// **'Manasik Masuk'**
+  String get performanceAssessmentManasikMasuk;
+
+  /// Supervisor assessment section title
+  ///
+  /// In id, this message translates to:
+  /// **'Penilaian Atasan'**
+  String get performanceAssessmentPenilaianAtasan;
+
+  /// Maximum supervisor point label
+  ///
+  /// In id, this message translates to:
+  /// **'Maksimal Point Atasan'**
+  String get performanceAssessmentMaksimalPointAtasan;
+
+  /// Work plan section title
+  ///
+  /// In id, this message translates to:
+  /// **'Rencana Kerja'**
+  String get performanceAssessmentRencanaKerja;
+
+  /// Position column header
+  ///
+  /// In id, this message translates to:
+  /// **'Jabatan'**
+  String get performanceAssessmentJabatan;
+
+  /// Minimum point column header
+  ///
+  /// In id, this message translates to:
+  /// **'Min Point'**
+  String get performanceAssessmentMinPoint;
+
+  /// Maximum point column header
+  ///
+  /// In id, this message translates to:
+  /// **'Max Point'**
+  String get performanceAssessmentMaxPoint;
+
+  /// Target point X formula text
+  ///
+  /// In id, this message translates to:
+  /// **'Target Point X'**
+  String get performanceAssessmentTargetPointX;
+
+  /// Daily attendance point formula text
+  ///
+  /// In id, this message translates to:
+  /// **'Poin Absensi Harian'**
+  String get performanceAssessmentPoinAbsensiHarian;
+
+  /// Reset button text
+  ///
+  /// In id, this message translates to:
+  /// **'Reset'**
+  String get performanceAssessmentButtonReset;
+
+  /// Apply button text
+  ///
+  /// In id, this message translates to:
+  /// **'Terapkan'**
+  String get performanceAssessmentButtonApply;
+
+  /// Confirmation dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Maaf, Sebelumnya...'**
+  String get performanceAssessmentDialogConfirmTitle;
+
+  /// Confirmation dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Apakah anda yakin ingin menerapkan Format Penilaian Kinerja ini ?'**
+  String get performanceAssessmentDialogConfirmMessage;
+
+  /// Success dialog title
+  ///
+  /// In id, this message translates to:
+  /// **'Berhasil!'**
+  String get performanceAssessmentDialogSuccessTitle;
+
+  /// Success dialog message
+  ///
+  /// In id, this message translates to:
+  /// **'Format telah berhasil di Terapkan !'**
+  String get performanceAssessmentDialogSuccessMessage;
 }
 
 class _AppLocalizationsDelegate

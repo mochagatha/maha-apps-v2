@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import '../../../../../../core/config/sub_menu_config.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../../home/presentation/providers/home_provider.dart';
+import '../../../../presentation/widgets/settings_menu_item.dart';
 import '../config/settings_absensi_menu_registry.dart';
-import '../widgets/settings_menu_item.dart' as settings;
 
 /// Settings Absensi page displaying all available absensi submenu items
 /// Uses centralized configuration for maintainability and l10n support
@@ -73,7 +73,7 @@ class _SettingsAbsensiPageState extends State<SettingsAbsensiPage> {
                   // Get localized title using the titleKey from config
                   final localizedTitle = _getLocalizedTitle(context, config.titleKey);
 
-                  return settings.SettingsMenuItem(
+                  return SettingsMenuItem(
                     iconPath: config.iconPath,
                     title: localizedTitle,
                     onTap: () => _handleMenuTap(context, menuItem.code, config),

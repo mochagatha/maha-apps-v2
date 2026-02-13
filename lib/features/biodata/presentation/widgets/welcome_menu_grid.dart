@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 
 class WelcomeMenuGrid extends StatelessWidget {
@@ -12,13 +12,13 @@ class WelcomeMenuGrid extends StatelessWidget {
       {
         'icon': 'assets/images/icon/absensi.png',
         'label': 'Absensi',
-        'action': () => context.pushNamed(RouteNames.absensi),
+        'action': () => context.pushNamed(AppRoutes.absensi.name),
         'isAsset': true,
       },
       {
         'icon': 'assets/images/icon/approval.png',
         'label': 'Approval',
-        'action': () => context.pushNamed(RouteNames.approvalList),
+        'action': () => context.pushNamed(AppRoutes.approvalList.name),
         'isAsset': true,
       },
       {
@@ -30,7 +30,7 @@ class WelcomeMenuGrid extends StatelessWidget {
       {
         'icon': 'assets/images/icon/permintaan.png',
         'label': 'Permintaan',
-        'action': () => context.pushNamed(RouteNames.permintaan),
+        'action': () => context.pushNamed(AppRoutes.permintaan.name),
         'isAsset': true,
       },
       {'icon': 'assets/images/icon/tugas.png', 'label': 'Tugas', 'action': () {}, 'isAsset': true},
@@ -43,13 +43,13 @@ class WelcomeMenuGrid extends StatelessWidget {
       {
         'icon': 'assets/images/icon/administrasi.png',
         'label': 'Administrasi',
-        'action': () => context.pushNamed(RouteNames.administration),
+        'action': () => context.pushNamed(AppRoutes.administration.name),
         'isAsset': true,
       },
       {
         'icon': 'assets/images/icon/arsip.png',
         'label': 'Arsip',
-        'action': () => context.pushNamed(RouteNames.arsipMenu),
+        'action': () => context.pushNamed(AppRoutes.arsipMenu.name),
         'isAsset': true,
       },
     ];

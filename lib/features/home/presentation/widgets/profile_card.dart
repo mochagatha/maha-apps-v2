@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
@@ -78,7 +78,7 @@ class ProfileCard extends StatelessWidget {
                           if (context.mounted) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (context.mounted) {
-                                context.go(RoutePaths.login);
+                                context.go(AppRoutes.login.path);
                               }
                             });
                           }
@@ -176,7 +176,7 @@ class ProfileCard extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            context.push(RoutePaths.profile);
+                            context.push(AppRoutes.profile.path);
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

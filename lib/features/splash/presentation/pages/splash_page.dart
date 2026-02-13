@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
 import '../../../home/presentation/providers/home_provider.dart';
 import '../../../permissions/presentation/providers/permission_provider.dart';
@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
     if (!mounted) return;
 
     if (permissionProvider.state != PermissionState.granted) {
-      context.go(RoutePaths.permission);
+      context.go(AppRoutes.permission.path);
       return;
     }
 
@@ -59,20 +59,20 @@ class _SplashPageState extends State<SplashPage> {
     if (authProvider.isAuthenticated) {
       // Check if admin
       if (authProvider.isAdmin) {
-        context.go(RoutePaths.adminHome);
+        context.go(AppRoutes.adminHome.path);
         return;
       }
       // Check status to match v1 logic
       // v1 source: employee?.data.status
       if (authProvider.user?.status == 1) {
-        context.go(RoutePaths.welcomeBiodata);
+        context.go(AppRoutes.welcomeBiodata.path);
         return;
       } else {
-        context.go(RoutePaths.home);
+        context.go(AppRoutes.home.path);
         return;
       }
     } else {
-      context.go(RoutePaths.login);
+      context.go(AppRoutes.login.path);
       return;
     }
   }

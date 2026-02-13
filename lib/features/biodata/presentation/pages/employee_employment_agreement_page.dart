@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/core/router/route_names.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_agreement_provider.dart';
 import 'package:maha_apps_v2/shared/theme/app_theme.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
@@ -175,7 +175,7 @@ class _SubmitButtonState extends State<_SubmitButton> {
         context: context,
         builder: (context) => _SetujuPopup(),
       );
-      router.goNamed(RouteNames.home);
+      router.goNamed(AppRoutes.home.name);
     }
   }
 

@@ -829,8 +829,127 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsKpi => 'KPI';
 
   @override
+  String get settingsKpiTargetPoint => 'Target Point';
+
+  @override
+  String get settingsKpiZonasi => 'Zonasi';
+
+  @override
+  String get settingsKpiJamKerja => 'Jam Kerja';
+
+  @override
+  String get settingsKpiKaryawan => 'Karyawan';
+
+  @override
+  String get settingsKpiPenilaianKinerja => 'Penilaian Kinerja';
+
+  @override
+  String get settingsKpiUbahPeriodeSurat =>
+      'Ubah Periode Surat Teguran & Surat Peringatan';
+
+  @override
+  String get settingsKpiPengaturanAktivasiPoint => 'Pengaturan Aktivasi Point';
+
+  @override
   String get settingsBahasa => 'Bahasa';
 
   @override
   String get settingsNotifikasi => 'Notifikasi';
+
+  @override
+  String get targetPointTitle => 'Target Point';
+
+  @override
+  String get targetPointInfoText =>
+      'Target point adalah jumlah point yang harus dicapai oleh karyawan dalam satu periode (sebulan penuh). Target point didapatkan melalui Total Gaji [....]';
+
+  @override
+  String get targetPointTotalGaji => 'Total Gaji';
+
+  @override
+  String get targetPointButtonReset => 'Reset';
+
+  @override
+  String get targetPointButtonApply => 'Terapkan';
+
+  @override
+  String get targetPointDialogConfirmTitle => 'Maaf, Sebelumnya...';
+
+  @override
+  String get targetPointDialogConfirmMessage =>
+      'Apakah anda yakin ingin mengubah Target Poin ini ?';
+
+  @override
+  String get targetPointDialogSuccessTitle => 'Berhasil!';
+
+  @override
+  String get targetPointDialogSuccessMessage =>
+      'Target Poin telah berhasil di Ubah !';
+
+  @override
+  String get performanceAssessmentTitle => 'Penilaian Kinerja';
+
+  @override
+  String get performanceAssessmentKehadiran => 'Kehadiran';
+
+  @override
+  String get performanceAssessmentMaksimalPointAbsensi =>
+      'Maksimal Point Absensi';
+
+  @override
+  String get performanceAssessmentTerlambat => 'Terlambat';
+
+  @override
+  String get performanceAssessmentTidakAbsenPulang => 'Tidak Absen Pulang';
+
+  @override
+  String get performanceAssessmentSakit => 'Sakit';
+
+  @override
+  String get performanceAssessmentManasikMasuk => 'Manasik Masuk';
+
+  @override
+  String get performanceAssessmentPenilaianAtasan => 'Penilaian Atasan';
+
+  @override
+  String get performanceAssessmentMaksimalPointAtasan =>
+      'Maksimal Point Atasan';
+
+  @override
+  String get performanceAssessmentRencanaKerja => 'Rencana Kerja';
+
+  @override
+  String get performanceAssessmentJabatan => 'Jabatan';
+
+  @override
+  String get performanceAssessmentMinPoint => 'Min Point';
+
+  @override
+  String get performanceAssessmentMaxPoint => 'Max Point';
+
+  @override
+  String get performanceAssessmentTargetPointX => 'Target Point X';
+
+  @override
+  String get performanceAssessmentPoinAbsensiHarian => 'Poin Absensi Harian';
+
+  @override
+  String get performanceAssessmentButtonReset => 'Reset';
+
+  @override
+  String get performanceAssessmentButtonApply => 'Terapkan';
+
+  @override
+  String get performanceAssessmentDialogConfirmTitle => 'Maaf, Sebelumnya...';
+
+  @override
+  String get performanceAssessmentDialogConfirmMessage =>
+      'Apakah anda yakin ingin menerapkan Format Penilaian Kinerja ini ?';
+
+  @override
+  String get performanceAssessmentDialogSuccessTitle => 'Berhasil!';
+
+  @override
+  String get performanceAssessmentDialogSuccessMessage =>
+      'Format telah berhasil di Terapkan !';
 }

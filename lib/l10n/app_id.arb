@@ -592,6 +592,135 @@
   "settingsPelacakanJamKerja": "Pelacakan Jam Kerja",
   "settingsStrukturOrganisasi": "Struktur Organisasi",
   "settingsKpi": "KPI",
+  "settingsKpiTargetPoint": "Target Point",
+  "settingsKpiZonasi": "Zonasi",
+  "settingsKpiJamKerja": "Jam Kerja",
+  "settingsKpiKaryawan": "Karyawan",
+  "settingsKpiPenilaianKinerja": "Penilaian Kinerja",
+  "settingsKpiUbahPeriodeSurat": "Ubah Periode Surat Teguran & Surat Peringatan",
+  "settingsKpiPengaturanAktivasiPoint": "Pengaturan Aktivasi Point",
   "settingsBahasa": "Bahasa",
-  "settingsNotifikasi": "Notifikasi"
+  "settingsNotifikasi": "Notifikasi",
+  
+  "targetPointTitle": "Target Point",
+  "@targetPointTitle": {
+    "description": "Target Point page title"
+  },
+  "targetPointInfoText": "Target point adalah jumlah point yang harus dicapai oleh karyawan dalam satu periode (sebulan penuh). Target point didapatkan melalui Total Gaji [....]",
+  "@targetPointInfoText": {
+    "description": "Information text explaining what target point is"
+  },
+  "targetPointTotalGaji": "Total Gaji",
+  "@targetPointTotalGaji": {
+    "description": "Total salary label"
+  },
+  "targetPointButtonReset": "Reset",
+  "@targetPointButtonReset": {
+    "description": "Reset button text"
+  },
+  "targetPointButtonApply": "Terapkan",
+  "@targetPointButtonApply": {
+    "description": "Apply button text"
+  },
+  "targetPointDialogConfirmTitle": "Maaf, Sebelumnya...",
+  "@targetPointDialogConfirmTitle": {
+    "description": "Confirmation dialog title"
+  },
+  "targetPointDialogConfirmMessage": "Apakah anda yakin ingin mengubah Target Poin ini ?",
+  "@targetPointDialogConfirmMessage": {
+    "description": "Confirmation dialog message"
+  },
+  "targetPointDialogSuccessTitle": "Berhasil!",
+  "@targetPointDialogSuccessTitle": {
+    "description": "Success dialog title"
+  },
+  "targetPointDialogSuccessMessage": "Target Poin telah berhasil di Ubah !",
+  "@targetPointDialogSuccessMessage": {
+    "description": "Success dialog message"
+  },
+  
+  "performanceAssessmentTitle": "Penilaian Kinerja",
+  "@performanceAssessmentTitle": {
+    "description": "Performance Assessment page title"
+  },
+  "performanceAssessmentKehadiran": "Kehadiran",
+  "@performanceAssessmentKehadiran": {
+    "description": "Attendance section title"
+  },
+  "performanceAssessmentMaksimalPointAbsensi": "Maksimal Point Absensi",
+  "@performanceAssessmentMaksimalPointAbsensi": {
+    "description": "Maximum attendance point label"
+  },
+  "performanceAssessmentTerlambat": "Terlambat",
+  "@performanceAssessmentTerlambat": {
+    "description": "Late label"
+  },
+  "performanceAssessmentTidakAbsenPulang": "Tidak Absen Pulang",
+  "@performanceAssessmentTidakAbsenPulang": {
+    "description": "No checkout label"
+  },
+  "performanceAssessmentSakit": "Sakit",
+  "@performanceAssessmentSakit": {
+    "description": "Sick label"
+  },
+  "performanceAssessmentManasikMasuk": "Manasik Masuk",
+  "@performanceAssessmentManasikMasuk": {
+    "description": "Manasik attendance label"
+  },
+  "performanceAssessmentPenilaianAtasan": "Penilaian Atasan",
+  "@performanceAssessmentPenilaianAtasan": {
+    "description": "Supervisor assessment section title"
+  },
+  "performanceAssessmentMaksimalPointAtasan": "Maksimal Point Atasan",
+  "@performanceAssessmentMaksimalPointAtasan": {
+    "description": "Maximum supervisor point label"
+  },
+  "performanceAssessmentRencanaKerja": "Rencana Kerja",
+  "@performanceAssessmentRencanaKerja": {
+    "description": "Work plan section title"
+  },
+  "performanceAssessmentJabatan": "Jabatan",
+  "@performanceAssessmentJabatan": {
+    "description": "Position column header"
+  },
+  "performanceAssessmentMinPoint": "Min Point",
+  "@performanceAssessmentMinPoint": {
+    "description": "Minimum point column header"
+  },
+  "performanceAssessmentMaxPoint": "Max Point",
+  "@performanceAssessmentMaxPoint": {
+    "description": "Maximum point column header"
+  },
+  "performanceAssessmentTargetPointX": "Target Point X",
+  "@performanceAssessmentTargetPointX": {
+    "description": "Target point X formula text"
+  },
+  "performanceAssessmentPoinAbsensiHarian": "Poin Absensi Harian",
+  "@performanceAssessmentPoinAbsensiHarian": {
+    "description": "Daily attendance point formula text"
+  },
+  "performanceAssessmentButtonReset": "Reset",
+  "@performanceAssessmentButtonReset": {
+    "description": "Reset button text"
+  },
+  "performanceAssessmentButtonApply": "Terapkan",
+  "@performanceAssessmentButtonApply": {
+    "description": "Apply button text"
+  },
+  "performanceAssessmentDialogConfirmTitle": "Maaf, Sebelumnya...",
+  "@performanceAssessmentDialogConfirmTitle": {
+    "description": "Confirmation dialog title"
+  },
+  "performanceAssessmentDialogConfirmMessage": "Apakah anda yakin ingin menerapkan Format Penilaian Kinerja ini ?",
+  "@performanceAssessmentDialogConfirmMessage": {
+    "description": "Confirmation dialog message"
+  },
+  "performanceAssessmentDialogSuccessTitle": "Berhasil!",
+  "@performanceAssessmentDialogSuccessTitle": {
+    "description": "Success dialog title"
+  },
+  "performanceAssessmentDialogSuccessMessage": "Format telah berhasil di Terapkan !",
+  "@performanceAssessmentDialogSuccessMessage": {
+    "description": "Success dialog message"
+  }
 }

@@ -1,9 +1,18 @@
 // Dependency Injection Container using GetIt
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
+
+// Target Point KPI feature imports
+import '../../features/settings/features/kpi/features/target_point/data/datasources/target_point_remote_datasource.dart';
+import '../../features/settings/features/kpi/features/target_point/data/repositories/target_point_repository_impl.dart';
+import '../../features/settings/features/kpi/features/target_point/domain/repositories/target_point_repository.dart';
+import '../../features/settings/features/kpi/features/target_point/domain/usecases/get_target_point_indicators.dart';
+import '../../features/settings/features/kpi/features/target_point/domain/usecases/update_target_point_indicator.dart';
 
 // Authentication feature imports
 import '../../features/authentication/data/datasources/auth_local_datasource.dart';
@@ -100,7 +109,8 @@ import '../../features/settings/features/organizational_structure/presentation/p
 import '../../features/settings/features/access_menu/data/datasources/access_menu_remote_data_source.dart';
 import '../../features/settings/features/access_menu/data/repositories/access_menu_repository_impl.dart';
 import '../../features/settings/features/access_menu/domain/repositories/access_menu_repository.dart';
-import '../../features/settings/features/access_menu/domain/usecases/get_employee_menus.dart' as access_menu_usecases;
+import '../../features/settings/features/access_menu/domain/usecases/get_employee_menus.dart'
+    as access_menu_usecases;
 import '../../features/settings/features/access_menu/domain/usecases/get_all_menus.dart';
 import '../../features/settings/features/access_menu/domain/usecases/manage_menu_access.dart';
 import '../../features/settings/features/access_menu/presentation/providers/access_menu_provider.dart';
@@ -453,6 +463,34 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<ScreenSecurityRemoteDataSource>(
     () => ScreenSecurityRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  //! Features - KPI
+  // Target Point Provider
+  sl.registerFactory(
+    () => TargetPointProvider(
+      getTargetPointIndicatorsUseCase: sl(),
+      updateTargetPointIndicatorUseCase: sl(),
+    ),
+  );
+
+  // Target Point Use cases
+  sl.registerLazySingleton(() => GetTargetPointIndicators(sl()));
+  sl.registerLazySingleton(() => UpdateTargetPointIndicator(sl()));
+
+  // Target Point Repository
+  sl.registerLazySingleton<TargetPointRepository>(
+    () => TargetPointRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Target Point Data sources
+  sl.registerLazySingleton<TargetPointRemoteDataSource>(
+    () => TargetPointRemoteDataSourceImpl(client: sl()),
+  );
+
+  // Penilaian Kinerja Provider
+  sl.registerFactory(
+    () => PenilaianKinerjaProvider(),
   );
 
   //! Features - Pelacakan Jam Kerja

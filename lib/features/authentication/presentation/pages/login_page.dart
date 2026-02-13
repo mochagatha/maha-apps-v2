@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../screen_security/presentation/providers/screen_security_provider.dart';
@@ -92,13 +92,13 @@ class _LoginPageState extends State<LoginPage> {
         // Set admin status
         await authProvider.setAdminStatus(true);
         // Navigate to admin face verification
-        context.go(RoutePaths.adminFaceVerification);
+        context.go(AppRoutes.adminFaceVerification.path);
       } else {
         await authProvider.setAdminStatus(false);
         if (authProvider.user?.status == 1) {
-          context.go(RoutePaths.welcomeBiodata);
+          context.go(AppRoutes.welcomeBiodata.path);
         } else {
-          context.go(RoutePaths.home);
+          context.go(AppRoutes.home.path);
         }
       }
     } else if (authProvider.errorMessage != null) {
@@ -214,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                         const Spacer(),
                         InkWell(
                           onTap: () {
-                            context.push(RoutePaths.forgotPassword);
+                            context.push(AppRoutes.forgotPassword.path);
                           },
                           child: Text(
                             context.l10n.forgotPassword,

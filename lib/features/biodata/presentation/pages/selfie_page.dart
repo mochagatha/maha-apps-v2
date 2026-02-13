@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 
 class SelfiePage extends StatelessWidget {
   const SelfiePage({super.key});
@@ -84,7 +84,7 @@ class SelfiePage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  context.pushNamed(RouteNames.selfieCamera);
+                  context.pushNamed(AppRoutes.selfieCamera.name);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

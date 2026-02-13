@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import 'selfie_page.dart'; // Using HeaderScrollSelfie
 
 class SelfieKtpPage extends StatelessWidget {
@@ -85,7 +85,7 @@ class SelfieKtpPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                   context.pushNamed(RouteNames.selfieCameraKtp);
+                   context.pushNamed(AppRoutes.selfieCameraKtp.name);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
