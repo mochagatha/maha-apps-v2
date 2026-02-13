@@ -4,22 +4,14 @@ import '../../domain/entities/target_point_indicator.dart';
 /// Extends entity and adds JSON serialization
 class TargetPointIndicatorModel extends TargetPointIndicator {
   const TargetPointIndicatorModel({
-    required int id,
-    required String name,
-    required String indicatorName,
-    required String operator,
-    required int value,
-    required String typeValue,
-    required String typeIndicator,
-  }) : super(
-         id: id,
-         name: name,
-         indicatorName: indicatorName,
-         operator: operator,
-         value: value,
-         typeValue: typeValue,
-         typeIndicator: typeIndicator,
-       );
+    required super.id,
+    required super.name,
+    required super.indicatorName,
+    required super.operator,
+    required super.value,
+    required super.typeValue,
+    required super.typeIndicator,
+  });
 
   /// Create model from JSON (API response)
   factory TargetPointIndicatorModel.fromJson(Map<String, dynamic> json) {

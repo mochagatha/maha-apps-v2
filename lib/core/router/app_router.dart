@@ -26,6 +26,8 @@ import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/pages/settings_kpi_target_point_page.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/presentation/pages/settings_kpi_ubah_periode_surat_page.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/presentation/providers/ubah_periode_surat_provider.dart';
 import '../../features/settings/features/kpi/presentation/pages/settings_kpi_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
@@ -676,6 +678,14 @@ class AppRouter {
           // ),
           builder: (context, state) => const SettingsPlaceholderPage(
             title: 'Penilaian Kinerja',
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiUbahPeriodeSurat.path,
+          name: AppRoutes.settingsKpiUbahPeriodeSurat.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<UbahPeriodeSuratProvider>(),
+            child: const SettingsKpiUbahPeriodeSuratPage(),
           ),
         ),
 

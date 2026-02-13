@@ -38,7 +38,7 @@ class TargetPointRemoteDataSourceImpl implements TargetPointRemoteDataSource {
 
       if (response.statusCode == 200) {
         // Extract data from V1 API response format
-        final data = response.data['data'];
+        final data = response.data['data']['target_point'];
 
         if (data is List) {
           return data.map((json) => TargetPointIndicatorModel.fromJson(json)).toList();

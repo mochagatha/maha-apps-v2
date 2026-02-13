@@ -14,6 +14,14 @@ import '../../features/settings/features/kpi/features/target_point/domain/reposi
 import '../../features/settings/features/kpi/features/target_point/domain/usecases/get_target_point_indicators.dart';
 import '../../features/settings/features/kpi/features/target_point/domain/usecases/update_target_point_indicator.dart';
 
+// Ubah Periode Surat KPI feature imports
+import '../../features/settings/features/kpi/features/ubah_periode_surat/presentation/providers/ubah_periode_surat_provider.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/data/datasources/ubah_periode_surat_remote_data_source.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/data/repositories/ubah_periode_surat_repository_impl.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/domain/repositories/ubah_periode_surat_repository.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/domain/usecases/get_punishment_setting.dart';
+import '../../features/settings/features/kpi/features/ubah_periode_surat/domain/usecases/update_punishment_setting.dart';
+
 // Authentication feature imports
 import '../../features/authentication/data/datasources/auth_local_datasource.dart';
 import '../../features/authentication/data/datasources/auth_remote_datasource.dart';
@@ -486,6 +494,28 @@ Future<void> init() async {
   // Target Point Data sources
   sl.registerLazySingleton<TargetPointRemoteDataSource>(
     () => TargetPointRemoteDataSourceImpl(client: sl()),
+  );
+
+  // Ubah Periode Surat Provider
+  sl.registerFactory(
+    () => UbahPeriodeSuratProvider(
+      getPunishmentSetting: sl(),
+      updatePunishmentSetting: sl(),
+    ),
+  );
+
+  // Ubah Periode Surat Use cases
+  sl.registerLazySingleton(() => GetPunishmentSetting(sl()));
+  sl.registerLazySingleton(() => UpdatePunishmentSetting(sl()));
+
+  // Ubah Periode Surat Repository
+  sl.registerLazySingleton<UbahPeriodeSuratRepository>(
+    () => UbahPeriodeSuratRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Ubah Periode Surat Data sources
+  sl.registerLazySingleton<UbahPeriodeSuratRemoteDataSource>(
+    () => UbahPeriodeSuratRemoteDataSourceImpl(apiClient: sl()),
   );
 
   // Penilaian Kinerja Provider
