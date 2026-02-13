@@ -115,6 +115,8 @@ class AppRoutes {
   static const settingsAbsensiPenempatanKerja = AppRoute('settings-absensi-penempatan-kerja', '/settings/absensi/penempatan-kerja');
   static const settingsAbsensiZonasi = AppRoute('settings-absensi-zonasi', '/settings/absensi/zonasi');
   static const settingsAbsensiJamKerja = AppRoute('settings-absensi-jam-kerja', '/settings/absensi/jam-kerja');
+  static const settingsAbsensiDetailJamKerja = AppRoute('settings-absensi-detail-jam-kerja', '/settings/absensi/jam-kerja/detail');
+  static const settingsAbsensiEditJamKerja = AppRoute('settings-absensi-edit-jam-kerja', '/settings/absensi/jam-kerja/edit');
   static const settingsAbsensiKaryawan = AppRoute('settings-absensi-karyawan', '/settings/absensi/karyawan');
   static const settingsAbsensiPekerjaHarian = AppRoute('settings-absensi-pekerja-harian', '/settings/absensi/pekerja-harian');
   static const settingsAbsensiHariLiburCuti = AppRoute('settings-absensi-hari-libur-cuti', '/settings/absensi/hari-libur-cuti-bersama');
