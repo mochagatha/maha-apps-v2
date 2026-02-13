@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/core/router/route_paths.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/domain/entities/work_hour_entity.dart';
 import 'package:maha_apps_v2/shared/theme/app_theme.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
@@ -115,7 +115,7 @@ class DetailWorkHoursPage extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           context.push(
-                            RoutePaths.settingsAbsensiEditJamKerja,
+                            AppRoutes.settingsAbsensiEditJamKerja.path,
                             extra: {"name": workHour.name},
                           );
                         },

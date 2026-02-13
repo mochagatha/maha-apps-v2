@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/core/router/route_paths.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/features/settings/presentation/widgets/settings_menu_item.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 
@@ -15,7 +15,7 @@ class SettingsWorkHoursPage extends StatelessWidget {
         title: "Normal",
         onTap: () {
           context.push(
-            RoutePaths.settingsAbsensiDetailJamKerja,
+            AppRoutes.settingsAbsensiDetailJamKerja.path,
             extra: {"name": "Normal"},
           );
         },
@@ -25,7 +25,7 @@ class SettingsWorkHoursPage extends StatelessWidget {
         title: "Proyek",
         onTap: () {
           context.push(
-            RoutePaths.settingsAbsensiDetailJamKerja,
+            AppRoutes.settingsAbsensiDetailJamKerja.path,
             extra: {"name": "Proyek"},
           );
         },
@@ -35,7 +35,7 @@ class SettingsWorkHoursPage extends StatelessWidget {
         title: "Shift 1",
         onTap: () {
           context.push(
-            RoutePaths.settingsAbsensiDetailJamKerja,
+            AppRoutes.settingsAbsensiDetailJamKerja.path,
             extra: {"name": "Shift 1"},
           );
         },
@@ -45,7 +45,7 @@ class SettingsWorkHoursPage extends StatelessWidget {
         title: "Shift 2",
         onTap: () {
           context.push(
-            RoutePaths.settingsAbsensiDetailJamKerja,
+            AppRoutes.settingsAbsensiDetailJamKerja.path,
             extra: {"name": "Shift 2"},
           );
         },
@@ -55,7 +55,7 @@ class SettingsWorkHoursPage extends StatelessWidget {
         title: "Khusus",
         onTap: () {
           context.push(
-            RoutePaths.settingsAbsensiDetailJamKerja,
+            AppRoutes.settingsAbsensiDetailJamKerja.path,
             extra: {"name": "Khusus"},
           );
         },
