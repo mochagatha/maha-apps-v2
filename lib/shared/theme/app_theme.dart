@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
+  const AppColors._();
   static const Color primary = Color.fromRGBO(233, 30, 33, 1);
   static const Color blue = Color(0xfe106AE8);
   static const Color background = Color(0xfeFEFEFE);

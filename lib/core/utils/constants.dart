@@ -10,7 +10,7 @@ class AppConstants {
   static const String keyRememberMe = 'remember_me';
   static const String keyBranchCode = 'branch_code';
   static const String keyIsAdmin = 'is_admin';
-  
+
   // Auth endpoints (V1 compatible)
   static const String endpointLogin = '/employee/login';
   static const String endpointLogout = '/auth/logout';
@@ -63,6 +63,9 @@ class AppConstants {
 
   // Biodata
   static const biodata = _BiodataConstants();
+
+  // Menu
+  static const menu = _MenuConstraints();
 }
 
 class _BiodataConstants {
@@ -124,25 +127,73 @@ class _BiodataConstants {
   final String nameSeniorSchool = "NAME_SENIOR_SCHOOL";
   final String startYearSeniorSchool = "START_YEAR_SENIOR_SCHOOL";
   final String endYearSeniorSchool = "END_YEAR_SENIOR_SCHOOL";
-  
+
   final String nameBachelor = "NAME_BACHELOR";
   final String majorBachelor = "MAJOR_BACHELOR";
   final String startYearBachelor = "START_YEAR_BACHELOR";
   final String endYearBachelor = "END_YEAR_BACHELOR";
   final String ipkBachelor = "IPK_BACHELOR";
   final String titleBachelor = "TITLE_BACHELOR";
-  
+
   final String nameMaster = "NAME_MASTER";
   final String majorMaster = "MAJOR_MASTER";
   final String startYearMaster = "START_YEAR_MASTER";
   final String endYearMaster = "END_YEAR_MASTER";
   final String ipkMaster = "IPK_MASTER";
   final String titleMaster = "TITLE_MASTER";
-  
+
   final String nameDoctor = "NAME_DOCTOR";
   final String majorDoctor = "MAJOR_DOCTOR";
   final String startYearDoctor = "START_YEAR_DOCTOR";
   final String endYearDoctor = "END_YEAR_DOCTOR";
   final String ipkDoctor = "IPK_DOCTOR";
   final String titleDoctor = "TITLE_DOCTOR";
+}
+
+class _MenuConstraints {
+  const _MenuConstraints();
+  final String absensi = "ABSENSI";
+  final String mengamati = "MENGAMATI";
+  final String persetujuan = "PERSETUJUAN";
+  final String rencanaKerja = "RENCANA_KERJA";
+  final String permintaan = "PERMINTAAN";
+  final String tugas = "TUGAS";
+  final String pengajuan = "PENGAJUAN";
+  final String administrasi = "ADMINISTRASI";
+  final String arsip = "ARSIP";
+  final String dataAbsensi = "DATA_ABSENSI";
+  final String dataKaryawan = "DATA_KARYAWAN";
+  final String proyek = "PROYEK";
+  final String kpi = "KPI";
+  final String aduan = "ADUAN";
+  final String dataPayroll = "DATA_PAYROLL";
+  final String kasir = "KASIR";
+  final String akuntansi = "AKUNTANSI";
+  final String rekrutment = "REKRUTMENT";
+  final String pengaturan = "PENGATURAN";
+  final String updateKontrak = "UPDATE_KONTRAK";
+  final String database = "DATABASE";
+
+  final subPengaturan = const _PengaturanConstraints();
+}
+
+class _PengaturanConstraints {
+  const _PengaturanConstraints();
+  final String absensi = "PENGATURAN/ABSENSI";
+
+  final subAbsensi = const _PengaturanAbsensiConstraints._();
+}
+
+class _PengaturanAbsensiConstraints {
+  const _PengaturanAbsensiConstraints._();
+  final String penempatanKerja = "PENGATURAN/ABSENSI/PENEMPATAN_KERJA";
+  final String zonasi = "PENGATURAN/ABSENSI/ZONASI";
+  final String jamKerja = "PENGATURAN/ABSENSI/JAM_KERJA";
+  final String karyawan = "PENGATURAN/ABSENSI/KARYAWAN";
+  final String pekerjaHarian = "PENGATURAN/ABSENSI/PEKERJA_HARIAN";
+  final String hariLiburCutiBersama =
+      "PENGATURAN/ABSENSI/HARI_LIBUR_CUTI_BERSAMA";
+  final String lembur = "PENGATURAN/ABSENSI/LEMBUR";
+  final String absenDimanaSaja = "PENGATURAN/ABSENSI/ABSEN_DIMANA_SAJA";
+  final String perbaikkanKehadiran = "PENGATURAN/ABSENSI/PERBAIKKAN_KEHADIRAN";
 }

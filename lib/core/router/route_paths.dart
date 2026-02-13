@@ -114,6 +114,8 @@ class RoutePaths {
   static const String settingsAbsensiPenempatanKerja = '/settings/absensi/penempatan-kerja';
   static const String settingsAbsensiZonasi = '/settings/absensi/zonasi';
   static const String settingsAbsensiJamKerja = '/settings/absensi/jam-kerja';
+  static const String settingsAbsensiDetailJamKerja = '/settings/absensi/jam-kerja/detail';
+  static const String settingsAbsensiEditJamKerja = '/settings/absensi/jam-kerja/edit';
   static const String settingsAbsensiKaryawan = '/settings/absensi/karyawan';
   static const String settingsAbsensiPekerjaHarian = '/settings/absensi/pekerja-harian';
   static const String settingsAbsensiHariLiburCuti = '/settings/absensi/hari-libur-cuti-bersama';

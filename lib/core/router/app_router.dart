@@ -12,6 +12,9 @@ import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_
 import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/detail_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/edit_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/settings_work_hours_page.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
@@ -676,9 +679,23 @@ class AppRouter {
         ),
         GoRoute(
           path: RoutePaths.settingsAbsensiJamKerja,
-          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
-            title: 'Jam Kerja',
-          ),
+          builder: (context, state) => const SettingsWorkHoursPage(),
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiDetailJamKerja,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return DetailWorkHoursPage(name: extra["name"]);
+          },
+        ),
+        GoRoute(
+          path: RoutePaths.settingsAbsensiEditJamKerja,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return EditWorkHoursPage(
+              name: extra["name"],
+            );
+          },
         ),
         GoRoute(
           path: RoutePaths.settingsAbsensiKaryawan,

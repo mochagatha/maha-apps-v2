@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 import 'package:provider/provider.dart';
 
@@ -28,11 +29,11 @@ class _SettingsAbsensiPageState extends State<SettingsAbsensiPage> {
         builder: (context, homeProvider, child) {
           // Get settings menus from hierarchical cache
           final settingsParent = homeProvider.hierarchicalMenus.firstWhere(
-            (element) => element.code == "PENGATURAN",
+            (element) => element.code == AppConstants.menu.pengaturan,
           );
 
           final settingsAbsensiParent = settingsParent.children?.firstWhere(
-            (element) => element.code == "PENGATURAN/ABSENSI",
+            (element) => element.code == AppConstants.menu.subPengaturan.absensi,
           );
 
           final settingsMenus = settingsAbsensiParent?.children ?? [];
