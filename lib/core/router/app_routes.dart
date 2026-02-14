@@ -70,6 +70,8 @@ class AppRoutes {
   static const biodataStatementLetter = AppRoute('biodata-statement-letter-statement', '/biodata/statement-letter/statement');
   static const biodataStatementLetterSignature = AppRoute('biodata-statement-letter-signature', '/biodata/statement-letter/signature');
   static const employeeEmploymentAgreement = AppRoute('employee-employment-agreement', '/employment-agreement/employee');
+  static const biodataRevisionNotice = AppRoute('biodata-revision-notice', '/biodata/revision/notice');
+  static const biodataRevisionForm = AppRoute('biodata-revision-form', '/biodata/revision/form');
 
   // Recruitment
   static const verificationData = AppRoute('verification-data', '/recruitment/verification-data');

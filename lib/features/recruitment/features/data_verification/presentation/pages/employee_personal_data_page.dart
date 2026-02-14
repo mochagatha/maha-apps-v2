@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:maha_apps_v2/shared/theme/app_theme.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
@@ -36,6 +37,22 @@ class _EmployeePersonalDataPageState extends State<EmployeePersonalDataPage> {
   ];
 
   DateTime? _startWork;
+  bool _isEditing = false;
+
+  void _applyRevision() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: _RevisionDescriptionSheet(),
+        );
+      },
+    );
+  }
 
   void _pickStartWorkDate() async {
     final DateTime? date = await showDatePicker(
@@ -594,26 +611,51 @@ class _EmployeePersonalDataPageState extends State<EmployeePersonalDataPage> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        child: Row(
-          children: [
-            Expanded(
-              child: CustomElevatedButton(
-                onPressed: () {},
-                color: AppColors.blue,
-                child: Text("Revisi"),
-              ),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: CustomOutlinedButton(
-                onPressed: () {},
-                enabled: false,
-                child: Text("Terima"),
-              ),
-            ),
-          ],
-        ),
+        child: _buildBottomButtons(),
       ),
+    );
+  }
+
+  Widget _buildBottomButtons() {
+    if (_isEditing) {
+      return Row(
+        children: [
+          Expanded(
+            child: CustomOutlinedButton(
+              onPressed: () => setState(() => _isEditing = false),
+              color: AppColors.blue,
+              child: Text("Batal"),
+            ),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: CustomElevatedButton(
+              onPressed: _applyRevision,
+              color: AppColors.blue,
+              child: Text("Revisi"),
+            ),
+          ),
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Expanded(
+          child: CustomElevatedButton(
+            onPressed: () => setState(() => _isEditing = true),
+            color: AppColors.blue,
+            child: Text("Revisi"),
+          ),
+        ),
+        SizedBox(width: 12),
+        Expanded(
+          child: CustomElevatedButton(
+            onPressed: () {},
+            loading: true,
+            child: Text("Terima"),
+          ),
+        ),
+      ],
     );
   }
 
@@ -656,7 +698,7 @@ class _EmployeePersonalDataPageState extends State<EmployeePersonalDataPage> {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () => setState(() => _isEditing = !_isEditing),
               style: IconButton.styleFrom(
                 minimumSize: Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -688,28 +730,10 @@ class _EmployeePersonalDataPageState extends State<EmployeePersonalDataPage> {
   }
 
   Widget _buildField({required String label, String? value}) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(top: 8),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade400),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
-          ),
-          SizedBox(height: 4),
-          Text(
-            value ?? "-",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-        ],
-      ),
+    return _DataField(
+      isEditing: _isEditing,
+      label: label,
+      value: value,
     );
   }
 
@@ -925,6 +949,154 @@ class _CustomCheckboxState extends State<_CustomCheckbox> {
           onChanged: (value) => setState(() => _checked = !_checked),
         ),
       ],
+    );
+  }
+}
+
+class _DataField extends StatefulWidget {
+  const _DataField({
+    required this.isEditing,
+    required this.label,
+    this.value,
+  });
+
+  final String label;
+  final String? value;
+  final bool isEditing;
+
+  @override
+  State<_DataField> createState() => _DataFieldState();
+}
+
+class _DataFieldState extends State<_DataField> {
+  bool _selected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.only(top: 8),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade400),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.label,
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  widget.value ?? "-",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          if (widget.isEditing)
+            Checkbox(
+              value: _selected,
+              onChanged: (value) => setState(() => _selected = !_selected),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RevisionDescriptionSheet extends StatefulWidget {
+  const _RevisionDescriptionSheet();
+
+  @override
+  State<_RevisionDescriptionSheet> createState() =>
+      _RevisionDescriptionSheetState();
+}
+
+class _RevisionDescriptionSheetState extends State<_RevisionDescriptionSheet> {
+  final _descriptionController = TextEditingController();
+  bool _valid = false;
+
+  void _validate() {
+    bool valid = _descriptionController.text.isNotEmpty;
+    if (_valid != valid) setState(() => _valid = valid);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _descriptionController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(12),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                height: 4,
+                width: 64,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+            ),
+            SizedBox(height: 24),
+            Text(
+              "Keterangan Direvisi",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 12),
+            TextField(
+              controller: _descriptionController,
+              maxLines: null,
+              minLines: 5,
+              onChanged: (value) => _validate(),
+              decoration: InputDecoration(
+                hintText: "Masukkan keterangan revisi...",
+                enabledBorder: _buildBorder(),
+                focusedBorder: _buildBorder(),
+              ),
+            ),
+            SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              child: CustomElevatedButton(
+                onPressed: () {
+                  context.pop();
+                  context.pop();
+                },
+                loading: !_valid,
+                child: Text("Tolak"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  InputBorder _buildBorder() {
+    return OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+      borderRadius: BorderRadius.circular(8),
     );
   }
 }
