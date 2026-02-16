@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'core/di/injection_container.dart' as di;
@@ -63,7 +64,7 @@ class AppInitializer extends StatefulWidget {
 
 class _AppInitializerState extends State<AppInitializer> {
   late final GoRouter _router;
-  
+
   @override
   void initState() {
     super.initState();
@@ -101,6 +102,7 @@ class _AppInitializerState extends State<AppInitializer> {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
+            FlutterQuillLocalizations.delegate,
           ],
           supportedLocales: const [
             Locale('id', ''), // Indonesian

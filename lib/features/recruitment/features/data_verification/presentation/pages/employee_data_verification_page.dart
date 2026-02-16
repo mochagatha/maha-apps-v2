@@ -6,8 +6,8 @@ import 'package:maha_apps_v2/shared/theme/app_theme.dart';
 import '../../../../../../core/utils/localization_extension.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 
-class EmployeeVerificationPage extends StatelessWidget {
-  const EmployeeVerificationPage({super.key});
+class EmployeeDataVerificationPage extends StatelessWidget {
+  const EmployeeDataVerificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class EmployeeVerificationPage extends StatelessWidget {
                         nik: 12345,
                         department: "IT Programming",
                         jobTitle: "Information Technology",
-                        status: 2,
+                        status: 3,
                       ),
                     ],
                   ),
@@ -150,11 +150,18 @@ class _DataItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final route = status > 1
+        ? AppRoutes.detailEmploymentAgreement.path
+        : AppRoutes.employeePersonalData.path;
+
     return GestureDetector(
       onTap: () {
-        context.pushNamed(
-          AppRoutes.employeePersonalData.name,
-          extra: {"id": id},
+        context.push(
+          route,
+          extra: {
+            "id": id,
+            "status": status,
+          },
         );
       },
       child: Card(
@@ -169,6 +176,28 @@ class _DataItem extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Column(
             children: [
+              if (status == 3)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withAlpha(40),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      "Direvisi",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ),
               if (status == 0)
                 Align(
                   alignment: Alignment.centerRight,

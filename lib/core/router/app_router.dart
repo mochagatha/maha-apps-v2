@@ -14,6 +14,8 @@ import 'package:maha_apps_v2/features/biodata/presentation/providers/biodata_rev
 import 'package:maha_apps_v2/features/biodata/presentation/providers/employment_agreement_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/signature_provider.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_letters_provider.dart';
+import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/create_employment_agreement_page.dart';
+import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/detail_employment_agareement_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/detail_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/edit_work_hours_page.dart';
@@ -61,7 +63,7 @@ import '../../features/biodata/domain/repositories/biodata_repository.dart'; // 
 import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 import '../../features/recruitment/features/data_verification/presentation/pages/verification_data_page.dart';
-import '../../features/recruitment/features/data_verification/presentation/pages/employee_verification_page.dart';
+import '../../features/recruitment/features/data_verification/presentation/pages/employee_data_verification_page.dart';
 import '../../features/recruitment/presentation/pages/company_code_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_verification_page.dart';
 import '../../features/authentication/presentation/pages/admin_face_camera_page.dart';
@@ -111,7 +113,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: AppRoutes.biodataRevisionNotice.path,
+      initialLocation: AppRoutes.splash.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -445,7 +447,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.employeeVerification.path,
           name: AppRoutes.employeeVerification.name,
-          builder: (context, state) => const EmployeeVerificationPage(),
+          builder: (context, state) => const EmployeeDataVerificationPage(),
         ),
         GoRoute(
           path: AppRoutes.employeePersonalData.path,
@@ -453,6 +455,19 @@ class AppRouter {
           builder: (context, state) {
             final extra = state.extra as Map<String, dynamic>;
             return EmployeePersonalDataPage(id: extra["id"]);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.createEmploymentAgreement.path,
+          name: AppRoutes.createEmploymentAgreement.name,
+          builder: (context, state) => CreateEmploymentAgreementPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.detailEmploymentAgreement.path,
+          name: AppRoutes.detailEmploymentAgreement.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return DetailEmploymentAgareementPage(status: extra["status"]);
           },
         ),
         GoRoute(

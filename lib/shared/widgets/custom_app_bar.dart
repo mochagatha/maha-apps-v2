@@ -31,6 +31,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Whether to center the title (default true)
   final bool centerTitle;
+  final Color backgroundColor;
+  final Color foregroundColor;
 
   const CustomAppBar({
     super.key,
@@ -40,18 +42,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.height = 77,
     this.centerTitle = true,
+    this.backgroundColor = AppColors.primary,
+    this.foregroundColor = Colors.white,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: showBackButton,
-      leading: leading ??
+      leading:
+          leading ??
           (showBackButton
               ? IconButton(
                   icon: const FaIcon(
                     FontAwesomeIcons.circleChevronLeft,
-                    color: Colors.white,
                     size: 24,
                   ),
                   tooltip: 'Back',
@@ -60,19 +64,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               : null),
       title: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: foregroundColor,
         ),
       ),
       centerTitle: centerTitle,
       toolbarHeight: height,
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white, // Ensures all icons and text are white
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
       actions: actions,
-      iconTheme: const IconThemeData(color: Colors.white),
-      actionsIconTheme: const IconThemeData(color: Colors.white),
+      surfaceTintColor: Colors.transparent,
+      iconTheme: IconThemeData(color: foregroundColor),
+      actionsIconTheme: IconThemeData(color: foregroundColor),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/shared/theme/app_theme.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
@@ -610,7 +611,7 @@ class _EmployeePersonalDataPageState extends State<EmployeePersonalDataPage> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        padding: const EdgeInsets.all(12),
         child: _buildBottomButtons(),
       ),
     );
@@ -650,8 +651,8 @@ class _EmployeePersonalDataPageState extends State<EmployeePersonalDataPage> {
         SizedBox(width: 12),
         Expanded(
           child: CustomElevatedButton(
-            onPressed: () {},
-            loading: true,
+            onPressed: () => context.push(AppRoutes.createEmploymentAgreement.path),
+            loading: false,
             child: Text("Terima"),
           ),
         ),
