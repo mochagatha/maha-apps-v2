@@ -17,6 +17,8 @@ import 'package:maha_apps_v2/features/biodata/presentation/providers/statement_l
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/create_employment_agreement_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/detail_employment_agareement_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
+import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/e_matrai_page.dart';
+import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/detail_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/edit_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/settings_work_hours_page.dart';
@@ -474,6 +476,16 @@ class AppRouter {
           path: AppRoutes.companyCode.path,
           name: AppRoutes.companyCode.name,
           builder: (context, state) => const CompanyCodePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.recruitmentEMatrai.path,
+          name: AppRoutes.recruitmentEMatrai.name,
+          builder: (context, state) => const EMatraiPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.employeeEMatrai.path,
+          name: AppRoutes.employeeEMatrai.name,
+          builder: (context, state) => const EmployeeEMatraiPage(),
         ),
 
         // Organizational Structure Routes

@@ -1,3 +1,4 @@
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
@@ -19,33 +20,40 @@ class RecruitmentRemoteDataSourceImpl implements RecruitmentRemoteDataSource {
   RecruitmentRemoteDataSourceImpl({required this.client});
 
   // Define all available recruitment menus
-  static const List<Map<String, dynamic>> _allRecruitmentMenus = [
+  static final List<Map<String, dynamic>> _allRecruitmentMenus = [
     {
-      'id': 'REKRUTMENT/VERIFIKASI_DATA',
+      'id': AppConstants.menu.subRekrutmen.verifikasiData,
       'label': 'Verifikasi Data',
       'icon': 'assets/images/icon/icon_verifikasi_data.svg',
-      'route': '/recruitment/verification-data',
+      'route': AppRoutes.employeeVerification.path,
       'count': 0,
     },
     {
-      'id': 'REKRUTMENT/PERJANJIAN_KERJA',
+      'id': AppConstants.menu.subRekrutmen.perjanjianKerja,
       'label': 'Perjanjian Kerja',
       'icon': 'assets/images/icon/icon_verifikasi_data_hrManager.svg',
       'route': null, // Will be implemented later
       'count': 0,
     },
     {
-      'id': 'REKRUTMENT/AKTIVASI_BPJS',
+      'id': AppConstants.menu.subRekrutmen.aktivasiBpjs,
       'label': 'Aktivasi BPJS',
       'icon': 'assets/images/icon/aktivasi_bpjs.svg',
       'route': null, // Will be implemented later
       'count': 0,
     },
     {
-      'id': 'REKRUTMENT/KODE_PERUSAHAAN',
+      'id': AppConstants.menu.subRekrutmen.kodePerusahaan,
       'label': 'Kode Perusahaan',
       'icon': 'assets/images/icon/icon_verifikasi_kode.svg',
-      'route': '/recruitment/company-code',
+      'route': AppRoutes.companyCode.path,
+      'count': 0,
+    },
+    {
+      'id': AppConstants.menu.subRekrutmen.eMatrai,
+      'label': 'E-Matrai',
+      'icon': 'assets/images/icon/ic_e_matrai.svg',
+      'route': AppRoutes.recruitmentEMatrai.path,
       'count': 0,
     },
   ];

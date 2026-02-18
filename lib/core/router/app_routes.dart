@@ -82,6 +82,9 @@ class AppRoutes {
   static const companyCode = AppRoute('company-code', '/recruitment/company-code');
   static const recruitmentAgreement = AppRoute('recruitment-agreement', '/recruitment/agreement');
   static const recruitmentBpjsActivation = AppRoute('recruitment-bpjs-activation', '/recruitment/bpjs-activation');
+  static const recruitmentEMatrai = AppRoute('recruitment-e-matrai', '/recruitment/e-matrai');
+  static const employeeEMatrai = AppRoute('recruitment-employee-e-matrai', '/recruitment/e-matrai/employee');
+  static const workerEMatrai = AppRoute('recruitment-worker-e-matrai', '/recruitment/e-matrai/worker');
 
   // Organizational Structure
   static const organizationalStructure = AppRoute('organizational-structure', '/organizational-structure');

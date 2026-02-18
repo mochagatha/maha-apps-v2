@@ -65,7 +65,7 @@ class AppConstants {
   static const biodata = _BiodataConstants();
 
   // Menu
-  static const menu = _MenuConstraints();
+  static const menu = _MenuConstraints._();
 }
 
 class _BiodataConstants {
@@ -151,7 +151,7 @@ class _BiodataConstants {
 }
 
 class _MenuConstraints {
-  const _MenuConstraints();
+  const _MenuConstraints._();
   final String absensi = "ABSENSI";
   final String mengamati = "MENGAMATI";
   final String persetujuan = "PERSETUJUAN";
@@ -174,11 +174,21 @@ class _MenuConstraints {
   final String updateKontrak = "UPDATE_KONTRAK";
   final String database = "DATABASE";
 
-  final subPengaturan = const _PengaturanConstraints();
+  final subPengaturan = const _PengaturanConstraints._();
+  final subRekrutmen = const _RekrutmenConstraints._();
+}
+
+class _RekrutmenConstraints {
+  const _RekrutmenConstraints._();
+  final String verifikasiData = 'REKRUTMENT/VERIFIKASI_DATA';
+  final String perjanjianKerja = 'REKRUTMENT/PERJANJIAN_KERJA';
+  final String aktivasiBpjs = 'REKRUTMENT/AKTIVASI_BPJS';
+  final String kodePerusahaan = 'REKRUTMENT/KODE_PERUSAHAAN';
+  final String eMatrai = 'REKRUTMENT/E_MATRAI';
 }
 
 class _PengaturanConstraints {
-  const _PengaturanConstraints();
+  const _PengaturanConstraints._();
   final String absensi = "PENGATURAN/ABSENSI";
 
   final subAbsensi = const _PengaturanAbsensiConstraints._();

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/shared/theme/app_theme.dart';
+import 'package:maha_apps_v2/shared/widgets/custom_tab_bar.dart';
 import '../../../../../../core/utils/localization_extension.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 
@@ -24,19 +25,7 @@ class EmployeeDataVerificationPage extends StatelessWidget {
         appBar: CustomAppBar(title: context.l10n.employeeVerificationTitle),
         body: Column(
           children: [
-            TabBar(
-              padding: EdgeInsets.zero,
-              labelPadding: EdgeInsets.zero,
-              indicatorSize: TabBarIndicatorSize.tab,
-              unselectedLabelColor: Colors.grey,
-              dividerColor: Colors.grey,
-              tabs: [
-                _TabBarItem(title: "Semua", count: 0),
-                ...statusList.map((label) {
-                  return _TabBarItem(title: label, count: 0);
-                }),
-              ],
-            ),
+            CustomTabBar(statusList: statusList),
             Expanded(
               child: TabBarView(
                 children: [
@@ -95,35 +84,6 @@ class EmployeeDataVerificationPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _TabBarItem extends StatelessWidget {
-  const _TabBarItem({
-    required this.title,
-    required this.count,
-  });
-
-  final String title;
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tab(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: TextStyle(fontSize: 12),
-          ),
-          Text(
-            count.toString(),
-            style: TextStyle(fontSize: 12),
-          ),
-        ],
       ),
     );
   }

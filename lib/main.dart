@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/router/app_router.dart';
@@ -24,6 +25,8 @@ void main() async {
 
   // Initialize dependency injection
   await di.init();
+
+  Intl.defaultLocale = "id_ID";
 
   runApp(const MyApp());
 }
