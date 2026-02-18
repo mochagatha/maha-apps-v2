@@ -7,14 +7,14 @@ import '../../../../../../../../shared/widgets/success_dialog.dart';
 import '../provider/aktivasi_point_provider.dart';
 
 /// Activation Point Settings Page
-class SettingsKpiAktivasiPoint extends StatefulWidget {
-  const SettingsKpiAktivasiPoint({super.key});
+class SettingsKpiAktivasiPointPage extends StatefulWidget {
+  const SettingsKpiAktivasiPointPage({super.key});
 
   @override
-  State<SettingsKpiAktivasiPoint> createState() => _SettingsKpiAktivasiPointState();
+  State<SettingsKpiAktivasiPointPage> createState() => _SettingsKpiAktivasiPointPageState();
 }
 
-class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
+class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointPage> {
   @override
   void initState() {
     super.initState();
@@ -81,18 +81,6 @@ class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Info Section
-                const Text(
-                  'Info',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Info Card
                 Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -100,13 +88,41 @@ class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Text(
-                      'Pengaturan Aktivasi Point yang merupakan fitur otomatis point digunakan oleh karyawan berupa akumulasi penambahan / pengurangan pada karyawan pada periode tertentu',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade700,
-                        height: 1.5,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Pengaturan Aktivasi Point Karyawan',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Aktifkan Point Karyawan",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade700,
+                                  height: 1.5,
+                                ),
+                              ),
+                            ),
+                            _buildCustomToggle(
+                              value: provider.isMainActivationEnabled,
+                              onChanged: (value) {
+                                provider.toggleMainActivation(value);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -123,78 +139,30 @@ class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Header with toggle
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                'Pengaturan Aktivasi Point Karyawan',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                            _buildCustomToggle(
-                              value: provider.isMainActivationEnabled,
-                              onChanged: (value) {
-                                provider.toggleMainActivation(value);
-                              },
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        const Divider(height: 1),
-                        const SizedBox(height: 16),
-
                         // Header text
                         const Text(
-                          'Aktivasi Poin',
+                          'Pengaturan Aktivasi Point Karyawan Perorangan',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Aktifkan Poin Hari Karyawan',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
                           ),
                         ),
                         const SizedBox(height: 16),
 
                         // Search field
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Cari Nama Karyawan',
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade500,
+                            ),
+                            prefixIcon: Icon(Icons.search, color: Colors.grey.shade500, size: 20),
+                            border: InputBorder.none,
+                            isDense: true,
                           ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.search, color: Colors.grey.shade500, size: 20),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Cari Nama Karyawan',
-                                    hintStyle: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey.shade500,
-                                    ),
-                                    border: InputBorder.none,
-                                    isDense: true,
-                                  ),
-                                  style: const TextStyle(fontSize: 13),
-                                ),
-                              ),
-                            ],
-                          ),
+                          style: const TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 16),
 
@@ -306,19 +274,23 @@ class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
     return GestureDetector(
       onTap: () => onChanged(!value),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: value ? AppColors.primary : Colors.grey.shade400,
+          color: value ? AppColors.primary.withOpacity(0.2) : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: value ? AppColors.primary : Colors.grey.shade300,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (value) ...[
+              const SizedBox(width: 8),
               const Text(
                 'On',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -329,7 +301,7 @@ class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: value ? AppColors.primary : Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -342,19 +314,20 @@ class _SettingsKpiAktivasiPointState extends State<SettingsKpiAktivasiPoint> {
               child: Icon(
                 Icons.check,
                 size: 16,
-                color: value ? AppColors.primary : Colors.grey.shade400,
+                color: value ? Colors.white : Colors.grey.shade700,
               ),
             ),
             if (!value) ...[
               const SizedBox(width: 4),
-              const Text(
+              Text(
                 'Off',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.grey.shade700,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              const SizedBox(width: 8),
             ],
           ],
         ),

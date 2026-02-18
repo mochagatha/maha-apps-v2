@@ -24,6 +24,8 @@ import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/presentation/page/settings_kpi_aktivasi_point_page.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/aktivasi_point_provider.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/pages/settings_kpi_target_point_page.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 import '../../features/settings/features/kpi/features/ubah_periode_surat/presentation/pages/settings_kpi_ubah_periode_surat_page.dart';
@@ -686,6 +688,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<UbahPeriodeSuratProvider>(),
             child: const SettingsKpiUbahPeriodeSuratPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiPengaturanAktivasiPoint.path,
+          name: AppRoutes.settingsKpiPengaturanAktivasiPoint.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<AktivasiPointProvider>(),
+            child: const SettingsKpiAktivasiPointPage(),
           ),
         ),
 
