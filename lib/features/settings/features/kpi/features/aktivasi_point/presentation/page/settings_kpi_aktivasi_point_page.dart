@@ -126,7 +126,7 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
 
                 // Activation Point Settings Card
                 Card(
@@ -341,7 +341,7 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
     required ValueChanged<bool> onToggle,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 8, top: 8),
       child: Row(
         children: [
           // Avatar

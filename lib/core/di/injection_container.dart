@@ -5,6 +5,14 @@ import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_k
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/aktivasi_point_provider.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
+
+// Aktivasi Point KPI feature imports
+import '../../features/settings/features/kpi/features/aktivasi_point/data/datasources/aktivasi_point_remote_data_source.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/data/repositories/aktivasi_point_repository_impl.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/domain/repositories/aktivasi_point_repository.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/get_kpi_settings.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/update_global_kpi_setting.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/update_employee_kpi_setting.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
 
@@ -521,7 +529,26 @@ Future<void> init() async {
 
   // Aktivasi Point Provider
   sl.registerFactory(
-    () => AktivasiPointProvider(),
+    () => AktivasiPointProvider(
+      getKpiSettings: sl(),
+      updateGlobalKpiSetting: sl(),
+      updateEmployeeKpiSetting: sl(),
+    ),
+  );
+
+  // Aktivasi Point Use cases
+  sl.registerLazySingleton(() => GetKpiSettings(sl()));
+  sl.registerLazySingleton(() => UpdateGlobalKpiSetting(sl()));
+  sl.registerLazySingleton(() => UpdateEmployeeKpiSetting(sl()));
+
+  // Aktivasi Point Repository
+  sl.registerLazySingleton<AktivasiPointRepository>(
+    () => AktivasiPointRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Aktivasi Point Data sources
+  sl.registerLazySingleton<AktivasiPointRemoteDataSource>(
+    () => AktivasiPointRemoteDataSourceImpl(apiClient: sl()),
   );
 
   // Penilaian Kinerja Provider
