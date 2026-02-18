@@ -38,12 +38,24 @@ class TargetPointRemoteDataSourceImpl implements TargetPointRemoteDataSource {
 
       if (response.statusCode == 200) {
         // Extract data from V1 API response format
-        final data = response.data['data']['target_point'];
+        // The response has nested structure: data.target_point
+        final responseData = response.data['data'];
 
-        if (data is List) {
-          return data.map((json) => TargetPointIndicatorModel.fromJson(json)).toList();
+        if (responseData == null) {
+          throw ServerException('Invalid response format: data is null');
+        }
+
+        final targetPointData = responseData['target_point'];
+
+        // Handle null or empty target_point array
+        if (targetPointData == null) {
+          return []; // Return empty list if no target_point data
+        }
+
+        if (targetPointData is List) {
+          return targetPointData.map((json) => TargetPointIndicatorModel.fromJson(json)).toList();
         } else {
-          throw ServerException('Invalid response format: data is not a list');
+          throw ServerException('Invalid response format: target_point is not a list');
         }
       } else {
         throw ServerException(
