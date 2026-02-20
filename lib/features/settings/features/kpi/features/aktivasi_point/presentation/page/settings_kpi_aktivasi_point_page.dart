@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../../../../../core/router/app_routes.dart';
 import '../../../../../../../../shared/theme/app_theme.dart';
 import '../../../../../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../../../../../shared/widgets/custom_app_bar.dart';
@@ -196,6 +198,15 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
                           ...provider.filteredEmployees.map((employee) {
                             return _buildEmployeeItem(
                               employee: employee,
+                              onTap: () async {
+                                await context.pushNamed(
+                                  AppRoutes.settingsKpiPengaturanAktivasiPointDetail.name,
+                                  pathParameters: {'employeeId': employee.id.toString()},
+                                );
+                                if (mounted) {
+                                  context.read<AktivasiPointProvider>().loadActivationSettings();
+                                }
+                              },
                             );
                           }).toList(),
                       ],
@@ -382,58 +393,63 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
   /// Build employee list item
   Widget _buildEmployeeItem({
     required EmployeeActivation employee,
+    VoidCallback? onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8, top: 8),
-      child: Row(
-        children: [
-          // Avatar
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                employee.name.substring(0, 1).toUpperCase(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8, top: 8),
+        child: Row(
+          children: [
+            // Avatar
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  employee.name.substring(0, 1).toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          // Name and job title
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  employee.name,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+            const SizedBox(width: 12),
+            // Name and job title
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    employee.name,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  employee.jobTitle,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
+                  const SizedBox(height: 2),
+                  Text(
+                    employee.jobTitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // Status indicator (read-only)
-          _buildStatusChip(employee.isActive),
-        ],
+            // Status indicator (read-only)
+            _buildStatusChip(employee.isActive),
+          ],
+        ),
       ),
     );
   }

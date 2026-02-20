@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/aktivasi_point_provider.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/employee_kpi_detail_provider.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 
 // Aktivasi Point KPI feature imports
@@ -11,6 +12,7 @@ import '../../features/settings/features/kpi/features/aktivasi_point/data/dataso
 import '../../features/settings/features/kpi/features/aktivasi_point/data/repositories/aktivasi_point_repository_impl.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/domain/repositories/aktivasi_point_repository.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/get_kpi_settings.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/get_employee_kpi_by_id.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/update_global_kpi_setting.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/domain/usecases/update_employee_kpi_setting.dart';
 import '../network/api_client.dart';
@@ -536,8 +538,17 @@ Future<void> init() async {
     ),
   );
 
+  // Employee KPI Detail Provider
+  sl.registerFactory(
+    () => EmployeeKpiDetailProvider(
+      getEmployeeKpiById: sl(),
+      updateEmployeeKpiSetting: sl(),
+    ),
+  );
+
   // Aktivasi Point Use cases
   sl.registerLazySingleton(() => GetKpiSettings(sl()));
+  sl.registerLazySingleton(() => GetEmployeeKpiById(sl()));
   sl.registerLazySingleton(() => UpdateGlobalKpiSetting(sl()));
   sl.registerLazySingleton(() => UpdateEmployeeKpiSetting(sl()));
 

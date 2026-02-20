@@ -25,7 +25,9 @@ import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/presentation/page/settings_kpi_aktivasi_point_page.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/presentation/page/settings_kpi_aktivasi_point_detail_page.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/aktivasi_point_provider.dart';
+import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/employee_kpi_detail_provider.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/pages/settings_kpi_target_point_page.dart';
 import '../../features/settings/features/kpi/features/target_point/presentation/providers/target_point_provider.dart';
 import '../../features/settings/features/kpi/features/ubah_periode_surat/presentation/pages/settings_kpi_ubah_periode_surat_page.dart';
@@ -674,12 +676,9 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.settingsKpiPenilaianKinerja.path,
           name: AppRoutes.settingsKpiPenilaianKinerja.name,
-          // builder: (context, state) => ChangeNotifierProvider(
-          //   create: (_) => sl<PenilaianKinerjaProvider>(),
-          //   child: const SettingsKpiPenilaianKinerjaPage(),
-          // ),
-          builder: (context, state) => const SettingsPlaceholderPage(
-            title: 'Penilaian Kinerja',
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<PenilaianKinerjaProvider>(),
+            child: const SettingsKpiPenilaianKinerjaPage(),
           ),
         ),
         GoRoute(
@@ -697,6 +696,17 @@ class AppRouter {
             create: (_) => sl<AktivasiPointProvider>(),
             child: const SettingsKpiAktivasiPointPage(),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsKpiPengaturanAktivasiPointDetail.path,
+          name: AppRoutes.settingsKpiPengaturanAktivasiPointDetail.name,
+          builder: (context, state) {
+            final employeeId = int.parse(state.pathParameters['employeeId']!);
+            return ChangeNotifierProvider(
+              create: (_) => sl<EmployeeKpiDetailProvider>(),
+              child: SettingsKpiAktivasiPointDetailPage(employeeId: employeeId),
+            );
+          },
         ),
 
         // Settings Routes

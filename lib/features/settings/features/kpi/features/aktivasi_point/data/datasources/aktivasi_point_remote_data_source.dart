@@ -1,10 +1,14 @@
 import '../../../../../../../../core/network/api_client.dart';
+import '../models/employee_kpi_model.dart';
 import '../models/kpi_settings_model.dart';
 
 /// Remote data source for Aktivasi Point (KPI Settings)
 abstract class AktivasiPointRemoteDataSource {
   /// Get KPI settings from API
   Future<KpiSettingsModel> getKpiSettings();
+
+  /// Get KPI setting for a specific employee by ID
+  Future<EmployeeKpiModel> getEmployeeKpiById(int employeeId);
 
   /// Update global KPI activation setting
   Future<void> updateGlobalKpiSetting({required bool isActive});
@@ -37,6 +41,26 @@ class AktivasiPointRemoteDataSourceImpl implements AktivasiPointRemoteDataSource
       } else {
         throw Exception(
           response.data['message'] ?? 'Failed to get KPI settings',
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<EmployeeKpiModel> getEmployeeKpiById(int employeeId) async {
+    try {
+      final response = await apiClient.dioGolang.get(
+        '/employee/employee-kpi-setting/get-by-employee/$employeeId',
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data['data'];
+        return EmployeeKpiModel.fromJson(data);
+      } else {
+        throw Exception(
+          response.data['message'] ?? 'Failed to get employee KPI setting',
         );
       }
     } catch (e) {
