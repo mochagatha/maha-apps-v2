@@ -42,6 +42,10 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
         final success = await provider.saveSettings();
 
         if (success && mounted) {
+          await provider.loadActivationSettings();
+
+          if (!mounted) return;
+
           // Show success dialog
           SuccessDialog.show(
             context,
@@ -170,9 +174,6 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
                         ...provider.employees.map((employee) {
                           return _buildEmployeeItem(
                             employee: employee,
-                            onToggle: (value) {
-                              provider.toggleEmployeeActivation(employee.id, value);
-                            },
                           );
                         }).toList(),
                       ],
@@ -335,10 +336,30 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
     );
   }
 
+  Widget _buildStatusChip(bool isActive) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: isActive ? AppColors.primary.withOpacity(0.12) : Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: isActive ? AppColors.primary : Colors.grey.shade300,
+        ),
+      ),
+      child: Text(
+        isActive ? 'ON' : 'OFF',
+        style: TextStyle(
+          color: isActive ? AppColors.primary : Colors.grey.shade700,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
   /// Build employee list item
   Widget _buildEmployeeItem({
     required EmployeeActivation employee,
-    required ValueChanged<bool> onToggle,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8, top: 8),
@@ -388,11 +409,8 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
               ],
             ),
           ),
-          // Toggle
-          _buildCustomToggle(
-            value: employee.isActive,
-            onChanged: onToggle,
-          ),
+          // Status indicator (read-only)
+          _buildStatusChip(employee.isActive),
         ],
       ),
     );
