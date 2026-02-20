@@ -79,6 +79,7 @@ class AktivasiPointProvider extends ChangeNotifier {
   AktivasiPointStatus _status = AktivasiPointStatus.initial;
   String? _errorMessage;
   bool _isMainActivationEnabled = false;
+  String _searchQuery = '';
   List<EmployeeActivation> _employees = [];
   List<EmployeeActivation> _originalEmployees = [];
 
@@ -86,7 +87,20 @@ class AktivasiPointProvider extends ChangeNotifier {
   AktivasiPointStatus get status => _status;
   String? get errorMessage => _errorMessage;
   bool get isMainActivationEnabled => _isMainActivationEnabled;
+  String get searchQuery => _searchQuery;
   List<EmployeeActivation> get employees => _employees;
+  List<EmployeeActivation> get filteredEmployees {
+    final query = _searchQuery.trim().toLowerCase();
+    if (query.isEmpty) {
+      return _employees;
+    }
+
+    return _employees.where((employee) {
+      return employee.name.toLowerCase().contains(query) ||
+          employee.nik.toLowerCase().contains(query) ||
+          employee.jobTitle.toLowerCase().contains(query);
+    }).toList();
+  }
 
   /// Load activation point settings
   Future<void> loadActivationSettings() async {
@@ -125,6 +139,15 @@ class AktivasiPointProvider extends ChangeNotifier {
   /// Toggle main activation
   void toggleMainActivation(bool value) {
     _isMainActivationEnabled = value;
+    notifyListeners();
+  }
+
+  /// Update search query for employee filtering
+  void setSearchQuery(String value) {
+    if (_searchQuery == value) {
+      return;
+    }
+    _searchQuery = value;
     notifyListeners();
   }
 

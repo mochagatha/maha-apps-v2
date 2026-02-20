@@ -15,6 +15,8 @@ class SettingsKpiAktivasiPointPage extends StatefulWidget {
 }
 
 class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointPage> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -22,6 +24,12 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
       final provider = context.read<AktivasiPointProvider>();
       provider.loadActivationSettings();
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _handleReset() {
@@ -156,6 +164,8 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
 
                         // Search field
                         TextFormField(
+                          controller: _searchController,
+                          onChanged: provider.setSearchQuery,
                           decoration: InputDecoration(
                             hintText: 'Cari Nama Karyawan',
                             hintStyle: TextStyle(
@@ -171,11 +181,23 @@ class _SettingsKpiAktivasiPointPageState extends State<SettingsKpiAktivasiPointP
                         const SizedBox(height: 16),
 
                         // Employee list
-                        ...provider.employees.map((employee) {
-                          return _buildEmployeeItem(
-                            employee: employee,
-                          );
-                        }).toList(),
+                        if (provider.filteredEmployees.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Text(
+                              'Karyawan tidak ditemukan',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          )
+                        else
+                          ...provider.filteredEmployees.map((employee) {
+                            return _buildEmployeeItem(
+                              employee: employee,
+                            );
+                          }).toList(),
                       ],
                     ),
                   ),
