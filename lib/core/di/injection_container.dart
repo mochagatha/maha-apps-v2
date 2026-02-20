@@ -2,6 +2,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
+
+// Penilaian Kinerja KPI feature imports
+import '../../features/settings/features/kpi/features/penilaian_kinerja/data/datasources/penilaian_kinerja_remote_data_source.dart';
+import '../../features/settings/features/kpi/features/penilaian_kinerja/data/repositories/penilaian_kinerja_repository_impl.dart';
+import '../../features/settings/features/kpi/features/penilaian_kinerja/domain/repositories/penilaian_kinerja_repository.dart';
+import '../../features/settings/features/kpi/features/penilaian_kinerja/domain/usecases/get_kpi_indicators.dart';
+import '../../features/settings/features/kpi/features/penilaian_kinerja/domain/usecases/update_many_kpi_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/aktivasi_point_provider.dart';
 import '../../features/settings/features/kpi/features/aktivasi_point/presentation/provider/employee_kpi_detail_provider.dart';
@@ -564,7 +571,24 @@ Future<void> init() async {
 
   // Penilaian Kinerja Provider
   sl.registerFactory(
-    () => PenilaianKinerjaProvider(),
+    () => PenilaianKinerjaProvider(
+      getKpiIndicatorsUseCase: sl(),
+      updateManyKpiIndicatorsUseCase: sl(),
+    ),
+  );
+
+  // Penilaian Kinerja Use cases
+  sl.registerLazySingleton(() => GetKpiIndicators(sl()));
+  sl.registerLazySingleton(() => UpdateManyKpiIndicators(sl()));
+
+  // Penilaian Kinerja Repository
+  sl.registerLazySingleton<PenilaianKinerjaRepository>(
+    () => PenilaianKinerjaRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Penilaian Kinerja Data sources
+  sl.registerLazySingleton<PenilaianKinerjaRemoteDataSource>(
+    () => PenilaianKinerjaRemoteDataSourceImpl(apiClient: sl()),
   );
 
   //! Features - Pelacakan Jam Kerja

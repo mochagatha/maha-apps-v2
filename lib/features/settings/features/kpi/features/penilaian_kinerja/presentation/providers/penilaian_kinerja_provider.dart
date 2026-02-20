@@ -1,102 +1,173 @@
 import 'package:flutter/foundation.dart';
+import '../../../../../../../../../core/error/failures.dart';
+import '../../../../../../../../../core/usecases/usecase.dart';
+import '../../domain/entities/kpi_indicator.dart';
+import '../../domain/entities/kpi_indicators_data.dart';
+import '../../domain/entities/kpi_role_indicator.dart';
+import '../../domain/repositories/penilaian_kinerja_repository.dart';
+import '../../domain/usecases/get_kpi_indicators.dart';
+import '../../domain/usecases/update_many_kpi_indicators.dart';
 
-/// Model for work plan position
+/// Local mutable model for a role-based indicator (work plan / task)
 class WorkPlanPosition {
+  final int id;
   final String position;
   int minPoint;
   int maxPoint;
 
   WorkPlanPosition({
+    required this.id,
     required this.position,
     required this.minPoint,
     required this.maxPoint,
   });
 
-  WorkPlanPosition copyWith({
-    String? position,
-    int? minPoint,
-    int? maxPoint,
-  }) {
+  factory WorkPlanPosition.fromEntity(KpiRoleIndicator entity) {
     return WorkPlanPosition(
-      position: position ?? this.position,
+      id: entity.id,
+      position: entity.roleName,
+      minPoint: entity.minPoint,
+      maxPoint: entity.maxPoint,
+    );
+  }
+
+  WorkPlanPosition copyWith({int? minPoint, int? maxPoint}) {
+    return WorkPlanPosition(
+      id: id,
+      position: position,
       minPoint: minPoint ?? this.minPoint,
       maxPoint: maxPoint ?? this.maxPoint,
     );
   }
 }
 
+/// Local mutable model for a value-based indicator (attendance / supervisor)
+class _IndicatorState {
+  final int id;
+  final String name;
+  final String indicatorName;
+  final String operator;
+  int value;
+  final String typeValue;
+  final String typeIndicator;
+
+  _IndicatorState.fromEntity(KpiIndicator e)
+    : id = e.id,
+      name = e.name,
+      indicatorName = e.indicatorName,
+      operator = e.operator,
+      value = e.value,
+      typeValue = e.typeValue,
+      typeIndicator = e.typeIndicator;
+}
+
 /// Provider for Performance Assessment feature
-/// Manages state for performance assessment configuration
 class PenilaianKinerjaProvider extends ChangeNotifier {
-  // Kehadiran (Attendance) State
-  int _maksimalPointAbsensi = 20;
-  int _terlambat = 50;
-  int _tidakAbsenPulang = 50;
-  int _sakit = 100;
-  int _manasikMasuk = 100;
+  final GetKpiIndicators getKpiIndicatorsUseCase;
+  final UpdateManyKpiIndicators updateManyKpiIndicatorsUseCase;
 
-  // Penilaian Atasan (Supervisor Assessment) State
-  int _maksimalPointAtasan = 20;
+  PenilaianKinerjaProvider({
+    required this.getKpiIndicatorsUseCase,
+    required this.updateManyKpiIndicatorsUseCase,
+  });
 
-  // Rencana Kerja (Work Plan) State
-  List<WorkPlanPosition> _workPlanPositions = [
-    WorkPlanPosition(position: 'Staf', minPoint: 5, maxPoint: 100),
-    WorkPlanPosition(position: 'SPV', minPoint: 50, maxPoint: 120),
-  ];
+  // Raw loaded data (used for reset)
+  KpiIndicatorsData? _originalData;
+
+  List<_IndicatorState> _attendanceItems = [];
+  List<_IndicatorState> _supervisorItems = [];
+  List<WorkPlanPosition> _workPlanPositions = [];
+  List<WorkPlanPosition> _taskPositions = [];
 
   bool _isLoading = false;
   String? _errorMessage;
 
-  // Getters - Kehadiran
-  int get maksimalPointAbsensi => _maksimalPointAbsensi;
-  int get terlambat => _terlambat;
-  int get tidakAbsenPulang => _tidakAbsenPulang;
-  int get sakit => _sakit;
-  int get manasikMasuk => _manasikMasuk;
+  // ──────────────────────────────────────────────────────────────────────────
+  // Getters
+  // ──────────────────────────────────────────────────────────────────────────
 
-  // Getters - Penilaian Atasan
-  int get maksimalPointAtasan => _maksimalPointAtasan;
-
-  // Getters - Rencana Kerja
-  List<WorkPlanPosition> get workPlanPositions => List.unmodifiable(_workPlanPositions);
-
-  // Getters - Common
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  bool get hasData => _originalData != null;
 
-  /// Update Kehadiran values
+  int get maksimalPointAbsensi => _attendanceItems.isNotEmpty ? _attendanceItems[0].value : 0;
+  int get terlambat => _attendanceItems.length > 1 ? _attendanceItems[1].value : 0;
+  int get tidakAbsenPulang => _attendanceItems.length > 2 ? _attendanceItems[2].value : 0;
+  int get sakit => _attendanceItems.length > 3 ? _attendanceItems[3].value : 0;
+  int get mangkirMasuk => _attendanceItems.length > 4 ? _attendanceItems[4].value : 0;
+
+  int get maksimalPointAtasan => _supervisorItems.isNotEmpty ? _supervisorItems[0].value : 0;
+
+  List<WorkPlanPosition> get workPlanPositions => List.unmodifiable(_workPlanPositions);
+  List<WorkPlanPosition> get taskPositions => List.unmodifiable(_taskPositions);
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Load from API
+  // ──────────────────────────────────────────────────────────────────────────
+
+  Future<void> loadKpiIndicators() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    final result = await getKpiIndicatorsUseCase(const NoParams());
+
+    result.fold(
+      (failure) {
+        _errorMessage = _mapFailureToMessage(failure);
+        _isLoading = false;
+        notifyListeners();
+      },
+      (data) {
+        _originalData = data;
+        _applyDataToState(data);
+        _isLoading = false;
+        notifyListeners();
+      },
+    );
+  }
+
+  void _applyDataToState(KpiIndicatorsData data) {
+    _attendanceItems = data.attendance.map(_IndicatorState.fromEntity).toList();
+    _supervisorItems = data.supervisorAssessment.map(_IndicatorState.fromEntity).toList();
+    _workPlanPositions = data.workPlan.map(WorkPlanPosition.fromEntity).toList();
+    _taskPositions = data.task.map(WorkPlanPosition.fromEntity).toList();
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Update helpers (called from the page before applyChanges)
+  // ──────────────────────────────────────────────────────────────────────────
+
   void updateMaksimalPointAbsensi(int value) {
-    _maksimalPointAbsensi = value;
+    if (_attendanceItems.isNotEmpty) _attendanceItems[0].value = value;
     notifyListeners();
   }
 
   void updateTerlambat(int value) {
-    _terlambat = value;
+    if (_attendanceItems.length > 1) _attendanceItems[1].value = value;
     notifyListeners();
   }
 
   void updateTidakAbsenPulang(int value) {
-    _tidakAbsenPulang = value;
+    if (_attendanceItems.length > 2) _attendanceItems[2].value = value;
     notifyListeners();
   }
 
   void updateSakit(int value) {
-    _sakit = value;
+    if (_attendanceItems.length > 3) _attendanceItems[3].value = value;
     notifyListeners();
   }
 
-  void updateManasikMasuk(int value) {
-    _manasikMasuk = value;
+  void updateMangkirMasuk(int value) {
+    if (_attendanceItems.length > 4) _attendanceItems[4].value = value;
     notifyListeners();
   }
 
-  /// Update Penilaian Atasan value
   void updateMaksimalPointAtasan(int value) {
-    _maksimalPointAtasan = value;
+    if (_supervisorItems.isNotEmpty) _supervisorItems[0].value = value;
     notifyListeners();
   }
 
-  /// Update Work Plan Position
   void updateWorkPlanPosition(int index, {int? minPoint, int? maxPoint}) {
     if (index >= 0 && index < _workPlanPositions.length) {
       _workPlanPositions[index] = _workPlanPositions[index].copyWith(
@@ -107,71 +178,82 @@ class PenilaianKinerjaProvider extends ChangeNotifier {
     }
   }
 
-  /// Add new work plan position
-  void addWorkPlanPosition(WorkPlanPosition position) {
-    _workPlanPositions.add(position);
-    notifyListeners();
-  }
-
-  /// Remove work plan position
-  void removeWorkPlanPosition(int index) {
-    if (index >= 0 && index < _workPlanPositions.length) {
-      _workPlanPositions.removeAt(index);
+  void updateTaskPosition(int index, {int? minPoint, int? maxPoint}) {
+    if (index >= 0 && index < _taskPositions.length) {
+      _taskPositions[index] = _taskPositions[index].copyWith(
+        minPoint: minPoint,
+        maxPoint: maxPoint,
+      );
       notifyListeners();
     }
   }
 
-  /// Reset all values to default
-  void reset() {
-    _maksimalPointAbsensi = 20;
-    _terlambat = 50;
-    _tidakAbsenPulang = 50;
-    _sakit = 100;
-    _manasikMasuk = 100;
-    _maksimalPointAtasan = 20;
-    _workPlanPositions = [
-      WorkPlanPosition(position: 'Staf', minPoint: 5, maxPoint: 100),
-      WorkPlanPosition(position: 'SPV', minPoint: 50, maxPoint: 120),
-    ];
-    _errorMessage = null;
-    notifyListeners();
-  }
+  // ──────────────────────────────────────────────────────────────────────────
+  // Apply / Save
+  // ──────────────────────────────────────────────────────────────────────────
 
-  /// Apply/save the performance assessment changes
-  /// This is a placeholder - will be connected to use case later
   Future<bool> applyChanges() async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-    try {
-      // Simulate API call
-      await Future.delayed(const Duration(milliseconds: 500));
+    // Build payload from attendance + supervisor items (those with a `value` field)
+    final updateItems = <KpiIndicatorUpdateItem>[
+      ..._attendanceItems.map(
+        (e) => KpiIndicatorUpdateItem(id: e.id, value: e.value),
+      ),
+      ..._supervisorItems.map(
+        (e) => KpiIndicatorUpdateItem(id: e.id, value: e.value),
+      ),
+    ];
 
-      // TODO: Call use case when data/domain layers are implemented
-      // final result = await applyPerformanceAssessmentUseCase(params);
-      // return result.fold(
-      //   (failure) {
-      //     _errorMessage = _mapFailureToMessage(failure);
-      //     return false;
-      //   },
-      //   (success) => true,
-      // );
-
+    if (updateItems.isEmpty) {
       _isLoading = false;
       notifyListeners();
       return true;
-    } catch (e) {
-      _errorMessage = e.toString();
-      _isLoading = false;
-      notifyListeners();
-      return false;
     }
+
+    final result = await updateManyKpiIndicatorsUseCase(
+      UpdateManyKpiIndicatorsParams(items: updateItems),
+    );
+
+    return result.fold(
+      (failure) {
+        _errorMessage = _mapFailureToMessage(failure);
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      },
+      (_) {
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      },
+    );
   }
 
-  /// Clear error message
+  // ──────────────────────────────────────────────────────────────────────────
+  // Reset
+  // ──────────────────────────────────────────────────────────────────────────
+
+  void reset() {
+    if (_originalData != null) {
+      _applyDataToState(_originalData!);
+    }
+    _errorMessage = null;
+    notifyListeners();
+  }
+
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Helpers
+  // ──────────────────────────────────────────────────────────────────────────
+
+  String _mapFailureToMessage(Failure failure) {
+    return failure.message.isNotEmpty ? failure.message : 'Terjadi kesalahan';
   }
 }

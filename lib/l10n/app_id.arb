@@ -663,9 +663,9 @@
   "@performanceAssessmentSakit": {
     "description": "Sick label"
   },
-  "performanceAssessmentManasikMasuk": "Manasik Masuk",
+  "performanceAssessmentManasikMasuk": "Mangkir Masuk",
   "@performanceAssessmentManasikMasuk": {
-    "description": "Manasik attendance label"
+    "description": "Absent without leave label"
   },
   "performanceAssessmentPenilaianAtasan": "Penilaian Atasan",
   "@performanceAssessmentPenilaianAtasan": {

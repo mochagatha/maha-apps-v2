@@ -313,7 +313,7 @@
   "performanceAssessmentTerlambat": "Late",
   "performanceAssessmentTidakAbsenPulang": "No Checkout",
   "performanceAssessmentSakit": "Sick",
-  "performanceAssessmentManasikMasuk": "Manasik Attendance",
+  "performanceAssessmentManasikMasuk": "Absent Without Leave",
   "performanceAssessmentPenilaianAtasan": "Supervisor Assessment",
   "performanceAssessmentMaksimalPointAtasan": "Maximum Supervisor Point",
   "performanceAssessmentRencanaKerja": "Work Plan",
