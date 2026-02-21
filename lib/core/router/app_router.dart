@@ -27,13 +27,13 @@ import 'package:maha_apps_v2/features/recruitment/features/data_verification/pre
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/e_matrai_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/detail_work_hours_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/edit_work_hours_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/employee_absence_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/settings_work_hours_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/work_hour_placement_employee_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/work_hour_placement_worker_page.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/worker_absence_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/detail_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/edit_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/employee_absence_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/settings_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/work_hour_placement_employee_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/work_hour_placement_worker_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/worker_absence_page.dart';
 import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/pages/settings_kpi_penilaian_kinerja_page.dart';
 import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
@@ -359,7 +359,6 @@ class AppRouter {
             return ArchiveAgreementPage(options: extra["options"]);
           },
         ),
-        // TODO: submenu paths;;
         GoRoute(
           path: AppRoutes.welcomeBiodata.path,
           name: AppRoutes.welcomeBiodata.name,
