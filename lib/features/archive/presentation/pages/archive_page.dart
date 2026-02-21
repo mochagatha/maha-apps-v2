@@ -2,56 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/core/utils/constants.dart';
+import 'package:maha_apps_v2/features/archive/presentation/widgets/archive_menu_item.dart';
 import 'package:provider/provider.dart';
 
-import '../config/settings_menu_registry.dart';
+import '../config/archive_menu_registry.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../home/presentation/providers/home_provider.dart';
 import '../../../../core/config/sub_menu_config.dart';
-import '../widgets/language_selector.dart';
-import '../widgets/settings_menu_item.dart' as settings;
 
 /// Settings page displaying all available settings menu items
 /// Uses centralized configuration for maintainability and l10n support
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class ArchivePage extends StatefulWidget {
+  const ArchivePage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<ArchivePage> createState() => _ArchivePageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _ArchivePageState extends State<ArchivePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.menuPengaturan),
+      appBar: CustomAppBar(title: context.l10n.menuArsip),
       body: Consumer<HomeProvider>(
         builder: (context, homeProvider, child) {
           // Get settings menus from hierarchical cache
-          final settingsParent = homeProvider.hierarchicalMenus.firstWhere(
-            (element) => element.code == AppConstants.menu.pengaturan,
+          final archiveParent = homeProvider.hierarchicalMenus.firstWhere(
+            (element) => element.code == AppConstants.menu.arsip,
             orElse: () => homeProvider.hierarchicalMenus.first,
           );
 
-          final settingsMenus = settingsParent.children ?? [];
+          final archiveMenus = archiveParent.children ?? [];
 
           // Show loading if no menus yet
-          if (settingsMenus.isEmpty) {
+          if (archiveMenus.isEmpty) {
             return const Center(
               child: SpinKitThreeBounce(color: Colors.red),
             );
           }
 
           // Filter only menus that have configuration in registry
-          final validMenus = settingsMenus
-              .where((menu) => SettingsMenuRegistry.hasConfig(menu.code))
+          final validMenus = archiveMenus
+              .where((menu) => ArchiveMenuRegistry.hasConfig(menu.code))
               .toList();
 
           // Sort by order from registry
           validMenus.sort((a, b) {
-            final configA = SettingsMenuRegistry.getConfig(a.code);
-            final configB = SettingsMenuRegistry.getConfig(b.code);
+            final configA = ArchiveMenuRegistry.getConfig(a.code);
+            final configB = ArchiveMenuRegistry.getConfig(b.code);
             return (configA?.order ?? 0).compareTo(configB?.order ?? 0);
           });
 
@@ -65,13 +64,13 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 // Settings Menu Items
                 ...validMenus.map((menuItem) {
-                  final config = SettingsMenuRegistry.getConfig(menuItem.code);
+                  final config = ArchiveMenuRegistry.getConfig(menuItem.code);
                   if (config == null) return const SizedBox.shrink();
 
                   // Get localized title using the titleKey from config
                   final localizedTitle = _getLocalizedTitle(context, config.titleKey);
 
-                  return settings.SettingsMenuItem(
+                  return ArchiveMenuItem(
                     iconPath: config.iconPath,
                     title: localizedTitle,
                     onTap: () => _handleMenuTap(context, menuItem.code, config),
@@ -92,38 +91,12 @@ class _SettingsPageState extends State<SettingsPage> {
     final l10n = context.l10n;
 
     switch (titleKey) {
-      case 'settingsAbsensi':
-        return l10n.settingsAbsensi;
-      case 'settingsFormatDanDraf':
-        return l10n.settingsFormatDanDraf;
-      case 'settingsPenempatanKerja':
-        return l10n.settingsPenempatanKerja;
-      case 'settingsLibur':
-        return l10n.settingsLibur;
-      case 'settingsLembur':
-        return l10n.settingsLembur;
-      case 'settingsTindakanKaryawan':
-        return l10n.settingsTindakanKaryawan;
-      case 'settingsAksesLayar':
-        return l10n.settingsAksesLayar;
-      case 'settingsHakAksesMenu':
-        return l10n.settingsHakAksesMenu;
-      case 'settingsEmail':
-        return l10n.settingsEmail;
-      case 'settingsWhatsapp':
-        return l10n.settingsWhatsapp;
-      case 'settingsAlurOperasional':
-        return l10n.settingsAlurOperasional;
-      case 'settingsPelacakanJamKerja':
-        return l10n.settingsPelacakanJamKerja;
-      case 'settingsStrukturOrganisasi':
-        return l10n.settingsStrukturOrganisasi;
-      case 'settingsKpi':
-        return l10n.settingsKpi;
-      case 'settingsBahasa':
-        return l10n.settingsBahasa;
-      case 'settingsNotifikasi':
-        return l10n.settingsNotifikasi;
+      case 'arsipRegistrasi':
+        return 'Regiastrasi';
+      case 'arsipPernyataan':
+        return 'Pernyataan';
+      case 'arsipPerjanjian':
+        return 'Perjanjian';
       default:
         return titleKey; // Fallback to key if not found
     }
@@ -136,16 +109,16 @@ class _SettingsPageState extends State<SettingsPage> {
     SubMenuConfig config,
   ) {
     // Check if menu has custom action (e.g., language dialog)
-    if (config.hasCustomAction) {
-      if (menuCode == config.code) {
-        LanguageSelector.show(context);
-      }
-      return;
-    }
+    // if (config.hasCustomAction) {
+    //   if (menuCode == config.code) {
+    //     LanguageSelector.show(context);
+    //   }
+    //   return;
+    // }
 
     // Navigate to route if available
     if (config.routePath != null) {
-      context.push(config.routePath!);
+      context.push(config.routePath!, extra: config.extra);
     }
   }
 }

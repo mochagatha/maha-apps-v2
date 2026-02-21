@@ -40,7 +40,14 @@ class AppRoutes {
   static const listFeature = AppRoute('list-feature', '/list-feature');
   static const requestHomeScreen = AppRoute('request-home', '/request-home');
   static const administration = AppRoute('administration', '/administration');
-  static const arsipMenu = AppRoute('arsip-menu', '/arsip-menu');
+  static const archiveMenu = AppRoute('arsip-menu', '/arsip-menu');
+  static const archiveYearMenu = AppRoute('arsip-year-menu', '/arsip-menu/year');
+  static const archiveMonthMenu = AppRoute('arsip-month-menu', '/arsip-menu/month');
+  static const archiveWorkerStatusMenu = AppRoute('arsip-worker-status-menu', '/arsip-menu/worker-status');
+  static const archiveRegistrationMenu = AppRoute('arsip-registration-menu', '/arsip-menu/registration');
+  static const archiveStatementMenu = AppRoute('arsip-statement-menu', '/arsip-menu/statement');
+  static const archiveAgreementMenu = AppRoute('arsip-agreement-menu', '/arsip-menu/agreement');
+  static const archiveDocumentsMenu = AppRoute('arsip-documents-menu', '/arsip-menu/documents');
   static const dataAbsensi = AppRoute('data-absensi', '/data-absensi');
   static const dataKaryawanList = AppRoute('data-karyawan-list', '/data-karyawan-list');
   static const listProyek = AppRoute('list-proyek', '/list-proyek');

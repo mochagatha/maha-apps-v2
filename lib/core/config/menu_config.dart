@@ -42,7 +42,7 @@ class MenuConfig {
     AppConstants.menu.tugas: AppRoutes.listFeature.path,
     AppConstants.menu.pengajuan: AppRoutes.requestHomeScreen.path,
     AppConstants.menu.administrasi: AppRoutes.administration.path,
-    AppConstants.menu.arsip: AppRoutes.arsipMenu.path,
+    AppConstants.menu.arsip: AppRoutes.archiveMenu.path,
     AppConstants.menu.dataAbsensi: AppRoutes.dataAbsensi.path,
     AppConstants.menu.dataKaryawan: AppRoutes.dataKaryawanList.path,
     AppConstants.menu.proyek: AppRoutes.listProyek.path,

@@ -49,7 +49,7 @@ class WelcomeMenuGrid extends StatelessWidget {
       {
         'icon': 'assets/images/icon/arsip.png',
         'label': 'Arsip',
-        'action': () => context.pushNamed(AppRoutes.arsipMenu.name),
+        'action': () => context.pushNamed(AppRoutes.archiveMenu.name),
         'isAsset': true,
       },
     ];

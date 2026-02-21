@@ -1,6 +1,14 @@
 // GoRouter Configuration
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_agreement_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_documents_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_month_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_work_status_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_year_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/archive_statement_page.dart';
+import 'package:maha_apps_v2/features/archive/presentation/pages/arsip_registration_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/bank_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/create_signature_page.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/pages/employee_employment_agreement_page.dart';
@@ -275,6 +283,71 @@ class AppRouter {
             child: const AbsensiPage(),
           ),
         ),
+        GoRoute(
+          path: AppRoutes.archiveMenu.path,
+          name: AppRoutes.archiveMenu.name,
+          builder: (context, state) => ArchivePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.archiveYearMenu.path,
+          name: AppRoutes.archiveYearMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArchiveYearPage(options: extra["options"]);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.archiveMonthMenu.path,
+          name: AppRoutes.archiveMonthMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArchiveMonthPage(options: extra["options"]);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.archiveWorkerStatusMenu.path,
+          name: AppRoutes.archiveWorkerStatusMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArchiveWorkStatusPage(options: extra["options"]);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.archiveDocumentsMenu.path,
+          name: AppRoutes.archiveDocumentsMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArchiveDocumentsPage(
+              title: extra["title"],
+              options: extra["options"],
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.archiveRegistrationMenu.path,
+          name: AppRoutes.archiveRegistrationMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArsipRegistrationPage(options: extra["options"]);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.archiveStatementMenu.path,
+          name: AppRoutes.archiveStatementMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArchiveStatementPage(options: extra["options"]);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.archiveAgreementMenu.path,
+          name: AppRoutes.archiveAgreementMenu.name,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ArchiveAgreementPage(options: extra["options"]);
+          },
+        ),
+        // TODO: submenu paths;;
         GoRoute(
           path: AppRoutes.welcomeBiodata.path,
           name: AppRoutes.welcomeBiodata.name,

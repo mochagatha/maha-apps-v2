@@ -21,11 +21,14 @@ class SubMenuConfig extends Equatable {
   /// Display order in the list
   final int order;
 
+  final Object? extra;
+
   const SubMenuConfig({
     required this.code,
     required this.titleKey,
     required this.iconPath,
     this.routePath,
+    this.extra,
     this.hasCustomAction = false,
     this.order = 0,
   });

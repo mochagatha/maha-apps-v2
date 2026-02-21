@@ -176,6 +176,53 @@ class _MenuConstraints {
 
   final subPengaturan = const _PengaturanConstraints._();
   final subRekrutmen = const _RekrutmenConstraints._();
+  final subArsip = const _ArsipConstraints._();
+}
+
+class _ArsipConstraints {
+  const _ArsipConstraints._();
+  final String strukturOrganisasi = "ARSIP/STRUKTUR_ORGANISASI";
+  final String registrasi = "ARSIP/REGISTRASI";
+  final String pernyataan = "ARSIP/PERNYATAAN";
+  final String perjanjian = "ARSIP/PERJANJIAN";
+  final String dataKaryawan = "ARSIP/DATA_KARYAWAN";
+  final String kehadiran = "ARSIP/KEHADIRAN";
+  final String lembur = "ARSIP/LEMBUR";
+  final String izin = "ARSIP/IZIN";
+  final String cuti = "ARSIP/CUTI";
+  final String sakit = "ARSIP/SAKIT";
+  final String absenDimanaSaja = "ARSIP/ABSEN_DIMANA_SAJA";
+  final String serahTerima = "ARSIP/SERAH_TERIMA";
+  final String pengunduranDiri = "ARSIP/PENGUNDURAN_DIRI";
+  final String kpi = "ARSIP/KPI";
+  final String permintaan = "ARSIP/PERMINTAAN";
+  final String rencanaKerja = "ARSIP/RENCANA_KERJA";
+  final String tugas = "ARSIP/TUGAS";
+  final String potongan = "ARSIP/POTONGAN";
+  final String pendapatan = "ARSIP/PENDAPATAN";
+  final String pinjaman = "ARSIP/PINJAMAN";
+  final String kenaikanGaji = "ARSIP/KENAIKAN_GAJI";
+  final String penurunanGaji = "ARSIP/PENURUNAN_GAJI";
+  final String promosiKaryawan = "ARSIP/PROMOSI_KARYAWAN";
+  final String demoKaryawan = "ARSIP/DEMOSI_KARYAWAN";
+  final String mutasiKaryawan = "ARSIP/MUTASI_KARYAWAN";
+  final String gaji = "ARSIP/GAJI";
+  final String anggaran = "ARSIP/ANGGARAN";
+
+  final tipeDokumen = const _TipeDokumenConstants._();
+}
+
+class _TipeDokumenConstants {
+  const _TipeDokumenConstants._();
+  final String syaratDanKetentuan = "SYARAT DAN KETENTUAN PENGGUNAAN APLIKASI";
+  final String privacyPolicy = "KEBIJAKAN PRIVASI PENGGUNAAN APLIKASI";
+  final String peraturanPerusahaan = "PERATURAN PERUSAHAAN";
+  final String rekeningBank = "SURAT PERNYATAAN REKENING BANK";
+  final String tandaTangan = "SURAT PERNYATAAN TANDA TANGAN";
+  final String pernyataan = "SURAT PERNYATAAN";
+  final String perjanjianKerja = "SURAT PERJANJIAN KERJA";
+  final String suratPernyataan1 = "SURAT PERNYATAAN 1";
+  final String suratPernyataan2 = "SURAT PERNYATAAN 2";
 }
 
 class _RekrutmenConstraints {
