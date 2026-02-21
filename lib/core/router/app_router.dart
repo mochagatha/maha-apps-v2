@@ -30,6 +30,8 @@ import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/detail_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/edit_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/settings_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/pages/settings_kpi_penilaian_kinerja_page.dart';
+import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../features/authentication/presentation/pages/register_page.dart';
 import '../../features/authentication/presentation/pages/forgot_password_page.dart';
