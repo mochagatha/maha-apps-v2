@@ -236,6 +236,14 @@ class AppRoutes {
     'settings-absensi-pekerja-harian',
     '/settings/absensi/pekerja-harian',
   );
+  static const settingsAbsensiPenempatanKaryawan = AppRoute(
+    'settings-absensi-penempatan-karyawan',
+    '/settings/absensi/penempatan/karyawan',
+  );
+  static const settingsAbsensiPenempatanPekerjaHarian = AppRoute(
+    'settings-absensi-penempatan-pekerja-harian',
+    '/settings/absensi/penempatan/pekerja-harian',
+  );
   static const settingsAbsensiHariLiburCuti = AppRoute(
     'settings-absensi-hari-libur-cuti',
     '/settings/absensi/hari-libur-cuti-bersama',

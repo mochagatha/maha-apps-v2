@@ -29,7 +29,11 @@ import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/detail_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/edit_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/employee_absence_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/settings_work_hours_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/work_hour_placement_employee_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/work_hour_placement_worker_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/presentation/pages/worker_absence_page.dart';
 import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/pages/settings_kpi_penilaian_kinerja_page.dart';
 import 'package:maha_apps_v2/features/settings/features/kpi/features/penilaian_kinerja/presentation/providers/penilaian_kinerja_provider.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
@@ -900,17 +904,19 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiKaryawan.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Karyawan',
-              ),
+          builder: (context, state) => EmployeeAbsencePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiPenempatanKaryawan.path,
+          builder: (context, state) => WorkHourPlacementEmployeePage(),
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiPekerjaHarian.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Pekerja Harian',
-              ),
+          builder: (context, state) => WorkerAbsencePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiPenempatanPekerjaHarian.path,
+          builder: (context, state) => WorkHourPlacementWorkerPage(),
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiHariLiburCuti.path,
