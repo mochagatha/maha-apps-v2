@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maha_apps_v2/core/utils/localization_extension.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../../shared/theme/app_theme.dart';
@@ -100,6 +101,86 @@ class _SettingsKpiTargetPointPageState extends State<SettingsKpiTargetPointPage>
       ),
       body: Consumer<TargetPointProvider>(
         builder: (context, provider, child) {
+          // Show loading state
+          if (provider.isLoading && provider.indicator == null) {
+            return const Center(
+              child: SpinKitThreeBounce(
+                color: AppColors.primary,
+              ),
+            );
+          }
+
+          // Show error state
+          if (provider.errorMessage != null && provider.indicator == null) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.grey.shade400,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      provider.errorMessage!,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        provider.loadTargetPointIndicators().then((_) {
+                          if (provider.indicator != null) {
+                            _totalGajiController.text = provider.totalGaji.toString();
+                          }
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Coba Lagi'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          // Show empty state
+          if (provider.indicator == null) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.inbox_outlined,
+                      size: 64,
+                      color: Colors.grey.shade400,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Tidak ada data Target Poin',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
           return SingleChildScrollView(
             padding: EdgeInsets.all(16),
             child: Column(
@@ -248,12 +329,15 @@ class _SettingsKpiTargetPointPageState extends State<SettingsKpiTargetPointPage>
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: AppColors.primary,
+                        disabledBackgroundColor: AppColors.neutral5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(
-                            color: AppColors.primary,
-                            width: 1.5,
-                          ),
+                          side: provider.isLoading
+                              ? BorderSide.none
+                              : BorderSide(
+                                  color: AppColors.primary,
+                                  width: 1.5,
+                                ),
                         ),
                         elevation: 0,
                       ),
@@ -277,21 +361,16 @@ class _SettingsKpiTargetPointPageState extends State<SettingsKpiTargetPointPage>
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
+                        disabledBackgroundColor: AppColors.neutral5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
                         elevation: 0,
                       ),
                       child: provider.isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white,
-                                ),
-                              ),
+                          ? SpinKitThreeBounce(
+                              color: Colors.white,
+                              size: 16,
                             )
                           : Text(
                               context.l10n.targetPointButtonApply,

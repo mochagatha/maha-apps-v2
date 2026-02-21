@@ -26,7 +26,7 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
   final TextEditingController _terlambatController = TextEditingController();
   final TextEditingController _tidakAbsenPulangController = TextEditingController();
   final TextEditingController _sakitController = TextEditingController();
-  final TextEditingController _manasikMasukController = TextEditingController();
+  final TextEditingController _mangkirMasukController = TextEditingController();
 
   // Controller for Penilaian Atasan
   final TextEditingController _maksimalPointAtasanController = TextEditingController();
@@ -37,8 +37,12 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeControllers();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = context.read<PenilaianKinerjaProvider>();
+      await provider.loadKpiIndicators();
+      if (mounted) {
+        _initializeControllers();
+      }
     });
   }
 
@@ -50,7 +54,7 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
     _terlambatController.text = provider.terlambat.toString();
     _tidakAbsenPulangController.text = provider.tidakAbsenPulang.toString();
     _sakitController.text = provider.sakit.toString();
-    _manasikMasukController.text = provider.manasikMasuk.toString();
+    _mangkirMasukController.text = provider.mangkirMasuk.toString();
 
     // Initialize Penilaian Atasan controller
     _maksimalPointAtasanController.text = provider.maksimalPointAtasan.toString();
@@ -71,7 +75,7 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
     _terlambatController.dispose();
     _tidakAbsenPulangController.dispose();
     _sakitController.dispose();
-    _manasikMasukController.dispose();
+    _mangkirMasukController.dispose();
     _maksimalPointAtasanController.dispose();
 
     for (var controllers in _workPlanControllers) {
@@ -103,7 +107,7 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
         provider.updateTerlambat(int.tryParse(_terlambatController.text) ?? 50);
         provider.updateTidakAbsenPulang(int.tryParse(_tidakAbsenPulangController.text) ?? 50);
         provider.updateSakit(int.tryParse(_sakitController.text) ?? 100);
-        provider.updateManasikMasuk(int.tryParse(_manasikMasukController.text) ?? 100);
+        provider.updateMangkirMasuk(int.tryParse(_mangkirMasukController.text) ?? 100);
 
         // Update Penilaian Atasan value
         provider.updateMaksimalPointAtasan(int.tryParse(_maksimalPointAtasanController.text) ?? 20);
@@ -145,6 +149,35 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
       ),
       body: Consumer<PenilaianKinerjaProvider>(
         builder: (context, provider, child) {
+          // Initial loading state
+          if (provider.isLoading && !provider.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // Error state with no data
+          if (provider.errorMessage != null && !provider.hasData) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    provider.errorMessage!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await provider.loadKpiIndicators();
+                      if (mounted) _initializeControllers();
+                    },
+                    child: const Text('Coba Lagi'),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return SingleChildScrollView(
             padding: EdgeInsets.all(16),
             child: Column(
@@ -187,7 +220,7 @@ class _SettingsKpiPenilaianKinerjaPageState extends State<SettingsKpiPenilaianKi
                       cardColor: Color(0xFFFDE0D1),
                       label: context.l10n.performanceAssessmentManasikMasuk,
                       formula: context.l10n.performanceAssessmentPoinAbsensiHarian,
-                      controller: _manasikMasukController,
+                      controller: _mangkirMasukController,
                     ),
                   ],
                 ),

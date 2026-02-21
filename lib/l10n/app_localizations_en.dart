@@ -902,7 +902,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get performanceAssessmentSakit => 'Sick';
 
   @override
-  String get performanceAssessmentManasikMasuk => 'Manasik Attendance';
+  String get performanceAssessmentManasikMasuk => 'Absent Without Leave';
 
   @override
   String get performanceAssessmentPenilaianAtasan => 'Supervisor Assessment';

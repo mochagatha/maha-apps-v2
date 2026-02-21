@@ -42,14 +42,20 @@ class TargetPointProvider extends ChangeNotifier {
         notifyListeners();
       },
       (indicators) {
-        // Find the indicator with indicator_name "Total Gaji"
-        if (indicators.isNotEmpty) {
-          _indicator = indicators.firstWhere(
-            (indicator) => indicator.indicatorName == 'Total Gaji',
-            orElse: () => indicators.first,
-          );
-          _totalGaji = _indicator!.value;
+        // Check if we received any indicators
+        if (indicators.isEmpty) {
+          _errorMessage = 'Tidak ada data Target Poin yang tersedia';
+          _isLoading = false;
+          notifyListeners();
+          return;
         }
+
+        // Find the indicator with indicator_name "Total Gaji"
+        _indicator = indicators.firstWhere(
+          (indicator) => indicator.indicatorName == 'Total Gaji',
+          orElse: () => indicators.first,
+        );
+        _totalGaji = _indicator!.value;
         _isLoading = false;
         notifyListeners();
       },

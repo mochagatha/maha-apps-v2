@@ -906,7 +906,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get performanceAssessmentSakit => 'Sakit';
 
   @override
-  String get performanceAssessmentManasikMasuk => 'Manasik Masuk';
+  String get performanceAssessmentManasikMasuk => 'Mangkir Masuk';
 
   @override
   String get performanceAssessmentPenilaianAtasan => 'Penilaian Atasan';

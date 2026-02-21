@@ -1784,10 +1784,10 @@ abstract class AppLocalizations {
   /// **'Sakit'**
   String get performanceAssessmentSakit;
 
-  /// Manasik attendance label
+  /// Absent without leave label
   ///
   /// In id, this message translates to:
-  /// **'Manasik Masuk'**
+  /// **'Mangkir Masuk'**
   String get performanceAssessmentManasikMasuk;
 
   /// Supervisor assessment section title
