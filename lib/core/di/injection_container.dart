@@ -105,7 +105,9 @@ import '../../features/biodata/data/repositories/biodata_repository_impl.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart';
 import '../../features/biodata/domain/usecases/get_biodata.dart';
 import '../../features/biodata/domain/usecases/submit_biodata.dart';
+import '../../features/biodata/domain/usecases/submit_education.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
+import '../../features/biodata/presentation/providers/education_form_provider.dart';
 
 // Recruitment feature imports
 import '../../features/recruitment/data/datasources/recruitment_remote_datasource.dart';
@@ -333,10 +335,12 @@ Future<void> init() async {
 
   //! Features - Biodata
   sl.registerFactory(() => BiodataProvider(getBiodata: sl()));
+  sl.registerFactory(() => EducationFormProvider(submitEducationUseCase: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetBiodata(sl()));
   sl.registerLazySingleton(() => SubmitBiodata(sl()));
+  sl.registerLazySingleton(() => SubmitEducation(sl()));
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));

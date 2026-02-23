@@ -10,4 +10,5 @@ abstract class BiodataRepository {
   Future<Either<Failure, List<District>>> getDistricts(String regencyId);
   Future<Either<Failure, List<Village>>> getVillages(String districtId);
   Future<Either<Failure, void>> submitBiodata(Map<String, dynamic> body);
+  Future<Either<Failure, void>> submitEducation(Map<String, dynamic> body);
 }

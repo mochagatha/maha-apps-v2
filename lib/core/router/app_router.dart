@@ -398,7 +398,7 @@ class AppRouter {
           path: AppRoutes.educationForm.path,
           name: AppRoutes.educationForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => EducationFormProvider(),
+            create: (_) => sl<EducationFormProvider>(),
             child: const EducationFormPage(),
           ),
         ),

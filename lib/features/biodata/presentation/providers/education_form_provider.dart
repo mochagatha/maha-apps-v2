@@ -4,52 +4,46 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../domain/services/biodata_step_manager.dart';
+import '../../domain/usecases/submit_education.dart';
 
 class EducationFormProvider extends ChangeNotifier {
+  final SubmitEducation submitEducationUseCase;
+  EducationFormProvider({required this.submitEducationUseCase});
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String? lastEducationOption;
   bool isLoadingData = false;
+  bool isSubmitting = false;
+  String? errorMessage;
 
   // Primary School (SD)
-  final TextEditingController namePrimarySchoolController =
-      TextEditingController();
-  final TextEditingController startYearPrimarySchoolController =
-      TextEditingController();
-  final TextEditingController endYearPrimarySchoolController =
-      TextEditingController();
+  final TextEditingController namePrimarySchoolController = TextEditingController();
+  final TextEditingController startYearPrimarySchoolController = TextEditingController();
+  final TextEditingController endYearPrimarySchoolController = TextEditingController();
 
   // Junior High (SMP)
-  final TextEditingController nameJuniorSchoolController =
-      TextEditingController();
-  final TextEditingController startYearJuniorSchoolController =
-      TextEditingController();
-  final TextEditingController endYearJuniorSchoolController =
-      TextEditingController();
+  final TextEditingController nameJuniorSchoolController = TextEditingController();
+  final TextEditingController startYearJuniorSchoolController = TextEditingController();
+  final TextEditingController endYearJuniorSchoolController = TextEditingController();
 
   // Senior High (SMA)
-  final TextEditingController nameSeniorSchoolController =
-      TextEditingController();
-  final TextEditingController startYearSeniorSchoolController =
-      TextEditingController();
-  final TextEditingController endYearSeniorSchoolController =
-      TextEditingController();
+  final TextEditingController nameSeniorSchoolController = TextEditingController();
+  final TextEditingController startYearSeniorSchoolController = TextEditingController();
+  final TextEditingController endYearSeniorSchoolController = TextEditingController();
 
   // Bachelor (S1/D4)
   final TextEditingController nameBachelorController = TextEditingController();
   final TextEditingController majorBachelorController = TextEditingController();
-  final TextEditingController startYearBachelorController =
-      TextEditingController();
-  final TextEditingController endYearBachelorController =
-      TextEditingController();
+  final TextEditingController startYearBachelorController = TextEditingController();
+  final TextEditingController endYearBachelorController = TextEditingController();
   final TextEditingController ipkBachelorController = TextEditingController();
   final TextEditingController titleBachelorController = TextEditingController();
 
   // Master (S2)
   final TextEditingController nameMasterController = TextEditingController();
   final TextEditingController majorMasterController = TextEditingController();
-  final TextEditingController startYearMasterController =
-      TextEditingController();
+  final TextEditingController startYearMasterController = TextEditingController();
   final TextEditingController endYearMasterController = TextEditingController();
   final TextEditingController ipkMasterController = TextEditingController();
   final TextEditingController titleMasterController = TextEditingController();
@@ -57,8 +51,7 @@ class EducationFormProvider extends ChangeNotifier {
   // Doctoral (S3)
   final TextEditingController nameDoctorController = TextEditingController();
   final TextEditingController majorDoctorController = TextEditingController();
-  final TextEditingController startYearDoctorController =
-      TextEditingController();
+  final TextEditingController startYearDoctorController = TextEditingController();
   final TextEditingController endYearDoctorController = TextEditingController();
   final TextEditingController ipkDoctorController = TextEditingController();
   final TextEditingController titleDoctorController = TextEditingController();
@@ -239,11 +232,66 @@ class EducationFormProvider extends ChangeNotifier {
 
     formKey.currentState?.save();
     debugPrint("Submitting Education Form...");
-    
-    // Save the next step on success
-    BiodataStepManager.setNextStep(AppRoutes.familyForm.path);
-    
-    // Implement submit logic
-    return null;
+
+    isSubmitting = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id') ?? 0;
+
+      final params = SubmitEducationParams(
+        employeeId: employeeId,
+        lastEducation: lastEducationOption ?? '',
+        primarySchool: namePrimarySchoolController.text,
+        psStartYear: startYearPrimarySchoolController.text,
+        psEndYear: endYearPrimarySchoolController.text,
+        juniorHighSchool: nameJuniorSchoolController.text,
+        jhsStartYear: startYearJuniorSchoolController.text,
+        jhsEndYear: endYearJuniorSchoolController.text,
+        seniorHighSchool: nameSeniorSchoolController.text,
+        shsStartYear: startYearSeniorSchoolController.text,
+        shsEndYear: endYearSeniorSchoolController.text,
+        bachelorUniversity: nameBachelorController.text,
+        bachelorMajor: majorBachelorController.text,
+        bachelorStartYear: startYearBachelorController.text,
+        bachelorEndYear: endYearBachelorController.text,
+        bachelorGpa: ipkBachelorController.text,
+        bachelorDegree: titleBachelorController.text,
+        masterUniversity: nameMasterController.text,
+        masterMajor: majorMasterController.text,
+        masterStartYear: startYearMasterController.text,
+        masterEndYear: endYearMasterController.text,
+        masterGpa: ipkMasterController.text,
+        masterDegree: titleMasterController.text,
+        doctoralUniversity: nameDoctorController.text,
+        doctoralMajor: majorDoctorController.text,
+        doctoralStartYear: startYearDoctorController.text,
+        doctoralEndYear: endYearDoctorController.text,
+        doctoralGpa: ipkDoctorController.text,
+        doctoralDegree: titleDoctorController.text,
+      );
+
+      final result = await submitEducationUseCase(params);
+
+      return result.fold(
+        (failure) {
+          errorMessage = failure.message;
+          return failure.message;
+        },
+        (_) {
+          // Save the next step on success
+          BiodataStepManager.setNextStep(AppRoutes.familyForm.path);
+          return null;
+        },
+      );
+    } catch (e) {
+      errorMessage = e.toString();
+      return e.toString();
+    } finally {
+      isSubmitting = false;
+      notifyListeners();
+    }
   }
 }
