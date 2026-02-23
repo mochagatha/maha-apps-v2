@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/core/router/app_routes.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/presentation/widgets/employee_list_view.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_dialog.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_outlined_button.dart';
-import 'package:provider/provider.dart';
 
-import '../provider/worker_overtime_settings_provider.dart';
-import '../widgets/percentage_slider.dart';
+import '../../../../presentation/widgets/employee_list_view.dart';
 import '../../../../presentation/widgets/switch_option.dart';
 
-class WorkerOvertimeSettingsPage extends StatelessWidget {
-  const WorkerOvertimeSettingsPage({super.key});
+class WorkerAttendanceAnywherePage extends StatefulWidget {
+  const WorkerAttendanceAnywherePage({super.key});
+
+  @override
+  State<WorkerAttendanceAnywherePage> createState() =>
+      _WorkerAttendanceAnywherePageState();
+}
+
+class _WorkerAttendanceAnywherePageState
+    extends State<WorkerAttendanceAnywherePage> {
+  final _searchController = TextEditingController();
 
   void _submit(BuildContext context) {
     showDialog(
@@ -26,7 +32,7 @@ class WorkerOvertimeSettingsPage extends StatelessWidget {
             children: [
               TextSpan(text: "Apakah Anda yakin ingin menyimpan "),
               TextSpan(
-                text: "Pengaturan Lembur",
+                text: "Akses Absen Dimana Saja",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(text: " ini?"),
@@ -58,48 +64,28 @@ class WorkerOvertimeSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<WorkerOvertimeSettingsProvider>();
-
     return Scaffold(
-      appBar: CustomAppBar(title: "Pengaturan Lembur"),
+      appBar: CustomAppBar(title: "Pengaturan Akses Absen Dimana Saja"),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _CustomLabel("Pengaturan Lembur Keseluruhan (Pekerja Harian)"),
-            SizedBox(height: 32),
+            _CustomLabel("Pengaturan Akses Absen Dimana Saja (Pekerja Harian)"),
+            SizedBox(height: 24),
             SwitchOption(
-              label: "Pembukaan lembur karyawan",
-              description: "Tanpa batasan waktu dan biaya",
+              label: "Perizinan Absen Dimana Saja",
+              description: "Izin untuk absen dimana saja bagi pekerja harian",
             ),
-            SizedBox(height: 12),
-            SwitchOption(
-              label: "Pembatasan lembur karyawan",
-              description: "Ditentukan batas waktu atau biaya dalam presentase",
-              onChanged: (value) => provider.showPercentage = value,
+            SizedBox(height: 24),
+            _CustomLabel(
+              "Pengaturan Akses Absen Dimana Saja Perorangan (Pekerja Harian)",
             ),
-            Selector<WorkerOvertimeSettingsProvider, bool>(
-              selector: (_, provider) => provider.showPercentage,
-              builder: (context, show, child) {
-                if (!show) return SizedBox();
-                return PercentageSlider();
-              },
-            ),
-            SizedBox(height: 12),
-            SwitchOption(
-              label: "Penutupan lembur karyawan",
-              description: "Tidak ada waktu dan biaya lembur",
-            ),
-
-            SizedBox(height: 48),
-            _CustomLabel("Pengaturan Lembur Perorangan (Pekerja Harian)"),
             SizedBox(height: 12),
             EmployeeListView(
-              searchController: provider.searchController,
+              searchController: _searchController,
               onItemTap: () {
                 context.push(
-                  AppRoutes.settingsAbsensiLemburPekerjaHarianOrangan.path,
+                  AppRoutes.settingsAbsensiAbsenDimanaSajaPekerjaHarianOrangan.path,
                 );
               },
             ),

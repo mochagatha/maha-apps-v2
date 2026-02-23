@@ -280,6 +280,22 @@ class AppRoutes {
     'settings-absensi-absen-dimana-saja',
     '/settings/absensi/absen-dimana-saja',
   );
+  static const settingsAbsensiAbsenDimanaSajaKaryawan = AppRoute(
+    'settings-absensi-absen-dimana-saja-karyawan',
+    '/settings/absensi/absen-dimana-saja/karyawan',
+  );
+  static const settingsAbsensiAbsenDimanaSajaKaryawanOrangan = AppRoute(
+    'settings-absensi-absen-dimana-saja-karyawan-orangan',
+    '/settings/absensi/absen-dimana-saja/karyawan/orangan',
+  );
+  static const settingsAbsensiAbsenDimanaSajaPekerjaHarian = AppRoute(
+    'settings-absensi-absen-dimana-saja-pekerja-harian',
+    '/settings/absensi/absen-dimana-saja/pekerja-harian',
+  );
+  static const settingsAbsensiAbsenDimanaSajaPekerjaHarianOrangan = AppRoute(
+    'settings-absensi-absen-dimana-saja-pekerja-harian-orangan',
+    '/settings/absensi/absen-dimana-saja/pekerja-harian/orangan',
+  );
   static const settingsAbsensiPerbaikanKehadiran = AppRoute(
     'settings-absensi-perbaikan-kehadiran',
     '/settings/absensi/perbaikan-kehadiran',

@@ -5,14 +5,11 @@ import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_dialog.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_outlined_button.dart';
-import 'package:provider/provider.dart';
 
-import '../provider/employee_overtime_settings_provider.dart';
-import '../widgets/percentage_slider.dart';
 import '../../../../presentation/widgets/switch_option.dart';
 
-class SingleEmployeeOvertimeSettingsPage extends StatelessWidget {
-  const SingleEmployeeOvertimeSettingsPage({super.key});
+class SingleEmployeeAttendanceAnywherePage extends StatelessWidget {
+  const SingleEmployeeAttendanceAnywherePage({super.key});
 
   void _submit(BuildContext context) {
     showDialog(
@@ -25,7 +22,7 @@ class SingleEmployeeOvertimeSettingsPage extends StatelessWidget {
             children: [
               TextSpan(text: "Apakah Anda yakin ingin menyimpan "),
               TextSpan(
-                text: "Pengaturan Lembur Perorangan",
+                text: "Akses Absen Dimana Saja Orangan",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(text: " ini?"),
@@ -58,10 +55,8 @@ class SingleEmployeeOvertimeSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<EmployeeOvertimeSettingsProvider>();
-
     return Scaffold(
-      appBar: CustomAppBar(title: "Pengaturan Lembur"),
+      appBar: CustomAppBar(title: "Pengaturan Akses Absen Dimana Saja"),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -146,26 +141,8 @@ class SingleEmployeeOvertimeSettingsPage extends StatelessWidget {
             ),
             SizedBox(height: 24),
             SwitchOption(
-              label: "Pembukaan lembur karyawan",
-              description: "Tanpa batasan waktu dan biaya",
-            ),
-            SizedBox(height: 12),
-            SwitchOption(
-              label: "Pembatasan lembur karyawan",
-              description: "Ditentukan batas waktu atau biaya dalam presentase",
-              onChanged: (value) => provider.showPercentage = value,
-            ),
-            Selector<EmployeeOvertimeSettingsProvider, bool>(
-              selector: (_, provider) => provider.showPercentage,
-              builder: (context, show, child) {
-                if (!show) return SizedBox();
-                return PercentageSlider();
-              },
-            ),
-            SizedBox(height: 12),
-            SwitchOption(
-              label: "Penutupan lembur karyawan",
-              description: "Tidak ada waktu dan biaya lembur",
+              label: "Perizinan Absen Dimana Saja",
+              description: "Izin untuk absen dimana saja bagi karyawan",
             ),
           ],
         ),

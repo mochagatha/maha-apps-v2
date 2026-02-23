@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:maha_apps_v2/core/router/app_routes.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/presentation/widgets/employee_list_view.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_dialog.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
@@ -8,8 +9,8 @@ import 'package:maha_apps_v2/shared/widgets/custom_outlined_button.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/employee_overtime_settings_provider.dart';
-import '../widget/percentage_slider.dart';
-import '../widget/switch_option.dart';
+import '../widgets/percentage_slider.dart';
+import '../../../../presentation/widgets/switch_option.dart';
 
 class EmployeeOvertimeSettingsPage extends StatelessWidget {
   const EmployeeOvertimeSettingsPage({super.key});
@@ -94,68 +95,11 @@ class EmployeeOvertimeSettingsPage extends StatelessWidget {
             SizedBox(height: 48),
             _CustomLabel("Pengaturan Lembur Perorangan (Karyawan)"),
             SizedBox(height: 12),
-            SizedBox(
-              height: 40,
-              child: TextField(
-                controller: provider.searchController,
-                style: TextStyle(fontSize: 14),
-                decoration: InputDecoration(
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: 4),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                  hintText: "Cari karyawan disini...",
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 12),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 7,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    context.push(
-                      AppRoutes.settingsAbsensiLemburKaryawanOrangan.path,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 16,
-                    ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          radius: 20,
-                        ),
-                        SizedBox(width: 24),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Nama Karyawan",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "Software Engineer",
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            EmployeeListView(
+              searchController: provider.searchController,
+              onItemTap: () {
+                context.push(
+                  AppRoutes.settingsAbsensiLemburKaryawanOrangan.path,
                 );
               },
             ),

@@ -27,6 +27,11 @@ import 'package:maha_apps_v2/features/recruitment/features/data_verification/pre
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/e_matrai_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/attendance_anywhere_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/employee_attendance_anywhere_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/single_employee_attendance_anywhere_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/single_worker_attendance_anywhere_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/worker_attendance_anywhere_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/add_joint_leave_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/holiday_settings_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/joint_leave_settings_page.dart';
@@ -987,10 +992,23 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiAbsenDimanaSaja.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Absen Dimana Saja',
-              ),
+          builder: (context, state) => AttendanceAnywhereSettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiAbsenDimanaSajaKaryawan.path,
+          builder: (context, state) => EmployeeAttendanceAnywherePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiAbsenDimanaSajaKaryawanOrangan.path,
+          builder: (context, state) => SingleEmployeeAttendanceAnywherePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiAbsenDimanaSajaPekerjaHarian.path,
+          builder: (context, state) => WorkerAttendanceAnywherePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiAbsenDimanaSajaPekerjaHarianOrangan.path,
+          builder: (context, state) => SingleWorkerAttendanceAnywherePage(),
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiPerbaikanKehadiran.path,

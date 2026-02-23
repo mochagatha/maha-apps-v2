@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/widget/switch_option.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/presentation/widgets/switch_option.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_dialog.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
@@ -9,7 +9,7 @@ import 'package:maha_apps_v2/shared/widgets/custom_outlined_button.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/worker_overtime_settings_provider.dart';
-import '../widget/percentage_slider.dart';
+import '../widgets/percentage_slider.dart';
 
 class SingleWorkerOvertimeSettingsPage extends StatelessWidget {
   const SingleWorkerOvertimeSettingsPage({super.key});
