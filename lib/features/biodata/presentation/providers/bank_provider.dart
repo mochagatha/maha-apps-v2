@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
 import 'package:maha_apps_v2/features/biodata/domain/entities/bank.dart';
 
 class BankProvider extends ChangeNotifier {
@@ -43,8 +46,10 @@ class BankProvider extends ChangeNotifier {
       return "Data ada yang kosong!";
     }
 
-    // implement submit
     await Future.delayed(Duration(seconds: 1));
+
+    // Save the next step on success
+    BiodataStepManager.setNextStep(AppRoutes.selfieForm.path);
 
     return null;
   }

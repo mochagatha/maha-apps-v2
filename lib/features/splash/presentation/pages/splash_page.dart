@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
+import '../../../biodata/domain/services/biodata_step_manager.dart';
 import '../../../home/presentation/providers/home_provider.dart';
 import '../../../permissions/presentation/providers/permission_provider.dart';
 import '../../../../core/di/injection_container.dart';
@@ -65,7 +66,12 @@ class _SplashPageState extends State<SplashPage> {
       // Check status to match v1 logic
       // v1 source: employee?.data.status
       if (authProvider.user?.status == 1) {
-        context.go(AppRoutes.welcomeBiodata.path);
+        final nextStep = await BiodataStepManager.getNextStep();
+        if (nextStep != null && nextStep.isNotEmpty) {
+          context.go(nextStep);
+        } else {
+          context.go(AppRoutes.welcomeBiodata.path);
+        }
         return;
       } else {
         context.go(AppRoutes.home.path);

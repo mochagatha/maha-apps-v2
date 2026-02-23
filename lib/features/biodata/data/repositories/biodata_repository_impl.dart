@@ -59,7 +59,17 @@ class BiodataRepositoryImpl implements BiodataRepository {
       final remoteVillages = await remoteDataSource.getVillages(districtId);
       return Right(remoteVillages.map((m) => Village(id: m.id, name: m.name)).toList());
     } on ServerException catch (e) {
-       return Left(ServerFailure(e.message));
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitBiodata(Map<String, dynamic> body) async {
+    try {
+      await remoteDataSource.submitBiodata(body);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../domain/services/biodata_step_manager.dart';
 import '../providers/selfie_provider.dart';
 
 class SelfieKtpResultPage extends StatelessWidget {
@@ -62,6 +63,7 @@ class SelfieKtpResultPage extends StatelessWidget {
                   }
 
                   // Submit Data and Finish
+                  BiodataStepManager.setNextStep(AppRoutes.biodataSignature.path);
                   showDialog(
                     context: context,
                     builder: (context) => _SuccessPopup(),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
+
 class SkillModel {
   final int id;
   final String name;
@@ -81,6 +84,10 @@ class SkillProvider extends ChangeNotifier {
     notifyListeners();
 
     debugPrint("Submitting Skills: ${selectedSkills.map((s) => s.name).toList()}");
+    
+    // Save the next step on success
+    BiodataStepManager.setNextStep(AppRoutes.biodataBank.path);
+    
     return true;
   }
 }

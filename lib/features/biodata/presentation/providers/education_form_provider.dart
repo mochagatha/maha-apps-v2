@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
+
 class EducationFormProvider extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -236,6 +239,10 @@ class EducationFormProvider extends ChangeNotifier {
 
     formKey.currentState?.save();
     debugPrint("Submitting Education Form...");
+    
+    // Save the next step on success
+    BiodataStepManager.setNextStep(AppRoutes.familyForm.path);
+    
     // Implement submit logic
     return null;
   }

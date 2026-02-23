@@ -104,6 +104,7 @@ import '../../features/biodata/data/datasources/biodata_remote_datasource.dart';
 import '../../features/biodata/data/repositories/biodata_repository_impl.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart';
 import '../../features/biodata/domain/usecases/get_biodata.dart';
+import '../../features/biodata/domain/usecases/submit_biodata.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 
 // Recruitment feature imports
@@ -335,6 +336,7 @@ Future<void> init() async {
 
   // Use cases
   sl.registerLazySingleton(() => GetBiodata(sl()));
+  sl.registerLazySingleton(() => SubmitBiodata(sl()));
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));

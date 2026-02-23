@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
 import '../providers/selfie_provider.dart';
 
 class SelfieResultPage extends StatelessWidget {
@@ -59,6 +60,7 @@ class SelfieResultPage extends StatelessWidget {
                     return;
                   }
                   // Proceed to Selfie KTP
+                  BiodataStepManager.setNextStep(AppRoutes.selfieKtpForm.path);
                   context.pushNamed(AppRoutes.selfieKtpForm.name);
                 },
                 style: ElevatedButton.styleFrom(

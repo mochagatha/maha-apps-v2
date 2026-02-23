@@ -11,6 +11,7 @@ abstract class BiodataRemoteDataSource {
   Future<List<RegencyModel>> getRegencies(String provinceId);
   Future<List<DistrictModel>> getDistricts(String regencyId);
   Future<List<VillageModel>> getVillages(String districtId);
+  Future<void> submitBiodata(Map<String, dynamic> body);
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -116,6 +117,28 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
         throw ServerException(response.data['message'] ?? 'Failed to load villages');
       }
     } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitBiodata(Map<String, dynamic> body) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-biodata',
+        data: body,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit biodata',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
       throw ServerException(e.toString());
     }
   }

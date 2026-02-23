@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
+
 class FamilyProvider extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isLoadingData = false;
@@ -222,6 +225,10 @@ class FamilyProvider extends ChangeNotifier {
 
     formKey.currentState?.save();
     debugPrint("Submitting Family Form...");
+    
+    // Save the next step on success
+    BiodataStepManager.setNextStep(AppRoutes.documentForm.path);
+    
     // Handle data collection and API submission here
     return null;
   }

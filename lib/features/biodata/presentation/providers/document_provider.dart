@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
+
 class DocumentProvider extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isLoadingData = false;
@@ -35,6 +38,10 @@ class DocumentProvider extends ChangeNotifier {
     }
 
     debugPrint("Submitting Documents: $selectedFiles");
+    
+    // Save the next step on success
+    BiodataStepManager.setNextStep(AppRoutes.skillForm.path);
+    
     // Proceed to upload
     return null;
   }

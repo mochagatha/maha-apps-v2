@@ -3,15 +3,21 @@ import 'package:intl/intl.dart';
 import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../domain/services/biodata_step_manager.dart';
 import '../../domain/entities/region.dart';
 import '../../domain/repositories/biodata_repository.dart';
-// For easier access if needed, but better passed in
+import '../../domain/usecases/submit_biodata.dart';
 
 class BiodataFormProvider extends ChangeNotifier {
   final BiodataRepository repository;
+  final SubmitBiodata submitBiodataUseCase;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  BiodataFormProvider({required this.repository}) {
+  BiodataFormProvider({
+    required this.repository,
+    required this.submitBiodataUseCase,
+  }) {
     fetchProvinces(); // Auto fetch on create
   }
 
@@ -30,8 +36,7 @@ class BiodataFormProvider extends ChangeNotifier {
 
   // Contacts
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emergencyPhoneController =
-      TextEditingController();
+  final TextEditingController emergencyPhoneController = TextEditingController();
 
   // Birth
   final TextEditingController birthPlaceController = TextEditingController();
@@ -56,6 +61,9 @@ class BiodataFormProvider extends ChangeNotifier {
 
   // Error message for gender field (others use form validators)
   String? genderError;
+
+  // Submission state
+  bool isSubmitting = false;
 
   // Loading States
   bool isLoadingRegency = false;
@@ -364,8 +372,7 @@ class BiodataFormProvider extends ChangeNotifier {
           AppConstants.biodata.birthDate,
         ) ??
         birthDateController.text;
-    isSwitchOn =
-        prefs.getBool(AppConstants.biodata.sameCurrentAddress) ?? isSwitchOn;
+    isSwitchOn = prefs.getBool(AppConstants.biodata.sameCurrentAddress) ?? isSwitchOn;
 
     await fetchProvinces(render: false);
     final provinceId = prefs.getInt(AppConstants.biodata.province);
@@ -482,7 +489,7 @@ class BiodataFormProvider extends ChangeNotifier {
     if (selectedGender == null || selectedGender!.isEmpty) {
       genderError = "Jenis kelamin harus dipilih";
       hasErrors = true;
-      notifyListeners(); // Notify to show error message
+      notifyListeners();
     }
 
     if (!isFormValid || hasErrors) {
@@ -490,10 +497,82 @@ class BiodataFormProvider extends ChangeNotifier {
     }
 
     formKey.currentState?.save();
-    // Logic from _submitForm in v1
-    // final currentProvince = isSwitchOn ? selectedProvince! : selectedProvinceDom!;
-    // ... construct model and send to API
-    debugPrint("Submitting Form...");
-    return null;
+
+    // Retrieve employee_id from SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final employeeId = prefs.getInt('employee_id');
+    if (employeeId == null) {
+      return 'Employee ID tidak ditemukan. Silakan login ulang.';
+    }
+
+    // Parse birth date from localized display format to yyyy-MM-dd
+    String birthDateIso;
+    try {
+      final parsed = DateFormat.yMMMMd('id').parse(birthDateController.text);
+      birthDateIso = DateFormat('yyyy-MM-dd').format(parsed);
+    } catch (_) {
+      return 'Format tanggal lahir tidak valid.';
+    }
+
+    // Determine current (domicile) address: same as KTP when switch is on
+    final Province currentProv = isSwitchOn
+        ? selectedProvince as Province
+        : selectedProvinceDom as Province;
+    final Regency currentReg = isSwitchOn
+        ? selectedRegency as Regency
+        : selectedRegencyDom as Regency;
+    final District currentDist = isSwitchOn
+        ? selectedDistrict as District
+        : selectedDistrictDom as District;
+    final Village currentVill = isSwitchOn
+        ? selectedVillage as Village
+        : selectedVillageDom as Village;
+    final String currentPostal = isSwitchOn
+        ? postalCodeController.text
+        : postalCodeDomController.text;
+    final String currentAddr = isSwitchOn ? addressController.text : addressDomController.text;
+
+    final params = SubmitBiodataParams(
+      employeeId: employeeId,
+      fullname: nameController.text,
+      nickname: nicknameController.text,
+      nik: nikController.text,
+      identityProvince: (selectedProvince as Province).id.toString(),
+      identityRegency: (selectedRegency as Regency).id.toString(),
+      identityDistrict: (selectedDistrict as District).id.toString(),
+      identityVillage: (selectedVillage as Village).id.toString(),
+      identityPostalCode: int.tryParse(postalCodeController.text) ?? 0,
+      identityAddress: addressController.text,
+      currentProvince: currentProv.id.toString(),
+      currentRegency: currentReg.id.toString(),
+      currentDistrict: currentDist.id.toString(),
+      currentVillage: currentVill.id.toString(),
+      currentPostalCode: int.tryParse(currentPostal) ?? 0,
+      currentAddress: currentAddr,
+      residenceStatus: selectedResidenceStatus!,
+      phoneNumber: phoneController.text,
+      emergencyPhoneNumber: emergencyPhoneController.text,
+      gender: selectedGender!,
+      birthPlace: birthPlaceController.text,
+      birthDate: birthDateIso,
+      religion: selectedReligion!,
+    );
+
+    isSubmitting = true;
+    notifyListeners();
+
+    final result = await submitBiodataUseCase(params);
+
+    isSubmitting = false;
+    notifyListeners();
+
+    return result.fold(
+      (failure) => failure.message,
+      (_) {
+        // Save the next step on success
+        BiodataStepManager.setNextStep(AppRoutes.educationForm.path);
+        return null;
+      },
+    );
   }
 }
