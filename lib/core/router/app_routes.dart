@@ -260,6 +260,22 @@ class AppRoutes {
     'settings-absensi-lembur',
     '/settings/absensi/lembur',
   );
+  static const settingsAbsensiLemburKaryawan = AppRoute(
+    'settings-absensi-lembur-karyawan',
+    '/settings/absensi/lembur/karyawan',
+  );
+  static const settingsAbsensiLemburKaryawanOrangan = AppRoute(
+    'settings-absensi-lembur-karyawan-orangan',
+    '/settings/absensi/lembur/karyawan/orangan',
+  );
+  static const settingsAbsensiLemburPekerjaHarian = AppRoute(
+    'settings-absensi-lembur-pekerja-harian',
+    '/settings/absensi/lembur/pekerja-harian',
+  );
+  static const settingsAbsensiLemburPekerjaHarianOrangan = AppRoute(
+    'settings-absensi-lembur-pekerja-harian-orangan',
+    '/settings/absensi/lembur/pekerja-harian/orangan',
+  );
   static const settingsAbsensiAbsenDimanaSaja = AppRoute(
     'settings-absensi-absen-dimana-saja',
     '/settings/absensi/absen-dimana-saja',

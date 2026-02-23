@@ -31,6 +31,13 @@ import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/holiday_settings_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/joint_leave_settings_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/providers/add_joint_leave_provider.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/pages/employee_overtime_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/pages/overtime_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/pages/single_employee_overtime_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/pages/single_worker_overtime_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/pages/worker_overtime_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/provider/employee_overtime_settings_provider.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/overtime/presentation/provider/worker_overtime_settings_provider.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/detail_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/edit_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/employee_absence_page.dart';
@@ -940,10 +947,43 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiLembur.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Lembur',
-              ),
+          builder: (context, state) => OvertimeSettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiLemburKaryawan.path,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => EmployeeOvertimeSettingsProvider(),
+              child: EmployeeOvertimeSettingsPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiLemburKaryawanOrangan.path,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => EmployeeOvertimeSettingsProvider(),
+              child: SingleEmployeeOvertimeSettingsPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiLemburPekerjaHarian.path,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => WorkerOvertimeSettingsProvider(),
+              child: WorkerOvertimeSettingsPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsensiLemburPekerjaHarianOrangan.path,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => WorkerOvertimeSettingsProvider(),
+              child: SingleWorkerOvertimeSettingsPage(),
+            );
+          },
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiAbsenDimanaSaja.path,

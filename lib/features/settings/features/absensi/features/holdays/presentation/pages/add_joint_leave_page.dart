@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/providers/add_joint_leave_provider.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
+import 'package:maha_apps_v2/shared/widgets/custom_dialog.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_outlined_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_text_form_field.dart';
@@ -49,7 +50,42 @@ class AddJointLeavePage extends StatelessWidget {
   void _submit(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => _ConfirmDialog(),
+      builder: (context) {
+        return CustomDialog(
+          title: "Maaf Sebelumnya...",
+          assetImage: "assets/images/icon/submit-biodata.png",
+          content: TextSpan(
+            children: [
+              TextSpan(text: "Apakah Anda yakin ingin menambah "),
+              TextSpan(
+                text: "Hari Libur",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: " ini?"),
+            ],
+          ),
+          action: Row(
+            children: [
+              Expanded(
+                child: CustomOutlinedButton(
+                  onPressed: () {
+                    context.pop();
+                    context.pop();
+                  },
+                  child: Text("Oke"),
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: CustomElevatedButton(
+                  onPressed: () => context.pop(),
+                  child: Text("Batal"),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -165,76 +201,6 @@ class AddJointLeavePage extends StatelessWidget {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: BorderSide(color: Colors.grey.shade300),
-    );
-  }
-}
-
-class _ConfirmDialog extends StatelessWidget {
-  const _ConfirmDialog();
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      insetPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Maaf Sebelumnya...",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
-              ),
-            ),
-            SizedBox(height: 8),
-            Image.asset(
-              "assets/images/icon/submit-biodata.png",
-              height: 100,
-            ),
-            SizedBox(height: 12),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(text: "Apakah Anda yakin ingin menambah "),
-                  TextSpan(
-                    text: "Hari Libur",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: " ini?"),
-                ],
-              ),
-              style: TextStyle(color: Colors.grey.shade800),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomOutlinedButton(
-                    onPressed: () {
-                      context.pop();
-                      context.pop();
-                    },
-                    child: Text("Oke"),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: CustomElevatedButton(
-                    onPressed: () => context.pop(),
-                    child: Text("Batal"),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
