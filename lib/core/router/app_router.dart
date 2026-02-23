@@ -406,7 +406,7 @@ class AppRouter {
           path: AppRoutes.familyForm.path,
           name: AppRoutes.familyForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => FamilyProvider(),
+            create: (_) => sl<FamilyProvider>(),
             child: const FamilyPage(),
           ),
         ),

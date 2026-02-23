@@ -13,6 +13,10 @@ abstract class BiodataRemoteDataSource {
   Future<List<VillageModel>> getVillages(String districtId);
   Future<void> submitBiodata(Map<String, dynamic> body);
   Future<void> submitEducation(Map<String, dynamic> body);
+  Future<void> submitFamily(Map<String, dynamic> body);
+  Future<void> submitSibling(Map<String, dynamic> body);
+  Future<void> submitMarital(int employeeId, Map<String, dynamic> body);
+  Future<void> submitChildren(Map<String, dynamic> body);
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -154,6 +158,94 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw ServerException(
           response.data['message'] ?? 'Failed to submit education',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitFamily(Map<String, dynamic> body) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-family',
+        data: body,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit family data',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitSibling(Map<String, dynamic> body) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-sibling',
+        data: body,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit sibling data',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitMarital(int employeeId, Map<String, dynamic> body) async {
+    try {
+      final response = await client.dioGolang.put(
+        '/employee/employee-marital/$employeeId',
+        data: body,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit marital data',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitChildren(Map<String, dynamic> body) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-children',
+        data: body,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit children data',
         );
       }
     } on DioException catch (e) {

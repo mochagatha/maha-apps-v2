@@ -82,4 +82,44 @@ class BiodataRepositoryImpl implements BiodataRepository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> submitFamily(Map<String, dynamic> body) async {
+    try {
+      await remoteDataSource.submitFamily(body);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitSibling(Map<String, dynamic> body) async {
+    try {
+      await remoteDataSource.submitSibling(body);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitMarital(int employeeId, Map<String, dynamic> body) async {
+    try {
+      await remoteDataSource.submitMarital(employeeId, body);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitChildren(Map<String, dynamic> body) async {
+    try {
+      await remoteDataSource.submitChildren(body);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

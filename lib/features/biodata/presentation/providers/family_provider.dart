@@ -1,11 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../domain/services/biodata_step_manager.dart';
+import '../../domain/usecases/submit_children.dart';
+import '../../domain/usecases/submit_family.dart';
+import '../../domain/usecases/submit_marital.dart';
+import '../../domain/usecases/submit_sibling.dart';
 
 class FamilyProvider extends ChangeNotifier {
+  final SubmitFamily submitFamilyUseCase;
+  final SubmitSibling submitSiblingUseCase;
+  final SubmitMarital submitMaritalUseCase;
+  final SubmitChildren submitChildrenUseCase;
+
+  FamilyProvider({
+    required this.submitFamilyUseCase,
+    required this.submitSiblingUseCase,
+    required this.submitMaritalUseCase,
+    required this.submitChildrenUseCase,
+  });
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isLoadingData = false;
+  bool isSubmitting = false;
 
   // --- Parent Controllers ---
   final TextEditingController fatherNameController = TextEditingController();
@@ -225,12 +243,100 @@ class FamilyProvider extends ChangeNotifier {
 
     formKey.currentState?.save();
     debugPrint("Submitting Family Form...");
-    
-    // Save the next step on success
-    BiodataStepManager.setNextStep(AppRoutes.documentForm.path);
-    
-    // Handle data collection and API submission here
-    return null;
+
+    isSubmitting = true;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id') ?? 0;
+
+      // --- 1. Submit parent (father & mother) data ---
+      final familyResult = await submitFamilyUseCase(
+        SubmitFamilyParams(
+          employeeId: employeeId,
+          fatherName: fatherNameController.text,
+          fatherStatus: int.tryParse(lifeFatherOption ?? '1') ?? 1,
+          fatherAge: int.tryParse(fatherAgeController.text) ?? 0,
+          fatherLastEducation: lastEducationFatherOption ?? '',
+          fatherLastJobTitle: fatherJobController.text,
+          fatherLastJobCompany: fatherCompanyController.text,
+          motherName: motherNameController.text,
+          motherStatus: int.tryParse(lifeMotherOption ?? '1') ?? 1,
+          motherAge: int.tryParse(motherAgeController.text) ?? 0,
+          motherLastEducation: lastEducationMotherOption ?? '',
+          motherLastJobTitle: motherJobController.text,
+          motherLastJobCompany: motherCompanyController.text,
+        ),
+      );
+
+      final familyError = familyResult.fold((f) => f.message, (_) => null);
+      if (familyError != null) return familyError;
+
+      // --- 2. Submit each sibling ---
+      for (int i = 0; i < nameSiblingControllers.length; i++) {
+        final siblingResult = await submitSiblingUseCase(
+          SubmitSiblingParams(
+            employeeId: employeeId,
+            siblingName: nameSiblingControllers[i].text,
+            siblingGender: genderSiblingControllers[i],
+            siblingAge: int.tryParse(ageSiblingControllers[i].text) ?? 0,
+            siblingLastEducation: educationSiblingOptions[i] ?? '',
+            siblingLastJobTitle: jobSiblingControllers[i].text,
+            siblingLastJobCompany: companySiblingControllers[i].text,
+          ),
+        );
+
+        final siblingError = siblingResult.fold((f) => f.message, (_) => null);
+        if (siblingError != null) return siblingError;
+      }
+
+      // --- 3. Submit marital status ---
+      final isMarried = statusMarriedOption == 'kawin';
+      final maritalResult = await submitMaritalUseCase(
+        SubmitMaritalParams(
+          employeeId: employeeId,
+          maritalStatus: statusMarriedOption ?? 'belum kawin',
+          coupleName: isMarried ? coupleNameController.text : null,
+          coupleAge: isMarried ? (int.tryParse(coupleAgeController.text) ?? 0) : null,
+          coupleLastEducation: isMarried ? coupleEducationOption : null,
+          coupleLastJobTitle: isMarried ? coupleJobController.text : null,
+          coupleLastJobCompany: isMarried ? coupleCompanyController.text : null,
+        ),
+      );
+
+      final maritalError = maritalResult.fold((f) => f.message, (_) => null);
+      if (maritalError != null) return maritalError;
+
+      // --- 4. Submit each child (only if married and has children) ---
+      if (isMarried && statusChildOption == '2') {
+        for (int i = 0; i < nameChildrenControllers.length; i++) {
+          final childResult = await submitChildrenUseCase(
+            SubmitChildrenParams(
+              employeeId: employeeId,
+              childName: nameChildrenControllers[i].text,
+              childGender: genderChildrenControllers[i],
+              childAge: int.tryParse(ageChildrenControllers[i].text) ?? 0,
+              childLastEducation: educationChildrenOptions[i] ?? '',
+              childLastJobTitle: jobChildrenControllers[i].text,
+              childLastJobCompany: companyChildrenControllers[i].text,
+            ),
+          );
+
+          final childError = childResult.fold((f) => f.message, (_) => null);
+          if (childError != null) return childError;
+        }
+      }
+
+      // Save the next step on success
+      BiodataStepManager.setNextStep(AppRoutes.documentForm.path);
+      return null;
+    } catch (e) {
+      return e.toString();
+    } finally {
+      isSubmitting = false;
+      notifyListeners();
+    }
   }
 
   @override
