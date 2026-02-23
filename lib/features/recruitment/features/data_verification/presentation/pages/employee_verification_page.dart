@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/core/router/route_names.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/shared/theme/app_theme.dart';
 import '../../../../../../core/utils/localization_extension.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
@@ -153,7 +153,7 @@ class _DataItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushNamed(
-          RouteNames.employeePersonalData,
+          AppRoutes.employeePersonalData.name,
           extra: {"id": id},
         );
       },

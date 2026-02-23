@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../providers/selfie_provider.dart';
 
 class SelfieCameraKtpPage extends StatefulWidget {
@@ -152,7 +152,7 @@ class _SelfieCameraKtpPageState extends State<SelfieCameraKtpPage> {
               // Dispose camera before navigating to prevent camera staying active
               await provider.disposeCamera();
               if (context.mounted) {
-                context.pushNamed(RouteNames.selfieResultKtp);
+                context.pushNamed(AppRoutes.selfieResultKtp.name);
               }
             }
           },

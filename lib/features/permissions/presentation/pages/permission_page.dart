@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../providers/permission_provider.dart';
 import '../widgets/permission_denied_dialog.dart';
 
@@ -40,7 +40,7 @@ class _PermissionPageState extends State<PermissionPage> with WidgetsBindingObse
   void _navigateIfGranted() {
     final provider = context.read<PermissionProvider>();
     if (provider.state == PermissionState.granted) {
-      context.go(RoutePaths.splash);
+      context.go(AppRoutes.splash.path);
     }
   }
 
@@ -70,7 +70,7 @@ class _PermissionPageState extends State<PermissionPage> with WidgetsBindingObse
               if (provider.state == PermissionState.granted) {
                 // Should navigate away, but shows success just in case
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  context.go(RoutePaths.splash);
+                  context.go(AppRoutes.splash.path);
                 });
                 return const Center(child: CircularProgressIndicator());
               }
@@ -114,7 +114,7 @@ class _PermissionPageState extends State<PermissionPage> with WidgetsBindingObse
                         await provider.requestPermissions();
                         if (context.mounted) {
                           if (provider.state == PermissionState.granted) {
-                            context.go(RoutePaths.splash);
+                            context.go(AppRoutes.splash.path);
                           } else if (provider.state == PermissionState.permanentlyDenied) {
                             // Show dialog with details
                             _showPermissionDeniedDialog();

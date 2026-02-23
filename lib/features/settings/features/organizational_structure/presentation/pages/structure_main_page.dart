@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../core/utils/localization_extension.dart';
 import '../../../../../../shared/theme/app_theme.dart';
 import '../../../../../../shared/widgets/confirm_dialog.dart';
@@ -47,7 +47,13 @@ class _StructureMainPageState extends State<StructureMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.mainStructure),
+      appBar: CustomAppBar(
+        title: widget.type == "utama"
+            ? context.l10n.mainStructure
+            : widget.type == "project"
+            ? "Struktur Proyek"
+            : "Struktur Cabang",
+      ),
       body: Consumer<StructureProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
@@ -259,132 +265,144 @@ class _StructureMainPageState extends State<StructureMainPage> {
               ],
             ),
             if (role.superiorEmployeeStructure.isNotEmpty) ...[
-              ...role.superiorEmployeeStructure.map((superior) {
-                return Column(
-                  children: [
-                    Stack(
-                      children: [
-                        InkWell(
-                          onTap: () => _navigateToTeamManagement(superior.id),
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundImage: NetworkImage(superior.employee.photoUrl),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final superior = role.superiorEmployeeStructure[index];
+                  return Column(
+                    children: [
+                      Stack(
+                        children: [
+                          InkWell(
+                            onTap: () => _navigateToTeamManagement(superior.id),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(superior.employee.photoUrl),
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: InkWell(
-                            onTap: () =>
-                                _showEditSuperiorDialog(superior, companyStructureId, role.id),
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: AppColors.blue,
-                                shape: BoxShape.circle,
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: InkWell(
+                              onTap: () =>
+                                  _showEditSuperiorDialog(superior, companyStructureId, role.id),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.blue,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.edit, size: 16, color: Colors.white),
                               ),
-                              child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        superior.employee.fullname,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        superior.employee.nik,
+                        style: TextStyle(fontSize: 12, color: AppColors.neutral6),
+                      ),
+                      SizedBox(height: 8),
+                      if (superior.departmentStructure.isNotEmpty) ...[
+                        ...superior.departmentStructure.map((department) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          department.department.departmentName,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Builder(
+                                        builder: (buttonContext) => InkWell(
+                                          onTap: () => _showDepartmentMenu(
+                                            department,
+                                            superior.id,
+                                            buttonContext,
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: const BoxDecoration(
+                                              color: AppColors.blue,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.edit,
+                                              size: 12,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                if (department.employeeStructure.isNotEmpty) ...[
+                                  ...department.employeeStructure.map((subDepartment) {
+                                    return CircleAvatar(
+                                      radius: 16,
+                                      backgroundImage: NetworkImage(
+                                        subDepartment.employee.photoUrl,
+                                      ),
+                                      backgroundColor: Colors.grey.shade200,
+                                    );
+                                  }),
+                                ],
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _navigateToAddDepartment(
+                            companyStructureId: companyStructureId,
+                            roleStructureId: role.id,
+                            superiorEmployeeId: superior.id,
+                          ),
+                          icon: const Icon(Icons.add_box_outlined, size: 26),
+                          label: const Text(
+                            "Tambah Departemen",
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.blue,
+                            side: const BorderSide(color: AppColors.blue, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(8),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      superior.employee.fullname,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      superior.employee.nik,
-                      style: TextStyle(fontSize: 12, color: AppColors.neutral6),
-                    ),
-                    SizedBox(height: 8),
-                    if (superior.departmentStructure.isNotEmpty) ...[
-                      ...superior.departmentStructure.map((department) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        department.department.departmentName,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Builder(
-                                      builder: (buttonContext) => InkWell(
-                                        onTap: () => _showDepartmentMenu(
-                                          department,
-                                          superior.id,
-                                          buttonContext,
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          decoration: const BoxDecoration(
-                                            color: AppColors.blue,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(
-                                            Icons.edit,
-                                            size: 12,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              if (department.employeeStructure.isNotEmpty) ...[
-                                ...department.employeeStructure.map((subDepartment) {
-                                  return CircleAvatar(
-                                    radius: 16,
-                                    backgroundImage: NetworkImage(subDepartment.employee.photoUrl),
-                                    backgroundColor: Colors.grey.shade200,
-                                  );
-                                }),
-                              ],
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => _navigateToAddDepartment(
-                          companyStructureId: companyStructureId,
-                          roleStructureId: role.id,
-                          superiorEmployeeId: superior.id,
-                        ),
-                        icon: const Icon(Icons.add_box_outlined, size: 26),
-                        label: const Text(
-                          "Tambah Departemen",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.blue,
-                          side: const BorderSide(color: AppColors.blue, width: 2),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadiusGeometry.circular(8),
-                          ),
-                        ),
                       ),
-                    ),
-                  ],
-                );
-              }),
+                    ],
+                  );
+                },
+                separatorBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: const Divider(),
+                ),
+                itemCount: role.superiorEmployeeStructure.length,
+              ),
             ],
           ],
         ),
@@ -442,7 +460,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
 
   void _navigateToJobTitleSelection(int companyStructureId, int roleStructureId) async {
     await context.pushNamed(
-      RouteNames.jobTitleSelection,
+      AppRoutes.jobTitleSelection.name,
       queryParameters: {
         'companyStructureId': companyStructureId.toString(),
         'roleStructureId': roleStructureId.toString(),

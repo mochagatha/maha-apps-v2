@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maha_apps_v2/core/router/route_names.dart';
+import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:maha_apps_v2/features/biodata/presentation/providers/bank_provider.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_text_form_field.dart';
@@ -139,7 +139,7 @@ class _SubmitButtonState extends State<_SubmitButton> {
         ),
       );
     } else {
-      router.pushNamed(RouteNames.biodataSignature);
+      router.pushNamed(AppRoutes.biodataSignature.name);
     }
   }
 

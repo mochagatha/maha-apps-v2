@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => context.go('/home'),
+            onPressed: () => context.go(AppRoutes.home.path),
           ),
           title: Text(
             context.l10n.profile,
@@ -614,7 +614,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           if (context.mounted) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (context.mounted) {
-                                context.go(RoutePaths.login);
+                                context.go(AppRoutes.login.path);
                               }
                             });
                           }

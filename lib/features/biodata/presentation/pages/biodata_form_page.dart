@@ -5,7 +5,7 @@ import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../shared/widgets/custom_search_dropdown.dart';
@@ -553,7 +553,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
 
                   // Only navigate if form validation passes
                   if (context.mounted) {
-                    context.pushNamed(RouteNames.educationForm);
+                    context.pushNamed(AppRoutes.educationForm.name);
                   }
                 },
                 style: ElevatedButton.styleFrom(

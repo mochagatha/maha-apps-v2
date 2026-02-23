@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/document_provider.dart';
@@ -222,7 +222,7 @@ class DocumentPage extends StatelessWidget {
                   }
 
                   if (context.mounted) {
-                    context.pushNamed(RouteNames.skillForm);
+                    context.pushNamed(AppRoutes.skillForm.name);
                   }
                 },
                 style: ElevatedButton.styleFrom(

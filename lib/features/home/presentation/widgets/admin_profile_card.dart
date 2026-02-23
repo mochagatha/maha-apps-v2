@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../authentication/presentation/providers/auth_provider.dart';
@@ -68,7 +68,7 @@ class AdminProfileCard extends StatelessWidget {
                           await context.read<ScreenSecurityProvider>().disableSecurity();
                           await context.read<AuthProvider>().logoutUser();
                           if (context.mounted) {
-                            context.go(RoutePaths.login);
+                            context.go(AppRoutes.login.path);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -197,7 +197,7 @@ class AdminProfileCard extends StatelessWidget {
                     // Notification Icon
                     GestureDetector(
                       onTap: () {
-                        // context.push(RoutePaths.pesan);
+                        // context.push(AppRoutes.pesan.path);.path);
                       },
                       child: Stack(
                         clipBehavior: Clip.none,

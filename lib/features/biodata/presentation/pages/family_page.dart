@@ -5,7 +5,7 @@ import 'package:maha_apps_v2/core/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/route_names.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/family_provider.dart';
@@ -432,7 +432,7 @@ class _FamilyPageState extends State<FamilyPage> {
                   }
 
                   if (context.mounted) {
-                    context.pushNamed(RouteNames.documentForm);
+                    context.pushNamed(AppRoutes.documentForm.name);
                   }
                 },
                 style: ElevatedButton.styleFrom(

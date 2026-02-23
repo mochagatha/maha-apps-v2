@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 
@@ -105,13 +105,13 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
             _buildLinkItem(
               context,
               text: context.l10n.termsOfUse,
-              onTap: () => context.push(RoutePaths.termsAndConditions),
+              onTap: () => context.push(AppRoutes.termsAndConditions.path),
             ),
             const SizedBox(height: _spacingXSmall),
             _buildLinkItem(
               context,
               text: context.l10n.privacyNotice,
-              onTap: () => context.push(RoutePaths.privacyNotice),
+              onTap: () => context.push(AppRoutes.privacyNotice.path),
             ),
             const SizedBox(height: _spacingLarge),
           ],
@@ -209,6 +209,6 @@ class _TermsAndConditionsSheetState extends State<TermsAndConditionsSheet> {
   /// Handler untuk tombol setuju
   void _handleAgreeButtonPressed() {
     Navigator.pop(context);
-    context.go(RoutePaths.register);
+    context.go(AppRoutes.register.path);
   }
 }

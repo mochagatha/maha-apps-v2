@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../core/router/route_paths.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../../../shared/widgets/menu_item_card.dart';
 
@@ -40,14 +40,14 @@ class EmploymentLevelListPage extends StatelessWidget {
         'icon': 'assets/images/icon/jam_kerja.svg',
         'text': 'Kantor',
         'action': () {
-          context.push(RoutePaths.employmentLevelOffice);
+          context.push(AppRoutes.employmentLevelOffice.path);
         },
       },
       {
         'icon': 'assets/images/icon/pengaturan_lembur.svg',
         'text': 'Proyek',
         'action': () {
-          context.push(RoutePaths.employmentLevelProject);
+          context.push(AppRoutes.employmentLevelProject.path);
         },
       },
     ];

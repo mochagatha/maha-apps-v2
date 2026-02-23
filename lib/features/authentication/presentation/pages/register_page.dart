@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
@@ -94,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      context.go(RoutePaths.login);
+                      context.go(AppRoutes.login.path);
                     },
                     child: Text(context.l10n.login),
                   ),
@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
         title: context.l10n.createAccountTitle,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go(RoutePaths.login),
+          onPressed: () => context.go(AppRoutes.login.path),
         ),
       ),
       body: Consumer<AuthProvider>(
@@ -392,7 +392,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.go(RoutePaths.login);
+                                  context.go(AppRoutes.login.path);
                                 },
                             ),
                           ],

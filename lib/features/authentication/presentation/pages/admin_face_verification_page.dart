@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/router/route_paths.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../core/utils/localization_extension.dart';
@@ -16,7 +16,7 @@ class AdminFaceVerificationPage extends StatelessWidget {
         title: context.l10n.adminFaceVerificationTitle,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go(RoutePaths.login),
+          onPressed: () => context.go(AppRoutes.login.path),
         ),
       ),
       body: SafeArea(
@@ -62,7 +62,7 @@ class AdminFaceVerificationPage extends StatelessWidget {
               // Start button
               ElevatedButton(
                 onPressed: () {
-                  context.push(RoutePaths.adminFaceCamera);
+                  context.push(AppRoutes.adminFaceCamera.path);
                 },
                 child: Text(context.l10n.startVerification),
               ),
@@ -72,7 +72,7 @@ class AdminFaceVerificationPage extends StatelessWidget {
               // Cancel button
               TextButton(
                 onPressed: () {
-                  context.go(RoutePaths.login);
+                  context.go(AppRoutes.login.path);
                 },
                 child: Text(context.l10n.cancel),
               ),

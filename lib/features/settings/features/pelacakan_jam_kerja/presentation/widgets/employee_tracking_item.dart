@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../shared/theme/app_theme.dart';
-import '../../../../../../core/router/route_names.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../domain/entities/tracking_employee.dart';
 
 class EmployeeTrackingItem extends StatelessWidget {
@@ -32,7 +32,7 @@ class EmployeeTrackingItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           context.pushNamed(
-            RouteNames.pelacakanEmployeeDetail,
+            AppRoutes.pelacakanEmployeeDetail.name,
             pathParameters: {'id': employee.id.toString()},
           );
         },

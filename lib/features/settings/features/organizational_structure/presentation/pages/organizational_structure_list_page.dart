@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../../core/router/route_paths.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../../../shared/widgets/menu_item_card.dart';
 
@@ -49,7 +49,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'enabled': true,
         'action': () {
           context.push(
-            RoutePaths.structureMain,
+            AppRoutes.structureMain.path,
             extra: {'type': 'utama'},
           );
         },
@@ -60,7 +60,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'enabled': true,
         'action': () {
           context.push(
-            RoutePaths.structureMain,
+            AppRoutes.structureMain.path,
             extra: {'type': 'project'},
           );
         },
@@ -71,7 +71,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'enabled': true,
         'action': () {
           context.push(
-            RoutePaths.structureMain,
+            AppRoutes.structureMain.path,
             extra: {'type': 'cabang'},
           );
         },
@@ -81,7 +81,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Data Tingkatan Pekerjaan',
         'enabled': true,
         'action': () {
-          context.push(RoutePaths.employmentLevel);
+          context.push(AppRoutes.employmentLevel.path);
         },
       },
       {
@@ -89,7 +89,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Data Departemen',
         'enabled': true,
         'action': () {
-          context.push(RoutePaths.departmentList);
+          context.push(AppRoutes.departmentList.path);
         },
       },
       {
@@ -97,7 +97,7 @@ class OrganizationalStructureListPage extends StatelessWidget {
         'text': 'Data Jabatan',
         'enabled': true,
         'action': () {
-          context.push(RoutePaths.jobTitleList);
+          context.push(AppRoutes.jobTitleList.path);
         },
       },
     ];

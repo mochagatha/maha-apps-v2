@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../core/router/route_paths.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../../../shared/widgets/menu_item_card.dart';
 
@@ -40,14 +40,14 @@ class JobTitleProjectPage extends StatelessWidget {
         'icon': 'assets/images/icon/jam_kerja.svg',
         'text': 'Karyawan',
         'action': () {
-          context.push(RoutePaths.jobTitleProjectEmployee);
+          context.push(AppRoutes.jobTitleProjectEmployee.path);
         },
       },
       {
         'icon': 'assets/images/icon/pengaturan_lembur.svg',
         'text': 'Pekerja Harian',
         'action': () {
-          context.push(RoutePaths.jobTitleProjectWorker);
+          context.push(AppRoutes.jobTitleProjectWorker.path);
         },
       },
     ];
