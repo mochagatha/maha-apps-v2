@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/domain/entities/placement_entity.dart';
-import 'package:maha_apps_v2/features/settings/features/absensi/features/domain/entities/work_hour_entity.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/domain/entities/placement_entity.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/domain/entities/work_hour_entity.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_elevated_button.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_search_dropdown.dart';

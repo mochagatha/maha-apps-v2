@@ -10,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization textCapitalization;
   final String? prefKey;
+  final VoidCallback? onChanged;
 
   const CustomTextFormField({
     super.key,
@@ -20,6 +21,7 @@ class CustomTextFormField extends StatefulWidget {
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.none,
     this.prefKey,
+    this.onChanged,
   });
 
   @override
@@ -30,6 +32,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late SharedPreferences _prefs;
 
   void _saveChanges(String value) async {
+    widget.onChanged?.call();
     if (widget.prefKey == null) return;
     _prefs.setString(widget.prefKey!, value);
   }

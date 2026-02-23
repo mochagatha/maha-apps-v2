@@ -27,6 +27,10 @@ import 'package:maha_apps_v2/features/recruitment/features/data_verification/pre
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/e_matrai_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/add_joint_leave_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/holiday_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/pages/joint_leave_settings_page.dart';
+import 'package:maha_apps_v2/features/settings/features/absensi/features/holdays/presentation/providers/add_joint_leave_provider.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/detail_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/edit_work_hours_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/work_hour_placement/presentation/pages/employee_absence_page.dart';
@@ -919,10 +923,20 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiHariLiburCuti.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Hari Libur & Cuti Bersama',
-              ),
+          builder: (context, state) => HolidaySettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsenceJointLeave.path,
+          builder: (context, state) => JointLeaveSettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settingsAbsenceAddJointLeave.path,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (context) => AddJointLeaveProvider(),
+              child: AddJointLeavePage(),
+            );
+          },
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiLembur.path,

@@ -248,6 +248,14 @@ class AppRoutes {
     'settings-absensi-hari-libur-cuti',
     '/settings/absensi/hari-libur-cuti-bersama',
   );
+  static const settingsAbsenceJointLeave = AppRoute(
+    'settings-absensi-joint-leave',
+    '/settings/absensi/joint-leave',
+  );
+  static const settingsAbsenceAddJointLeave = AppRoute(
+    'settings-absensi-add-joint-leave',
+    '/settings/absensi/joint-leave/add',
+  );
   static const settingsAbsensiLembur = AppRoute(
     'settings-absensi-lembur',
     '/settings/absensi/lembur',
