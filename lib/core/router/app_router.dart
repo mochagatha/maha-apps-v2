@@ -100,7 +100,6 @@ import '../../features/biodata/presentation/pages/selfie_result_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_camera_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_result_page.dart';
-import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 import '../../features/recruitment/features/data_verification/presentation/pages/verification_data_page.dart';
@@ -154,7 +153,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: AppRoutes.splash.path,
+      initialLocation: AppRoutes.biodataRevisionNotice.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -510,7 +509,7 @@ class AppRouter {
         ShellRoute(
           builder: (context, state, child) {
             return ChangeNotifierProvider(
-              create: (context) => BiodataRevisionProvider(),
+              create: (context) => sl<BiodataRevisionProvider>(),
               child: child,
             );
           },

@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/biodata.dart';
+import '../entities/employee_full_data.dart';
 import '../entities/region.dart';
+import '../entities/revision_verification.dart';
 
 abstract class BiodataRepository {
   Future<Either<Failure, Biodata>> getBiodata();
@@ -27,5 +29,11 @@ abstract class BiodataRepository {
     String? npwpPath,
     String? bpjsKtnPath,
     String? bpjsKesPath,
+  });
+  Future<Either<Failure, RevisionVerification>> getRevisionVerification(int employeeId);
+  Future<Either<Failure, EmployeeFullData>> getEmployeeFullData(int employeeId);
+  Future<Either<Failure, void>> submitRevision({
+    required int employeeId,
+    required Map<String, dynamic> body,
   });
 }

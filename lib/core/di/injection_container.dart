@@ -111,10 +111,14 @@ import '../../features/biodata/domain/usecases/submit_sibling.dart';
 import '../../features/biodata/domain/usecases/submit_marital.dart';
 import '../../features/biodata/domain/usecases/submit_children.dart';
 import '../../features/biodata/domain/usecases/submit_document.dart';
+import '../../features/biodata/domain/usecases/get_revision_verification.dart';
+import '../../features/biodata/domain/usecases/get_employee_full_data.dart';
+import '../../features/biodata/domain/usecases/submit_revision.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
 import '../../features/biodata/presentation/providers/family_provider.dart';
+import '../../features/biodata/presentation/providers/biodata_revision_provider.dart';
 
 // Recruitment feature imports
 import '../../features/recruitment/data/datasources/recruitment_remote_datasource.dart';
@@ -352,6 +356,13 @@ Future<void> init() async {
       submitChildrenUseCase: sl(),
     ),
   );
+  sl.registerFactory(
+    () => BiodataRevisionProvider(
+      getRevisionVerification: sl(),
+      getEmployeeFullData: sl(),
+      submitRevision: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetBiodata(sl()));
@@ -362,6 +373,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SubmitMarital(sl()));
   sl.registerLazySingleton(() => SubmitChildren(sl()));
   sl.registerLazySingleton(() => SubmitDocument(sl()));
+  sl.registerLazySingleton(() => GetRevisionVerification(sl()));
+  sl.registerLazySingleton(() => GetEmployeeFullData(sl()));
+  sl.registerLazySingleton(() => SubmitRevision(sl()));
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));

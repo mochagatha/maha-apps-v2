@@ -2,7 +2,9 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/biodata.dart';
+import '../../domain/entities/employee_full_data.dart';
 import '../../domain/entities/region.dart';
+import '../../domain/entities/revision_verification.dart';
 import '../../domain/repositories/biodata_repository.dart';
 import '../datasources/biodata_remote_datasource.dart';
 
@@ -151,6 +153,43 @@ class BiodataRepositoryImpl implements BiodataRepository {
         bpjsKtnPath: bpjsKtnPath,
         bpjsKesPath: bpjsKesPath,
       );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RevisionVerification>> getRevisionVerification(int employeeId) async {
+    try {
+      final result = await remoteDataSource.getRevisionVerification(employeeId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, EmployeeFullData>> getEmployeeFullData(int employeeId) async {
+    try {
+      final result = await remoteDataSource.getEmployeeFullData(employeeId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitRevision({
+    required int employeeId,
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      await remoteDataSource.submitRevision(employeeId: employeeId, body: body);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

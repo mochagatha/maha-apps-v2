@@ -3,7 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
 import '../models/biodata_model.dart';
+import '../models/employee_full_data_model.dart';
 import '../models/region_models.dart';
+import '../models/revision_verification_model.dart';
 
 abstract class BiodataRemoteDataSource {
   Future<BiodataModel> getBiodata();
@@ -30,6 +32,9 @@ abstract class BiodataRemoteDataSource {
     String? bpjsKtnPath,
     String? bpjsKesPath,
   });
+  Future<RevisionVerificationModel> getRevisionVerification(int employeeId);
+  Future<EmployeeFullDataModel> getEmployeeFullData(int employeeId);
+  Future<void> submitRevision({required int employeeId, required Map<String, dynamic> body});
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -328,6 +333,65 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       throw ServerException(
         e.response?.data['message'] ?? 'Network error occurred',
       );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<RevisionVerificationModel> getRevisionVerification(int employeeId) async {
+    try {
+      final response = await client.dioGolang.get(
+        '/employee/employee-verification-data/get-by-employee/$employeeId',
+      );
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        return RevisionVerificationModel.fromJson(
+          response.data['data'] as Map<String, dynamic>,
+        );
+      }
+      throw ServerException(response.data['message'] ?? 'Failed to get revision data');
+    } on DioException catch (e) {
+      throw ServerException(e.response?.data['message'] ?? 'Network error occurred');
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<EmployeeFullDataModel> getEmployeeFullData(int employeeId) async {
+    try {
+      final response = await client.dioGolang.get('/employee/$employeeId');
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        return EmployeeFullDataModel.fromJson(
+          response.data['data'] as Map<String, dynamic>,
+        );
+      }
+      throw ServerException(response.data['message'] ?? 'Failed to get employee data');
+    } on DioException catch (e) {
+      throw ServerException(e.response?.data['message'] ?? 'Network error occurred');
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitRevision({
+    required int employeeId,
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final response = await client.dioGolang.put(
+        '/employee/update-all-data/$employeeId',
+        data: body,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(response.data['message'] ?? 'Failed to submit revision');
+      }
+    } on DioException catch (e) {
+      throw ServerException(e.response?.data['message'] ?? 'Network error occurred');
     } catch (e) {
       if (e is ServerException) rethrow;
       throw ServerException(e.toString());
