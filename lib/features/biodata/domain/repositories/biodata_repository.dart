@@ -15,4 +15,17 @@ abstract class BiodataRepository {
   Future<Either<Failure, void>> submitSibling(Map<String, dynamic> body);
   Future<Either<Failure, void>> submitMarital(int employeeId, Map<String, dynamic> body);
   Future<Either<Failure, void>> submitChildren(Map<String, dynamic> body);
+  Future<Either<Failure, void>> submitDocument({
+    required int employeeId,
+    required String photoPath,
+    required String ktpPath,
+    required String kkPath,
+    required String certificatePath,
+    required String gradeTranscriptPath,
+    String? certificateSkillPath,
+    String? bankAccountPath,
+    String? npwpPath,
+    String? bpjsKtnPath,
+    String? bpjsKesPath,
+  });
 }

@@ -122,4 +122,38 @@ class BiodataRepositoryImpl implements BiodataRepository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> submitDocument({
+    required int employeeId,
+    required String photoPath,
+    required String ktpPath,
+    required String kkPath,
+    required String certificatePath,
+    required String gradeTranscriptPath,
+    String? certificateSkillPath,
+    String? bankAccountPath,
+    String? npwpPath,
+    String? bpjsKtnPath,
+    String? bpjsKesPath,
+  }) async {
+    try {
+      await remoteDataSource.submitDocument(
+        employeeId: employeeId,
+        photoPath: photoPath,
+        ktpPath: ktpPath,
+        kkPath: kkPath,
+        certificatePath: certificatePath,
+        gradeTranscriptPath: gradeTranscriptPath,
+        certificateSkillPath: certificateSkillPath,
+        bankAccountPath: bankAccountPath,
+        npwpPath: npwpPath,
+        bpjsKtnPath: bpjsKtnPath,
+        bpjsKesPath: bpjsKesPath,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

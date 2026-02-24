@@ -110,7 +110,9 @@ import '../../features/biodata/domain/usecases/submit_family.dart';
 import '../../features/biodata/domain/usecases/submit_sibling.dart';
 import '../../features/biodata/domain/usecases/submit_marital.dart';
 import '../../features/biodata/domain/usecases/submit_children.dart';
+import '../../features/biodata/domain/usecases/submit_document.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
+import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
 import '../../features/biodata/presentation/providers/family_provider.dart';
 
@@ -340,6 +342,7 @@ Future<void> init() async {
 
   //! Features - Biodata
   sl.registerFactory(() => BiodataProvider(getBiodata: sl()));
+  sl.registerFactory(() => DocumentProvider(submitDocumentUseCase: sl()));
   sl.registerFactory(() => EducationFormProvider(submitEducationUseCase: sl()));
   sl.registerFactory(
     () => FamilyProvider(
@@ -358,6 +361,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SubmitSibling(sl()));
   sl.registerLazySingleton(() => SubmitMarital(sl()));
   sl.registerLazySingleton(() => SubmitChildren(sl()));
+  sl.registerLazySingleton(() => SubmitDocument(sl()));
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../domain/services/biodata_step_manager.dart';
 import '../providers/biodata_provider.dart';
 import '../widgets/welcome_dialogs.dart';
 import '../widgets/welcome_menu_grid.dart';
@@ -38,7 +39,7 @@ class _WelcomeBiodataState extends State<WelcomeBiodata> {
             WelcomeDialogs.showDataCompletionPromptDialog(
               context: context,
               onConfirm: () async {
-                await saveDataToPreferences('biodata', 'nama_lengkap');
+                BiodataStepManager.setNextStep(AppRoutes.biodataForm.path);
                 context.goNamed(AppRoutes.biodataForm.name);
               },
             );
@@ -47,7 +48,6 @@ class _WelcomeBiodataState extends State<WelcomeBiodata> {
       },
     );
   }
-
 
   Future<void> saveDataToPreferences(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

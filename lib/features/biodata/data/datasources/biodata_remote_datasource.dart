@@ -17,6 +17,19 @@ abstract class BiodataRemoteDataSource {
   Future<void> submitSibling(Map<String, dynamic> body);
   Future<void> submitMarital(int employeeId, Map<String, dynamic> body);
   Future<void> submitChildren(Map<String, dynamic> body);
+  Future<void> submitDocument({
+    required int employeeId,
+    required String photoPath,
+    required String ktpPath,
+    required String kkPath,
+    required String certificatePath,
+    required String gradeTranscriptPath,
+    String? certificateSkillPath,
+    String? bankAccountPath,
+    String? npwpPath,
+    String? bpjsKtnPath,
+    String? bpjsKesPath,
+  });
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -246,6 +259,69 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw ServerException(
           response.data['message'] ?? 'Failed to submit children data',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitDocument({
+    required int employeeId,
+    required String photoPath,
+    required String ktpPath,
+    required String kkPath,
+    required String certificatePath,
+    required String gradeTranscriptPath,
+    String? certificateSkillPath,
+    String? bankAccountPath,
+    String? npwpPath,
+    String? bpjsKtnPath,
+    String? bpjsKesPath,
+  }) async {
+    try {
+      final Map<String, dynamic> fields = {
+        'employee_id': employeeId.toString(),
+        'photo': await MultipartFile.fromFile(photoPath),
+        'ktp': await MultipartFile.fromFile(ktpPath),
+        'kk': await MultipartFile.fromFile(kkPath),
+        'certificate': await MultipartFile.fromFile(certificatePath),
+        'grade_transcript': await MultipartFile.fromFile(gradeTranscriptPath),
+      };
+
+      if (certificateSkillPath != null && certificateSkillPath.isNotEmpty) {
+        fields['certificate_skill'] = await MultipartFile.fromFile(certificateSkillPath);
+      }
+      if (bankAccountPath != null && bankAccountPath.isNotEmpty) {
+        fields['bank_account'] = await MultipartFile.fromFile(bankAccountPath);
+      }
+      if (npwpPath != null && npwpPath.isNotEmpty) {
+        fields['npwp'] = await MultipartFile.fromFile(npwpPath);
+      }
+      if (bpjsKtnPath != null && bpjsKtnPath.isNotEmpty) {
+        fields['bpjs_ktn'] = await MultipartFile.fromFile(bpjsKtnPath);
+      }
+      if (bpjsKesPath != null && bpjsKesPath.isNotEmpty) {
+        fields['bpjs_kes'] = await MultipartFile.fromFile(bpjsKesPath);
+      }
+
+      final formData = FormData.fromMap(fields);
+
+      final response = await client.dioGolang.post(
+        '/employee/employee-document',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit documents',
         );
       }
     } on DioException catch (e) {

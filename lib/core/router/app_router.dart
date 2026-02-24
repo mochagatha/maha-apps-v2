@@ -58,6 +58,7 @@ import '../../features/authentication/presentation/pages/forgot_password_page.da
 import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
+import '../../features/biodata/domain/services/biodata_step_manager.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
@@ -188,7 +189,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.login.path,
           name: AppRoutes.login.name,
-          redirect: (context, state) {
+          redirect: (context, state) async {
             final authProvider = context.read<AuthProvider>();
             // If user is on splash and already authenticated, skip splash
             // BUT: Admin users should NOT skip - they must login fresh each time
@@ -199,7 +200,12 @@ class AppRouter {
               }
               // Check user status to determine destination (matching v1 logic)
               if (authProvider.user?.status == 1) {
-                return AppRoutes.welcomeBiodata.path;
+                final nextStep = await BiodataStepManager.getNextStep();
+                if (nextStep != null && nextStep.isNotEmpty) {
+                  return nextStep;
+                } else {
+                  return AppRoutes.welcomeBiodata.path;
+                }
               } else {
                 return AppRoutes.home.path;
               }
@@ -414,7 +420,7 @@ class AppRouter {
           path: AppRoutes.documentForm.path,
           name: AppRoutes.documentForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => DocumentProvider(),
+            create: (_) => sl<DocumentProvider>(),
             child: const DocumentPage(),
           ),
         ),

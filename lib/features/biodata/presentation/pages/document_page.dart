@@ -171,83 +171,95 @@ class DocumentPage extends StatelessWidget {
         height: 70,
         elevation: 0,
         color: Colors.white,
-        child: Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  context.pop();
-                },
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.primary),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: AppColors.primary),
-                    SizedBox(width: 8),
-                    Text(
-                      'Kembali',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () async {
-                  final provider = context.read<DocumentProvider>();
-                  final messenger = ScaffoldMessenger.of(context);
-                  final error = await provider.submit();
-
-                  if (error != null) {
-                    messenger.showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          error,
-                          style: TextStyle(color: Colors.white),
+        child: Consumer<DocumentProvider>(
+          builder: (context, provider, child) => Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: AppColors.primary),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: AppColors.primary),
+                      SizedBox(width: 8),
+                      Text(
+                        'Kembali',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
                         ),
-                        backgroundColor: Colors.grey.shade800,
                       ),
-                    );
-                    return;
-                  }
-
-                  if (context.mounted) {
-                    context.pushNamed(AppRoutes.skillForm.name);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Selanjutnya',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: provider.isSubmitting
+                      ? null
+                      : () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          final error = await provider.submit();
+
+                          if (error != null) {
+                            messenger.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  error,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.grey.shade800,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (context.mounted) {
+                            context.pushNamed(AppRoutes.skillForm.name);
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: provider.isSubmitting
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Selanjutnya',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
+                          ],
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
