@@ -27,6 +27,7 @@ import 'package:maha_apps_v2/features/recruitment/features/data_verification/pre
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/e_matrai_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
+import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/providers/e_matrai_provider.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/attendance_anywhere_settings_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/employee_attendance_anywhere_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/single_employee_attendance_anywhere_page.dart';
@@ -153,7 +154,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: AppRoutes.biodataRevisionNotice.path,
+      initialLocation: AppRoutes.recruitmentEMatrai.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -592,7 +593,14 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.employeeEMatrai.path,
           name: AppRoutes.employeeEMatrai.name,
-          builder: (context, state) => const EmployeeEMatraiPage(),
+          builder: (context, state) {
+            final typeUser =
+                (state.extra as Map<String, dynamic>?)?['type_user'] as String? ?? 'employee';
+            return ChangeNotifierProvider(
+              create: (_) => sl<EMatraiProvider>(),
+              child: EmployeeEMatraiPage(typeUser: typeUser),
+            );
+          },
         ),
 
         // Organizational Structure Routes

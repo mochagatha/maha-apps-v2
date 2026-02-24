@@ -127,6 +127,13 @@ import '../../features/recruitment/domain/repositories/recruitment_repository.da
 import '../../features/recruitment/domain/usecases/get_recruitment_menus.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 
+// E-Matrai feature imports
+import '../../features/recruitment/features/e_matrai/data/datasources/e_matrai_remote_datasource.dart';
+import '../../features/recruitment/features/e_matrai/data/repositories/e_matrai_repository_impl.dart';
+import '../../features/recruitment/features/e_matrai/domain/repositories/e_matrai_repository.dart';
+import '../../features/recruitment/features/e_matrai/domain/usecases/get_e_matrai_list.dart';
+import '../../features/recruitment/features/e_matrai/presentation/providers/e_matrai_provider.dart';
+
 // Organizational Structure feature imports
 import '../../features/settings/features/organizational_structure/data/datasources/organizational_structure_remote_data_source.dart';
 import '../../features/settings/features/organizational_structure/data/repositories/organizational_structure_repository_impl.dart';
@@ -400,6 +407,23 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<RecruitmentRemoteDataSource>(
     () => RecruitmentRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - E-Matrai
+  // Provider
+  sl.registerFactory(() => EMatraiProvider(getEMatraiList: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetEMatraiList(sl()));
+
+  // Repository
+  sl.registerLazySingleton<EMatraiRepository>(
+    () => EMatraiRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<EMatraiRemoteDataSource>(
+    () => EMatraiRemoteDataSourceImpl(client: sl()),
   );
 
   //! Features - Organizational Structure
