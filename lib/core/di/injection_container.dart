@@ -116,6 +116,7 @@ import '../../features/biodata/domain/usecases/submit_document.dart';
 import '../../features/biodata/domain/usecases/get_revision_verification.dart';
 import '../../features/biodata/domain/usecases/get_employee_full_data.dart';
 import '../../features/biodata/domain/usecases/submit_revision.dart';
+import '../../features/biodata/domain/usecases/submit_signature.dart';
 import '../../features/biodata/domain/usecases/submit_skill.dart';
 import '../../features/biodata/presentation/providers/bank_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
@@ -123,6 +124,7 @@ import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
 import '../../features/biodata/presentation/providers/family_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_revision_provider.dart';
+import '../../features/biodata/presentation/providers/signature_provider.dart';
 import '../../features/biodata/presentation/providers/skill_provider.dart';
 
 // Recruitment feature imports
@@ -397,9 +399,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRevisionVerification(sl()));
   sl.registerLazySingleton(() => GetEmployeeFullData(sl()));
   sl.registerLazySingleton(() => SubmitRevision(sl()));
+  sl.registerLazySingleton(() => SubmitSignature(sl()));
   sl.registerLazySingleton(() => SubmitSkill(sl()));
 
   // Providers
+  sl.registerFactory(
+    () => SignatureProvider(submitSignatureUseCase: sl(), sharedPreferences: sl()),
+  );
   sl.registerFactory(() => SkillProvider(submitSkillUseCase: sl()));
 
   // Repository

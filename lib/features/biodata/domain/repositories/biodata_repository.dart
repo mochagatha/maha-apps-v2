@@ -48,4 +48,8 @@ abstract class BiodataRepository {
     required int employeeId,
     required List<String> skills,
   });
+  Future<Either<Failure, void>> submitSignature({
+    required int employeeId,
+    required String signaturePath,
+  });
 }

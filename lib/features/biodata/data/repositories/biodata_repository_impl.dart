@@ -242,4 +242,20 @@ class BiodataRepositoryImpl implements BiodataRepository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> submitSignature({
+    required int employeeId,
+    required String signaturePath,
+  }) async {
+    try {
+      await remoteDataSource.submitSignature(
+        employeeId: employeeId,
+        signaturePath: signaturePath,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

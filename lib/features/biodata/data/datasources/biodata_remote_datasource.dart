@@ -44,6 +44,7 @@ abstract class BiodataRemoteDataSource {
   Future<EmployeeFullDataModel> getEmployeeFullData(int employeeId);
   Future<void> submitRevision({required int employeeId, required Map<String, dynamic> body});
   Future<void> submitSkill({required int employeeId, required List<String> skills});
+  Future<void> submitSignature({required int employeeId, required String signaturePath});
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -465,6 +466,40 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
     } on DioException catch (e) {
       throw ServerException(
         e.response?.data['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitSignature({
+    required int employeeId,
+    required String signaturePath,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'signature': await MultipartFile.fromFile(
+          signaturePath,
+          filename: 'signature.png',
+        ),
+      });
+
+      final response = await client.dioGolang.post(
+        '/employee/employee-signature/$employeeId',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit signature',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data?['message'] ?? 'Network error occurred',
       );
     } catch (e) {
       if (e is ServerException) rethrow;
