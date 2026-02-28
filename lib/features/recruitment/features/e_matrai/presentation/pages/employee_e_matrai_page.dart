@@ -34,7 +34,21 @@ class EmployeeEMatraiPage extends StatelessWidget {
         appBar: CustomAppBar(title: 'Upload E-Matrai'),
         body: Column(
           children: [
-            CustomTabBar(statusList: statusList, showAll: false),
+            Consumer<EMatraiProvider>(
+              builder: (context, provider, _) {
+                final c = provider.count;
+                // Baru → newCount, Upload → upload, Selesai → approve
+                return CustomTabBar(
+                  statusList: statusList,
+                  showAll: false,
+                  counts: [
+                    c?.newCount ?? 0,
+                    c?.upload ?? 0,
+                    c?.approve ?? 0,
+                  ],
+                );
+              },
+            ),
             Expanded(
               child: TabBarView(
                 children: List.generate(statusList.length, (statusIndex) {
@@ -503,7 +517,7 @@ class _DataItemState extends State<_DataItem> {
               _buildAttachment(
                 title: 'Surat Perjanjian Kerja',
                 attachmentUrl: widget.item.attachmentUrl,
-                createdAt: widget.item.createdAt,
+                updatedAt: widget.item.updatedAt,
               ),
 
             // Upload button
@@ -547,7 +561,7 @@ class _DataItemState extends State<_DataItem> {
               _buildAttachment(
                 title: 'Surat Perjanjian Kerja (E-Matrai)',
                 attachmentUrl: '',
-                createdAt: DateTime.now().toIso8601String(),
+                updatedAt: DateTime.now().toIso8601String(),
                 selectedFile: _selectedFile,
               ),
               const SizedBox(height: 12),
@@ -610,12 +624,12 @@ class _DataItemState extends State<_DataItem> {
   Widget _buildAttachment({
     required String title,
     required String attachmentUrl,
-    required String createdAt,
+    required String updatedAt,
     File? selectedFile,
   }) {
     DateTime date;
     try {
-      date = DateTime.parse(createdAt);
+      date = DateTime.parse(updatedAt);
     } catch (_) {
       date = DateTime.now();
     }

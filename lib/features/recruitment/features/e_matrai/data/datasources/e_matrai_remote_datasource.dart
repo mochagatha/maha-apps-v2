@@ -54,7 +54,7 @@ class EMatraiRemoteDataSourceImpl implements EMatraiRemoteDataSource {
     try {
       final formData = FormData.fromMap({
         'employee_agreement_id': employeeAgreementId.toString(),
-        'file': await MultipartFile.fromFile(
+        'files': await MultipartFile.fromFile(
           filePath,
           contentType: DioMediaType('application', 'pdf'),
         ),
