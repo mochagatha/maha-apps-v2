@@ -35,6 +35,7 @@ abstract class BiodataRemoteDataSource {
   Future<RevisionVerificationModel> getRevisionVerification(int employeeId);
   Future<EmployeeFullDataModel> getEmployeeFullData(int employeeId);
   Future<void> submitRevision({required int employeeId, required Map<String, dynamic> body});
+  Future<void> submitSkill({required int employeeId, required List<String> skills});
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -392,6 +393,31 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       }
     } on DioException catch (e) {
       throw ServerException(e.response?.data['message'] ?? 'Network error occurred');
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitSkill({
+    required int employeeId,
+    required List<String> skills,
+  }) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-skill/$employeeId',
+        data: {'skills': skills},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit skills',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] ?? 'Network error occurred',
+      );
     } catch (e) {
       if (e is ServerException) rethrow;
       throw ServerException(e.toString());

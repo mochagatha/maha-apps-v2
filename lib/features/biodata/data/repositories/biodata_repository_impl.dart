@@ -195,4 +195,20 @@ class BiodataRepositoryImpl implements BiodataRepository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> submitSkill({
+    required int employeeId,
+    required List<String> skills,
+  }) async {
+    try {
+      await remoteDataSource.submitSkill(
+        employeeId: employeeId,
+        skills: skills,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }

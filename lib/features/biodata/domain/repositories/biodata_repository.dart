@@ -36,4 +36,8 @@ abstract class BiodataRepository {
     required int employeeId,
     required Map<String, dynamic> body,
   });
+  Future<Either<Failure, void>> submitSkill({
+    required int employeeId,
+    required List<String> skills,
+  });
 }

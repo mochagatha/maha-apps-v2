@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../domain/services/biodata_step_manager.dart';
+import '../../domain/usecases/submit_skill.dart';
 
 class SkillModel {
   final int id;
@@ -11,9 +14,14 @@ class SkillModel {
 }
 
 class SkillProvider extends ChangeNotifier {
-  bool isLoadingSkill = false;
+  final SubmitSkill submitSkillUseCase;
 
-  // Available skills (Mocked or loaded from API)
+  SkillProvider({required this.submitSkillUseCase});
+
+  bool isLoadingSkill = false;
+  String? errorMessage;
+
+  // Available skills (predefined list for the selection dialog)
   List<SkillModel> availableSkills = [
     SkillModel(id: 1, name: 'Memasak'),
     SkillModel(id: 2, name: 'Bahasa Jerman'),
@@ -25,20 +33,22 @@ class SkillProvider extends ChangeNotifier {
     SkillModel(id: 8, name: 'Public Speaking'),
   ];
 
-  // User's selected skills
+  // User's selected skills (from predefined list)
   List<SkillModel> selectedSkills = [];
 
-  // Skills to be added (User inputs manual string?)
-  // v1 had 'addSkillList' as List<String>.
-  // v1 dialog seems to allow searching and selecting existing skills.
+  // Manually typed new skills
   List<String> newSkills = [];
 
   // Skills marked for deletion (if updating existing data)
   List<int> deleteSkillList = [];
 
+  /// All skill names to be submitted (predefined + manually typed)
+  List<String> get allSkillNames => [
+    ...selectedSkills.map((s) => s.name),
+    ...newSkills,
+  ];
+
   Future<void> fetchSkills(String query) async {
-    // Simulate API call or filtering
-    // In real app, this would call UseCase
     notifyListeners();
   }
 
@@ -67,27 +77,82 @@ class SkillProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sync selected skills from dialog (replaces current selection)
+  void syncSelectedSkills(List<SkillModel> selected, List<String> customSkills) {
+    // Track removed predefined skills for deletion list
+    for (final existing in selectedSkills) {
+      if (!selected.any((s) => s.id == existing.id)) {
+        deleteSkillList.add(existing.id);
+      }
+    }
+    selectedSkills = List.from(selected);
+    newSkills = List.from(customSkills);
+    notifyListeners();
+  }
+
   Future<bool> submit() async {
     // Validate at least one skill is selected
-    if (selectedSkills.isEmpty) {
+    if (allSkillNames.isEmpty) {
       debugPrint("Validation Error: At least one skill must be selected");
       return false;
     }
 
     isLoadingSkill = true;
+    errorMessage = null;
     notifyListeners();
 
-    // Simulate submit
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final employeeId = prefs.getInt('employee_id');
 
-    isLoadingSkill = false;
-    notifyListeners();
+      if (employeeId == null) {
+        errorMessage = 'Employee ID tidak ditemukan. Silahkan login ulang.';
+        isLoadingSkill = false;
+        notifyListeners();
+        return false;
+      }
 
-    debugPrint("Submitting Skills: ${selectedSkills.map((s) => s.name).toList()}");
-    
-    // Save the next step on success
-    BiodataStepManager.setNextStep(AppRoutes.biodataBank.path);
-    
-    return true;
+      final result = await submitSkillUseCase(
+        SubmitSkillParams(
+          employeeId: employeeId,
+          skills: allSkillNames,
+        ),
+      );
+
+      isLoadingSkill = false;
+
+      return result.fold(
+        (failure) {
+          errorMessage = _mapFailureToMessage(failure);
+          notifyListeners();
+          return false;
+        },
+        (_) {
+          debugPrint("Skills submitted successfully: $allSkillNames");
+          // Save the next step on success
+          BiodataStepManager.setNextStep(AppRoutes.biodataBank.path);
+          notifyListeners();
+          return true;
+        },
+      );
+    } catch (e) {
+      errorMessage = 'Terjadi kesalahan: ${e.toString()}';
+      isLoadingSkill = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return (failure as ServerFailure).message;
+      case NetworkFailure:
+        return 'Tidak ada koneksi internet. Periksa koneksi Anda.';
+      case CacheFailure:
+        return (failure as CacheFailure).message;
+      default:
+        return 'Terjadi kesalahan yang tidak diketahui.';
+    }
   }
 }

@@ -114,11 +114,13 @@ import '../../features/biodata/domain/usecases/submit_document.dart';
 import '../../features/biodata/domain/usecases/get_revision_verification.dart';
 import '../../features/biodata/domain/usecases/get_employee_full_data.dart';
 import '../../features/biodata/domain/usecases/submit_revision.dart';
+import '../../features/biodata/domain/usecases/submit_skill.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
 import '../../features/biodata/presentation/providers/family_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_revision_provider.dart';
+import '../../features/biodata/presentation/providers/skill_provider.dart';
 
 // Recruitment feature imports
 import '../../features/recruitment/data/datasources/recruitment_remote_datasource.dart';
@@ -384,6 +386,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRevisionVerification(sl()));
   sl.registerLazySingleton(() => GetEmployeeFullData(sl()));
   sl.registerLazySingleton(() => SubmitRevision(sl()));
+  sl.registerLazySingleton(() => SubmitSkill(sl()));
+
+  // Providers
+  sl.registerFactory(() => SkillProvider(submitSkillUseCase: sl()));
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));
@@ -412,10 +418,12 @@ Future<void> init() async {
 
   //! Features - E-Matrai
   // Provider
-  sl.registerFactory(() => EMatraiProvider(
-    getEMatraiList: sl(),
-    uploadMatraiUseCase: sl(),
-  ));
+  sl.registerFactory(
+    () => EMatraiProvider(
+      getEMatraiList: sl(),
+      uploadMatraiUseCase: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetEMatraiList(sl()));
