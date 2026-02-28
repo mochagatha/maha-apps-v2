@@ -1,11 +1,19 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
+import '../entities/bank.dart';
 import '../entities/biodata.dart';
 import '../entities/employee_full_data.dart';
 import '../entities/region.dart';
 import '../entities/revision_verification.dart';
 
 abstract class BiodataRepository {
+  Future<Either<Failure, List<Bank>>> getBanks();
+  Future<Either<Failure, void>> submitBank({
+    required int employeeId,
+    required int bankId,
+    required String accountNumber,
+    required String accountName,
+  });
   Future<Either<Failure, Biodata>> getBiodata();
   Future<Either<Failure, List<Province>>> getProvinces();
   Future<Either<Failure, List<Regency>>> getRegencies(String provinceId);

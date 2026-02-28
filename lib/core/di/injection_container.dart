@@ -103,7 +103,9 @@ import '../../features/absensi/presentation/providers/attendance_provider.dart';
 import '../../features/biodata/data/datasources/biodata_remote_datasource.dart';
 import '../../features/biodata/data/repositories/biodata_repository_impl.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart';
+import '../../features/biodata/domain/usecases/get_banks.dart';
 import '../../features/biodata/domain/usecases/get_biodata.dart';
+import '../../features/biodata/domain/usecases/submit_bank.dart';
 import '../../features/biodata/domain/usecases/submit_biodata.dart';
 import '../../features/biodata/domain/usecases/submit_education.dart';
 import '../../features/biodata/domain/usecases/submit_family.dart';
@@ -115,6 +117,7 @@ import '../../features/biodata/domain/usecases/get_revision_verification.dart';
 import '../../features/biodata/domain/usecases/get_employee_full_data.dart';
 import '../../features/biodata/domain/usecases/submit_revision.dart';
 import '../../features/biodata/domain/usecases/submit_skill.dart';
+import '../../features/biodata/presentation/providers/bank_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
@@ -355,6 +358,12 @@ Future<void> init() async {
   );
 
   //! Features - Biodata
+  sl.registerFactory(
+    () => BankProvider(
+      getBanksUseCase: sl(),
+      submitBankUseCase: sl(),
+    ),
+  );
   sl.registerFactory(() => BiodataProvider(getBiodata: sl()));
   sl.registerFactory(() => DocumentProvider(submitDocumentUseCase: sl()));
   sl.registerFactory(() => EducationFormProvider(submitEducationUseCase: sl()));
@@ -375,7 +384,9 @@ Future<void> init() async {
   );
 
   // Use cases
+  sl.registerLazySingleton(() => GetBanks(sl()));
   sl.registerLazySingleton(() => GetBiodata(sl()));
+  sl.registerLazySingleton(() => SubmitBank(sl()));
   sl.registerLazySingleton(() => SubmitBiodata(sl()));
   sl.registerLazySingleton(() => SubmitEducation(sl()));
   sl.registerLazySingleton(() => SubmitFamily(sl()));

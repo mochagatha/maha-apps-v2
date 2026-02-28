@@ -2,12 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
+import '../models/bank_model.dart';
 import '../models/biodata_model.dart';
 import '../models/employee_full_data_model.dart';
 import '../models/region_models.dart';
 import '../models/revision_verification_model.dart';
 
 abstract class BiodataRemoteDataSource {
+  Future<List<BankModel>> getBanks();
+  Future<void> submitBank({
+    required int employeeId,
+    required int bankId,
+    required String accountNumber,
+    required String accountName,
+  });
   Future<BiodataModel> getBiodata();
   Future<List<ProvinceModel>> getProvinces();
   Future<List<RegencyModel>> getRegencies(String provinceId);
@@ -43,6 +51,46 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
   final SharedPreferences sharedPreferences;
 
   BiodataRemoteDataSourceImpl({required this.client, required this.sharedPreferences});
+
+  @override
+  Future<List<BankModel>> getBanks() async {
+    try {
+      final response = await client.dioGolang.get('/bank');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['data'] ?? [];
+        return data.map((json) => BankModel.fromJson(json as Map<String, dynamic>)).toList();
+      } else {
+        throw ServerException(response.data['message'] ?? 'Failed to get banks');
+      }
+    } on DioException catch (e) {
+      throw ServerException(e.response?.data?['message'] ?? e.message ?? 'Network error');
+    }
+  }
+
+  @override
+  Future<void> submitBank({
+    required int employeeId,
+    required int bankId,
+    required String accountNumber,
+    required String accountName,
+  }) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-bank',
+        data: {
+          'employee_id': employeeId,
+          'bank_id': bankId,
+          'account_number': accountNumber,
+          'account_name': accountName,
+        },
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(response.data['message'] ?? 'Failed to submit bank');
+      }
+    } on DioException catch (e) {
+      throw ServerException(e.response?.data?['message'] ?? e.message ?? 'Network error');
+    }
+  }
 
   @override
   Future<BiodataModel> getBiodata() async {

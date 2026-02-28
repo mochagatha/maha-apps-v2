@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
+import '../../domain/entities/bank.dart';
 import '../../domain/entities/biodata.dart';
 import '../../domain/entities/employee_full_data.dart';
 import '../../domain/entities/region.dart';
@@ -12,6 +13,36 @@ class BiodataRepositoryImpl implements BiodataRepository {
   final BiodataRemoteDataSource remoteDataSource;
 
   BiodataRepositoryImpl({required this.remoteDataSource});
+
+  @override
+  Future<Either<Failure, List<Bank>>> getBanks() async {
+    try {
+      final models = await remoteDataSource.getBanks();
+      return Right(models);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitBank({
+    required int employeeId,
+    required int bankId,
+    required String accountNumber,
+    required String accountName,
+  }) async {
+    try {
+      await remoteDataSource.submitBank(
+        employeeId: employeeId,
+        bankId: bankId,
+        accountNumber: accountNumber,
+        accountName: accountName,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 
   @override
   Future<Either<Failure, Biodata>> getBiodata() async {
