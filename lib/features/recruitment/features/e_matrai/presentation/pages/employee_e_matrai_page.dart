@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -135,7 +136,12 @@ class _TabContentState extends State<_TabContent> with AutomaticKeepAliveClientM
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              return _DataItem(item: item, statusText: widget.statusText);
+              return _DataItem(
+                item: item,
+                statusText: widget.statusText,
+                matraiStatus: widget.matraiStatus,
+                typeUser: widget.typeUser,
+              );
             },
           ),
         );
@@ -148,10 +154,17 @@ class _TabContentState extends State<_TabContent> with AutomaticKeepAliveClientM
 // Single card
 // ---------------------------------------------------------------------------
 class _DataItem extends StatefulWidget {
-  const _DataItem({required this.item, required this.statusText});
+  const _DataItem({
+    required this.item,
+    required this.statusText,
+    required this.matraiStatus,
+    required this.typeUser,
+  });
 
   final EMatraiItem item;
   final String statusText;
+  final int matraiStatus;
+  final String typeUser;
 
   @override
   State<_DataItem> createState() => _DataItemState();
@@ -161,6 +174,7 @@ class _DataItemState extends State<_DataItem> {
   File? _selectedFile;
   bool _isDownloading = false;
   double _downloadProgress = 0;
+  bool _isUploading = false;
 
   Uri? _normalizeDownloadUri(String rawUrl) {
     final trimmedUrl = rawUrl.trim();
@@ -310,6 +324,56 @@ class _DataItemState extends State<_DataItem> {
     }
   }
 
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result == null || result.files.single.path == null) return;
+    setState(() => _selectedFile = File(result.files.single.path!));
+  }
+
+  Future<void> _uploadFile() async {
+    if (_selectedFile == null) return;
+
+    setState(() => _isUploading = true);
+
+    final provider = context.read<EMatraiProvider>();
+    final success = await provider.uploadMatrai(
+      employeeAgreementId: widget.item.id,
+      filePath: _selectedFile!.path,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Upload berhasil'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      setState(() {
+        _selectedFile = null;
+        _isUploading = false;
+      });
+      // Refresh the current tab so the item reflects the new status
+      provider.fetchTab(
+        widget.matraiStatus,
+        typeUser: widget.typeUser,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(provider.uploadErrorMessage ?? 'Upload gagal'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() => _isUploading = false);
+      provider.resetUploadStatus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final status = widget.item.matraiStatus;
@@ -446,7 +510,7 @@ class _DataItemState extends State<_DataItem> {
             if (safeStatus < 2 && _selectedFile == null) ...[
               const SizedBox(height: 8),
               OutlinedButton(
-                onPressed: () => setState(() => _selectedFile = File('')),
+                onPressed: _isUploading ? null : _pickFile,
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: AppColors.blue),
                   foregroundColor: AppColors.blue,
@@ -490,8 +554,17 @@ class _DataItemState extends State<_DataItem> {
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Selesai'),
+                  onPressed: _isUploading ? () {} : _uploadFile,
+                  child: _isUploading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text('Selesai'),
                 ),
               ),
             ],

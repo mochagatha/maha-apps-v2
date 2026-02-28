@@ -132,6 +132,7 @@ import '../../features/recruitment/features/e_matrai/data/datasources/e_matrai_r
 import '../../features/recruitment/features/e_matrai/data/repositories/e_matrai_repository_impl.dart';
 import '../../features/recruitment/features/e_matrai/domain/repositories/e_matrai_repository.dart';
 import '../../features/recruitment/features/e_matrai/domain/usecases/get_e_matrai_list.dart';
+import '../../features/recruitment/features/e_matrai/domain/usecases/upload_matrai.dart';
 import '../../features/recruitment/features/e_matrai/presentation/providers/e_matrai_provider.dart';
 
 // Organizational Structure feature imports
@@ -411,10 +412,14 @@ Future<void> init() async {
 
   //! Features - E-Matrai
   // Provider
-  sl.registerFactory(() => EMatraiProvider(getEMatraiList: sl()));
+  sl.registerFactory(() => EMatraiProvider(
+    getEMatraiList: sl(),
+    uploadMatraiUseCase: sl(),
+  ));
 
   // Use cases
   sl.registerLazySingleton(() => GetEMatraiList(sl()));
+  sl.registerLazySingleton(() => UploadMatrai(sl()));
 
   // Repository
   sl.registerLazySingleton<EMatraiRepository>(

@@ -37,4 +37,27 @@ class EMatraiRepositoryImpl implements EMatraiRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> uploadMatrai({
+    required int employeeAgreementId,
+    required String filePath,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure('No internet connection'));
+    }
+    try {
+      await remoteDataSource.uploadMatrai(
+        employeeAgreementId: employeeAgreementId,
+        filePath: filePath,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

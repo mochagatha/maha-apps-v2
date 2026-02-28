@@ -154,7 +154,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: AppRoutes.recruitmentEMatrai.path,
+      initialLocation: AppRoutes.splash.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {

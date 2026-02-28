@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:maha_apps_v2/core/error/exceptions.dart';
 import 'package:maha_apps_v2/core/network/api_client.dart';
 import '../models/e_matrai_models.dart';
@@ -8,6 +9,12 @@ abstract class EMatraiRemoteDataSource {
   Future<EMatraiListModel> getEMatraiList({
     required int matraiStatus,
     required String typeUser,
+  });
+
+  /// Upload signed PDF via multipart/form-data.
+  Future<void> uploadMatrai({
+    required int employeeAgreementId,
+    required String filePath,
   });
 }
 
@@ -36,6 +43,43 @@ class EMatraiRemoteDataSourceImpl implements EMatraiRemoteDataSource {
       rethrow;
     } catch (e) {
       throw ServerException('Failed to fetch e-matrai list: $e');
+    }
+  }
+
+  @override
+  Future<void> uploadMatrai({
+    required int employeeAgreementId,
+    required String filePath,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'employee_agreement_id': employeeAgreementId.toString(),
+        'file': await MultipartFile.fromFile(
+          filePath,
+          contentType: DioMediaType('application', 'pdf'),
+        ),
+      });
+
+      final response = await client.dioGolang.post(
+        '/employee/employee-agreement/upload-matrai',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+      print(response.data);
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          (response.data as Map<String, dynamic>?)?['message'] as String? ??
+              'Failed to upload matrai',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data['message'] as String? ?? 'Failed to upload matrai: ${e.message}',
+      );
+    } catch (e) {
+      print(e);
+      throw ServerException('Failed to upload matrai: $e');
     }
   }
 }

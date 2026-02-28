@@ -11,4 +11,13 @@ abstract class EMatraiRepository {
     required int matraiStatus,
     required String typeUser,
   });
+
+  /// Upload signed PDF for an employee agreement (e-matrai).
+  ///
+  /// POST /employee/employee-agreement/upload-matrai
+  /// Body: multipart/form-data with [employeeAgreementId] and [filePath] (PDF).
+  Future<Either<Failure, void>> uploadMatrai({
+    required int employeeAgreementId,
+    required String filePath,
+  });
 }
