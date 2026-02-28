@@ -428,7 +428,7 @@ class AppRouter {
           path: AppRoutes.skillForm.path,
           name: AppRoutes.skillForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => SkillProvider(),
+            create: (_) => sl<SkillProvider>(),
             child: const SkillPage(),
           ),
         ),
@@ -467,7 +467,7 @@ class AppRouter {
           name: AppRoutes.biodataBank.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
-              create: (context) => BankProvider(),
+              create: (context) => sl<BankProvider>(),
               child: const BankPage(),
             );
           },
@@ -482,7 +482,7 @@ class AppRouter {
           name: AppRoutes.biodataCreateSignature.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
-              create: (context) => SignatureProvider(),
+              create: (_) => sl<SignatureProvider>(),
               child: CreateSignaturePage(),
             );
           },
