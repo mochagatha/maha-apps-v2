@@ -165,7 +165,7 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> {
             await provider.takePicture();
             if (context.mounted && provider.selfieImage != null) {
               // Dispose camera before navigating to prevent camera staying active
-              await provider.disposeCamera();
+              // await provider.disposeCamera();
               if (context.mounted) {
                 context.pushNamed(AppRoutes.selfieResult.name);
               }

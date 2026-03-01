@@ -1,12 +1,25 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../domain/usecases/submit_employee_document.dart';
 
 class SelfieProvider extends ChangeNotifier {
+  final SubmitEmployeeDocument submitEmployeeDocumentUseCase;
+  final SharedPreferences sharedPreferences;
+
+  SelfieProvider({
+    required this.submitEmployeeDocumentUseCase,
+    required this.sharedPreferences,
+  });
+
   CameraController? controller;
   XFile? selfieImage;
   XFile? selfieKtpImage;
   bool isCameraInitialized = false;
   bool isLoading = false;
+  bool isUploading = false;
+  String? uploadErrorMessage;
 
   Future<void> initializeCamera({
     CameraLensDirection cameraLensDirection = CameraLensDirection.front,
@@ -72,6 +85,44 @@ class SelfieProvider extends ChangeNotifier {
       isCameraInitialized = false;
       // Don't call notifyListeners here as widget might be disposed
     }
+  }
+
+  /// Upload selfie with KTP photo to POST /employee/employee-document
+  /// Returns null on success, or an error message string on failure.
+  Future<String?> uploadSelfieWithKtp() async {
+    if (selfieKtpImage == null) {
+      return 'Foto selfie dengan KTP belum diambil';
+    }
+
+    final employeeId = sharedPreferences.getInt('employee_id');
+    if (employeeId == null) {
+      return 'ID karyawan tidak ditemukan';
+    }
+
+    isUploading = true;
+    uploadErrorMessage = null;
+    notifyListeners();
+
+    final result = await submitEmployeeDocumentUseCase(
+      SubmitEmployeeDocumentParams(
+        employeeId: employeeId,
+        photoWithKtpPath: selfieKtpImage!.path,
+      ),
+    );
+
+    isUploading = false;
+
+    return result.fold(
+      (failure) {
+        uploadErrorMessage = failure.message;
+        notifyListeners();
+        return failure.message;
+      },
+      (_) {
+        notifyListeners();
+        return null;
+      },
+    );
   }
 
   @override

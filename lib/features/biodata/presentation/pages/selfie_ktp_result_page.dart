@@ -47,28 +47,44 @@ class SelfieKtpResultPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Validate both selfie images exist
-                  if (provider.selfieImage == null ||
-                      provider.selfieKtpImage == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Foto selfie dan foto selfie dengan KTP harus diambil!',
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    return;
-                  }
+                onPressed: provider.isUploading
+                    ? null
+                    : () async {
+                        // Validate both selfie images exist
+                        if (provider.selfieImage == null || provider.selfieKtpImage == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Foto selfie dan foto selfie dengan KTP harus diambil!',
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
 
-                  // Submit Data and Finish
-                  BiodataStepManager.setNextStep(AppRoutes.biodataSignature.path);
-                  showDialog(
-                    context: context,
-                    builder: (context) => _SuccessPopup(),
-                  );
-                },
+                        // Upload selfie with KTP to backend
+                        final error = await provider.uploadSelfieWithKtp();
+
+                        if (!context.mounted) return;
+
+                        if (error != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(error),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        // Upload successful, proceed to next step
+                        BiodataStepManager.setNextStep(AppRoutes.biodataSignature.path);
+                        showDialog(
+                          context: context,
+                          builder: (context) => const _SuccessPopup(),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
@@ -76,14 +92,23 @@ class SelfieKtpResultPage extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                child: const Text(
-                  'Unggah Foto',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child: provider.isUploading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Unggah Foto',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 12),

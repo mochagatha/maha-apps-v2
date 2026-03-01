@@ -118,7 +118,9 @@ import '../../features/biodata/domain/usecases/get_employee_full_data.dart';
 import '../../features/biodata/domain/usecases/submit_revision.dart';
 import '../../features/biodata/domain/usecases/submit_signature.dart';
 import '../../features/biodata/domain/usecases/submit_skill.dart';
+import '../../features/biodata/domain/usecases/submit_employee_document.dart';
 import '../../features/biodata/presentation/providers/bank_provider.dart';
+import '../../features/biodata/presentation/providers/selfie_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 import '../../features/biodata/presentation/providers/document_provider.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
@@ -401,12 +403,19 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SubmitRevision(sl()));
   sl.registerLazySingleton(() => SubmitSignature(sl()));
   sl.registerLazySingleton(() => SubmitSkill(sl()));
+  sl.registerLazySingleton(() => SubmitEmployeeDocument(sl()));
 
   // Providers
   sl.registerFactory(
     () => SignatureProvider(submitSignatureUseCase: sl(), sharedPreferences: sl()),
   );
   sl.registerFactory(() => SkillProvider(submitSkillUseCase: sl()));
+  sl.registerFactory(
+    () => SelfieProvider(
+      submitEmployeeDocumentUseCase: sl(),
+      sharedPreferences: sl(),
+    ),
+  );
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));

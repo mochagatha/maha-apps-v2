@@ -45,6 +45,10 @@ abstract class BiodataRemoteDataSource {
   Future<void> submitRevision({required int employeeId, required Map<String, dynamic> body});
   Future<void> submitSkill({required int employeeId, required List<String> skills});
   Future<void> submitSignature({required int employeeId, required String signaturePath});
+  Future<void> submitEmployeeDocument({
+    required int employeeId,
+    required String photoWithKtpPath,
+  });
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -495,6 +499,41 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw ServerException(
           response.data['message'] ?? 'Failed to submit signature',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data?['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitEmployeeDocument({
+    required int employeeId,
+    required String photoWithKtpPath,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'employee_id': employeeId,
+        'photo_with_ktp': await MultipartFile.fromFile(
+          photoWithKtpPath,
+          filename: 'photo_with_ktp.jpg',
+        ),
+      });
+
+      final response = await client.dioGolang.post(
+        '/employee/employee-document',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit employee document',
         );
       }
     } on DioException catch (e) {

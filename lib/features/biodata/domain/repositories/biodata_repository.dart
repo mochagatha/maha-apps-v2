@@ -52,4 +52,8 @@ abstract class BiodataRepository {
     required int employeeId,
     required String signaturePath,
   });
+  Future<Either<Failure, void>> submitEmployeeDocument({
+    required int employeeId,
+    required String photoWithKtpPath,
+  });
 }
