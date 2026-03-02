@@ -119,6 +119,8 @@ import '../../features/biodata/domain/usecases/submit_revision.dart';
 import '../../features/biodata/domain/usecases/submit_signature.dart';
 import '../../features/biodata/domain/usecases/submit_skill.dart';
 import '../../features/biodata/domain/usecases/submit_employee_document.dart';
+import '../../features/biodata/domain/usecases/submit_user_photo.dart';
+import '../ml/face_embedding_service.dart';
 import '../../features/biodata/presentation/providers/bank_provider.dart';
 import '../../features/biodata/presentation/providers/selfie_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
@@ -404,6 +406,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SubmitSignature(sl()));
   sl.registerLazySingleton(() => SubmitSkill(sl()));
   sl.registerLazySingleton(() => SubmitEmployeeDocument(sl()));
+  sl.registerLazySingleton(() => SubmitUserPhoto(sl()));
+  sl.registerLazySingleton(() => FaceEmbeddingService());
 
   // Providers
   sl.registerFactory(
@@ -413,6 +417,8 @@ Future<void> init() async {
   sl.registerFactory(
     () => SelfieProvider(
       submitEmployeeDocumentUseCase: sl(),
+      submitUserPhotoUseCase: sl(),
+      faceEmbeddingService: sl(),
       sharedPreferences: sl(),
     ),
   );

@@ -6,6 +6,7 @@ import '../../domain/entities/biodata.dart';
 import '../../domain/entities/employee_full_data.dart';
 import '../../domain/entities/region.dart';
 import '../../domain/entities/revision_verification.dart';
+import '../../domain/entities/user_photo.dart';
 import '../../domain/repositories/biodata_repository.dart';
 import '../datasources/biodata_remote_datasource.dart';
 
@@ -269,6 +270,16 @@ class BiodataRepositoryImpl implements BiodataRepository {
         employeeId: employeeId,
         photoWithKtpPath: photoWithKtpPath,
       );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> submitUserPhoto(UserPhoto userPhoto) async {
+    try {
+      await remoteDataSource.submitUserPhoto(userPhoto);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

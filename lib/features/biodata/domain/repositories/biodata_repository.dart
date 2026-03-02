@@ -5,6 +5,7 @@ import '../entities/biodata.dart';
 import '../entities/employee_full_data.dart';
 import '../entities/region.dart';
 import '../entities/revision_verification.dart';
+import '../entities/user_photo.dart';
 
 abstract class BiodataRepository {
   Future<Either<Failure, List<Bank>>> getBanks();
@@ -56,4 +57,5 @@ abstract class BiodataRepository {
     required int employeeId,
     required String photoWithKtpPath,
   });
+  Future<Either<Failure, void>> submitUserPhoto(UserPhoto userPhoto);
 }

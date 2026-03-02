@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/api_client.dart';
+import '../../domain/entities/user_photo.dart';
 import '../models/bank_model.dart';
 import '../models/biodata_model.dart';
 import '../models/employee_full_data_model.dart';
 import '../models/region_models.dart';
 import '../models/revision_verification_model.dart';
+import '../models/user_photo_model.dart';
 
 abstract class BiodataRemoteDataSource {
   Future<List<BankModel>> getBanks();
@@ -49,6 +51,7 @@ abstract class BiodataRemoteDataSource {
     required int employeeId,
     required String photoWithKtpPath,
   });
+  Future<void> submitUserPhoto(UserPhoto userPhoto);
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -534,6 +537,33 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw ServerException(
           response.data['message'] ?? 'Failed to submit employee document',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data?['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitUserPhoto(UserPhoto userPhoto) async {
+    try {
+      final model = UserPhotoModel.fromEntity(userPhoto);
+      final formData = await model.toFormData();
+
+      final response = await client.dioGolang.post(
+        '/user-photo/create',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit user photo',
         );
       }
     } on DioException catch (e) {

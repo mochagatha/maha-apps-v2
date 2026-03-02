@@ -1,11 +1,14 @@
-import 'package:camera/camera.dart';
+﻿import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/utils/coordinates_translator.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
-import '../../../../core/router/app_routes.dart';
 import '../providers/selfie_provider.dart';
 
 class SelfieCameraPage extends StatefulWidget {
@@ -15,34 +18,18 @@ class SelfieCameraPage extends StatefulWidget {
   State<SelfieCameraPage> createState() => _SelfieCameraPageState();
 }
 
-class _SelfieCameraPageState extends State<SelfieCameraPage> {
+class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerProviderStateMixin {
   SelfieProvider? _selfieProvider;
-
-  // Guides from V1
-  final List<String> guideSelfie = [
-    'Jelas & Berada di bingkai',
-    'Foto Tampak Buram',
-    'Wajah Tampak Gelap',
-    'Wajah Terpotong',
-  ];
-
-  final List<String> guideSelfie2 = [
-    'Foto Selfie kamu dengan menggunakan pakaian sopan',
-    'Foto Selfie jelas (tidak buram)',
-    'Foto Selfie dengan cahaya yang cukup (tidak gelap)',
-    'Foto Selfie tidak terpotong',
-  ];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Save provider reference safely
-    _selfieProvider ??= context.read<SelfieProvider>();
-  }
+  late AnimationController _pulseController;
 
   @override
   void initState() {
     super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..repeat(reverse: true);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SelfieProvider>().initializeCamera(
         cameraLensDirection: CameraLensDirection.front,
@@ -51,138 +38,361 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _selfieProvider ??= context.read<SelfieProvider>();
+  }
+
+  @override
   void deactivate() {
-    // Stop camera when widget is being removed from tree
     _selfieProvider?.disposeCamera();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // Dispose camera when leaving this page
-    _selfieProvider?.disposeCamera();
+    _pulseController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const double previewAspectRatio = 1.0;
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       appBar: const CustomAppBar(title: 'Foto Selfie'),
       body: Consumer<SelfieProvider>(
-        builder: (context, provider, child) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Camera Preview Section
-              AspectRatio(
-                aspectRatio: 1 / previewAspectRatio,
-                child: ClipRect(
-                  child: provider.isCameraInitialized && provider.controller != null
-                      ? Transform.scale(
-                          scale: provider.controller!.value.aspectRatio / previewAspectRatio,
-                          child: Center(child: CameraPreview(provider.controller!)),
-                        )
-                      : const Center(child: SpinKitThreeBounce(color: AppColors.primary)),
-                ),
-              ),
+        builder: (context, provider, _) {
+          // Navigate when all 3 angles are captured
+          if (provider.allCaptured) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (context.mounted) {
+                context.pushNamed(AppRoutes.selfieResult.name);
+              }
+            });
+          }
 
-              // Guide Section
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Panduan Foto Selfie :',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 15),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  for (int i = 0; i < 4; i++)
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.22,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/icon/selfie${i + 1}.png',
-                                            fit: BoxFit.contain,
-                                          ),
-                                          Text(
-                                            '${guideSelfie[i]}\n',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.grey,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                            maxLines: 2,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              ...guideSelfie2.map(
-                                (e) => Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text('•'),
-                                    const SizedBox(width: 8),
-                                    Expanded(child: Text(e, style: const TextStyle(fontSize: 12))),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+          return Column(
+            children: [
+              // Step indicator
+              _buildStepIndicator(provider),
+
+              // Angle label
+              Container(
+                width: double.infinity,
+                color: Colors.black,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  provider.currentAngle.label,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
+
+              // Camera preview + overlay
+              Expanded(child: _buildCameraPreview(provider)),
+
+              // Guide text
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text(
+                  provider.faceDetected
+                      ? 'Wajah terdeteksi! Tahan posisi...'
+                      : 'Arahkan wajah ke dalam bingkai',
+                  style: TextStyle(
+                    color: provider.faceDetected ? Colors.greenAccent : Colors.white70,
+                    fontSize: 13,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+              // Capture button
+              _buildCaptureBar(provider),
             ],
           );
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 70,
-        elevation: 0,
-        color: Colors.white,
-        child: ElevatedButton(
-          onPressed: () async {
-            final provider = context.read<SelfieProvider>();
-            await provider.takePicture();
-            if (context.mounted && provider.selfieImage != null) {
-              // Dispose camera before navigating to prevent camera staying active
-              // await provider.disposeCamera();
-              if (context.mounted) {
-                context.pushNamed(AppRoutes.selfieResult.name);
-              }
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    );
+  }
+
+  /// Three-step dot indicator at the top.
+  Widget _buildStepIndicator(SelfieProvider provider) {
+    final angles = SelfieAngle.values;
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(angles.length * 2 - 1, (i) {
+          if (i.isOdd) {
+            // Connector line
+            return Expanded(
+              child: Divider(
+                color: i ~/ 2 < provider.currentAngleIndex
+                    ? AppColors.primary
+                    : Colors.grey.shade300,
+                thickness: 2,
+              ),
+            );
+          }
+          final stepIndex = i ~/ 2;
+          final isCompleted = provider.capturedPhotos.containsKey(angles[stepIndex].value);
+          final isActive = stepIndex == provider.currentAngleIndex;
+
+          return Column(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isCompleted
+                      ? Colors.green
+                      : isActive
+                      ? AppColors.primary
+                      : Colors.grey.shade300,
+                ),
+                child: Icon(
+                  isCompleted ? Icons.check : Icons.face,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                _angleName(angles[stepIndex].value),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isActive ? AppColors.primary : Colors.grey,
+                  fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ],
+          );
+        }),
+      ),
+    );
+  }
+
+  String _angleName(String value) {
+    switch (value) {
+      case 'front':
+        return 'Depan';
+      case 'right':
+        return 'Kanan';
+      case 'left':
+        return 'Kiri';
+      default:
+        return value;
+    }
+  }
+
+  /// Camera preview with face bounding-box overlay and countdown.
+  Widget _buildCameraPreview(SelfieProvider provider) {
+    if (!provider.isCameraInitialized || provider.controller == null) {
+      return const Center(
+        child: SpinKitThreeBounce(color: AppColors.primary),
+      );
+    }
+
+    final controller = provider.controller!;
+    final imageSize = provider.imageSize;
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        // Camera feed
+        FittedBox(
+          fit: BoxFit.contain,
+          child: SizedBox(
+            width: controller.value.previewSize?.height ?? 1,
+            height: controller.value.previewSize?.width ?? 1,
+            child: CameraPreview(controller),
           ),
-          child: const Text(
-            'Ambil Foto Selfie',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+
+        // Guide oval frame (always shown)
+        CustomPaint(
+          painter: _FaceGuidePainter(
+            faceDetected: provider.faceDetected,
+            pulseAnim: _pulseController,
           ),
+        ),
+
+        // Face bounding boxes (from stream detection)
+        if (imageSize != null && provider.detectedFaces.isNotEmpty)
+          CustomPaint(
+            painter: _FaceBoundingBoxPainter(
+              faces: provider.detectedFaces,
+              imageSize: imageSize,
+              cameraLensDirection: controller.description.lensDirection,
+              rotation: InputImageRotation.rotation270deg,
+            ),
+          ),
+
+        // Processing spinner
+        if (provider.isCapturingPhoto || provider.isProcessingCapture)
+          Container(
+            color: Colors.black54,
+            child: const Center(
+              child: SpinKitThreeBounce(color: Colors.white),
+            ),
+          ),
+
+        // Countdown overlay
+        if (provider.countdownValue != null)
+          Center(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: Container(
+                key: ValueKey(provider.countdownValue),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary.withAlpha(204),
+                  border: Border.all(color: Colors.white, width: 3),
+                ),
+                child: Center(
+                  child: Text(
+                    '${provider.countdownValue}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCaptureBar(SelfieProvider provider) {
+    final busy = provider.isCapturingPhoto || provider.isProcessingCapture;
+    return Container(
+      color: Colors.black,
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+      child: ElevatedButton.icon(
+        onPressed: busy ? null : () => provider.manualCapture(),
+        icon: const Icon(Icons.camera_alt),
+        label: Text(
+          provider.countdownValue != null
+              ? 'Ambil Foto (${provider.countdownValue})'
+              : 'Ambil Foto',
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: Colors.grey,
+          minimumSize: const Size(double.infinity, 52),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     );
   }
+}
+
+/// Draws a rounded oval guide frame + instructions.
+class _FaceGuidePainter extends CustomPainter {
+  final bool faceDetected;
+  final Animation<double> pulseAnim;
+
+  _FaceGuidePainter({required this.faceDetected, required this.pulseAnim})
+    : super(repaint: pulseAnim);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final ovalW = size.width * 0.62;
+    final ovalH = size.height * 0.70;
+    final ovalRect = Rect.fromCenter(
+      center: Offset(size.width / 2, size.height / 2),
+      width: ovalW,
+      height: ovalH,
+    );
+
+    // Dim background outside oval
+    final backgroundPaint = Paint()..color = Colors.black54;
+    final ovalPath = Path()..addOval(ovalRect);
+    final fullRect = Path()..addRect(Offset.zero & size);
+    final outside = Path.combine(PathOperation.difference, fullRect, ovalPath);
+    canvas.drawPath(outside, backgroundPaint);
+
+    // Oval border
+    final borderColor = faceDetected
+        ? Color.lerp(Colors.green, Colors.greenAccent, pulseAnim.value)!
+        : Colors.white54;
+    final borderPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = faceDetected ? 3.0 : 2.0
+      ..color = borderColor;
+    canvas.drawOval(ovalRect, borderPaint);
+  }
+
+  @override
+  bool shouldRepaint(_FaceGuidePainter old) => old.faceDetected != faceDetected;
+}
+
+/// Draws face bounding boxes scaled to canvas coordinates.
+class _FaceBoundingBoxPainter extends CustomPainter {
+  final List<Face> faces;
+  final Size imageSize;
+  final CameraLensDirection cameraLensDirection;
+  final InputImageRotation rotation;
+
+  _FaceBoundingBoxPainter({
+    required this.faces,
+    required this.imageSize,
+    required this.cameraLensDirection,
+    required this.rotation,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
+      ..color = Colors.greenAccent;
+
+    for (final face in faces) {
+      final left = translateX(
+        face.boundingBox.left,
+        size,
+        imageSize,
+        rotation,
+        cameraLensDirection,
+      );
+      final top = translateY(face.boundingBox.top, size, imageSize, rotation, cameraLensDirection);
+      final right = translateX(
+        face.boundingBox.right,
+        size,
+        imageSize,
+        rotation,
+        cameraLensDirection,
+      );
+      final bottom = translateY(
+        face.boundingBox.bottom,
+        size,
+        imageSize,
+        rotation,
+        cameraLensDirection,
+      );
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(Rect.fromLTRB(left, top, right, bottom), const Radius.circular(8)),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_FaceBoundingBoxPainter old) => old.faces != faces;
 }
