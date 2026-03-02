@@ -358,7 +358,31 @@ class SelfieProvider extends ChangeNotifier {
     detectedFaces = [];
     submitErrors.clear();
     notifyListeners();
-    await _startImageStream();
+    // Re-initialize camera if it was disposed (e.g. app backgrounded)
+    if (controller == null || !controller!.value.isInitialized) {
+      await initializeCamera(cameraLensDirection: CameraLensDirection.front);
+    } else {
+      await _startImageStream();
+    }
+  }
+
+  /// Resets all captured data and restarts the camera stream from angle 0.
+  Future<void> resetAll() async {
+    _cancelCountdown();
+    capturedPhotos.clear();
+    capturedEmbeddings.clear();
+    allCaptured = false;
+    currentAngleIndex = 0;
+    faceDetected = false;
+    detectedFaces = [];
+    submitErrors.clear();
+    notifyListeners();
+    // Re-initialize camera if it was disposed, otherwise just restart stream
+    if (controller == null || !controller!.value.isInitialized) {
+      await initializeCamera(cameraLensDirection: CameraLensDirection.front);
+    } else {
+      await _startImageStream();
+    }
   }
 
   // Helper: read an int pref that may have been stored as String or int

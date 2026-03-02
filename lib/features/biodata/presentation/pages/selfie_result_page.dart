@@ -60,23 +60,23 @@ class SelfieResultPage extends StatelessWidget {
                   const SizedBox(height: 12),
                   ...SelfieAngle.values
                       .where((a) => provider.submitErrors[a.value] != null)
-                      .map((a) => Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.error_outline,
-                                    color: Colors.red, size: 16),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    '${_angleName(a.value)}: ${provider.submitErrors[a.value]}',
-                                    style: const TextStyle(
-                                        color: Colors.red, fontSize: 12),
-                                  ),
+                      .map(
+                        (a) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.error_outline, color: Colors.red, size: 16),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  '${_angleName(a.value)}: ${provider.submitErrors[a.value]}',
+                                  style: const TextStyle(color: Colors.red, fontSize: 12),
                                 ),
-                              ],
-                            ),
-                          )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                 ],
 
                 const SizedBox(height: 24),
@@ -88,8 +88,7 @@ class SelfieResultPage extends StatelessWidget {
                     onPressed: provider.isSubmitting
                         ? null
                         : () async {
-                            final success =
-                                await provider.submitAllUserPhotos();
+                            final success = await provider.submitAllUserPhotos();
                             if (!context.mounted) return;
                             if (success) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -98,14 +97,14 @@ class SelfieResultPage extends StatelessWidget {
                                   backgroundColor: Colors.green,
                                 ),
                               );
-                              BiodataStepManager.setNextStep(
-                                  AppRoutes.selfieKtpForm.path);
+                              BiodataStepManager.setNextStep(AppRoutes.selfieKtpForm.path);
                               context.pushNamed(AppRoutes.selfieKtpForm.name);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                      'Gagal mengirim beberapa foto. Periksa detail di atas.'),
+                                    'Gagal mengirim beberapa foto. Periksa detail di atas.',
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -116,20 +115,17 @@ class SelfieResultPage extends StatelessWidget {
                       foregroundColor: Colors.white,
                       disabledBackgroundColor: Colors.grey,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: provider.isSubmitting
                         ? const SizedBox(
                             height: 20,
                             width: 20,
-                            child: CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                           )
                         : const Text(
                             'Konfirmasi & Kirim',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                   ),
                 ),
@@ -140,19 +136,25 @@ class SelfieResultPage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    onPressed: provider.isSubmitting ? null : () => context.pop(),
+                    onPressed: provider.isSubmitting
+                        ? null
+                        : () async {
+                            // Reset all captures so camera page starts fresh
+                            await provider.resetAll();
+                            if (context.mounted) context.pop();
+                          },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.primary),
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: const Text(
                       'Ulangi Semua Foto',
                       style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary),
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 ),
@@ -218,8 +220,8 @@ class _AngleThumbnail extends StatelessWidget {
                       width: double.infinity,
                     )
                   : const Center(
-                      child: Icon(Icons.image_not_supported,
-                          color: Colors.grey, size: 36)),
+                      child: Icon(Icons.image_not_supported, color: Colors.grey, size: 36),
+                    ),
             ),
           ),
 
@@ -245,9 +247,10 @@ class _AngleThumbnail extends StatelessWidget {
               child: const Text(
                 'Ulangi',
                 style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600),
+                  color: AppColors.primary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

@@ -22,6 +22,9 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
   SelfieProvider? _selfieProvider;
   late AnimationController _pulseController;
 
+  /// Guards against re-pushing selfieResult on every rebuild while allCaptured==true.
+  bool _hasNavigatedToResult = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,18 +32,42 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SelfieProvider>().initializeCamera(
-        cameraLensDirection: CameraLensDirection.front,
-      );
-    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _selfieProvider ??= context.read<SelfieProvider>();
+    if (_selfieProvider == null) {
+      _selfieProvider = context.read<SelfieProvider>();
+      _selfieProvider!.addListener(_onProviderChanged);
+      // Sync guard with current state (e.g. hot-reload, recreation)
+      _hasNavigatedToResult = _selfieProvider!.allCaptured;
+      // Only initialize camera if it hasn't been set up yet
+      if (!_selfieProvider!.isCameraInitialized) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _selfieProvider!.initializeCamera(
+              cameraLensDirection: CameraLensDirection.front,
+            );
+          }
+        });
+      }
+    }
+  }
+
+  /// Listener: navigate to result exactly once per capture cycle.
+  void _onProviderChanged() {
+    if (!mounted) return;
+    final provider = _selfieProvider!;
+    if (provider.allCaptured && !_hasNavigatedToResult) {
+      _hasNavigatedToResult = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.pushNamed(AppRoutes.selfieResult.name);
+      });
+    }
+    if (!provider.allCaptured) {
+      _hasNavigatedToResult = false;
+    }
   }
 
   @override
@@ -51,6 +78,7 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
 
   @override
   void dispose() {
+    _selfieProvider?.removeListener(_onProviderChanged);
     _pulseController.dispose();
     super.dispose();
   }
@@ -62,15 +90,6 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
       appBar: const CustomAppBar(title: 'Foto Selfie'),
       body: Consumer<SelfieProvider>(
         builder: (context, provider, _) {
-          // Navigate when all 3 angles are captured
-          if (provider.allCaptured) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (context.mounted) {
-                context.pushNamed(AppRoutes.selfieResult.name);
-              }
-            });
-          }
-
           return Column(
             children: [
               // Step indicator
@@ -278,6 +297,29 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
 
   Widget _buildCaptureBar(SelfieProvider provider) {
     final busy = provider.isCapturingPhoto || provider.isProcessingCapture;
+
+    // All photos captured: show navigation button instead of camera button
+    if (provider.allCaptured) {
+      return Container(
+        color: Colors.black,
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+        child: ElevatedButton.icon(
+          onPressed: () => context.pushNamed(AppRoutes.selfieResult.name),
+          icon: const Icon(Icons.check_circle_outline),
+          label: const Text(
+            'Lihat Hasil Foto',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(double.infinity, 52),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      );
+    }
+
     return Container(
       color: Colors.black,
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
