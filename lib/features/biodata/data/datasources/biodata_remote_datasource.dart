@@ -52,6 +52,10 @@ abstract class BiodataRemoteDataSource {
     required String photoWithKtpPath,
   });
   Future<void> submitUserPhoto(UserPhoto userPhoto);
+  Future<void> submitVerificationData({
+    required int employeeId,
+    required int status,
+  });
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -564,6 +568,34 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw ServerException(
           response.data['message'] ?? 'Failed to submit user photo',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data?['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> submitVerificationData({
+    required int employeeId,
+    required int status,
+  }) async {
+    try {
+      final response = await client.dioGolang.post(
+        '/employee/employee-verification-data',
+        data: {
+          'employee_id': employeeId,
+          'status': status,
+        },
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to submit verification data',
         );
       }
     } on DioException catch (e) {

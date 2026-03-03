@@ -58,4 +58,8 @@ abstract class BiodataRepository {
     required String photoWithKtpPath,
   });
   Future<Either<Failure, void>> submitUserPhoto(UserPhoto userPhoto);
+  Future<Either<Failure, void>> submitVerificationData({
+    required int employeeId,
+    required int status,
+  });
 }

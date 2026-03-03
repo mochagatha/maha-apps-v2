@@ -51,7 +51,7 @@ class SelfieKtpResultPage extends StatelessWidget {
                     ? null
                     : () async {
                         // Validate both selfie images exist
-                        if (provider.selfieImage == null || provider.selfieKtpImage == null) {
+                        if (provider.selfieKtpImage == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
@@ -87,6 +87,7 @@ class SelfieKtpResultPage extends StatelessWidget {
                         BiodataStepManager.setNextStep(AppRoutes.biodataSignature.path);
                         showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (context) => const _SuccessPopup(),
                         );
                       },
@@ -152,73 +153,76 @@ class _SuccessPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      insetPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Data diri berhasil dikirim!",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 24),
-            Image.asset(
-              "assets/images/icon/verifikasi-data.png",
-              height: 150,
-            ),
-            SizedBox(height: 24),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(text: "Mohon untuk menunggu "),
-                  TextSpan(
-                    text: "Verifikasi Data Diri",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: " Anda dari HRD Maha!"),
-                ],
+    return PopScope(
+      canPop: false,
+      child: Dialog(
+        insetPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Data diri berhasil dikirim!",
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                context.goNamed(AppRoutes.biodataBank.name);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+              SizedBox(height: 24),
+              Image.asset(
+                "assets/images/icon/verifikasi-data.png",
+                height: 150,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/icon/whatsapp.png",
-                    height: 16,
-                    width: 16,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 8),
-                  const Text(
-                    'Hubungi Admin',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              SizedBox(height: 24),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: "Mohon untuk menunggu "),
+                    TextSpan(
+                      text: "Verifikasi Data Diri",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
+                    TextSpan(text: " Anda dari HRD Maha!"),
+                  ],
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-          ],
+              SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  context.goNamed(AppRoutes.biodataBank.name);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/icon/whatsapp.png",
+                      height: 16,
+                      width: 16,
+                      fit: BoxFit.contain,
+                    ),
+                    SizedBox(width: 8),
+                    const Text(
+                      'Hubungi Admin',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
