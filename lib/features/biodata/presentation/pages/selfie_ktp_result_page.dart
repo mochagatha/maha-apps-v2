@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -148,6 +149,22 @@ class SelfieKtpResultPage extends StatelessWidget {
   }
 }
 
+Future<void> _hubungiAdminWhatsApp(BuildContext context) async {
+  const phone = '6281364993863';
+  const message =
+      'Halo Admin Maha, saya telah mengirimkan data diri saya dan membutuhkan konfirmasi untuk proses Verifikasi Data Diri. Mohon bantuannya. Terima kasih.';
+  final uri = Uri.parse(
+    'https://wa.me/$phone?text=${Uri.encodeComponent(message)}',
+  );
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak dapat membuka WhatsApp.')),
+      );
+    }
+  }
+}
+
 class _SuccessPopup extends StatelessWidget {
   const _SuccessPopup();
 
@@ -190,9 +207,7 @@ class _SuccessPopup extends StatelessWidget {
               ),
               SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
-                  context.goNamed(AppRoutes.biodataBank.name);
-                },
+                onPressed: () => _hubungiAdminWhatsApp(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
