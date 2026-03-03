@@ -48,14 +48,12 @@ class _SelfieCameraKtpPageState extends State<SelfieCameraKtpPage> {
 
   @override
   void deactivate() {
-    // Stop camera when widget is being removed from tree
-    _selfieProvider?.disposeCamera();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // Dispose camera when leaving this page
+    // Dispose camera when widget is permanently removed from tree
     _selfieProvider?.disposeCamera();
     super.dispose();
   }

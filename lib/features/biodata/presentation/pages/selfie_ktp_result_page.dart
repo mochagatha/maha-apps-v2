@@ -78,6 +78,11 @@ class SelfieKtpResultPage extends StatelessWidget {
                           return;
                         }
 
+                        // Dispose camera now that upload is complete
+                        await provider.disposeCamera();
+
+                        if (!context.mounted) return;
+
                         // Upload successful, proceed to next step
                         BiodataStepManager.setNextStep(AppRoutes.biodataSignature.path);
                         showDialog(

@@ -1,12 +1,10 @@
 ﻿import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/utils/coordinates_translator.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/selfie_provider.dart';
@@ -18,9 +16,8 @@ class SelfieCameraPage extends StatefulWidget {
   State<SelfieCameraPage> createState() => _SelfieCameraPageState();
 }
 
-class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerProviderStateMixin {
+class _SelfieCameraPageState extends State<SelfieCameraPage> {
   SelfieProvider? _selfieProvider;
-  late AnimationController _pulseController;
 
   /// Guards against re-pushing selfieResult on every rebuild while allCaptured==true.
   bool _hasNavigatedToResult = false;
@@ -28,10 +25,6 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
   }
 
   @override
@@ -59,6 +52,26 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
   void _onProviderChanged() {
     if (!mounted) return;
     final provider = _selfieProvider!;
+
+    // Show capture warning (no face detected) as a SnackBar.
+    if (provider.captureWarning != null) {
+      final warning = provider.captureWarning!;
+      provider.clearCaptureWarning();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(warning),
+              backgroundColor: Colors.red.shade700,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      });
+    }
+
     if (provider.allCaptured && !_hasNavigatedToResult) {
       _hasNavigatedToResult = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,14 +85,12 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
 
   @override
   void deactivate() {
-    _selfieProvider?.disposeCamera();
     super.deactivate();
   }
 
   @override
   void dispose() {
     _selfieProvider?.removeListener(_onProviderChanged);
-    _pulseController.dispose();
     super.dispose();
   }
 
@@ -118,12 +129,10 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
               Container(
                 color: Colors.black,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  provider.faceDetected
-                      ? 'Wajah terdeteksi! Tahan posisi...'
-                      : 'Arahkan wajah ke dalam bingkai',
+                child: const Text(
+                  'Arahkan wajah ke dalam bingkai lalu tekan Ambil Foto',
                   style: TextStyle(
-                    color: provider.faceDetected ? Colors.greenAccent : Colors.white70,
+                    color: Colors.white70,
                     fontSize: 13,
                   ),
                   textAlign: TextAlign.center,
@@ -212,7 +221,7 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
     }
   }
 
-  /// Camera preview with face bounding-box overlay and countdown.
+  /// Camera preview with oval guide frame.
   Widget _buildCameraPreview(SelfieProvider provider) {
     if (!provider.isCameraInitialized || provider.controller == null) {
       return const Center(
@@ -221,7 +230,6 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
     }
 
     final controller = provider.controller!;
-    final imageSize = provider.imageSize;
 
     return Stack(
       fit: StackFit.expand,
@@ -236,24 +244,8 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
           ),
         ),
 
-        // Guide oval frame (always shown)
-        CustomPaint(
-          painter: _FaceGuidePainter(
-            faceDetected: provider.faceDetected,
-            pulseAnim: _pulseController,
-          ),
-        ),
-
-        // Face bounding boxes (from stream detection)
-        if (imageSize != null && provider.detectedFaces.isNotEmpty)
-          CustomPaint(
-            painter: _FaceBoundingBoxPainter(
-              faces: provider.detectedFaces,
-              imageSize: imageSize,
-              cameraLensDirection: controller.description.lensDirection,
-              rotation: InputImageRotation.rotation270deg,
-            ),
-          ),
+        // Guide oval frame
+        const CustomPaint(painter: _FaceGuidePainter()),
 
         // Processing spinner
         if (provider.isCapturingPhoto || provider.isProcessingCapture)
@@ -261,34 +253,6 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
             color: Colors.black54,
             child: const Center(
               child: SpinKitThreeBounce(color: Colors.white),
-            ),
-          ),
-
-        // Countdown overlay
-        if (provider.countdownValue != null)
-          Center(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: Container(
-                key: ValueKey(provider.countdownValue),
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withAlpha(204),
-                  border: Border.all(color: Colors.white, width: 3),
-                ),
-                child: Center(
-                  child: Text(
-                    '${provider.countdownValue}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
             ),
           ),
       ],
@@ -326,11 +290,9 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
       child: ElevatedButton.icon(
         onPressed: busy ? null : () => provider.manualCapture(),
         icon: const Icon(Icons.camera_alt),
-        label: Text(
-          provider.countdownValue != null
-              ? 'Ambil Foto (${provider.countdownValue})'
-              : 'Ambil Foto',
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        label: const Text(
+          'Ambil Foto',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -344,13 +306,9 @@ class _SelfieCameraPageState extends State<SelfieCameraPage> with SingleTickerPr
   }
 }
 
-/// Draws a rounded oval guide frame + instructions.
+/// Draws a rounded oval guide frame.
 class _FaceGuidePainter extends CustomPainter {
-  final bool faceDetected;
-  final Animation<double> pulseAnim;
-
-  _FaceGuidePainter({required this.faceDetected, required this.pulseAnim})
-    : super(repaint: pulseAnim);
+  const _FaceGuidePainter();
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -370,71 +328,13 @@ class _FaceGuidePainter extends CustomPainter {
     canvas.drawPath(outside, backgroundPaint);
 
     // Oval border
-    final borderColor = faceDetected
-        ? Color.lerp(Colors.green, Colors.greenAccent, pulseAnim.value)!
-        : Colors.white54;
     final borderPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = faceDetected ? 3.0 : 2.0
-      ..color = borderColor;
+      ..strokeWidth = 2.0
+      ..color = Colors.white54;
     canvas.drawOval(ovalRect, borderPaint);
   }
 
   @override
-  bool shouldRepaint(_FaceGuidePainter old) => old.faceDetected != faceDetected;
-}
-
-/// Draws face bounding boxes scaled to canvas coordinates.
-class _FaceBoundingBoxPainter extends CustomPainter {
-  final List<Face> faces;
-  final Size imageSize;
-  final CameraLensDirection cameraLensDirection;
-  final InputImageRotation rotation;
-
-  _FaceBoundingBoxPainter({
-    required this.faces,
-    required this.imageSize,
-    required this.cameraLensDirection,
-    required this.rotation,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..color = Colors.greenAccent;
-
-    for (final face in faces) {
-      final left = translateX(
-        face.boundingBox.left,
-        size,
-        imageSize,
-        rotation,
-        cameraLensDirection,
-      );
-      final top = translateY(face.boundingBox.top, size, imageSize, rotation, cameraLensDirection);
-      final right = translateX(
-        face.boundingBox.right,
-        size,
-        imageSize,
-        rotation,
-        cameraLensDirection,
-      );
-      final bottom = translateY(
-        face.boundingBox.bottom,
-        size,
-        imageSize,
-        rotation,
-        cameraLensDirection,
-      );
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTRB(left, top, right, bottom), const Radius.circular(8)),
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_FaceBoundingBoxPainter old) => old.faces != faces;
+  bool shouldRepaint(_FaceGuidePainter old) => false;
 }

@@ -1,10 +1,5 @@
-﻿import 'dart:async';
-import 'dart:io';
-
-import 'package:camera/camera.dart';
+﻿import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/ml/face_embedding_service.dart';
@@ -53,18 +48,16 @@ class SelfieProvider extends ChangeNotifier {
   final Map<String, List<double>> capturedEmbeddings = {};
   bool allCaptured = false;
 
-  // Real-time face detection state
-  bool faceDetected = false;
-  List<Face> detectedFaces = [];
-  Size? imageSize;
-
-  // Countdown state
-  int? countdownValue;
-  Timer? _countdownTimer;
-
   // Per-angle processing state
   bool isProcessingCapture = false;
   bool isCapturingPhoto = false;
+
+  // Warning shown when capture attempted without a detected face
+  String? captureWarning;
+
+  void clearCaptureWarning() {
+    captureWarning = null;
+  }
 
   // Upload state
   bool isSubmitting = false;
@@ -73,10 +66,6 @@ class SelfieProvider extends ChangeNotifier {
       submitErrors.isNotEmpty &&
       submitErrors.values.every((e) => e == null) &&
       submitErrors.length == SelfieAngle.values.length;
-
-  // Face detector (stream-only, fast mode)
-  FaceDetector? _streamFaceDetector;
-  bool _isDetecting = false;
 
   SelfieAngle get currentAngle => SelfieAngle.values[currentAngleIndex];
 
@@ -100,13 +89,10 @@ class SelfieProvider extends ChangeNotifier {
         camera,
         ResolutionPreset.high,
         enableAudio: false,
-        imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
       );
       await controller!.initialize();
 
       await faceEmbeddingService.initialize();
-      _initStreamDetector();
-      await _startImageStream();
 
       isCameraInitialized = true;
       notifyListeners();
@@ -115,36 +101,7 @@ class SelfieProvider extends ChangeNotifier {
     }
   }
 
-  void _initStreamDetector() {
-    _streamFaceDetector?.close();
-    _streamFaceDetector = FaceDetector(
-      options: FaceDetectorOptions(
-        performanceMode: FaceDetectorMode.fast,
-        enableLandmarks: false,
-        enableClassification: false,
-        minFaceSize: 0.15,
-      ),
-    );
-  }
-
-  Future<void> _startImageStream() async {
-    if (controller == null || !controller!.value.isInitialized) return;
-    if (controller!.value.isStreamingImages) return;
-    await controller!.startImageStream(_processCameraFrame);
-  }
-
-  Future<void> _stopImageStream() async {
-    if (controller == null) return;
-    if (controller!.value.isStreamingImages) {
-      await controller!.stopImageStream();
-    }
-  }
-
   Future<void> disposeCamera() async {
-    _cancelCountdown();
-    await _stopImageStream();
-    _streamFaceDetector?.close();
-    _streamFaceDetector = null;
     if (controller != null) {
       await controller!.dispose();
       controller = null;
@@ -152,141 +109,18 @@ class SelfieProvider extends ChangeNotifier {
     }
   }
 
-  // Live frame processing
-
-  Future<void> _processCameraFrame(CameraImage cameraImage) async {
-    if (_isDetecting || isCapturingPhoto || isProcessingCapture) return;
-    if (_streamFaceDetector == null) return;
-    _isDetecting = true;
-
-    try {
-      final inputImage = _buildInputImage(cameraImage);
-      if (inputImage == null) {
-        _isDetecting = false;
-        return;
-      }
-      final faces = await _streamFaceDetector!.processImage(inputImage);
-
-      imageSize = Size(
-        cameraImage.width.toDouble(),
-        cameraImage.height.toDouble(),
-      );
-      detectedFaces = faces;
-
-      final nowDetected = faces.isNotEmpty;
-
-      if (nowDetected && !faceDetected) {
-        faceDetected = true;
-        notifyListeners();
-        _startCountdown();
-      } else if (!nowDetected && faceDetected) {
-        faceDetected = false;
-        _cancelCountdown();
-        notifyListeners();
-      } else {
-        notifyListeners();
-      }
-    } catch (_) {
-      // silently ignore per-frame errors
-    } finally {
-      _isDetecting = false;
-    }
-  }
-
-  InputImage? _buildInputImage(CameraImage cameraImage) {
-    if (controller == null) return null;
-    final sensorOrientation = controller!.description.sensorOrientation;
-
-    InputImageRotation rotation;
-    if (Platform.isIOS) {
-      rotation =
-          InputImageRotationValue.fromRawValue(sensorOrientation) ??
-          InputImageRotation.rotation0deg;
-    } else {
-      final orientations = {
-        DeviceOrientation.portraitUp: 0,
-        DeviceOrientation.landscapeLeft: 90,
-        DeviceOrientation.portraitDown: 180,
-        DeviceOrientation.landscapeRight: 270,
-      };
-      final deviceRot = orientations[controller!.value.deviceOrientation] ?? 0;
-      final rotCompensation = (sensorOrientation - deviceRot + 360) % 360;
-      rotation =
-          InputImageRotationValue.fromRawValue(rotCompensation) ?? InputImageRotation.rotation0deg;
-    }
-
-    final format = InputImageFormatValue.fromRawValue(cameraImage.format.raw);
-    if (format == null) return null;
-
-    final plane = cameraImage.planes.first;
-    return InputImage.fromBytes(
-      bytes: plane.bytes,
-      metadata: InputImageMetadata(
-        size: Size(
-          cameraImage.width.toDouble(),
-          cameraImage.height.toDouble(),
-        ),
-        rotation: rotation,
-        format: format,
-        bytesPerRow: plane.bytesPerRow,
-      ),
-    );
-  }
-
-  // Countdown
-
-  void _startCountdown() {
-    if (countdownValue != null) return;
-    countdownValue = 3;
-    notifyListeners();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (countdownValue == null) {
-        timer.cancel();
-        return;
-      }
-      countdownValue = countdownValue! - 1;
-      notifyListeners();
-      if (countdownValue! <= 0) {
-        timer.cancel();
-        countdownValue = null;
-        _captureCurrentAngle();
-      }
-    });
-  }
-
-  void _cancelCountdown() {
-    _countdownTimer?.cancel();
-    _countdownTimer = null;
-    countdownValue = null;
-    notifyListeners();
-  }
-
   // Capture
 
-  /// Manual capture — interrupts any running countdown.
+  /// Manual capture — takes a photo and detects faces in the captured image.
   Future<void> manualCapture() async {
     if (isCapturingPhoto || isProcessingCapture) return;
-    _cancelCountdown();
+    captureWarning = null;
     await _captureCurrentAngle();
   }
 
   Future<void> _captureCurrentAngle() async {
     if (controller == null || !controller!.value.isInitialized) return;
     if (isCapturingPhoto || isProcessingCapture) return;
-
-    // Wait for any in-progress frame detection to finish (max 500 ms)
-    int waitMs = 0;
-    while (_isDetecting && waitMs < 500) {
-      await Future.delayed(const Duration(milliseconds: 50));
-      waitMs += 50;
-    }
-
-    // Stop image stream safely — ignore errors (e.g. stream already stopped)
-    try {
-      await _stopImageStream();
-    } catch (e) {
-      debugPrint('[SelfieProvider] stopImageStream error (ignored): $e');
-    }
 
     isCapturingPhoto = true;
     notifyListeners();
@@ -297,9 +131,6 @@ class SelfieProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('[SelfieProvider] takePicture error: $e');
       isCapturingPhoto = false;
-      try {
-        await _startImageStream();
-      } catch (_) {}
       notifyListeners();
       return;
     }
@@ -308,6 +139,7 @@ class SelfieProvider extends ChangeNotifier {
     notifyListeners();
 
     final angle = currentAngle;
+    bool didCaptureFace = false;
     try {
       final result = await faceEmbeddingService.processImage(photo);
 
@@ -315,36 +147,38 @@ class SelfieProvider extends ChangeNotifier {
         capturedPhotos[angle.value] = result.croppedFace;
         capturedEmbeddings[angle.value] = result.embedding;
         if (angle == SelfieAngle.front) selfieImage = result.croppedFace;
+        captureWarning = null;
+        didCaptureFace = true;
       } else {
-        capturedPhotos[angle.value] = photo;
-        capturedEmbeddings[angle.value] = List.filled(192, 0.0);
-        if (angle == SelfieAngle.front) selfieImage = photo;
+        // No face found in the captured photo — warn and do NOT advance.
+        captureWarning = 'Tidak ada wajah terdeteksi. Silakan coba lagi.';
+        debugPrint('[SelfieProvider] No face in captured photo for ${angle.value}');
       }
     } catch (e) {
-      // TFLite / ML Kit error — store raw photo with empty embedding so user
-      // can still proceed rather than being silently stuck.
-      debugPrint('[SelfieProvider] processImage error (using fallback): $e');
-      capturedPhotos[angle.value] = photo;
-      capturedEmbeddings[angle.value] = List.filled(192, 0.0);
-      if (angle == SelfieAngle.front) selfieImage = photo;
+      debugPrint('[SelfieProvider] processImage error: $e');
+      captureWarning = 'Tidak ada wajah terdeteksi. Silakan coba lagi.';
     } finally {
-      // Advance step regardless of ML result
-      if (currentAngleIndex < SelfieAngle.values.length - 1) {
-        currentAngleIndex++;
-        faceDetected = false;
-        detectedFaces = [];
-      } else {
-        allCaptured = true;
+      if (didCaptureFace) {
+        // Find the next angle that has NOT been captured yet (supports partial retake).
+        final nextIndex = _findNextUncapturedIndex();
+        if (nextIndex != null) {
+          currentAngleIndex = nextIndex;
+        } else {
+          allCaptured = true;
+        }
       }
       isProcessingCapture = false;
       notifyListeners();
     }
+  }
 
-    if (!allCaptured) {
-      try {
-        await _startImageStream();
-      } catch (_) {}
+  /// Returns the index of the first [SelfieAngle] whose photo has not yet
+  /// been captured, or `null` when all angles are covered.
+  int? _findNextUncapturedIndex() {
+    for (int i = 0; i < SelfieAngle.values.length; i++) {
+      if (!capturedPhotos.containsKey(SelfieAngle.values[i].value)) return i;
     }
+    return null;
   }
 
   // Retake
@@ -354,34 +188,25 @@ class SelfieProvider extends ChangeNotifier {
     capturedEmbeddings.remove(angle.value);
     allCaptured = false;
     currentAngleIndex = SelfieAngle.values.indexOf(angle);
-    faceDetected = false;
-    detectedFaces = [];
+    captureWarning = null;
     submitErrors.clear();
     notifyListeners();
-    // Re-initialize camera if it was disposed (e.g. app backgrounded)
     if (controller == null || !controller!.value.isInitialized) {
       await initializeCamera(cameraLensDirection: CameraLensDirection.front);
-    } else {
-      await _startImageStream();
     }
   }
 
   /// Resets all captured data and restarts the camera stream from angle 0.
   Future<void> resetAll() async {
-    _cancelCountdown();
     capturedPhotos.clear();
     capturedEmbeddings.clear();
     allCaptured = false;
     currentAngleIndex = 0;
-    faceDetected = false;
-    detectedFaces = [];
+    captureWarning = null;
     submitErrors.clear();
     notifyListeners();
-    // Re-initialize camera if it was disposed, otherwise just restart stream
     if (controller == null || !controller!.value.isInitialized) {
       await initializeCamera(cameraLensDirection: CameraLensDirection.front);
-    } else {
-      await _startImageStream();
     }
   }
 
@@ -497,8 +322,6 @@ class SelfieProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    _cancelCountdown();
-    _streamFaceDetector?.close();
     controller?.dispose();
     controller = null;
     faceEmbeddingService.dispose();
