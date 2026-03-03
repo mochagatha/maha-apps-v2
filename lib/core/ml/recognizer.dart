@@ -96,6 +96,18 @@ class Recognizer {
       final embedding = outputBuffer[0];
       debugPrint('[Recognizer] Embedding sample (first 5): ${embedding.take(5).toList()}');
 
+      // L2-normalize embedding to unit length
+      double sum = 0.0;
+      for (var v in embedding) {
+        sum += v * v;
+      }
+      final norm = sqrt(sum);
+      if (norm > 0.0) {
+        for (int i = 0; i < embedding.length; i++) {
+          embedding[i] = embedding[i] / norm;
+        }
+      }
+
       return RecognitionEmbedding(location, embedding);
     } catch (e) {
       debugPrint('[Recognizer] Error recognizing face: $e');

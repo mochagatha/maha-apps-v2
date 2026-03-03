@@ -105,13 +105,16 @@ class FaceEmbeddingService {
       Rect.fromLTWH(bb.left, bb.top, bb.width, bb.height),
     );
 
-    // Save original (not just crop) as the photo to upload
-    // (backend may need the full face photo, not a tiny 112px crop)
-    // We return the original imageFile as the uploadable photo.
-    // The embedding is derived from the cropped+normalised version.
+    // Save the normalized cropped face (112x112 JPEG) as a temp file
+    // and return it so callers upload the normalized image.
+    // final jpg = img.encodeJpg(resized, quality: 90);
+    // final tempDir = Directory.systemTemp;
+    // final tempFile = File('${tempDir.path}/face_${DateTime.now().millisecondsSinceEpoch}.jpg');
+    // await tempFile.writeAsBytes(jpg);
+    // XFile(tempFile.path);
 
     return FaceEmbeddingResult(
-      croppedFace: imageFile, // upload original, embedding is from crop
+      croppedFace: imageFile,
       embedding: recognitionResult.embedding,
     );
   }
