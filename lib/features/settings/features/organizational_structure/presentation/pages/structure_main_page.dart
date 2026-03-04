@@ -31,6 +31,12 @@ class StructureMainPage extends StatefulWidget {
 }
 
 class _StructureMainPageState extends State<StructureMainPage> {
+  String get _typeBranch {
+    if (widget.type == 'utama') return 'office';
+    if (widget.type == 'project') return 'project';
+    return 'branch';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -524,10 +530,10 @@ class _StructureMainPageState extends State<StructureMainPage> {
   void _addStructureDialog() async {
     final provider = context.read<StructureProvider>();
 
-    // Load user roles list for office employees
+    // Load user roles list filtered by branch type based on current page
     final result = await provider.getOrganizationalData.getUserRolesList(
       typeRole: 'employee',
-      typeBranch: 'office',
+      typeBranch: _typeBranch,
     );
 
     if (!mounted) return;
