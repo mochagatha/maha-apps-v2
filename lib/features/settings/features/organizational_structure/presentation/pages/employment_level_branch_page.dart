@@ -4,15 +4,15 @@ import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../../../../../shared/widgets/menu_item_card.dart';
 
-class JobTitleListPage extends StatelessWidget {
-  const JobTitleListPage({super.key});
+class EmploymentLevelBranchPage extends StatelessWidget {
+  const EmploymentLevelBranchPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final menuItems = _buildMenuItems(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Data Jabatan'),
+      appBar: const CustomAppBar(title: 'Data Tingkatan Pekerja'),
       body: RefreshIndicator(
         color: Colors.red,
         onRefresh: () async {
@@ -38,23 +38,16 @@ class JobTitleListPage extends StatelessWidget {
     return [
       {
         'icon': 'assets/images/icon/jam_kerja.svg',
-        'text': 'Kantor',
+        'text': 'Karyawan',
         'action': () {
-          context.push(AppRoutes.jobTitleOffice.path);
+          context.push(AppRoutes.employmentLevelBranchEmployee.path);
         },
       },
       {
         'icon': 'assets/images/icon/pengaturan_lembur.svg',
-        'text': 'Proyek',
+        'text': 'Pekerja Harian',
         'action': () {
-          context.push(AppRoutes.jobTitleProject.path);
-        },
-      },
-      {
-        'icon': 'assets/images/icon/jam_kerja.svg',
-        'text': 'Cabang',
-        'action': () {
-          context.push(AppRoutes.jobTitleBranch.path);
+          context.push(AppRoutes.employmentLevelBranchWorker.path);
         },
       },
     ];

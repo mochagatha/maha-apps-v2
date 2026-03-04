@@ -240,9 +240,12 @@ class OrganizationalStructureRepositoryImpl implements OrganizationalStructureRe
   }
 
   @override
-  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(String typeRole) async {
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(
+    String typeRole, {
+    String? typeBranch,
+  }) async {
     try {
-      final result = await remoteDataSource.getUserRolesByType(typeRole);
+      final result = await remoteDataSource.getUserRolesByType(typeRole, typeBranch: typeBranch);
       return Right(result.map((model) => model.toEntity()).toList());
     } on DioException catch (e) {
       return Left(ServerFailure(e.response?.data['message'] ?? 'Gagal mengambil user roles'));

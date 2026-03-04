@@ -32,12 +32,12 @@ class UserRoleProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Load user role hierarchy by type role
-  Future<void> loadUserRoleHierarchy(String typeRole) async {
+  /// Load user role hierarchy by type role and optional type branch
+  Future<void> loadUserRoleHierarchy(String typeRole, {String? typeBranch}) async {
     _setLoading(true);
     _setError(null);
 
-    final result = await getOrganizationalData.getUserRolesByType(typeRole);
+    final result = await getOrganizationalData.getUserRolesByType(typeRole, typeBranch: typeBranch);
 
     result.fold(
       (failure) {

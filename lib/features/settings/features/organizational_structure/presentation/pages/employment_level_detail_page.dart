@@ -36,7 +36,7 @@ class _EmploymentLevelDetailPageState extends State<EmploymentLevelDetailPage> {
 
   Future<void> _loadData() async {
     final provider = context.read<UserRoleProvider>();
-    await provider.loadUserRoleHierarchy(widget.typeRole);
+    await provider.loadUserRoleHierarchy(widget.typeRole, typeBranch: widget.typeBranch);
   }
 
   @override

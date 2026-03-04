@@ -20,6 +20,11 @@ class DepartmentListPage extends StatelessWidget {
         'text': 'Proyek',
         'route': AppRoutes.departmentProject.path,
       },
+      {
+        'icon': 'assets/images/icon/jam_kerja.svg',
+        'text': 'Cabang',
+        'route': AppRoutes.departmentBranch.path,
+      },
     ];
 
     return Scaffold(

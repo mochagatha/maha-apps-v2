@@ -16,8 +16,11 @@ class GetOrganizationalData {
     return await repository.getUserRoles(typeBranch);
   }
 
-  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(String typeRole) async {
-    return await repository.getUserRolesByType(typeRole);
+  Future<Either<Failure, List<UserRoleEntity>>> getUserRolesByType(
+    String typeRole, {
+    String? typeBranch,
+  }) async {
+    return await repository.getUserRolesByType(typeRole, typeBranch: typeBranch);
   }
 
   Future<Either<Failure, List<JobTitleEntity>>> getJobTitles({

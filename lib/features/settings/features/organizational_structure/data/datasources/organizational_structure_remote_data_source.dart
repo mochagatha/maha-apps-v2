@@ -52,7 +52,7 @@ abstract class OrganizationalStructureRemoteDataSource {
   Future<void> deleteSuperiorEmployeeDepartment(int id);
   Future<OrganizationalStructureModel> getStructureDetail(int id);
   Future<List<EmploymentLevelModel>> getUserRoles(String typeBranch);
-  Future<List<UserRoleModel>> getUserRolesByType(String typeRole);
+  Future<List<UserRoleModel>> getUserRolesByType(String typeRole, {String? typeBranch});
   Future<List<UserRoleModel>> getUserRolesList({
     required String typeRole,
     required String typeBranch,
@@ -310,11 +310,15 @@ class OrganizationalStructureRemoteDataSourceImpl
   }
 
   @override
-  Future<List<UserRoleModel>> getUserRolesByType(String typeRole) async {
+  Future<List<UserRoleModel>> getUserRolesByType(String typeRole, {String? typeBranch}) async {
     try {
+      final Map<String, dynamic> queryParameters = {'type_role': typeRole};
+      if (typeBranch != null) {
+        queryParameters['type_branch'] = typeBranch;
+      }
       final response = await client.dioGolang.get(
         ApiEndpoints.userRole,
-        queryParameters: {'type_role': typeRole},
+        queryParameters: queryParameters,
       );
 
       final List<dynamic> data = response.data['data'];

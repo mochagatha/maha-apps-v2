@@ -114,10 +114,12 @@ import '../../features/settings/features/organizational_structure/presentation/p
 import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_list_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_office_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_project_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_branch_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/department_list_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/job_title_list_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/job_title_office_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/job_title_project_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/job_title_branch_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/job_title_detail_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/job_title_selection_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/employee_by_job_title_selection_page.dart';
@@ -127,6 +129,7 @@ import '../../features/settings/features/organizational_structure/presentation/p
 import '../../features/settings/features/organizational_structure/presentation/providers/user_role_provider.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/department_office_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/department_project_page.dart';
+import '../../features/settings/features/organizational_structure/presentation/pages/department_branch_page.dart';
 import '../../features/settings/features/organizational_structure/presentation/pages/employment_level_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_placeholder_page.dart';
@@ -154,7 +157,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: AppRoutes.selfieKtpForm.path,
+      initialLocation: AppRoutes.splash.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -689,6 +692,35 @@ class AppRouter {
           ),
         ),
         GoRoute(
+          path: AppRoutes.employmentLevelBranch.path,
+          name: AppRoutes.employmentLevelBranch.name,
+          builder: (context, state) => const EmploymentLevelBranchPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.employmentLevelBranchEmployee.path,
+          name: AppRoutes.employmentLevelBranchEmployee.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<UserRoleProvider>(),
+            child: const EmploymentLevelDetailPage(
+              typeRole: 'employee',
+              typeBranch: 'branch',
+              title: 'Tingkatan Karyawan',
+            ),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.employmentLevelBranchWorker.path,
+          name: AppRoutes.employmentLevelBranchWorker.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<UserRoleProvider>(),
+            child: const EmploymentLevelDetailPage(
+              typeRole: 'worker',
+              typeBranch: 'branch',
+              title: 'Tingkatan Pekerja Harian',
+            ),
+          ),
+        ),
+        GoRoute(
           path: AppRoutes.departmentList.path,
           name: AppRoutes.departmentList.name,
           builder: (context, state) => const DepartmentListPage(),
@@ -707,6 +739,14 @@ class AppRouter {
           builder: (context, state) => ChangeNotifierProvider(
             create: (_) => sl<DepartmentProvider>(),
             child: const DepartmentProjectPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.departmentBranch.path,
+          name: AppRoutes.departmentBranch.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<DepartmentProvider>(),
+            child: const DepartmentBranchPage(),
           ),
         ),
         GoRoute(
@@ -768,6 +808,35 @@ class AppRouter {
             child: const JobTitleDetailPage(
               typeRole: 'worker',
               typeBranch: 'project',
+              title: 'Data Jabatan',
+            ),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.jobTitleBranch.path,
+          name: AppRoutes.jobTitleBranch.name,
+          builder: (context, state) => const JobTitleBranchPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.jobTitleBranchEmployee.path,
+          name: AppRoutes.jobTitleBranchEmployee.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<JobTitleProvider>(),
+            child: const JobTitleDetailPage(
+              typeRole: 'employee',
+              typeBranch: 'branch',
+              title: 'Data Jabatan',
+            ),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.jobTitleBranchWorker.path,
+          name: AppRoutes.jobTitleBranchWorker.name,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => sl<JobTitleProvider>(),
+            child: const JobTitleDetailPage(
+              typeRole: 'worker',
+              typeBranch: 'branch',
               title: 'Data Jabatan',
             ),
           ),

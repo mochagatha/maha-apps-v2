@@ -50,6 +50,13 @@ class EmploymentLevelListPage extends StatelessWidget {
           context.push(AppRoutes.employmentLevelProject.path);
         },
       },
+      {
+        'icon': 'assets/images/icon/jam_kerja.svg',
+        'text': 'Cabang',
+        'action': () {
+          context.push(AppRoutes.employmentLevelBranch.path);
+        },
+      },
     ];
   }
 }

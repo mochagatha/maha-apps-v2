@@ -46,8 +46,14 @@ class AppRoutes {
   static const archiveMenu = AppRoute('arsip-menu', '/arsip-menu');
   static const archiveYearMenu = AppRoute('arsip-year-menu', '/arsip-menu/year');
   static const archiveMonthMenu = AppRoute('arsip-month-menu', '/arsip-menu/month');
-  static const archiveWorkerStatusMenu = AppRoute('arsip-worker-status-menu', '/arsip-menu/worker-status');
-  static const archiveRegistrationMenu = AppRoute('arsip-registration-menu', '/arsip-menu/registration');
+  static const archiveWorkerStatusMenu = AppRoute(
+    'arsip-worker-status-menu',
+    '/arsip-menu/worker-status',
+  );
+  static const archiveRegistrationMenu = AppRoute(
+    'arsip-registration-menu',
+    '/arsip-menu/registration',
+  );
   static const archiveStatementMenu = AppRoute('arsip-statement-menu', '/arsip-menu/statement');
   static const archiveAgreementMenu = AppRoute('arsip-agreement-menu', '/arsip-menu/agreement');
   static const archiveDocumentsMenu = AppRoute('arsip-documents-menu', '/arsip-menu/documents');
@@ -76,9 +82,18 @@ class AppRoutes {
   static const selfieResultKtp = AppRoute('selfie-result-ktp', '/biodata/selfie-ktp/result');
   static const biodataBank = AppRoute('biodata-bank', '/biodata/bank');
   static const biodataSignature = AppRoute('biodata-signature', '/biodata/signature');
-  static const createEmploymentAgreement = AppRoute('create-employment-agreement', '/employment-agreement/create');
-  static const detailEmploymentAgreement = AppRoute('detail-employment-agreement', '/employment-agreement/detail');
-  static const biodataRevisionNotice = AppRoute('biodata-revision-notice', '/biodata/revision/notice');
+  static const createEmploymentAgreement = AppRoute(
+    'create-employment-agreement',
+    '/employment-agreement/create',
+  );
+  static const detailEmploymentAgreement = AppRoute(
+    'detail-employment-agreement',
+    '/employment-agreement/detail',
+  );
+  static const biodataRevisionNotice = AppRoute(
+    'biodata-revision-notice',
+    '/biodata/revision/notice',
+  );
   static const biodataRevisionForm = AppRoute('biodata-revision-form', '/biodata/revision/form');
   static const biodataCreateSignature = AppRoute(
     'biodata-create-signature',
@@ -110,8 +125,14 @@ class AppRoutes {
   static const companyCode = AppRoute('company-code', '/recruitment/company-code');
   static const recruitmentAgreement = AppRoute('recruitment-agreement', '/recruitment/agreement');
   static const recruitmentEMatrai = AppRoute('recruitment-e-matrai', '/recruitment/e-matrai');
-  static const employeeEMatrai = AppRoute('recruitment-employee-e-matrai', '/recruitment/e-matrai/employee');
-  static const workerEMatrai = AppRoute('recruitment-worker-e-matrai', '/recruitment/e-matrai/worker');
+  static const employeeEMatrai = AppRoute(
+    'recruitment-employee-e-matrai',
+    '/recruitment/e-matrai/employee',
+  );
+  static const workerEMatrai = AppRoute(
+    'recruitment-worker-e-matrai',
+    '/recruitment/e-matrai/worker',
+  );
   static const recruitmentBpjsActivation = AppRoute(
     'recruitment-bpjs-activation',
     '/recruitment/bpjs-activation',
@@ -159,6 +180,18 @@ class AppRoutes {
     'employment-level-project-worker',
     '/organizational-structure/employment-level/project/worker',
   );
+  static const employmentLevelBranch = AppRoute(
+    'employment-level-branch',
+    '/organizational-structure/employment-level/branch',
+  );
+  static const employmentLevelBranchEmployee = AppRoute(
+    'employment-level-branch-employee',
+    '/organizational-structure/employment-level/branch/employee',
+  );
+  static const employmentLevelBranchWorker = AppRoute(
+    'employment-level-branch-worker',
+    '/organizational-structure/employment-level/branch/worker',
+  );
   static const departmentList = AppRoute('department-list', '/organizational-structure/department');
   static const departmentOffice = AppRoute(
     'department-office',
@@ -167,6 +200,10 @@ class AppRoutes {
   static const departmentProject = AppRoute(
     'department-project',
     '/organizational-structure/department/project',
+  );
+  static const departmentBranch = AppRoute(
+    'department-branch',
+    '/organizational-structure/department/branch',
   );
   static const jobTitleList = AppRoute('job-title-list', '/organizational-structure/job-title');
   static const jobTitleOffice = AppRoute(
@@ -193,6 +230,18 @@ class AppRoutes {
     'job-title-project-worker',
     '/organizational-structure/job-title/project/worker',
   );
+  static const jobTitleBranch = AppRoute(
+    'job-title-branch',
+    '/organizational-structure/job-title/branch',
+  );
+  static const jobTitleBranchEmployee = AppRoute(
+    'job-title-branch-employee',
+    '/organizational-structure/job-title/branch/employee',
+  );
+  static const jobTitleBranchWorker = AppRoute(
+    'job-title-branch-worker',
+    '/organizational-structure/job-title/branch/worker',
+  );
   static const jobTitleSelection = AppRoute(
     'job-title-selection',
     '/organizational-structure/job-title-selection',
@@ -213,8 +262,14 @@ class AppRoutes {
 
   // Settings Submenus
   static const settingsAbsensi = AppRoute('settings-absensi', '/settings/absensi');
-  static const settingsAbsensiDetailJamKerja = AppRoute('settings-absensi-detail-jam-kerja', '/settings/absensi/jam-kerja/detail');
-  static const settingsAbsensiEditJamKerja = AppRoute('settings-absensi-edit-jam-kerja', '/settings/absensi/jam-kerja/edit');
+  static const settingsAbsensiDetailJamKerja = AppRoute(
+    'settings-absensi-detail-jam-kerja',
+    '/settings/absensi/jam-kerja/detail',
+  );
+  static const settingsAbsensiEditJamKerja = AppRoute(
+    'settings-absensi-edit-jam-kerja',
+    '/settings/absensi/jam-kerja/edit',
+  );
   static const settingsLibur = AppRoute('settings-libur', '/settings/libur');
   static const settingsAbsensiPenempatanKerja = AppRoute(
     'settings-absensi-penempatan-kerja',
