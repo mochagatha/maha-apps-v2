@@ -6,7 +6,7 @@ import '../../../../core/ml/face_embedding_service.dart';
 import '../../domain/entities/user_photo.dart';
 import '../../domain/usecases/submit_employee_document.dart';
 import '../../domain/usecases/submit_user_photo.dart';
-import '../../domain/usecases/submit_verification_data.dart';
+import '../../domain/usecases/confirm_employee_data.dart';
 
 /// Angle constants — order matters (captures in this order).
 enum SelfieAngle {
@@ -22,14 +22,14 @@ enum SelfieAngle {
 class SelfieProvider extends ChangeNotifier {
   final SubmitEmployeeDocument submitEmployeeDocumentUseCase;
   final SubmitUserPhoto submitUserPhotoUseCase;
-  final SubmitVerificationData submitVerificationDataUseCase;
+  final ConfirmEmployeeData confirmEmployeeDataUseCase;
   final FaceEmbeddingService faceEmbeddingService;
   final SharedPreferences sharedPreferences;
 
   SelfieProvider({
     required this.submitEmployeeDocumentUseCase,
     required this.submitUserPhotoUseCase,
-    required this.submitVerificationDataUseCase,
+    required this.confirmEmployeeDataUseCase,
     required this.faceEmbeddingService,
     required this.sharedPreferences,
   });
@@ -315,11 +315,15 @@ class SelfieProvider extends ChangeNotifier {
         return failure.message;
       },
       (_) async {
-        // Hit verification data endpoint after successful KTP upload
+        // Confirm employee data after successful KTP upload
         final employeeId = _getIntPref('employee_id');
         if (employeeId != null) {
-          await submitVerificationDataUseCase(
-            SubmitVerificationDataParams(employeeId: employeeId, status: 0),
+          final confirmDate = DateTime.now().toIso8601String().substring(0, 10);
+          await confirmEmployeeDataUseCase(
+            ConfirmEmployeeDataParams(
+              employeeId: employeeId,
+              confirmDate: confirmDate,
+            ),
           );
         }
         notifyListeners();

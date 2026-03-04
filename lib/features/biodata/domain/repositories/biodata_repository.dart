@@ -62,4 +62,8 @@ abstract class BiodataRepository {
     required int employeeId,
     required int status,
   });
+  Future<Either<Failure, void>> confirmEmployeeData({
+    required int employeeId,
+    required String confirmDate,
+  });
 }

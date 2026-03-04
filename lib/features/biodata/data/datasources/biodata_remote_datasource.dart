@@ -56,6 +56,10 @@ abstract class BiodataRemoteDataSource {
     required int employeeId,
     required int status,
   });
+  Future<void> confirmEmployeeData({
+    required int employeeId,
+    required String confirmDate,
+  });
 }
 
 class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
@@ -596,6 +600,33 @@ class BiodataRemoteDataSourceImpl implements BiodataRemoteDataSource {
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw ServerException(
           response.data['message'] ?? 'Failed to submit verification data',
+        );
+      }
+    } on DioException catch (e) {
+      throw ServerException(
+        e.response?.data?['message'] ?? 'Network error occurred',
+      );
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> confirmEmployeeData({
+    required int employeeId,
+    required String confirmDate,
+  }) async {
+    try {
+      final response = await client.dio.post(
+        '/employee/confirm-data/$employeeId',
+        data: {
+          'confirm_date': confirmDate,
+        },
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ServerException(
+          response.data['message'] ?? 'Failed to confirm employee data',
         );
       }
     } on DioException catch (e) {

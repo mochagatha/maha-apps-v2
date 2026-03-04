@@ -301,4 +301,20 @@ class BiodataRepositoryImpl implements BiodataRepository {
       return Left(ServerFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> confirmEmployeeData({
+    required int employeeId,
+    required String confirmDate,
+  }) async {
+    try {
+      await remoteDataSource.confirmEmployeeData(
+        employeeId: employeeId,
+        confirmDate: confirmDate,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
 }
