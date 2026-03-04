@@ -27,6 +27,7 @@ import 'package:maha_apps_v2/features/recruitment/features/data_verification/pre
 import 'package:maha_apps_v2/features/recruitment/features/data_verification/presentation/pages/employee_personal_data_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/e_matrai_page.dart';
 import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/pages/employee_e_matrai_page.dart';
+import 'package:maha_apps_v2/features/recruitment/features/e_matrai/presentation/providers/e_matrai_provider.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/attendance_anywhere_settings_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/employee_attendance_anywhere_page.dart';
 import 'package:maha_apps_v2/features/settings/features/absensi/features/attendance_anywhere/presentation/pages/single_employee_attendance_anywhere_page.dart';
@@ -58,6 +59,7 @@ import '../../features/authentication/presentation/pages/forgot_password_page.da
 import '../../features/authentication/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/authentication/presentation/pages/privacy_notice_page.dart';
 import '../../features/authentication/presentation/providers/auth_provider.dart';
+import '../../features/biodata/domain/services/biodata_step_manager.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/home/presentation/pages/admin_home.dart';
 import '../../features/home/presentation/providers/admin_home_provider.dart';
@@ -83,6 +85,8 @@ import '../../features/biodata/presentation/pages/welcome_page.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
 import '../../features/biodata/presentation/pages/biodata_form_page.dart';
 import '../../features/biodata/presentation/providers/biodata_form_provider.dart';
+import '../../features/biodata/domain/repositories/biodata_repository.dart';
+import '../../features/biodata/domain/usecases/submit_biodata.dart';
 import '../../features/biodata/presentation/pages/education_form_page.dart';
 import '../../features/biodata/presentation/providers/education_form_provider.dart';
 import '../../features/biodata/presentation/pages/family_page.dart';
@@ -97,7 +101,6 @@ import '../../features/biodata/presentation/pages/selfie_result_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_camera_page.dart';
 import '../../features/biodata/presentation/pages/selfie_ktp_result_page.dart';
-import '../../features/biodata/domain/repositories/biodata_repository.dart'; // Import Repository for type safety if needed, or rely on sl lookup
 import '../../features/recruitment/presentation/pages/recruitment_page.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
 import '../../features/recruitment/features/data_verification/presentation/pages/verification_data_page.dart';
@@ -151,7 +154,7 @@ class AppRouter {
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: AppRoutes.splash.path,
+      initialLocation: AppRoutes.selfieKtpForm.path,
       debugLogDiagnostics: true,
       // Redirect logic - Smart navigation to prevent hot reload splash issue
       redirect: (context, state) {
@@ -160,8 +163,7 @@ class AppRouter {
 
         // If user is on splash and already authenticated, skip splash
         // BUT: Admin users should NOT skip - they must login fresh each time
-        if (currentPath == AppRoutes.splash.path &&
-            authProvider.isAuthenticated) {
+        if (currentPath == AppRoutes.splash.path && authProvider.isAuthenticated) {
           // Check if admin
           if (authProvider.isAdmin) {
             return AppRoutes.adminHome.path;
@@ -187,7 +189,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.login.path,
           name: AppRoutes.login.name,
-          redirect: (context, state) {
+          redirect: (context, state) async {
             final authProvider = context.read<AuthProvider>();
             // If user is on splash and already authenticated, skip splash
             // BUT: Admin users should NOT skip - they must login fresh each time
@@ -198,7 +200,12 @@ class AppRouter {
               }
               // Check user status to determine destination (matching v1 logic)
               if (authProvider.user?.status == 1) {
-                return AppRoutes.welcomeBiodata.path;
+                final nextStep = await BiodataStepManager.getNextStep();
+                if (nextStep != null && nextStep.isNotEmpty) {
+                  return nextStep;
+                } else {
+                  return AppRoutes.welcomeBiodata.path;
+                }
               } else {
                 return AppRoutes.home.path;
               }
@@ -280,8 +287,7 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.pesan.path,
                   name: AppRoutes.pesan.name,
-                  builder: (context, state) =>
-                      const Scaffold(body: Center(child: Text("Pesan"))),
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Pesan"))),
                 ),
               ],
             ),
@@ -387,8 +393,10 @@ class AppRouter {
           path: AppRoutes.biodataForm.path,
           name: AppRoutes.biodataForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) =>
-                BiodataFormProvider(repository: sl<BiodataRepository>()),
+            create: (_) => BiodataFormProvider(
+              repository: sl<BiodataRepository>(),
+              submitBiodataUseCase: sl<SubmitBiodata>(),
+            ),
             child: const BiodataFormPage(),
           ),
         ),
@@ -396,7 +404,7 @@ class AppRouter {
           path: AppRoutes.educationForm.path,
           name: AppRoutes.educationForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => EducationFormProvider(),
+            create: (_) => sl<EducationFormProvider>(),
             child: const EducationFormPage(),
           ),
         ),
@@ -404,7 +412,7 @@ class AppRouter {
           path: AppRoutes.familyForm.path,
           name: AppRoutes.familyForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => FamilyProvider(),
+            create: (_) => sl<FamilyProvider>(),
             child: const FamilyPage(),
           ),
         ),
@@ -412,7 +420,7 @@ class AppRouter {
           path: AppRoutes.documentForm.path,
           name: AppRoutes.documentForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => DocumentProvider(),
+            create: (_) => sl<DocumentProvider>(),
             child: const DocumentPage(),
           ),
         ),
@@ -420,7 +428,7 @@ class AppRouter {
           path: AppRoutes.skillForm.path,
           name: AppRoutes.skillForm.name,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => SkillProvider(),
+            create: (_) => sl<SkillProvider>(),
             child: const SkillPage(),
           ),
         ),
@@ -459,7 +467,7 @@ class AppRouter {
           name: AppRoutes.biodataBank.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
-              create: (context) => BankProvider(),
+              create: (context) => sl<BankProvider>(),
               child: const BankPage(),
             );
           },
@@ -474,7 +482,7 @@ class AppRouter {
           name: AppRoutes.biodataCreateSignature.name,
           builder: (context, state) {
             return ChangeNotifierProvider(
-              create: (context) => SignatureProvider(),
+              create: (_) => sl<SignatureProvider>(),
               child: CreateSignaturePage(),
             );
           },
@@ -502,7 +510,7 @@ class AppRouter {
         ShellRoute(
           builder: (context, state, child) {
             return ChangeNotifierProvider(
-              create: (context) => BiodataRevisionProvider(),
+              create: (context) => sl<BiodataRevisionProvider>(),
               child: child,
             );
           },
@@ -585,7 +593,14 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.employeeEMatrai.path,
           name: AppRoutes.employeeEMatrai.name,
-          builder: (context, state) => const EmployeeEMatraiPage(),
+          builder: (context, state) {
+            final typeUser =
+                (state.extra as Map<String, dynamic>?)?['type_user'] as String? ?? 'employee';
+            return ChangeNotifierProvider(
+              create: (_) => sl<EMatraiProvider>(),
+              child: EmployeeEMatraiPage(typeUser: typeUser),
+            );
+          },
         ),
 
         // Organizational Structure Routes
@@ -789,8 +804,7 @@ class AppRouter {
             final jobTitleId = int.parse(
               state.uri.queryParameters['jobTitleId']!,
             );
-            final jobTitleName =
-                state.uri.queryParameters['jobTitleName'] ?? '';
+            final jobTitleName = state.uri.queryParameters['jobTitleName'] ?? '';
             return ChangeNotifierProvider(
               create: (_) => sl<StructureProvider>(),
               child: EmployeeByJobTitleSelectionPage(
@@ -885,17 +899,15 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiPenempatanKerja.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Penempatan Kerja',
-              ),
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Penempatan Kerja',
+          ),
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiZonasi.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Zonasi',
-              ),
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Zonasi',
+          ),
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiJamKerja.path,
@@ -1012,15 +1024,13 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsAbsensiPerbaikanKehadiran.path,
-          builder: (context, state) =>
-              const absensi_placeholder.SettingsPlaceholderPage(
-                title: 'Perbaikan Kehadiran',
-              ),
+          builder: (context, state) => const absensi_placeholder.SettingsPlaceholderPage(
+            title: 'Perbaikan Kehadiran',
+          ),
         ),
         GoRoute(
           path: AppRoutes.settingsPenempatanKerja.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Penempatan Kerja'),
         ),
         GoRoute(
           path: AppRoutes.settingsLibur.path,
@@ -1029,38 +1039,31 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsHirarkiOffice.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Hirarki Office'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hirarki Office'),
         ),
         GoRoute(
           path: AppRoutes.settingsLembur.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Lembur'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Lembur'),
         ),
         GoRoute(
           path: AppRoutes.settingsTindakanKaryawan.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Tindakan Karyawan'),
         ),
         GoRoute(
           path: AppRoutes.settingsBpjs.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'BPJS'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'BPJS'),
         ),
         GoRoute(
           path: AppRoutes.settingsPph21.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'PPH 21'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'PPH 21'),
         ),
         GoRoute(
           path: AppRoutes.settingsJamKerja.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Jam Kerja'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Jam Kerja'),
         ),
         GoRoute(
           path: AppRoutes.settingsFormatDanDraf.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Format dan Draf'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Format dan Draf'),
         ),
         GoRoute(
           path: AppRoutes.settingsAksesLayar.path,
@@ -1086,8 +1089,7 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsHakAksesMenu.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Hak Akses Menu'),
         ),
         GoRoute(
           name: AppRoutes.settingsPelacakanJamKerja.name,
@@ -1128,8 +1130,7 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.settingsBahasa.path,
-          builder: (context, state) =>
-              const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
+          builder: (context, state) => const SettingsPlaceholderPage(title: 'Ubah Bahasa'),
         ),
       ],
 

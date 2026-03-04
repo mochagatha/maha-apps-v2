@@ -60,9 +60,10 @@ class SkillPage extends StatelessWidget {
                               showDialog(
                                 context: context,
                                 builder: (_) => ChangeNotifierProvider.value(
-                                  value: provider, // Pass the existing provider
+                                  value: provider,
                                   child: SkillSelectionDialog(
                                     initialSelectedSkills: provider.selectedSkills,
+                                    initialCustomSkills: provider.newSkills,
                                   ),
                                 ),
                               );
@@ -170,16 +171,14 @@ class SkillPage extends StatelessWidget {
 
                   if (isValid && context.mounted) {
                     context.pushNamed(AppRoutes.selfieForm.name);
-                  } else if (!isValid) {
-                    // Show error message
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Pilih minimal 1 keahlian!'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
+                  } else if (!isValid && context.mounted) {
+                    final errorMsg = provider.errorMessage ?? 'Pilih minimal 1 keahlian!';
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(errorMsg),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(

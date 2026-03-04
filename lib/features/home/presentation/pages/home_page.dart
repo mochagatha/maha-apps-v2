@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/localization_extension.dart';
 import '../../../../shared/theme/app_theme.dart';
 import '../providers/home_provider.dart';
@@ -88,12 +90,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate safely to Reject screen logic if it exists
-                          // For now just close or stay, but V1 pushes RejectStatementScreen
-                          // We don't have that route yet, so we just show snackbar
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(context.l10n.rejectStatusDetailsComingSoon)),
-                          );
+                          context.pushNamed(AppRoutes.biodataRevisionNotice.name);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,

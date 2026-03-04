@@ -67,6 +67,7 @@ flutter:
     - assets/images/svg/arsip/
     - assets/fonts/
     - assets/audio/
+    - assets/models/
     - assets/
     - assets/templates/
     - assets/icons/

@@ -103,8 +103,35 @@ import '../../features/absensi/presentation/providers/attendance_provider.dart';
 import '../../features/biodata/data/datasources/biodata_remote_datasource.dart';
 import '../../features/biodata/data/repositories/biodata_repository_impl.dart';
 import '../../features/biodata/domain/repositories/biodata_repository.dart';
+import '../../features/biodata/domain/usecases/get_banks.dart';
 import '../../features/biodata/domain/usecases/get_biodata.dart';
+import '../../features/biodata/domain/usecases/submit_bank.dart';
+import '../../features/biodata/domain/usecases/submit_biodata.dart';
+import '../../features/biodata/domain/usecases/submit_education.dart';
+import '../../features/biodata/domain/usecases/submit_family.dart';
+import '../../features/biodata/domain/usecases/submit_sibling.dart';
+import '../../features/biodata/domain/usecases/submit_marital.dart';
+import '../../features/biodata/domain/usecases/submit_children.dart';
+import '../../features/biodata/domain/usecases/submit_document.dart';
+import '../../features/biodata/domain/usecases/get_revision_verification.dart';
+import '../../features/biodata/domain/usecases/get_employee_full_data.dart';
+import '../../features/biodata/domain/usecases/submit_revision.dart';
+import '../../features/biodata/domain/usecases/submit_signature.dart';
+import '../../features/biodata/domain/usecases/submit_skill.dart';
+import '../../features/biodata/domain/usecases/submit_employee_document.dart';
+import '../../features/biodata/domain/usecases/confirm_employee_data.dart';
+import '../../features/biodata/domain/usecases/submit_verification_data.dart';
+import '../../features/biodata/domain/usecases/submit_user_photo.dart';
+import '../ml/face_embedding_service.dart';
+import '../../features/biodata/presentation/providers/bank_provider.dart';
+import '../../features/biodata/presentation/providers/selfie_provider.dart';
 import '../../features/biodata/presentation/providers/biodata_provider.dart';
+import '../../features/biodata/presentation/providers/document_provider.dart';
+import '../../features/biodata/presentation/providers/education_form_provider.dart';
+import '../../features/biodata/presentation/providers/family_provider.dart';
+import '../../features/biodata/presentation/providers/biodata_revision_provider.dart';
+import '../../features/biodata/presentation/providers/signature_provider.dart';
+import '../../features/biodata/presentation/providers/skill_provider.dart';
 
 // Recruitment feature imports
 import '../../features/recruitment/data/datasources/recruitment_remote_datasource.dart';
@@ -112,6 +139,14 @@ import '../../features/recruitment/data/repositories/recruitment_repository_impl
 import '../../features/recruitment/domain/repositories/recruitment_repository.dart';
 import '../../features/recruitment/domain/usecases/get_recruitment_menus.dart';
 import '../../features/recruitment/presentation/providers/recruitment_provider.dart';
+
+// E-Matrai feature imports
+import '../../features/recruitment/features/e_matrai/data/datasources/e_matrai_remote_datasource.dart';
+import '../../features/recruitment/features/e_matrai/data/repositories/e_matrai_repository_impl.dart';
+import '../../features/recruitment/features/e_matrai/domain/repositories/e_matrai_repository.dart';
+import '../../features/recruitment/features/e_matrai/domain/usecases/get_e_matrai_list.dart';
+import '../../features/recruitment/features/e_matrai/domain/usecases/upload_matrai.dart';
+import '../../features/recruitment/features/e_matrai/presentation/providers/e_matrai_provider.dart';
 
 // Organizational Structure feature imports
 import '../../features/settings/features/organizational_structure/data/datasources/organizational_structure_remote_data_source.dart';
@@ -331,10 +366,67 @@ Future<void> init() async {
   );
 
   //! Features - Biodata
+  sl.registerFactory(
+    () => BankProvider(
+      getBanksUseCase: sl(),
+      submitBankUseCase: sl(),
+    ),
+  );
   sl.registerFactory(() => BiodataProvider(getBiodata: sl()));
+  sl.registerFactory(() => DocumentProvider(submitDocumentUseCase: sl()));
+  sl.registerFactory(() => EducationFormProvider(submitEducationUseCase: sl()));
+  sl.registerFactory(
+    () => FamilyProvider(
+      submitFamilyUseCase: sl(),
+      submitSiblingUseCase: sl(),
+      submitMaritalUseCase: sl(),
+      submitChildrenUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => BiodataRevisionProvider(
+      getRevisionVerification: sl(),
+      getEmployeeFullData: sl(),
+      submitRevision: sl(),
+    ),
+  );
 
   // Use cases
+  sl.registerLazySingleton(() => GetBanks(sl()));
   sl.registerLazySingleton(() => GetBiodata(sl()));
+  sl.registerLazySingleton(() => SubmitBank(sl()));
+  sl.registerLazySingleton(() => SubmitBiodata(sl()));
+  sl.registerLazySingleton(() => SubmitEducation(sl()));
+  sl.registerLazySingleton(() => SubmitFamily(sl()));
+  sl.registerLazySingleton(() => SubmitSibling(sl()));
+  sl.registerLazySingleton(() => SubmitMarital(sl()));
+  sl.registerLazySingleton(() => SubmitChildren(sl()));
+  sl.registerLazySingleton(() => SubmitDocument(sl()));
+  sl.registerLazySingleton(() => GetRevisionVerification(sl()));
+  sl.registerLazySingleton(() => GetEmployeeFullData(sl()));
+  sl.registerLazySingleton(() => SubmitRevision(sl()));
+  sl.registerLazySingleton(() => SubmitSignature(sl()));
+  sl.registerLazySingleton(() => SubmitSkill(sl()));
+  sl.registerLazySingleton(() => SubmitEmployeeDocument(sl()));
+  sl.registerLazySingleton(() => SubmitUserPhoto(sl()));
+  sl.registerLazySingleton(() => SubmitVerificationData(sl()));
+  sl.registerLazySingleton(() => ConfirmEmployeeData(sl()));
+  sl.registerLazySingleton(() => FaceEmbeddingService());
+
+  // Providers
+  sl.registerFactory(
+    () => SignatureProvider(submitSignatureUseCase: sl(), sharedPreferences: sl()),
+  );
+  sl.registerFactory(() => SkillProvider(submitSkillUseCase: sl()));
+  sl.registerFactory(
+    () => SelfieProvider(
+      submitEmployeeDocumentUseCase: sl(),
+      submitUserPhotoUseCase: sl(),
+      confirmEmployeeDataUseCase: sl(),
+      faceEmbeddingService: sl(),
+      sharedPreferences: sl(),
+    ),
+  );
 
   // Repository
   sl.registerLazySingleton<BiodataRepository>(() => BiodataRepositoryImpl(remoteDataSource: sl()));
@@ -359,6 +451,29 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<RecruitmentRemoteDataSource>(
     () => RecruitmentRemoteDataSourceImpl(client: sl()),
+  );
+
+  //! Features - E-Matrai
+  // Provider
+  sl.registerFactory(
+    () => EMatraiProvider(
+      getEMatraiList: sl(),
+      uploadMatraiUseCase: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetEMatraiList(sl()));
+  sl.registerLazySingleton(() => UploadMatrai(sl()));
+
+  // Repository
+  sl.registerLazySingleton<EMatraiRepository>(
+    () => EMatraiRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<EMatraiRemoteDataSource>(
+    () => EMatraiRemoteDataSourceImpl(client: sl()),
   );
 
   //! Features - Organizational Structure

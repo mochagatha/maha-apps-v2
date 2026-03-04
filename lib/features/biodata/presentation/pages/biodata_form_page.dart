@@ -70,8 +70,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 textCapitalization: TextCapitalization.words,
                                 hintText: 'Masukkan nama lengkap anda..',
                                 prefKey: AppConstants.biodata.name,
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'Nama lengkap tidak boleh kosong !'
                                     : null,
                               ),
@@ -81,8 +80,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 textCapitalization: TextCapitalization.words,
                                 hintText: 'Masukkan nama panggilan anda..',
                                 prefKey: AppConstants.biodata.nickname,
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'Nama panggilan tidak boleh kosong !'
                                     : null,
                               ),
@@ -124,8 +122,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 itemAsString: (p0) => p0.name,
                                 isLoading: false,
                                 onChanged: (val) => provider.setProvince(val),
-                                validator: (val) =>
-                                    val == null ? 'Pilih Provinsi!' : null,
+                                validator: (val) => val == null ? 'Pilih Provinsi!' : null,
                               ),
 
                               const CustomLabelBiodata(
@@ -144,9 +141,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 itemAsString: (p0) => p0.name,
                                 isLoading: provider.isLoadingRegency,
                                 onChanged: (val) => provider.setRegency(val),
-                                validator: (val) => val == null
-                                    ? 'Pilih Kota/Kabupaten!'
-                                    : null,
+                                validator: (val) => val == null ? 'Pilih Kota/Kabupaten!' : null,
                               ),
 
                               const CustomLabelBiodata(
@@ -165,8 +160,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 itemAsString: (p0) => p0.name,
                                 isLoading: provider.isLoadingDistrict,
                                 onChanged: (val) => provider.setDistrict(val),
-                                validator: (val) =>
-                                    val == null ? 'Pilih Kecamatan!' : null,
+                                validator: (val) => val == null ? 'Pilih Kecamatan!' : null,
                               ),
 
                               const CustomLabelBiodata(
@@ -185,8 +179,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 itemAsString: (p0) => p0.name,
                                 isLoading: provider.isLoadingVillage,
                                 onChanged: (val) => provider.setVillage(val),
-                                validator: (val) =>
-                                    val == null ? 'Pilih Kelurahan!' : null,
+                                validator: (val) => val == null ? 'Pilih Kelurahan!' : null,
                               ),
 
                               const CustomLabelBiodata(text: 'Kode Pos'),
@@ -199,8 +192,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   FilteringTextInputFormatter.digitsOnly,
                                   LengthLimitingTextInputFormatter(8),
                                 ],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'Kode pos tidak boleh kosong !'
                                     : null,
                               ),
@@ -210,8 +202,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 textCapitalization: TextCapitalization.words,
                                 hintText: 'Masukkan alamat sesuai KTP anda',
                                 prefKey: AppConstants.biodata.address,
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'Alamat tidak boleh kosong !'
                                     : null,
                               ),
@@ -232,8 +223,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                     scale: 2 / 3,
                                     child: Switch(
                                       value: provider.isSwitchOn,
-                                      activeTrackColor: AppColors.primary
-                                          .withOpacity(0.5),
+                                      activeTrackColor: AppColors.primary.withOpacity(0.5),
                                       onChanged: provider.toggleSwitch,
                                       inactiveThumbColor: Colors.grey,
                                       activeColor: AppColors.primary,
@@ -258,10 +248,8 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   items: provider.provincesDom,
                                   itemAsString: (p0) => p0.name,
                                   isLoading: false,
-                                  onChanged: (val) =>
-                                      provider.setProvinceDom(val),
-                                  validator: (val) =>
-                                      val == null ? 'Pilih Provinsi!' : null,
+                                  onChanged: (val) => provider.setProvinceDom(val),
+                                  validator: (val) => val == null ? 'Pilih Provinsi!' : null,
                                 ),
 
                                 const CustomLabelBiodata(
@@ -279,11 +267,8 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   items: provider.regenciesDom,
                                   itemAsString: (p0) => p0.name,
                                   isLoading: provider.isLoadingRegencyDom,
-                                  onChanged: (val) =>
-                                      provider.setRegencyDom(val),
-                                  validator: (val) => val == null
-                                      ? 'Pilih Kota/Kabupaten!'
-                                      : null,
+                                  onChanged: (val) => provider.setRegencyDom(val),
+                                  validator: (val) => val == null ? 'Pilih Kota/Kabupaten!' : null,
                                 ),
 
                                 const CustomLabelBiodata(
@@ -301,10 +286,8 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   items: provider.districtsDom,
                                   itemAsString: (p0) => p0.name,
                                   isLoading: provider.isLoadingDistrictDom,
-                                  onChanged: (val) =>
-                                      provider.setDistrictDom(val),
-                                  validator: (val) =>
-                                      val == null ? 'Pilih Kecamatan!' : null,
+                                  onChanged: (val) => provider.setDistrictDom(val),
+                                  validator: (val) => val == null ? 'Pilih Kecamatan!' : null,
                                 ),
 
                                 const CustomLabelBiodata(
@@ -322,10 +305,8 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   items: provider.villagesDom,
                                   itemAsString: (p0) => p0.name,
                                   isLoading: provider.isLoadingVillageDom,
-                                  onChanged: (val) =>
-                                      provider.setVillageDom(val),
-                                  validator: (val) =>
-                                      val == null ? 'Pilih Kelurahan!' : null,
+                                  onChanged: (val) => provider.setVillageDom(val),
+                                  validator: (val) => val == null ? 'Pilih Kelurahan!' : null,
                                 ),
 
                                 const CustomLabelBiodata(text: 'Kode Pos'),
@@ -333,14 +314,12 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                   controller: provider.postalCodeDomController,
                                   keyboardType: TextInputType.number,
                                   hintText: 'Masukkan kode pos domisili..',
-                                  prefKey:
-                                      AppConstants.biodata.currentPostalCode,
+                                  prefKey: AppConstants.biodata.currentPostalCode,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                     LengthLimitingTextInputFormatter(8),
                                   ],
-                                  validator: (value) =>
-                                      (value == null || value.isEmpty)
+                                  validator: (value) => (value == null || value.isEmpty)
                                       ? 'Kode pos tidak boleh kosong'
                                       : null,
                                 ),
@@ -348,11 +327,9 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 CustomTextFormField(
                                   controller: provider.addressDomController,
                                   textCapitalization: TextCapitalization.words,
-                                  hintText:
-                                      'Masukkan alamat jalan domisili anda..',
+                                  hintText: 'Masukkan alamat jalan domisili anda..',
                                   prefKey: AppConstants.biodata.currentAddress,
-                                  validator: (value) =>
-                                      (value == null || value.isEmpty)
+                                  validator: (value) => (value == null || value.isEmpty)
                                       ? 'Alamat domisili tidak boleh kosong'
                                       : null,
                                 ),
@@ -367,10 +344,8 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 value: provider.selectedResidenceStatus,
                                 items: provider.itemsMapAddress,
                                 label: 'Pilih Status Tempat Tinggal..',
-                                onChanged: (val) =>
-                                    provider.setResidenceStatus(val),
-                                errorText:
-                                    'Status Tempat tinggal tidak boleh kosong !',
+                                onChanged: (val) => provider.setResidenceStatus(val),
+                                errorText: 'Status Tempat tinggal tidak boleh kosong !',
                                 isMap: true,
                               ),
 
@@ -383,8 +358,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'No hp tidak boleh kosong !'
                                     : null,
                               ),
@@ -398,8 +372,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'Kontak tidak boleh kosong !'
                                     : null,
                               ),
@@ -415,8 +388,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                         activeColor: AppColors.primary,
                                         value: "L",
                                         groupValue: provider.selectedGender,
-                                        onChanged: (val) =>
-                                            provider.setGender(val!),
+                                        onChanged: (val) => provider.setGender(val!),
                                       ),
                                     ),
                                   ),
@@ -428,8 +400,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                         activeColor: AppColors.primary,
                                         value: "P",
                                         groupValue: provider.selectedGender,
-                                        onChanged: (val) =>
-                                            provider.setGender(val!),
+                                        onChanged: (val) => provider.setGender(val!),
                                       ),
                                     ),
                                   ),
@@ -456,8 +427,7 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                 textCapitalization: TextCapitalization.words,
                                 hintText: 'Masukkan Tempat Lahir Anda.. ',
                                 prefKey: AppConstants.biodata.birthPlace,
-                                validator: (value) =>
-                                    (value == null || value.isEmpty)
+                                validator: (value) => (value == null || value.isEmpty)
                                     ? 'Tempat lahir tidak boleh kosong !'
                                     : null,
                               ),
@@ -466,14 +436,12 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: InkWell(
-                                  onTap: () =>
-                                      provider.selectBirthDate(context),
+                                  onTap: () => provider.selectBirthDate(context),
                                   child: IgnorePointer(
                                     child: TextFormField(
                                       controller: provider.birthDateController,
                                       readOnly: true,
-                                      validator: (value) =>
-                                          (value == null || value.isEmpty)
+                                      validator: (value) => (value == null || value.isEmpty)
                                           ? 'Tanggal Lahir tidak boleh kosong !'
                                           : null,
                                       decoration: InputDecoration(
@@ -486,11 +454,10 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
                                           Icons.calendar_today,
                                           size: 20,
                                         ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 12,
-                                            ),
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                             8,
@@ -532,55 +499,67 @@ class _BiodataFormPageState extends State<BiodataFormPage> {
         child: Row(
           children: [
             Expanded(
-              child: ElevatedButton(
-                onPressed: () async {
-                  final provider = context.read<BiodataFormProvider>();
-                  final messenger = ScaffoldMessenger.of(context);
-                  final error = await provider.submit();
+              child: Consumer<BiodataFormProvider>(
+                builder: (context, provider, _) => ElevatedButton(
+                  onPressed: provider.isSubmitting
+                      ? null
+                      : () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          final error = await provider.submit();
 
-                  if (error != null) {
-                    messenger.showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          error,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.grey.shade800,
-                      ),
-                    );
-                    return;
-                  }
+                          if (error != null) {
+                            messenger.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  error,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.grey.shade800,
+                              ),
+                            );
+                            return;
+                          }
 
-                  // Only navigate if form validation passes
-                  if (context.mounted) {
-                    context.pushNamed(AppRoutes.educationForm.name);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                          // Only navigate if form validation passes
+                          if (context.mounted) {
+                            context.pushNamed(AppRoutes.educationForm.name);
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Selanjutnya',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ],
+                  child: provider.isSubmitting
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Selanjutnya',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
                 ),
               ),
             ),

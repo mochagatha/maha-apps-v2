@@ -9,8 +9,21 @@ import 'package:maha_apps_v2/shared/widgets/custom_app_bar.dart';
 import 'package:maha_apps_v2/shared/widgets/custom_search_dropdown.dart';
 import 'package:provider/provider.dart';
 
-class BankPage extends StatelessWidget {
+class BankPage extends StatefulWidget {
   const BankPage({super.key});
+
+  @override
+  State<BankPage> createState() => _BankPageState();
+}
+
+class _BankPageState extends State<BankPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BankProvider>().loadBanks();
+    });
+  }
 
   String? Function(dynamic) _emptyValidator(String hint) {
     return (value) {
@@ -49,14 +62,38 @@ class BankPage extends StatelessWidget {
               SizedBox(height: 12),
               Consumer<BankProvider>(
                 builder: (context, provider, child) {
-                  return CustomSearchDropdown(
-                    items: provider.banks,
-                    onChanged: (value) => provider.selectedBank = value,
-                    itemAsString: (item) => item.name,
-                    itemFromId: provider.bankFromId,
-                    itemId: (item) => item.id,
-                    hint: "Pilih bank tujuan Anda di sini...",
-                    validator: _emptyValidator("Bank tujuan"),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomSearchDropdown(
+                        items: provider.banks,
+                        onChanged: (value) => provider.selectedBank = value,
+                        itemAsString: (item) => item.name,
+                        itemFromId: provider.bankFromId,
+                        itemId: (item) => item.id,
+                        hint: "Pilih bank tujuan Anda di sini...",
+                        isLoading: provider.loadingBanks,
+                        validator: _emptyValidator("Bank tujuan"),
+                      ),
+                      if (provider.loadBanksError != null) ...[
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                provider.loadBanksError!,
+                                style: const TextStyle(color: Colors.red, fontSize: 12),
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: () => provider.loadBanks(),
+                              icon: const Icon(Icons.refresh, size: 16),
+                              label: const Text("Coba lagi"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
                   );
                 },
               ),

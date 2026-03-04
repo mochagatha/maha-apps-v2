@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:maha_apps_v2/core/router/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/theme/app_theme.dart';
+import '../../domain/services/biodata_step_manager.dart';
 import '../providers/selfie_provider.dart';
 
 class SelfieKtpResultPage extends StatelessWidget {
@@ -46,27 +48,50 @@ class SelfieKtpResultPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Validate both selfie images exist
-                  if (provider.selfieImage == null ||
-                      provider.selfieKtpImage == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Foto selfie dan foto selfie dengan KTP harus diambil!',
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    return;
-                  }
+                onPressed: provider.isUploading
+                    ? null
+                    : () async {
+                        // Validate both selfie images exist
+                        if (provider.selfieKtpImage == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Foto selfie dan foto selfie dengan KTP harus diambil!',
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
 
-                  // Submit Data and Finish
-                  showDialog(
-                    context: context,
-                    builder: (context) => _SuccessPopup(),
-                  );
-                },
+                        // Upload selfie with KTP to backend
+                        final error = await provider.uploadSelfieWithKtp();
+
+                        if (!context.mounted) return;
+
+                        if (error != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(error),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        // Dispose camera now that upload is complete
+                        await provider.disposeCamera();
+
+                        if (!context.mounted) return;
+
+                        // Upload successful, proceed to next step
+                        BiodataStepManager.setNextStep(AppRoutes.biodataSignature.path);
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => const _SuccessPopup(),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
@@ -74,14 +99,23 @@ class SelfieKtpResultPage extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                child: const Text(
-                  'Unggah Foto',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child: provider.isUploading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Unggah Foto',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 12),
@@ -115,78 +149,95 @@ class SelfieKtpResultPage extends StatelessWidget {
   }
 }
 
+Future<void> _hubungiAdminWhatsApp(BuildContext context) async {
+  const phone = '6281364993863';
+  const message =
+      'Halo Admin Maha, saya telah mengirimkan data diri saya dan membutuhkan konfirmasi untuk proses Verifikasi Data Diri. Mohon bantuannya. Terima kasih.';
+  final uri = Uri.parse(
+    'https://wa.me/$phone?text=${Uri.encodeComponent(message)}',
+  );
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak dapat membuka WhatsApp.')),
+      );
+    }
+  }
+}
+
 class _SuccessPopup extends StatelessWidget {
   const _SuccessPopup();
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      insetPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Data diri berhasil dikirim!",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 24),
-            Image.asset(
-              "assets/images/icon/verifikasi-data.png",
-              height: 150,
-            ),
-            SizedBox(height: 24),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(text: "Mohon untuk menunggu "),
-                  TextSpan(
-                    text: "Verifikasi Data Diri",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: " Anda dari HRD Maha!"),
-                ],
+    return PopScope(
+      canPop: false,
+      child: Dialog(
+        insetPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Data diri berhasil dikirim!",
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                context.goNamed(AppRoutes.biodataBank.name);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+              SizedBox(height: 24),
+              Image.asset(
+                "assets/images/icon/verifikasi-data.png",
+                height: 150,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/icon/whatsapp.png",
-                    height: 16,
-                    width: 16,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 8),
-                  const Text(
-                    'Hubungi Admin',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              SizedBox(height: 24),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: "Mohon untuk menunggu "),
+                    TextSpan(
+                      text: "Verifikasi Data Diri",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
+                    TextSpan(text: " Anda dari HRD Maha!"),
+                  ],
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-          ],
+              SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => _hubungiAdminWhatsApp(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/icon/whatsapp.png",
+                      height: 16,
+                      width: 16,
+                      fit: BoxFit.contain,
+                    ),
+                    SizedBox(width: 8),
+                    const Text(
+                      'Hubungi Admin',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

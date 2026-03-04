@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         // Forgot Password Provider from GetIt
         ChangeNotifierProvider(create: (_) => di.sl<ForgotPasswordProvider>()),
         // Selfie Provider (global for biodata flow)
-        ChangeNotifierProvider(create: (_) => SelfieProvider()),
+        ChangeNotifierProvider(create: (_) => di.sl<SelfieProvider>()),
         // Language Provider
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
         // Screen Security Provider from GetIt

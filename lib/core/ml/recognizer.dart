@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,69 +10,109 @@ import 'recognition_embedding.dart';
 
 /// Face recognition service using TensorFlow Lite MobileFaceNet model
 class Recognizer {
-  late Interpreter interpreter;
+  Interpreter? _interpreter;
   late InterpreterOptions _interpreterOptions;
+
+  bool get isLoaded => _interpreter != null;
 
   /// Input image dimensions for the model
   static const int WIDTH = 112;
   static const int HEIGHT = 112;
 
   /// Path to the TFLite model asset
-  String get modelName => 'assets/mobile_face_net.tflite';
+  String get modelName => 'assets/models/mobile_face_net.tflite';
 
-  /// Load the TensorFlow Lite model
+  /// Load the TensorFlow Lite model.
+  /// Throws [Exception] if the model asset cannot be loaded.
   Future<void> loadModel() async {
-    try {
-      interpreter = await Interpreter.fromAsset(modelName);
-    } catch (e) {
-      // Model loading failed - handle silently
-    }
+    _interpreter?.close();
+    _interpreter = null;
+    final interp = await Interpreter.fromAsset(
+      modelName,
+      options: _interpreterOptions,
+    );
+    _interpreter = interp;
+    debugPrint(
+      '[Recognizer] Model loaded. '
+      'Input: ${interp.getInputTensors().map((t) => t.shape)}, '
+      'Output: ${interp.getOutputTensors().map((t) => t.shape)}',
+    );
   }
 
-  /// Initialize the recognizer with optional thread count
+  /// Initialize the recognizer with optional thread count.
+  /// Do NOT call loadModel() here — use [FaceEmbeddingService.initialize()] which awaits it.
   Recognizer({int? numThreads}) {
     _interpreterOptions = InterpreterOptions();
 
     if (numThreads != null) {
       _interpreterOptions.threads = numThreads;
     }
-    loadModel();
   }
 
-  /// Convert image to normalized array for model input
+  /// Release interpreter resources.
+  void dispose() {
+    _interpreter?.close();
+    _interpreter = null;
+  }
+
+  /// Convert image to normalized array for model input.
+  /// MobileFaceNet expects [1, H, W, 3] NHWC layout with values in [-1, 1].
   List<dynamic> imageToArray(img.Image inputImage) {
-    img.Image resizedImage = img.copyResize(inputImage, width: WIDTH, height: HEIGHT);
-    List<double> flattenedList = resizedImage.data!
-        .expand((channel) => [channel.r, channel.g, channel.b])
-        .map((value) => value.toDouble())
-        .toList();
-    Float32List float32Array = Float32List.fromList(flattenedList);
-    int channels = 3;
-    int height = HEIGHT;
-    int width = WIDTH;
-    Float32List reshapedArray = Float32List(1 * height * width * channels);
-    for (int c = 0; c < channels; c++) {
-      for (int h = 0; h < height; h++) {
-        for (int w = 0; w < width; w++) {
-          int index = c * height * width + h * width + w;
-          reshapedArray[index] = (float32Array[c * height * width + h * width + w] - 127.5) / 127.5;
-        }
+    final img.Image resized = img.copyResize(inputImage, width: WIDTH, height: HEIGHT);
+
+    // Build flat HWC list: [r00,g00,b00, r01,g01,b01, ..., r(H-1)(W-1)...]
+    final Float32List input = Float32List(HEIGHT * WIDTH * 3);
+    int idx = 0;
+    for (int h = 0; h < HEIGHT; h++) {
+      for (int w = 0; w < WIDTH; w++) {
+        final pixel = resized.getPixel(w, h);
+        input[idx++] = (pixel.r.toDouble() - 127.5) / 127.5;
+        input[idx++] = (pixel.g.toDouble() - 127.5) / 127.5;
+        input[idx++] = (pixel.b.toDouble() - 127.5) / 127.5;
       }
     }
-    return reshapedArray.reshape([1, 112, 112, 3]);
+    return input.reshape([1, HEIGHT, WIDTH, 3]);
   }
 
-  /// Extract face embedding from image
+  /// Extract face embedding from image.
+  /// Throws [StateError] if the model has not been loaded yet.
   RecognitionEmbedding recognize(img.Image image, Rect location) {
-    var input = imageToArray(image);
+    try {
+      final interp = _interpreter;
+      if (interp == null) {
+        throw StateError('[Recognizer] Model not loaded — call loadModel() first.');
+      }
 
-    List output = List.filled(1 * 192, 0).reshape([1, 192]);
+      final input = imageToArray(image);
 
-    interpreter.run(input, output);
+      // Use runForMultipleInputs with Map<int, Object> — the canonical
+      // tflite_flutter pattern that avoids Float32List vs List<double> type errors.
+      // Output tensor shape is [1, 192] — wrap in a List to match
+      final List<List<double>> outputBuffer = [List<double>.filled(192, 0.0)];
+      final outputs = <int, Object>{0: outputBuffer};
 
-    List<double> outputArray = output.first.cast<double>();
+      interp.runForMultipleInputs([input], outputs);
 
-    return RecognitionEmbedding(location, outputArray);
+      final embedding = outputBuffer[0];
+      debugPrint('[Recognizer] Embedding sample (first 5): ${embedding.take(5).toList()}');
+
+      // L2-normalize embedding to unit length
+      double sum = 0.0;
+      for (var v in embedding) {
+        sum += v * v;
+      }
+      final norm = sqrt(sum);
+      if (norm > 0.0) {
+        for (int i = 0; i < embedding.length; i++) {
+          embedding[i] = embedding[i] / norm;
+        }
+      }
+
+      return RecognitionEmbedding(location, embedding);
+    } catch (e) {
+      debugPrint('[Recognizer] Error recognizing face: $e');
+      rethrow;
+    }
   }
 
   /// Find the nearest match between two embeddings

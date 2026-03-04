@@ -98,6 +98,7 @@ class _BiodataConstants {
   final String birthPlace = "TEMPAT_LAHIR";
   final String birthDate = "TGL_LAHIR";
   final String religion = "AGAMA";
+  final String nextStep = "NEXT_STEP";
 
   // Family
   final String fatherName = "NAMA_AYAH";

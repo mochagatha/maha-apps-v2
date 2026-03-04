@@ -28,7 +28,10 @@ class EMatraiPage extends StatelessWidget {
               label: "Pekerja Harian",
               icon: "assets/images/icon/pekerja_harian_icon.svg",
             ),
-            onTap: () {},
+            onTap: () => context.push(
+              AppRoutes.employeeEMatrai.path,
+              extra: {'type_user': 'worker'},
+            ),
           ),
         ],
       ),
