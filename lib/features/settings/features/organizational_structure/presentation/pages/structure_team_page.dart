@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
-import '../../domain/entities/department_entity.dart';
+import '../../../../../../shared/widgets/confirm_dialog.dart';
+import '../../../../../../shared/theme/app_theme.dart';
 import '../../domain/entities/employee_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
 import '../../domain/entities/department_structure_entity.dart';
 import '../providers/structure_provider.dart';
-import '../widgets/multi_select_employee_dialog.dart';
+import 'add_department_members_page.dart';
 
 class StructureTeamPage extends StatefulWidget {
   final int superiorId;
@@ -20,6 +21,23 @@ class StructureTeamPage extends StatefulWidget {
 }
 
 class _StructureTeamPageState extends State<StructureTeamPage> {
+  String get _typeBranch {
+    if (widget.type == 'utama') return 'office';
+    if (widget.type == 'project') return 'project';
+    return 'branch';
+  }
+
+  int? _getRoleStructureId(StructureProvider provider) {
+    final structure = provider.currentStructure;
+    if (structure == null) return null;
+    for (var role in structure.roleStructure) {
+      for (var superior in role.superiorEmployeeStructure) {
+        if (superior.id == widget.superiorId) return role.id;
+      }
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,10 +102,12 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () => _showAddDepartmentDialog(context),
-        child: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: Consumer<StructureProvider>(
+        builder: (context, provider, _) => FloatingActionButton(
+          backgroundColor: Colors.red,
+          onPressed: () => _navigateToAddDepartment(provider),
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }
@@ -189,13 +209,11 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
           _buildMemberSection(
             title: 'Karyawan',
             members: deptStruct.employeeStructure.map((e) => e.employee).toList(),
-            onEdit: () => _editMembers(deptStruct, false),
           ),
           const Divider(height: 32),
           _buildMemberSection(
             title: 'Pekerja Harian',
             members: deptStruct.workerStructure.map((w) => w.worker).toList(),
-            onEdit: () => _editMembers(deptStruct, true),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -215,22 +233,11 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
   Widget _buildMemberSection({
     required String title,
     required List<EmployeeEntity> members,
-    required VoidCallback onEdit,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            TextButton.icon(
-              onPressed: onEdit,
-              icon: const Icon(Icons.edit, size: 16),
-              label: const Text('Kelola'),
-            ),
-          ],
-        ),
+        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         if (members.isEmpty)
           const Text('-', style: TextStyle(color: Colors.grey))
         else
@@ -249,170 +256,52 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
     );
   }
 
-  void _showAddDepartmentDialog(BuildContext context) {
-    final provider = context.read<StructureProvider>();
-    DepartmentEntity? selectedDept;
-    List<int> selectedEmployees = [];
-    List<int> selectedWorkers = [];
+  void _navigateToAddDepartment(StructureProvider provider) async {
+    final structure = provider.currentStructure;
+    if (structure == null) return;
+    final roleStructureId = _getRoleStructureId(provider);
+    if (roleStructureId == null) return;
 
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: const Text('Tambah Departemen'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DropdownButtonFormField<DepartmentEntity>(
-                  value: selectedDept,
-                  hint: const Text('Pilih Departemen'),
-                  items: provider.departments.map((dept) {
-                    return DropdownMenuItem(value: dept, child: Text(dept.departmentName));
-                  }).toList(),
-                  onChanged: (val) => setState(() => selectedDept = val),
-                  decoration: const InputDecoration(border: OutlineInputBorder()),
-                ),
-                const SizedBox(height: 16),
-                OutlinedButton(
-                  onPressed: () => _showEmployeeSelection(
-                    context,
-                    provider.employees,
-                    selectedEmployees,
-                    (ids) => setState(() => selectedEmployees = ids),
-                    'Pilih Karyawan',
-                  ),
-                  child: Text('Pilih Karyawan (${selectedEmployees.length})'),
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton(
-                  onPressed: () => _showEmployeeSelection(
-                    context,
-                    provider.employees,
-                    selectedWorkers,
-                    (ids) => setState(() => selectedWorkers = ids),
-                    'Pilih Pekerja Harian',
-                  ),
-                  child: Text('Pilih Pekerja Harian (${selectedWorkers.length})'),
-                ),
-              ],
-            ),
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider.value(
+          value: provider,
+          child: AddDepartmentMembersPage(
+            companyStructureId: structure.id,
+            roleStructureId: roleStructureId,
+            superiorEmployeeId: widget.superiorId,
+            typeBranch: _typeBranch,
           ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
-            ElevatedButton(
-              onPressed: selectedDept == null
-                  ? null
-                  : () async {
-                      Navigator.pop(context);
-
-                      // Using provider from outer scope
-                      final superior = _getSuperior(provider);
-                      if (superior == null) return;
-
-                      final success = await provider.addDepartment(
-                        superiorEmployeeStructureId: superior.id,
-                        departmentId: selectedDept!.id,
-                        employeeIds: selectedEmployees,
-                        workerIds: selectedWorkers,
-                      );
-
-                      if (success && mounted) {
-                        provider.loadCompanyStructure('utama');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Departemen berhasil ditambahkan')),
-                        );
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('Simpan'),
-            ),
-          ],
         ),
       ),
     );
+
+    if (mounted) _loadInitialData();
   }
-
-  void _editMembers(DepartmentStructureEntity deptStruct, bool isWorker) {
-    final provider = context.read<StructureProvider>();
-    final currentMembers = isWorker
-        ? deptStruct.workerStructure.map((w) => w.worker)
-        : deptStruct.employeeStructure.map((e) => e.employee);
-    final currentIds = currentMembers.map((e) => e.id).toList();
-
-    _showEmployeeSelection(context, provider.employees, currentIds, (newIds) async {
-      // Calculate diff
-      final addedIds = newIds.where((id) => !currentIds.contains(id)).toList();
-      final removedIds = currentIds.where((id) => !newIds.contains(id)).toList();
-
-      if (addedIds.isEmpty && removedIds.isEmpty) return;
-
-      bool success;
-      if (isWorker) {
-        success = await provider.editWorkerDepartment(
-          id: deptStruct.id,
-          workerIds: addedIds,
-          deleteWorkerIds: removedIds,
-        );
-      } else {
-        success = await provider.editEmployeeDepartment(
-          id: deptStruct.id,
-          employeeIds: addedIds,
-          deleteEmployeeIds: removedIds,
-        );
-      }
-
-      if (success && mounted) {
-        provider.loadCompanyStructure('utama');
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Anggota berhasil diupdate')));
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(provider.errorMessage ?? 'Gagal update anggota'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }, isWorker ? 'Kelola Pekerja Harian' : 'Kelola Karyawan');
-  }
-
-  void _showEmployeeSelection(
-    BuildContext context,
-    List<EmployeeEntity> employees,
-    List<int> initialIds,
-    Function(List<int>) onConfirm,
-    String title,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) => MultiSelectEmployeeDialog(
-        employees: employees,
-        initialSelectedIds: initialIds,
-        onConfirm: onConfirm,
-        title: title,
-      ),
-    );
-  }
-
-  // Note: deleteDepartment function in provider is missing or named differently based on repo
-  // Looking at manage_superior_employee.dart, there isn't a deleteDepartment method explicitly exposed?
-  // Let's check repository.
-  // Repository has:
-  // Future<Either<Failure, void>> deleteSuperiorEmployee(int superiorEmployeeId);
-  // BUT does it have deleteDepartmentStructure?
-  // Checked: manage_superior_employee.dart doesn't seem to have deleteDepartment.
-  // Wait, I should check repository again.
-  // If not, I can't implement delete department.
 
   void _deleteDepartment(int deptStructId) {
-    ScaffoldMessenger.of(
+    final provider = context.read<StructureProvider>();
+    ConfirmDialog.show(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Fitur hapus departemen belum tersedia di API')));
+      message: 'Apakah Anda yakin ingin menghapus departemen ini?',
+      onConfirm: () async {
+        final success = await provider.deleteDepartment(deptStructId);
+        if (!mounted) return;
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Departemen berhasil dihapus')),
+          );
+          _loadInitialData();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(provider.errorMessage ?? 'Gagal menghapus departemen'),
+              backgroundColor: AppColors.primary,
+            ),
+          );
+        }
+      },
+    );
   }
 }

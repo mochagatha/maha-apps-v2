@@ -9,7 +9,6 @@ import '../../../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../../../shared/widgets/success_dialog.dart';
 import '../providers/structure_provider.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
-import '../../domain/entities/department_structure_entity.dart';
 import '../../domain/entities/organizational_structure_entity.dart';
 import '../../domain/entities/role_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
@@ -260,7 +259,8 @@ class _StructureMainPageState extends State<StructureMainPage> {
                   child: Builder(
                     builder: (buttonContext) => IconButton(
                       icon: const Icon(Icons.more_vert, color: Colors.grey),
-                      onPressed: () => _showRoleMenu(role.id, buttonContext),
+                      onPressed: () =>
+                          _showRoleMenu(role.id, role.superiorEmployeeStructure, buttonContext),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
@@ -278,12 +278,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
                     children: [
                       Stack(
                         children: [
-                          InkWell(
-                            onTap: () => _navigateToTeamManagement(superior.id),
-                            child: CircleAvatar(
-                              radius: 40,
-                              backgroundImage: NetworkImage(superior.employee.photoUrl),
-                            ),
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundImage: NetworkImage(superior.employee.photoUrl),
                           ),
                           Positioned(
                             bottom: 0,
@@ -332,28 +329,6 @@ class _StructureMainPageState extends State<StructureMainPage> {
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Builder(
-                                        builder: (buttonContext) => InkWell(
-                                          onTap: () => _showDepartmentMenu(
-                                            department,
-                                            superior.id,
-                                            buttonContext,
-                                          ),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: const BoxDecoration(
-                                              color: AppColors.blue,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Icon(
-                                              Icons.edit,
-                                              size: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
                                         ),
                                       ),
                                     ],
@@ -699,7 +674,11 @@ class _StructureMainPageState extends State<StructureMainPage> {
     );
   }
 
-  void _showRoleMenu(int roleId, BuildContext buttonContext) {
+  void _showRoleMenu(
+    int roleId,
+    List<SuperiorEmployeeEntity> superiorEmployees,
+    BuildContext buttonContext,
+  ) {
     final RenderBox button = buttonContext.findRenderObject() as RenderBox;
     final RenderBox overlay = Overlay.of(buttonContext).context.findRenderObject() as RenderBox;
     final RelativeRect position = RelativeRect.fromRect(
@@ -714,6 +693,17 @@ class _StructureMainPageState extends State<StructureMainPage> {
       context: buttonContext,
       position: position,
       items: [
+        if (superiorEmployees.isNotEmpty)
+          PopupMenuItem<String>(
+            value: 'detail',
+            child: Row(
+              children: [
+                const Icon(Icons.info_outline, color: AppColors.blue),
+                const SizedBox(width: 8),
+                const Text('Detail'),
+              ],
+            ),
+          ),
         PopupMenuItem<String>(
           value: 'delete',
           child: Row(
@@ -726,7 +716,9 @@ class _StructureMainPageState extends State<StructureMainPage> {
         ),
       ],
     ).then((value) {
-      if (value == 'delete') {
+      if (value == 'detail' && superiorEmployees.isNotEmpty) {
+        _navigateToTeamManagement(superiorEmployees.first.id);
+      } else if (value == 'delete') {
         _confirmDeleteRole(roleId);
       }
     });
@@ -754,265 +746,6 @@ class _StructureMainPageState extends State<StructureMainPage> {
                   context,
                 ).showSnackBar(SnackBar(content: Text(context.l10n.delete)));
                 _loadData();
-              }
-            },
-            child: const Text('Hapus', style: TextStyle(color: AppColors.primary)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDepartmentMenu(
-    DepartmentStructureEntity department,
-    int superiorEmployeeId,
-    BuildContext buttonContext,
-  ) {
-    final RenderBox button = buttonContext.findRenderObject() as RenderBox;
-    final RenderBox overlay = Overlay.of(buttonContext).context.findRenderObject() as RenderBox;
-    final RelativeRect position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-
-    showMenu<String>(
-      context: buttonContext,
-      position: position,
-      items: [
-        PopupMenuItem<String>(
-          value: 'edit',
-          child: Row(
-            children: [
-              const Icon(Icons.edit_outlined, color: AppColors.blue),
-              const SizedBox(width: 8),
-              const Text('Edit'),
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'delete',
-          child: Row(
-            children: [
-              const Icon(Icons.delete_outline, color: AppColors.primary),
-              const SizedBox(width: 8),
-              Text(context.l10n.delete),
-            ],
-          ),
-        ),
-      ],
-    ).then((value) {
-      if (value == 'edit') {
-        _showEditDepartmentDialog(department, superiorEmployeeId);
-      } else if (value == 'delete') {
-        _confirmDeleteDepartment(department.id);
-      }
-    });
-  }
-
-  void _showEditDepartmentDialog(
-    DepartmentStructureEntity department,
-    int superiorEmployeeId,
-  ) async {
-    final provider = context.read<StructureProvider>();
-
-    // Get current employee IDs
-    final currentEmployeeIds = department.employeeStructure.map((e) => e.employee.id).toList();
-
-    // Load all available employees
-    await provider.loadEmployees();
-
-    if (!mounted) return;
-
-    final selectedEmployeeIds = Set<int>.from(currentEmployeeIds);
-
-    final dialogResult = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Edit Anggota ${department.department.departmentName}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.5,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: provider.employees.map((employee) {
-                        final isSelected = selectedEmployeeIds.contains(employee.id);
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (isSelected) {
-                                    selectedEmployeeIds.remove(employee.id);
-                                  } else {
-                                    selectedEmployeeIds.add(employee.id);
-                                  }
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.shade300),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage: NetworkImage(employee.photoUrl),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            employee.fullname,
-                                            style: const TextStyle(fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            employee.nik,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: AppColors.neutral6,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Checkbox(
-                                      value: isSelected,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value == true) {
-                                            selectedEmployeeIds.add(employee.id);
-                                          } else {
-                                            selectedEmployeeIds.remove(employee.id);
-                                          }
-                                        });
-                                      },
-                                      activeColor: AppColors.primary,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: const Text(
-                      'Simpan',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    if (dialogResult == true && mounted) {
-      await _updateDepartment(
-        departmentId: department.id,
-        superiorEmployeeId: superiorEmployeeId,
-        departmentTypeId: department.department.id,
-        employeeIds: selectedEmployeeIds.toList(),
-      );
-    }
-  }
-
-  Future<void> _updateDepartment({
-    required int departmentId,
-    required int superiorEmployeeId,
-    required int departmentTypeId,
-    required List<int> employeeIds,
-  }) async {
-    final provider = context.read<StructureProvider>();
-
-    final success = await provider.updateDepartment(
-      id: departmentId,
-      superiorEmployeeStructureId: superiorEmployeeId,
-      departmentId: departmentTypeId,
-      employeeIds: employeeIds,
-    );
-
-    if (!mounted) return;
-
-    if (success) {
-      SuccessDialog.show(
-        context,
-        title: context.l10n.successExclamation,
-        message: 'Anggota departemen berhasil diperbarui',
-      );
-      await _loadData();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(provider.errorMessage ?? 'Gagal memperbarui anggota departemen'),
-          backgroundColor: AppColors.primary,
-        ),
-      );
-    }
-  }
-
-  void _confirmDeleteDepartment(int departmentId) {
-    final provider = context.read<StructureProvider>();
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Hapus Departemen'),
-        content: const Text('Apakah Anda yakin ingin menghapus departemen ini?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(context.l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(dialogContext);
-              final success = await provider.deleteDepartment(departmentId);
-              if (success && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Departemen berhasil dihapus')),
-                );
-                _loadData();
-              } else if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(provider.errorMessage ?? 'Gagal menghapus departemen'),
-                    backgroundColor: AppColors.primary,
-                  ),
-                );
               }
             },
             child: const Text('Hapus', style: TextStyle(color: AppColors.primary)),
