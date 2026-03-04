@@ -6,17 +6,21 @@ import '../../../../../../shared/theme/app_theme.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../providers/job_title_provider.dart';
 
-/// Page for selecting job title when adding employee to structure
+/// Page for selecting job title when adding/editing employee to structure
 class JobTitleSelectionPage extends StatefulWidget {
   final int companyStructureId;
   final int roleStructureId;
   final String typeBranch;
+  final bool isEdit;
+  final int? superiorEmployeeId;
 
   const JobTitleSelectionPage({
     super.key,
     required this.companyStructureId,
     required this.roleStructureId,
     this.typeBranch = 'office',
+    this.isEdit = false,
+    this.superiorEmployeeId,
   });
 
   @override
@@ -116,6 +120,9 @@ class _JobTitleSelectionPageState extends State<JobTitleSelectionPage> {
                         'roleStructureId': widget.roleStructureId.toString(),
                         'jobTitleId': jobTitle.id.toString(),
                         'jobTitleName': jobTitle.name ?? '',
+                        'isEdit': widget.isEdit.toString(),
+                        if (widget.superiorEmployeeId != null)
+                          'superiorEmployeeId': widget.superiorEmployeeId.toString(),
                       },
                     );
                   },

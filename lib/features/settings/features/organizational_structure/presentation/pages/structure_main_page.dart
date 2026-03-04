@@ -8,14 +8,12 @@ import '../../../../../../shared/theme/app_theme.dart';
 import '../../../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../../../shared/widgets/success_dialog.dart';
 import '../providers/structure_provider.dart';
-import '../providers/job_title_provider.dart';
 import '../../../../../../shared/widgets/custom_app_bar.dart';
 import '../../domain/entities/department_structure_entity.dart';
 import '../../domain/entities/organizational_structure_entity.dart';
 import '../../domain/entities/role_structure_entity.dart';
 import '../../domain/entities/superior_employee_entity.dart';
 import '../../domain/entities/user_role_entity.dart';
-import '../widgets/superior_employee_form_bottom_sheet.dart';
 import 'structure_team_page.dart';
 import 'add_department_members_page.dart';
 import 'organization_chart_page.dart';
@@ -503,30 +501,18 @@ class _StructureMainPageState extends State<StructureMainPage> {
     SuperiorEmployeeEntity superior,
     int companyStructureId,
     int roleStructureId,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(value: this.context.read<StructureProvider>()),
-          ChangeNotifierProvider(create: (_) => sl<JobTitleProvider>()),
-        ],
-        child: SuperiorEmployeeFormBottomSheet(
-          companyStructureId: companyStructureId,
-          roleStructureId: roleStructureId,
-          isEdit: true,
-          superiorEmployeeId: superior.id,
-          initialEmployeeId: superior.employee.id,
-          initialJobTitleId: superior.jobTitle.id,
-          onSuccess: _loadData,
-          type: widget.type,
-        ),
-      ),
+  ) async {
+    await context.pushNamed(
+      AppRoutes.jobTitleSelection.name,
+      queryParameters: {
+        'companyStructureId': companyStructureId.toString(),
+        'roleStructureId': roleStructureId.toString(),
+        'typeBranch': _typeBranch,
+        'isEdit': 'true',
+        'superiorEmployeeId': superior.id.toString(),
+      },
     );
+    _loadData();
   }
 
   void _addStructureDialog() async {

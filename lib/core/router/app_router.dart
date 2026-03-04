@@ -852,12 +852,19 @@ class AppRouter {
               state.uri.queryParameters['roleStructureId']!,
             );
             final typeBranch = state.uri.queryParameters['typeBranch'] ?? 'office';
+            final isEdit = state.uri.queryParameters['isEdit'] == 'true';
+            final superiorEmployeeIdStr = state.uri.queryParameters['superiorEmployeeId'];
+            final superiorEmployeeId = superiorEmployeeIdStr != null
+                ? int.parse(superiorEmployeeIdStr)
+                : null;
             return ChangeNotifierProvider(
               create: (_) => sl<JobTitleProvider>(),
               child: JobTitleSelectionPage(
                 companyStructureId: companyStructureId,
                 roleStructureId: roleStructureId,
                 typeBranch: typeBranch,
+                isEdit: isEdit,
+                superiorEmployeeId: superiorEmployeeId,
               ),
             );
           },
@@ -876,6 +883,11 @@ class AppRouter {
               state.uri.queryParameters['jobTitleId']!,
             );
             final jobTitleName = state.uri.queryParameters['jobTitleName'] ?? '';
+            final isEdit = state.uri.queryParameters['isEdit'] == 'true';
+            final superiorEmployeeIdStr = state.uri.queryParameters['superiorEmployeeId'];
+            final superiorEmployeeId = superiorEmployeeIdStr != null
+                ? int.parse(superiorEmployeeIdStr)
+                : null;
             return ChangeNotifierProvider(
               create: (_) => sl<StructureProvider>(),
               child: EmployeeByJobTitleSelectionPage(
@@ -883,6 +895,8 @@ class AppRouter {
                 roleStructureId: roleStructureId,
                 jobTitleId: jobTitleId,
                 jobTitleName: jobTitleName,
+                isEdit: isEdit,
+                superiorEmployeeId: superiorEmployeeId,
               ),
             );
           },

@@ -9,12 +9,14 @@ import '../../../../../../shared/widgets/success_dialog.dart';
 import '../providers/structure_provider.dart';
 import '../../domain/entities/employee_entity.dart';
 
-/// Page for selecting employee by job title to fill structure
+/// Page for selecting employee by job title to fill structure (add or edit)
 class EmployeeByJobTitleSelectionPage extends StatefulWidget {
   final int companyStructureId;
   final int roleStructureId;
   final int jobTitleId;
   final String jobTitleName;
+  final bool isEdit;
+  final int? superiorEmployeeId;
 
   const EmployeeByJobTitleSelectionPage({
     super.key,
@@ -22,6 +24,8 @@ class EmployeeByJobTitleSelectionPage extends StatefulWidget {
     required this.roleStructureId,
     required this.jobTitleId,
     required this.jobTitleName,
+    this.isEdit = false,
+    this.superiorEmployeeId,
   });
 
   @override
@@ -74,29 +78,42 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
   void _onEmployeeSelected(EmployeeEntity employee) {
     ConfirmDialog.show(
       context,
-      message: "Apakah anda yakin ingin menambahkan Struktur?",
+      message: widget.isEdit
+          ? "Apakah anda yakin ingin memperbarui Struktur?"
+          : "Apakah anda yakin ingin menambahkan Struktur?",
       onConfirm: () async {
-        await _addEmployeeToStructure(employee);
+        await _saveEmployeeToStructure(employee);
       },
     );
   }
 
-  Future<void> _addEmployeeToStructure(EmployeeEntity employee) async {
+  Future<void> _saveEmployeeToStructure(EmployeeEntity employee) async {
     final provider = context.read<StructureProvider>();
 
-    final success = await provider.addSuperiorEmployee(
-      companyStructureId: widget.companyStructureId,
-      roleStructureId: widget.roleStructureId,
-      employeeId: employee.id,
-      jobTitleId: widget.jobTitleId,
-    );
+    final bool success;
+    if (widget.isEdit && widget.superiorEmployeeId != null) {
+      success = await provider.editSuperiorEmployee(
+        superiorEmployeeId: widget.superiorEmployeeId!,
+        employeeId: employee.id,
+        jobTitleId: widget.jobTitleId,
+      );
+    } else {
+      success = await provider.addSuperiorEmployee(
+        companyStructureId: widget.companyStructureId,
+        roleStructureId: widget.roleStructureId,
+        employeeId: employee.id,
+        jobTitleId: widget.jobTitleId,
+      );
+    }
 
     if (!mounted) return;
 
     if (success) {
       SuccessDialog.show(
         context,
-        message: "Karyawan berhasil ditambahkan ke struktur",
+        message: widget.isEdit
+            ? "Karyawan berhasil diperbarui"
+            : "Karyawan berhasil ditambahkan ke struktur",
         onConfirm: () {
           context.pop();
           context.pop();
@@ -105,7 +122,10 @@ class _EmployeeByJobTitleSelectionPageState extends State<EmployeeByJobTitleSele
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(provider.errorMessage ?? 'Gagal menambahkan karyawan'),
+          content: Text(
+            provider.errorMessage ??
+                (widget.isEdit ? 'Gagal memperbarui karyawan' : 'Gagal menambahkan karyawan'),
+          ),
           backgroundColor: AppColors.primary,
         ),
       );
