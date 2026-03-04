@@ -851,11 +851,13 @@ class AppRouter {
             final roleStructureId = int.parse(
               state.uri.queryParameters['roleStructureId']!,
             );
+            final typeBranch = state.uri.queryParameters['typeBranch'] ?? 'office';
             return ChangeNotifierProvider(
               create: (_) => sl<JobTitleProvider>(),
               child: JobTitleSelectionPage(
                 companyStructureId: companyStructureId,
                 roleStructureId: roleStructureId,
+                typeBranch: typeBranch,
               ),
             );
           },

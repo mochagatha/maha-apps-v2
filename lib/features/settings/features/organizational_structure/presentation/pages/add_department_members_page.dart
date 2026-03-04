@@ -15,12 +15,14 @@ class AddDepartmentMembersPage extends StatefulWidget {
   final int companyStructureId;
   final int roleStructureId;
   final int superiorEmployeeId;
+  final String typeBranch;
 
   const AddDepartmentMembersPage({
     super.key,
     required this.companyStructureId,
     required this.roleStructureId,
     required this.superiorEmployeeId,
+    this.typeBranch = 'office',
   });
 
   @override
@@ -43,7 +45,7 @@ class _AddDepartmentMembersPageState extends State<AddDepartmentMembersPage> {
   Future<void> _loadData() async {
     final provider = context.read<StructureProvider>();
     await Future.wait([
-      provider.loadDepartments(),
+      provider.loadDepartmentsByType(typeRole: 'employee', typeBranch: widget.typeBranch),
       provider.loadEmployees(),
     ]);
   }

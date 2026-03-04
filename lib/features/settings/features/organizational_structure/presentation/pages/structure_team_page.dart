@@ -180,20 +180,20 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '${deptStruct.employeeStructure.length} Staff, ${deptStruct.workerStructure.length} Worker',
+          '${deptStruct.employeeStructure.length} Karyawan, ${deptStruct.workerStructure.length} Pekerja Harian',
           style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
         childrenPadding: const EdgeInsets.all(16),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildMemberSection(
-            title: 'Staff',
+            title: 'Karyawan',
             members: deptStruct.employeeStructure.map((e) => e.employee).toList(),
             onEdit: () => _editMembers(deptStruct, false),
           ),
           const Divider(height: 32),
           _buildMemberSection(
-            title: 'Worker',
+            title: 'Pekerja Harian',
             members: deptStruct.workerStructure.map((w) => w.worker).toList(),
             onEdit: () => _editMembers(deptStruct, true),
           ),
@@ -281,9 +281,9 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
                     provider.employees,
                     selectedEmployees,
                     (ids) => setState(() => selectedEmployees = ids),
-                    'Pilih Staff',
+                    'Pilih Karyawan',
                   ),
-                  child: Text('Pilih Staff (${selectedEmployees.length})'),
+                  child: Text('Pilih Karyawan (${selectedEmployees.length})'),
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton(
@@ -292,9 +292,9 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
                     provider.employees,
                     selectedWorkers,
                     (ids) => setState(() => selectedWorkers = ids),
-                    'Pilih Worker',
+                    'Pilih Pekerja Harian',
                   ),
-                  child: Text('Pilih Worker (${selectedWorkers.length})'),
+                  child: Text('Pilih Pekerja Harian (${selectedWorkers.length})'),
                 ),
               ],
             ),
@@ -379,7 +379,7 @@ class _StructureTeamPageState extends State<StructureTeamPage> {
           ),
         );
       }
-    }, isWorker ? 'Kelola Worker' : 'Kelola Staff');
+    }, isWorker ? 'Kelola Pekerja Harian' : 'Kelola Karyawan');
   }
 
   void _showEmployeeSelection(

@@ -470,6 +470,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
       queryParameters: {
         'companyStructureId': companyStructureId.toString(),
         'roleStructureId': roleStructureId.toString(),
+        'typeBranch': _typeBranch,
       },
     );
     _loadData();
@@ -490,6 +491,7 @@ class _StructureMainPageState extends State<StructureMainPage> {
             companyStructureId: companyStructureId,
             roleStructureId: roleStructureId,
             superiorEmployeeId: superiorEmployeeId,
+            typeBranch: _typeBranch,
           ),
         ),
       ),

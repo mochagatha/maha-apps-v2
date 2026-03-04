@@ -350,6 +350,30 @@ class StructureProvider with ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Load departments filtered by type role and branch
+  Future<void> loadDepartmentsByType({
+    required String typeRole,
+    required String typeBranch,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+
+    final result = await getOrganizationalData.getDepartmentsByType(
+      typeRole: typeRole,
+      typeBranch: typeBranch,
+    );
+
+    result.fold(
+      (failure) => _setError(failure.message),
+      (depts) {
+        _departments = depts;
+        notifyListeners();
+      },
+    );
+
+    _setLoading(false);
+  }
+
   /// Load all employees, optionally filtered by job title
   Future<void> loadEmployees({int? jobTitleId}) async {
     _setLoading(true);

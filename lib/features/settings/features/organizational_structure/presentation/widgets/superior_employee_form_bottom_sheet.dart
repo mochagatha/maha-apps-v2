@@ -54,9 +54,9 @@ class _SuperiorEmployeeFormBottomSheetState extends State<SuperiorEmployeeFormBo
     if (provider.employees.isEmpty) {
       provider.loadEmployees();
     }
-    // Load job titles for 'utama' branch? or general?
-    // Assuming 'utama' for now as this is Main Structure
-    jobTitleProvider.loadJobTitles(typeRole: 'employee', typeBranch: widget.type);
+    // Map type to API typeBranch value
+    final typeBranch = widget.type == 'utama' ? 'office' : widget.type;
+    jobTitleProvider.loadJobTitles(typeRole: 'employee', typeBranch: typeBranch);
   }
 
   Future<void> _submit() async {

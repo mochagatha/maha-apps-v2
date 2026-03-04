@@ -10,11 +10,13 @@ import '../providers/job_title_provider.dart';
 class JobTitleSelectionPage extends StatefulWidget {
   final int companyStructureId;
   final int roleStructureId;
+  final String typeBranch;
 
   const JobTitleSelectionPage({
     super.key,
     required this.companyStructureId,
     required this.roleStructureId,
+    this.typeBranch = 'office',
   });
 
   @override
@@ -32,7 +34,7 @@ class _JobTitleSelectionPageState extends State<JobTitleSelectionPage> {
 
   Future<void> _loadData() async {
     final provider = context.read<JobTitleProvider>();
-    await provider.loadJobTitles(typeRole: 'employee', typeBranch: 'office');
+    await provider.loadJobTitles(typeRole: 'employee', typeBranch: widget.typeBranch);
   }
 
   @override
